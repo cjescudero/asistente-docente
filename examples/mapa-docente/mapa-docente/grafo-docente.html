@@ -1,0 +1,563 @@
+<!-- asistente-docente:generated-graph:v1 -->
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Mapa docente</title>
+  <style>
+    :root { --ink:#24352d; --muted:#617168; --accent:#285a45; --line:#dfe6df;
+      --paper:#f7f9f5; --white:#fff; --soft:#eaf0e8; --shadow:0 12px 36px #20382c14; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none !important; }
+    body { margin:0; color:var(--ink); background:var(--paper); font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    button,input,a { -webkit-tap-highlight-color:transparent; }
+    button,input { font:inherit; }
+    button { color:inherit; cursor:pointer; }
+    button:disabled { opacity:.4; cursor:default; }
+    button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible,.node:focus-visible {
+      outline:3px solid #91b8a1; outline-offset:3px; }
+    button { border:1px solid transparent; background:none; }
+    a { color:var(--accent); }
+    h1,h2,h3,p { margin:0; }
+    .app { height:100vh; height:100dvh; min-height:520px; display:flex; flex-direction:column; }
+    .topbar { min-height:94px; padding:19px 28px; display:flex; align-items:center;
+      gap:18px; border-bottom:1px solid var(--line); background:var(--white); z-index:30; }
+    .brand-mark { width:43px; height:43px; flex-shrink:0; color:var(--accent); }
+    .brand { min-width:0; flex:1; }
+    h1 { font-size:23px; line-height:1.2; letter-spacing:-.7px; font-weight:650; }
+    .library-title { color:var(--muted); font-size:13px; margin-top:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:70vw; }
+    .audience { display:flex; gap:7px; align-items:center; font-size:12px; color:#456151; white-space:nowrap; }
+    .audience::before { content:""; width:6px; height:6px; border-radius:50%; background:#598969; }
+    .plain-button { padding:8px 10px; border-radius:6px; font-size:12px; }
+    .plain-button:hover { background:var(--soft); }
+    #open-wiki { white-space:nowrap; text-decoration:none; border:1px solid var(--line); }
+    .help { position:relative; }
+    .help summary { cursor:pointer; list-style:none; border:1px solid var(--line); border-radius:50%; width:30px; height:30px;
+      display:grid; place-items:center; color:var(--muted); font-weight:600; }
+    .help summary::-webkit-details-marker { display:none; }
+    .help-content { position:absolute; right:0; top:42px; width:284px; padding:18px;
+      background:white; box-shadow:var(--shadow); border:1px solid var(--line); border-radius:10px; }
+    .help-content h2 { font-size:14px; margin-bottom:8px; }
+    .help-content ul { padding-left:18px; margin:0; color:var(--muted); font-size:12px; }
+    .help-content li+li { margin-top:7px; }
+    .workspace { flex:1; min-height:0; position:relative; display:grid; grid-template-columns:246px minmax(0,1fr) 272px; }
+    .sidebar { background:var(--white); border-right:1px solid var(--line); display:flex; flex-direction:column; min-height:0; }
+    .search-area { padding:22px 18px 15px; }
+    .section-label { display:block; font-size:10px; font-weight:650; text-transform:uppercase; letter-spacing:1.35px; color:var(--muted); margin-bottom:10px; }
+    .search-wrap { position:relative; }
+    .search-wrap svg { position:absolute; top:12px; left:11px; color:#7a897f; pointer-events:none; }
+    #search-input { width:100%; height:40px; padding:9px 31px 9px 33px; border:1px solid var(--line); border-radius:7px;
+      background:#fbfcfa; color:var(--ink); font-size:13px; }
+    #search-input::placeholder { color:#7b8980; }
+    #search-clear { position:absolute; right:4px; top:4px; width:31px; height:31px; font-size:19px; color:var(--muted); border-radius:5px; }
+    #search-clear:hover { background:var(--soft); }
+    .filters { padding:0 18px 14px; border-bottom:1px solid var(--line); }
+    .filter-section { margin-top:9px; }
+    .filter-section summary { cursor:pointer; font-size:12px; font-weight:600; padding:4px 0 8px; }
+    .filter-options { display:grid; grid-template-columns:1fr; gap:1px; }
+    .filter-row { display:flex; align-items:center; gap:9px; min-height:29px; cursor:pointer; font-size:12px; }
+    .filter-row input { width:14px; height:14px; margin:0; accent-color:var(--accent); }
+    .type-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+    .filter-row .filter-count { margin-left:auto; color:#8a958e; font-size:11px; font-variant-numeric:tabular-nums; }
+    .evaluation-note { margin-top:8px; color:var(--muted); font-size:11px; line-height:1.5; }
+    .list-heading { padding:16px 18px 10px; display:flex; justify-content:space-between; align-items:center; }
+    .list-heading h2 { font-size:12px; font-weight:600; }
+    #list-count { font-size:11px; color:var(--muted); font-variant-numeric:tabular-nums; }
+    .node-list { list-style:none; padding:0 9px 16px; margin:0; overflow:auto; flex:1; min-height:80px; }
+    .list-button { width:100%; display:flex; align-items:flex-start; text-align:left; padding:10px 9px; gap:9px; border-radius:6px; }
+    .list-button:hover { background:#f1f5ee; }
+    .list-button[aria-pressed="true"] { background:#e8f0e7; }
+    .list-button .type-dot { margin-top:5px; }
+    .list-copy { display:block; min-width:0; }
+    .list-title { display:block; font-size:12px; line-height:1.4; overflow-wrap:anywhere; }
+    .list-kind { display:block; font-size:10px; color:var(--muted); margin-top:2px; }
+    .list-empty { padding:14px 9px; color:var(--muted); font-size:12px; }
+    .canvas { position:relative; min-width:0; min-height:0; overflow:hidden; background:var(--paper); }
+    .canvas-top { position:absolute; top:19px; left:22px; right:22px; z-index:2; display:flex; justify-content:space-between; align-items:center; gap:10px; pointer-events:none; }
+    #graph-status { font-size:11px; color:var(--muted); background:#f7f9f5dc; padding:4px 0; }
+    .mobile-button { display:none; pointer-events:auto; border:1px solid var(--line); background:white; padding:8px 12px; border-radius:6px; font-size:12px; box-shadow:0 2px 6px #20382c06; }
+    #graph { display:block; width:100%; height:100%; min-height:350px; touch-action:none; cursor:grab; }
+    #graph.is-panning { cursor:grabbing; }
+    .edge { stroke:#a8b7ac; stroke-width:1.15; stroke-opacity:.56; vector-effect:non-scaling-stroke; }
+    .edge.is-related { stroke:#587c65; stroke-opacity:.9; stroke-width:1.8; }
+    .edge.is-muted { stroke-opacity:.16; }
+    .edge-label { font-size:10px; fill:#4f6757; paint-order:stroke; stroke:var(--paper); stroke-width:5px; stroke-linejoin:round; pointer-events:none; }
+    .node { cursor:grab; outline:none; }
+    .node:active { cursor:grabbing; }
+    .node .halo { fill:none; stroke:transparent; stroke-width:3; transition:stroke .15s; }
+    .node:hover .halo,.node:focus-visible .halo { stroke:#c2d6c6; }
+    .node.is-selected .halo { stroke:#315e45; stroke-width:2; }
+    .node.is-neighbor .halo { stroke:#b8cebd; stroke-width:1.5; }
+    .node-core { stroke:#fff; stroke-width:2; }
+    .node-label { font-size:11px; fill:#304136; text-anchor:middle; font-weight:500; paint-order:stroke;
+      stroke:var(--paper); stroke-width:4px; stroke-linejoin:round; pointer-events:none; }
+    .node.is-selected .node-label { font-weight:700; }
+    .node.is-muted { opacity:.27; }
+    .node.is-dragging { opacity:1; }
+    .node-symbol { fill:white; font-size:12px; text-anchor:middle; dominant-baseline:central; pointer-events:none; }
+    .reserved-badge circle { fill:#f7f9f5; stroke:#56695c; stroke-width:1; }
+    .reserved-badge path { fill:none; stroke:#415d49; stroke-width:1.35; stroke-linecap:round; stroke-linejoin:round; }
+    .controls { position:absolute; left:50%; bottom:24px; transform:translateX(-50%); display:flex; align-items:center; gap:2px;
+      padding:5px; border:1px solid var(--line); border-radius:9px; background:white; box-shadow:0 4px 18px #20382c0c; z-index:3; white-space:nowrap; }
+    .controls button { height:32px; min-width:32px; border-radius:5px; padding:3px 8px; font-size:12px; }
+    .controls button:hover { background:var(--soft); }
+    .controls .zoom-button { font-size:21px; font-weight:400; }
+    .control-separator { height:18px; width:1px; background:var(--line); margin:0 4px; }
+    #zoom-level { min-width:42px; text-align:center; font-size:11px; color:var(--muted); font-variant-numeric:tabular-nums; }
+    .canvas-hint { position:absolute; left:22px; bottom:8px; font-size:10px; color:#819087; pointer-events:none; }
+    .empty-state { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+      text-align:center; padding:35px; pointer-events:none; }
+    .empty-state h2 { font-size:18px; font-weight:600; letter-spacing:-.3px; margin-bottom:9px; }
+    .empty-state p { font-size:13px; color:var(--muted); max-width:290px; }
+    .primary-button { display:inline-flex; align-items:center; justify-content:center; background:var(--accent); color:white;
+      text-decoration:none; padding:10px 14px; border-radius:6px; font-size:12px; font-weight:550; }
+    .primary-button:hover { background:#1d4835; }
+    .empty-state button { margin-top:18px; pointer-events:auto; }
+    .inspector { background:var(--white); border-left:1px solid var(--line); padding:24px 20px; overflow:auto; position:relative; }
+    .inspector-top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:18px; }
+    .inspector-top .section-label { margin:0; }
+    #selection-close { padding:0; width:27px; height:27px; font-size:20px; color:var(--muted); border-radius:5px; }
+    #selection-close:hover { background:var(--soft); }
+    .selection-placeholder { padding:36px 0 0; }
+    .selection-placeholder svg { color:#a4baaa; margin-bottom:17px; }
+    .selection-placeholder h2 { font-size:17px; letter-spacing:-.35px; font-weight:600; margin-bottom:8px; }
+    .selection-placeholder p { font-size:12px; color:var(--muted); max-width:205px; }
+    #selected-type { display:flex; align-items:center; gap:7px; color:var(--muted); font-size:11px; margin-bottom:9px; }
+    #selected-title { font-size:20px; line-height:1.3; letter-spacing:-.45px; font-weight:620; overflow-wrap:anywhere; }
+    .selection-meta { display:grid; grid-template-columns:auto 1fr; column-gap:12px; row-gap:10px; padding:18px 0; margin:0; font-size:11px; border-bottom:1px solid var(--line); }
+    .selection-meta dt { color:var(--muted); }
+    .selection-meta dd { margin:0; text-align:right; font-weight:500; }
+    #open-source { margin-top:18px; width:100%; gap:9px; }
+    #wiki-documents { list-style:none; padding:0; margin:0; }
+    .wiki-document { padding:10px 0; border-top:1px solid var(--line); }
+    .wiki-document-title { font-size:12px; display:block; margin-bottom:5px; overflow-wrap:anywhere; }
+    .wiki-document-links { display:flex; flex-wrap:wrap; gap:6px 12px; font-size:11px; }
+    .wiki-document-links a { text-underline-offset:3px; }
+    .relations-heading { margin-top:25px; margin-bottom:10px; font-size:12px; font-weight:600; }
+    #relations-list { list-style:none; padding:0; margin:0; }
+    .relation-button { display:flex; align-items:flex-start; gap:8px; width:100%; text-align:left; font-size:12px; padding:9px 0; border-top:1px solid #edf1eb; }
+    .relation-button:hover .relation-title { text-decoration:underline; text-underline-offset:3px; }
+    .relation-button .type-dot { margin-top:5px; }
+    .relation-title { display:block; }
+    .relation-label { display:block; color:var(--muted); font-size:10px; margin-top:2px; }
+    #no-relations { color:var(--muted); font-size:12px; }
+    .sr-only { position:absolute; width:1px; height:1px; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; }
+    .bottomline { display:flex; align-items:center; justify-content:space-between; padding:8px 22px; min-height:34px;
+      border-top:1px solid var(--line); background:white; color:#738378; font-size:10px; gap:14px; }
+    .bottomline span:last-child { text-align:right; }
+    @media (max-width:1120px) {
+      .workspace { grid-template-columns:228px minmax(0,1fr); }
+      .inspector { position:absolute; right:18px; top:64px; width:265px; max-height:calc(100% - 152px); border:1px solid var(--line);
+        border-radius:10px; box-shadow:var(--shadow); padding:18px; z-index:5; }
+      .inspector:not(.has-selection) { display:none; }
+      .topbar { padding:18px 22px; }
+    }
+    @media (max-width:740px) {
+      .app { min-height:500px; }
+      .topbar { min-height:89px; padding:16px; gap:11px; }
+      .brand-mark { width:33px; height:33px; }
+      h1 { font-size:21px; }
+      .library-title { font-size:11px; max-width:calc(100vw - 135px); }
+      .audience { position:absolute; top:7px; right:17px; font-size:9px; }
+      #open-wiki { font-size:10px; padding:6px; }
+      .help { margin-top:7px; }
+      .help-content { width:min(280px,calc(100vw - 32px)); }
+      .workspace { display:block; }
+      .canvas { height:100%; }
+      .canvas-top { top:15px; left:16px; right:16px; }
+      .mobile-button { display:inline-flex; }
+      .sidebar { display:none; position:absolute; left:12px; top:61px; width:min(310px,calc(100% - 24px));
+        max-height:calc(100% - 144px); border:1px solid var(--line); border-radius:9px; box-shadow:var(--shadow); z-index:12; overflow:hidden; }
+      .sidebar.is-open { display:flex; }
+      .search-area { padding:16px 16px 10px; }
+      .filters { padding:0 16px 10px; }
+      .filter-options { grid-template-columns:1fr 1fr; gap:1px 12px; }
+      .filter-row { font-size:11px; }
+      .filter-count { display:none; }
+      .node-list { min-height:110px; }
+      .inspector { left:12px; right:12px; width:auto; top:auto; bottom:79px; max-height:46%; padding:16px; }
+      .inspector-top { margin-bottom:8px; }
+      #selected-title { font-size:18px; }
+      .selection-meta { padding:12px 0; }
+      .relations-heading { margin-top:17px; }
+      .controls { bottom:23px; }
+      .controls button { padding:3px 7px; min-width:30px; }
+      .canvas-hint { width:100%; text-align:center; left:0; bottom:6px; font-size:9px; }
+      .bottomline { padding:7px 16px; font-size:9px; }
+      .bottomline span:last-child { display:none; }
+    }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { transition:none !important; scroll-behavior:auto !important; } }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <svg class="brand-mark" viewBox="0 0 44 44" aria-hidden="true"><path d="M11 30 22 11l12 20M11 30l23 1" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="22" cy="11" r="5.5" fill="currentColor"/><circle cx="11" cy="30" r="4.5" fill="currentColor" opacity=".62"/><circle cx="34" cy="31" r="4.5" fill="currentColor" opacity=".38"/></svg>
+      <div class="brand"><h1>Mapa docente</h1><p class="library-title" id="library-title">Temas y materiales</p></div>
+      <a class="plain-button" id="open-wiki" hidden>Abrir wiki ↗</a>
+      <span class="audience" id="audience-label">Uso docente</span>
+      <details class="help"><summary aria-label="Cómo explorar el mapa">?</summary><div class="help-content"><h2>Cómo explorar</h2><ul><li>Arrastra un nodo para cambiar su posición.</li><li>Reorganizar redistribuye los elementos visibles y conserva tus filtros.</li><li>Ajustar encaja la vista sin cambiar las posiciones.</li><li>Arrastra el fondo para moverte por el mapa.</li><li>Usa la rueda o los botones para acercarte.</li><li>Selecciona un elemento para consultar sus relaciones y documentos de la wiki.</li><li>Tabulador y Enter permiten recorrer y seleccionar los elementos.</li></ul></div></details>
+    </header>
+    <main class="workspace">
+      <aside class="sidebar" id="sidebar" aria-label="Buscar, filtrar y consultar la lista de nodos">
+        <div class="search-area"><label class="section-label" for="search-input">Explorar mapa</label><div class="search-wrap">
+          <svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8" cy="8" r="5.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m12 12 5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+          <input id="search-input" type="search" autocomplete="off" placeholder="Buscar un tema o material…" aria-controls="node-list" aria-describedby="search-hint">
+          <button id="search-clear" type="button" aria-label="Borrar búsqueda" hidden>×</button></div>
+          <span class="sr-only" id="search-hint">La búsqueda filtra el mapa y la lista. Pulsa Enter para seleccionar el primer resultado.</span></div>
+        <div class="filters"><details class="filter-section" open><summary>Tipos de contenido</summary><div class="filter-options" id="type-filters"></div><p class="evaluation-note" id="evaluation-note" hidden>Las evaluaciones están ocultas al abrir. Actívalas cuando quieras consultarlas.</p></details>
+          <details class="filter-section"><summary>Acceso</summary><div class="filter-options" id="access-filters"></div></details></div>
+        <div class="list-heading"><h2>Elementos del mapa</h2><span id="list-count"></span></div>
+        <ul class="node-list" id="node-list" aria-label="Nodos disponibles"></ul>
+      </aside>
+      <section class="canvas" id="canvas" aria-label="Mapa de relaciones">
+        <div class="canvas-top"><p id="graph-status" aria-live="polite" aria-atomic="true"></p><button class="mobile-button" id="sidebar-toggle" aria-expanded="false" aria-controls="sidebar" type="button">Lista y filtros</button></div>
+        <svg id="graph" role="group" aria-label="Mapa interactivo. También puedes usar la lista de elementos." tabindex="0">
+          <defs><pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".65" fill="#d7e0d7"/></pattern></defs>
+          <rect id="graph-background" width="100%" height="100%" fill="url(#dots)"/>
+          <g id="viewport"><g id="edges"></g><g id="nodes"></g></g>
+        </svg>
+        <div class="empty-state" id="empty-state" hidden><h2 id="empty-title">No hay coincidencias</h2><p id="empty-copy">Prueba otro término o activa más tipos de contenido.</p><button id="show-all-button" class="primary-button" type="button">Mostrar todos los elementos</button></div>
+        <nav class="controls" aria-label="Controles del mapa"><button class="zoom-button" id="zoom-out" aria-label="Alejar" type="button">−</button><span id="zoom-level" aria-live="off">100 %</span><button class="zoom-button" id="zoom-in" aria-label="Acercar" type="button">+</button><span class="control-separator"></span><button id="fit-button" type="button" title="Encajar la vista sin mover los nodos">Ajustar</button><button id="reset-button" type="button" title="Redistribuir los nodos visibles conservando filtros y selección">Reorganizar</button></nav>
+        <p class="canvas-hint">Arrastra nodos · Desplaza el fondo · Usa la rueda para acercarte</p>
+      </section>
+      <aside class="inspector" id="inspector" aria-label="Detalles del nodo seleccionado">
+        <div class="inspector-top"><span class="section-label">Detalle</span><button id="selection-close" type="button" aria-label="Cerrar selección" hidden>×</button></div>
+        <div class="selection-placeholder" id="selection-placeholder"><svg width="65" height="55" viewBox="0 0 65 55" aria-hidden="true"><path d="m12 40 22-25 20 22" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="34" cy="15" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="40" r="5" fill="currentColor"/><circle cx="54" cy="37" r="5" fill="currentColor" opacity=".6"/></svg><h2>Conecta las ideas</h2><p>Selecciona un tema o un material para ver con qué se relaciona y abrir su archivo.</p></div>
+        <div id="selection-content" hidden><p id="selected-type"></p><h2 id="selected-title"></h2><dl class="selection-meta"><dt>Acceso</dt><dd id="selected-access"></dd><dt id="reading-term">Lectura</dt><dd id="selected-reading"></dd></dl><a class="primary-button" id="open-source" target="_blank" rel="noopener noreferrer" hidden>Abrir archivo <span aria-hidden="true">↗</span></a><section id="wiki-section" hidden><h3 class="relations-heading">Documentos de la wiki</h3><ul id="wiki-documents"></ul></section><h3 class="relations-heading" id="relations-heading">Relaciones</h3><ul id="relations-list"></ul><p id="no-relations" hidden>Sin relaciones visibles con los filtros actuales.</p></div>
+      </aside>
+    </main>
+    <footer class="bottomline"><span id="footer-summary">Temas, conceptos y materiales conectados.</span><span>Consulta los documentos originales para comprobar el contexto.</span></footer>
+  </div>
+  <script id="graph-data" type="application/json">{"schemaVersion":1,"title":"Evidencia, fuentes y medición","audience":"docente","nodes":[{"id":"page:contenidos/apuntes/f005.md","title":"Apuntes sobre crítica de fuentes","kind":"apuntes","access":"estudiante","reading":null,"href":"contenidos/apuntes/f005.md","sourceIds":["source:f005"],"wikiDocuments":[{"title":"Apuntes sobre crítica de fuentes","href":"index.html#doc=contenidos%2Fapuntes%2Ff005.md","markdownHref":"contenidos/apuntes/f005.md"},{"title":"Crítica de fuentes","href":"index.html#doc=contenidos%2Fconceptos%2Fcritica-fuentes.md","markdownHref":"contenidos/conceptos/critica-fuentes.md"}]},{"id":"page:contenidos/conceptos/critica-fuentes.md","title":"Crítica de fuentes","kind":"concepto","access":"estudiante","reading":null,"href":"contenidos/conceptos/critica-fuentes.md","sourceIds":["source:f001","source:f005"],"wikiDocuments":[{"title":"Crítica de fuentes","href":"index.html#doc=contenidos%2Fconceptos%2Fcritica-fuentes.md","markdownHref":"contenidos/conceptos/critica-fuentes.md"},{"title":"Apuntes sobre crítica de fuentes","href":"index.html#doc=contenidos%2Fapuntes%2Ff005.md","markdownHref":"contenidos/apuntes/f005.md"},{"title":"Contrastar mediciones","href":"index.html#doc=contenidos%2Ftalleres%2Ff007.md","markdownHref":"contenidos/talleres/f007.md"},{"title":"Evaluación de mediciones","href":"index.html#doc=reservado%2Fconceptos%2Fevaluacion-medicion.md","markdownHref":"reservado/conceptos/evaluacion-medicion.md"},{"title":"Media y límites de una medición","href":"index.html#doc=contenidos%2Fconceptos%2Fmedia.md","markdownHref":"contenidos/conceptos/media.md"},{"title":"Programa 2026-27","href":"index.html#doc=contenidos%2Fprograma%2Ff001.md","markdownHref":"contenidos/programa/f001.md"}]},{"id":"page:contenidos/conceptos/media.md","title":"Media y límites de una medición","kind":"concepto","access":"estudiante","reading":null,"href":"contenidos/conceptos/media.md","sourceIds":["source:f001","source:f002","source:f003","source:f007"],"wikiDocuments":[{"title":"Media y límites de una medición","href":"index.html#doc=contenidos%2Fconceptos%2Fmedia.md","markdownHref":"contenidos/conceptos/media.md"},{"title":"Contrastar mediciones","href":"index.html#doc=contenidos%2Ftalleres%2Ff007.md","markdownHref":"contenidos/talleres/f007.md"},{"title":"Crítica de fuentes","href":"index.html#doc=contenidos%2Fconceptos%2Fcritica-fuentes.md","markdownHref":"contenidos/conceptos/critica-fuentes.md"},{"title":"Diapositivas de medición","href":"index.html#doc=contenidos%2Fpresentaciones%2Ff002.md","markdownHref":"contenidos/presentaciones/f002.md"},{"title":"Programa 2026-27","href":"index.html#doc=contenidos%2Fprograma%2Ff001.md","markdownHref":"contenidos/programa/f001.md"},{"title":"Práctica de medir y argumentar","href":"index.html#doc=contenidos%2Fpracticas%2Ff003.md","markdownHref":"contenidos/practicas/f003.md"}]},{"id":"page:contenidos/practicas/f003.md","title":"Práctica de medir y argumentar","kind":"practica","access":"estudiante","reading":null,"href":"contenidos/practicas/f003.md","sourceIds":["source:f003"],"wikiDocuments":[{"title":"Práctica de medir y argumentar","href":"index.html#doc=contenidos%2Fpracticas%2Ff003.md","markdownHref":"contenidos/practicas/f003.md"},{"title":"Diapositivas de medición","href":"index.html#doc=contenidos%2Fpresentaciones%2Ff002.md","markdownHref":"contenidos/presentaciones/f002.md"},{"title":"Evaluación de mediciones","href":"index.html#doc=reservado%2Fconceptos%2Fevaluacion-medicion.md","markdownHref":"reservado/conceptos/evaluacion-medicion.md"},{"title":"Examen histórico y solución","href":"index.html#doc=reservado%2Fevaluaciones%2Ff004.md","markdownHref":"reservado/evaluaciones/f004.md"},{"title":"Media y límites de una medición","href":"index.html#doc=contenidos%2Fconceptos%2Fmedia.md","markdownHref":"contenidos/conceptos/media.md"}]},{"id":"page:contenidos/presentaciones/f002.md","title":"Diapositivas de medición","kind":"presentacion","access":"estudiante","reading":null,"href":"contenidos/presentaciones/f002.md","sourceIds":["source:f002"],"wikiDocuments":[{"title":"Diapositivas de medición","href":"index.html#doc=contenidos%2Fpresentaciones%2Ff002.md","markdownHref":"contenidos/presentaciones/f002.md"},{"title":"Evaluación de mediciones","href":"index.html#doc=reservado%2Fconceptos%2Fevaluacion-medicion.md","markdownHref":"reservado/conceptos/evaluacion-medicion.md"},{"title":"Media y límites de una medición","href":"index.html#doc=contenidos%2Fconceptos%2Fmedia.md","markdownHref":"contenidos/conceptos/media.md"},{"title":"Práctica de medir y argumentar","href":"index.html#doc=contenidos%2Fpracticas%2Ff003.md","markdownHref":"contenidos/practicas/f003.md"}]},{"id":"page:contenidos/programa/f001.md","title":"Programa 2026-27","kind":"programa","access":"estudiante","reading":null,"href":"contenidos/programa/f001.md","sourceIds":["source:f001"],"wikiDocuments":[{"title":"Programa 2026-27","href":"index.html#doc=contenidos%2Fprograma%2Ff001.md","markdownHref":"contenidos/programa/f001.md"},{"title":"Crítica de fuentes","href":"index.html#doc=contenidos%2Fconceptos%2Fcritica-fuentes.md","markdownHref":"contenidos/conceptos/critica-fuentes.md"},{"title":"Evaluación de mediciones","href":"index.html#doc=reservado%2Fconceptos%2Fevaluacion-medicion.md","markdownHref":"reservado/conceptos/evaluacion-medicion.md"},{"title":"Media y límites de una medición","href":"index.html#doc=contenidos%2Fconceptos%2Fmedia.md","markdownHref":"contenidos/conceptos/media.md"}]},{"id":"page:contenidos/talleres/f007.md","title":"Contrastar mediciones","kind":"taller","access":"estudiante","reading":null,"href":"contenidos/talleres/f007.md","sourceIds":["source:f007"],"wikiDocuments":[{"title":"Contrastar mediciones","href":"index.html#doc=contenidos%2Ftalleres%2Ff007.md","markdownHref":"contenidos/talleres/f007.md"},{"title":"Crítica de fuentes","href":"index.html#doc=contenidos%2Fconceptos%2Fcritica-fuentes.md","markdownHref":"contenidos/conceptos/critica-fuentes.md"},{"title":"Media y límites de una medición","href":"index.html#doc=contenidos%2Fconceptos%2Fmedia.md","markdownHref":"contenidos/conceptos/media.md"}]},{"id":"page:reservado/conceptos/evaluacion-medicion.md","title":"Evaluación de mediciones","kind":"concepto","access":"docente","reading":null,"href":"reservado/conceptos/evaluacion-medicion.md","sourceIds":["source:f001","source:f002","source:f003","source:f004"],"wikiDocuments":[{"title":"Evaluación de mediciones","href":"index.html#doc=reservado%2Fconceptos%2Fevaluacion-medicion.md","markdownHref":"reservado/conceptos/evaluacion-medicion.md"},{"title":"Crítica de fuentes","href":"index.html#doc=contenidos%2Fconceptos%2Fcritica-fuentes.md","markdownHref":"contenidos/conceptos/critica-fuentes.md"},{"title":"Diapositivas de medición","href":"index.html#doc=contenidos%2Fpresentaciones%2Ff002.md","markdownHref":"contenidos/presentaciones/f002.md"},{"title":"Examen histórico y solución","href":"index.html#doc=reservado%2Fevaluaciones%2Ff004.md","markdownHref":"reservado/evaluaciones/f004.md"},{"title":"Programa 2026-27","href":"index.html#doc=contenidos%2Fprograma%2Ff001.md","markdownHref":"contenidos/programa/f001.md"},{"title":"Práctica de medir y argumentar","href":"index.html#doc=contenidos%2Fpracticas%2Ff003.md","markdownHref":"contenidos/practicas/f003.md"}]},{"id":"page:reservado/evaluaciones/f004.md","title":"Examen histórico y solución","kind":"evaluacion","access":"restringido","reading":null,"href":"reservado/evaluaciones/f004.md","sourceIds":["source:f004"],"wikiDocuments":[{"title":"Examen histórico y solución","href":"index.html#doc=reservado%2Fevaluaciones%2Ff004.md","markdownHref":"reservado/evaluaciones/f004.md"},{"title":"Evaluación de mediciones","href":"index.html#doc=reservado%2Fconceptos%2Fevaluacion-medicion.md","markdownHref":"reservado/conceptos/evaluacion-medicion.md"},{"title":"Práctica de medir y argumentar","href":"index.html#doc=contenidos%2Fpracticas%2Ff003.md","markdownHref":"contenidos/practicas/f003.md"}]},{"id":"source:f001","title":"Programa 2026-27","kind":"programa","access":"estudiante","reading":"completa","href":"../materiales-docentes/programa-2026.md","wikiDocuments":[{"title":"Crítica de fuentes","href":"index.html#doc=contenidos%2Fconceptos%2Fcritica-fuentes.md","markdownHref":"contenidos/conceptos/critica-fuentes.md"},{"title":"Evaluación de mediciones","href":"index.html#doc=reservado%2Fconceptos%2Fevaluacion-medicion.md","markdownHref":"reservado/conceptos/evaluacion-medicion.md"},{"title":"Media y límites de una medición","href":"index.html#doc=contenidos%2Fconceptos%2Fmedia.md","markdownHref":"contenidos/conceptos/media.md"},{"title":"Programa 2026-27","href":"index.html#doc=contenidos%2Fprograma%2Ff001.md","markdownHref":"contenidos/programa/f001.md"}]},{"id":"source:f002","title":"Diapositivas de medición","kind":"presentacion","access":"estudiante","reading":"completa","href":"../materiales-docentes/diapositivas-medicion-2026.md","wikiDocuments":[{"title":"Diapositivas de medición","href":"index.html#doc=contenidos%2Fpresentaciones%2Ff002.md","markdownHref":"contenidos/presentaciones/f002.md"},{"title":"Evaluación de mediciones","href":"index.html#doc=reservado%2Fconceptos%2Fevaluacion-medicion.md","markdownHref":"reservado/conceptos/evaluacion-medicion.md"},{"title":"Media y límites de una medición","href":"index.html#doc=contenidos%2Fconceptos%2Fmedia.md","markdownHref":"contenidos/conceptos/media.md"}]},{"id":"source:f003","title":"Práctica de medir y argumentar","kind":"practica","access":"estudiante","reading":"completa","href":"../materiales-docentes/practica-2026.md","wikiDocuments":[{"title":"Evaluación de mediciones","href":"index.html#doc=reservado%2Fconceptos%2Fevaluacion-medicion.md","markdownHref":"reservado/conceptos/evaluacion-medicion.md"},{"title":"Media y límites de una medición","href":"index.html#doc=contenidos%2Fconceptos%2Fmedia.md","markdownHref":"contenidos/conceptos/media.md"},{"title":"Práctica de medir y argumentar","href":"index.html#doc=contenidos%2Fpracticas%2Ff003.md","markdownHref":"contenidos/practicas/f003.md"}]},{"id":"source:f004","title":"Examen histórico y solución","kind":"evaluacion","access":"restringido","reading":"completa","href":"../archivo-evaluaciones/examen-2024-docente.md","wikiDocuments":[{"title":"Evaluación de mediciones","href":"index.html#doc=reservado%2Fconceptos%2Fevaluacion-medicion.md","markdownHref":"reservado/conceptos/evaluacion-medicion.md"},{"title":"Examen histórico y solución","href":"index.html#doc=reservado%2Fevaluaciones%2Ff004.md","markdownHref":"reservado/evaluaciones/f004.md"}]},{"id":"source:f005","title":"Apuntes sobre crítica de fuentes","kind":"apuntes","access":"estudiante","reading":"parcial","href":"../materiales-docentes/apuntes-fuentes-2026.md","wikiDocuments":[{"title":"Apuntes sobre crítica de fuentes","href":"index.html#doc=contenidos%2Fapuntes%2Ff005.md","markdownHref":"contenidos/apuntes/f005.md"},{"title":"Crítica de fuentes","href":"index.html#doc=contenidos%2Fconceptos%2Fcritica-fuentes.md","markdownHref":"contenidos/conceptos/critica-fuentes.md"}]},{"id":"source:f006","title":"Lista de lecturas","kind":"otro","access":"desconocido","reading":"pendiente","href":"../materiales-docentes/lecturas-pendientes.md","wikiDocuments":[]},{"id":"source:f007","title":"Taller de contraste de mediciones","kind":"taller","access":"estudiante","reading":"completa","href":"../materiales-docentes/taller-2026.md","wikiDocuments":[{"title":"Contrastar mediciones","href":"index.html#doc=contenidos%2Ftalleres%2Ff007.md","markdownHref":"contenidos/talleres/f007.md"},{"title":"Media y límites de una medición","href":"index.html#doc=contenidos%2Fconceptos%2Fmedia.md","markdownHref":"contenidos/conceptos/media.md"}]}],"edges":[{"source":"page:contenidos/apuntes/f005.md","target":"page:contenidos/conceptos/critica-fuentes.md"},{"source":"page:contenidos/apuntes/f005.md","target":"source:f005"},{"source":"page:contenidos/conceptos/critica-fuentes.md","target":"page:contenidos/apuntes/f005.md"},{"source":"page:contenidos/conceptos/critica-fuentes.md","target":"page:contenidos/conceptos/media.md"},{"source":"page:contenidos/conceptos/critica-fuentes.md","target":"page:contenidos/programa/f001.md"},{"source":"page:contenidos/conceptos/media.md","target":"page:contenidos/conceptos/critica-fuentes.md"},{"source":"page:contenidos/conceptos/media.md","target":"page:contenidos/practicas/f003.md"},{"source":"page:contenidos/conceptos/media.md","target":"page:contenidos/presentaciones/f002.md"},{"source":"page:contenidos/conceptos/media.md","target":"page:contenidos/programa/f001.md"},{"source":"page:contenidos/conceptos/media.md","target":"page:contenidos/talleres/f007.md"},{"source":"page:contenidos/practicas/f003.md","target":"page:contenidos/conceptos/media.md"},{"source":"page:contenidos/practicas/f003.md","target":"source:f003"},{"source":"page:contenidos/presentaciones/f002.md","target":"page:contenidos/conceptos/media.md"},{"source":"page:contenidos/presentaciones/f002.md","target":"page:contenidos/practicas/f003.md"},{"source":"page:contenidos/presentaciones/f002.md","target":"source:f002"},{"source":"page:contenidos/programa/f001.md","target":"page:contenidos/conceptos/critica-fuentes.md"},{"source":"page:contenidos/programa/f001.md","target":"page:contenidos/conceptos/media.md"},{"source":"page:contenidos/programa/f001.md","target":"source:f001"},{"source":"page:contenidos/talleres/f007.md","target":"page:contenidos/conceptos/critica-fuentes.md"},{"source":"page:contenidos/talleres/f007.md","target":"page:contenidos/conceptos/media.md"},{"source":"page:contenidos/talleres/f007.md","target":"source:f007"},{"source":"page:reservado/conceptos/evaluacion-medicion.md","target":"page:contenidos/conceptos/critica-fuentes.md"},{"source":"page:reservado/conceptos/evaluacion-medicion.md","target":"page:contenidos/practicas/f003.md"},{"source":"page:reservado/conceptos/evaluacion-medicion.md","target":"page:contenidos/presentaciones/f002.md"},{"source":"page:reservado/conceptos/evaluacion-medicion.md","target":"page:contenidos/programa/f001.md"},{"source":"page:reservado/conceptos/evaluacion-medicion.md","target":"page:reservado/evaluaciones/f004.md"},{"source":"page:reservado/evaluaciones/f004.md","target":"page:contenidos/practicas/f003.md"},{"source":"page:reservado/evaluaciones/f004.md","target":"page:reservado/conceptos/evaluacion-medicion.md"},{"source":"page:reservado/evaluaciones/f004.md","target":"source:f004"}],"wikiHref":"index.html#doc=index.md"}</script>
+  <script>
+  (() => {
+    "use strict";
+    const NS = "http://www.w3.org/2000/svg";
+    const MIN_ZOOM=.02;
+    const byId = id => document.getElementById(id);
+    const TYPES = {
+      concepto:{label:"Concepto",plural:"Conceptos",color:"#6987b2",symbol:"·"},
+      tema:{label:"Tema",plural:"Temas",color:"#377760",symbol:"·"},
+      presentacion:{label:"Presentación",plural:"Presentaciones",color:"#c88b5c",symbol:"▤"},
+      apuntes:{label:"Apuntes",plural:"Apuntes",color:"#9a83ad",symbol:"≡"},
+      practica:{label:"Práctica",plural:"Prácticas",color:"#c6a044",symbol:"↗"},
+      taller:{label:"Taller",plural:"Talleres",color:"#ba8050",symbol:"↗"},
+      evaluacion:{label:"Evaluación",plural:"Evaluaciones",color:"#b46f7d",symbol:"✓"},
+      programa:{label:"Programa",plural:"Programas",color:"#709499",symbol:"≡"},
+      otro:{label:"Otro material",plural:"Otros materiales",color:"#8b949e",symbol:"·"}
+    };
+    const ACCESS = {estudiante:"Para estudiantes",docente:"Uso docente",restringido:"Restringido",desconocido:"Sin clasificar"};
+    const READING = {completa:"Completa",parcial:"Parcial",pendiente:"Pendiente",no_legible:"No legible"};
+    let data;
+    try { data = JSON.parse(byId("graph-data").textContent); }
+    catch (_) {
+      byId("empty-state").hidden = false;
+      byId("empty-title").textContent = "No se ha podido abrir el mapa";
+      byId("empty-copy").textContent = "Vuelve a generar el archivo desde el mapa docente.";
+      byId("show-all-button").hidden = true;
+      return;
+    }
+    const student = ["student","estudiante"].includes(data.audience);
+    const title = typeof data.title === "string" ? data.title : "Mapa docente";
+    byId("library-title").textContent = title;
+    byId("audience-label").textContent = student ? "Vista del estudiante" : "Uso docente";
+    document.title = "Mapa docente · " + title;
+    const aliases = {diapositivas:"presentacion",examen:"evaluacion",rubrica:"evaluacion"};
+    const nodes = (Array.isArray(data.nodes) ? data.nodes : []).filter(n => n && typeof n.id === "string").map(n => ({
+      ...n, title:typeof n.title === "string" ? n.title : n.id,
+      kind:TYPES[n.kind] ? n.kind : aliases[n.kind] || "otro",
+      access:ACCESS[n.access] ? n.access : "desconocido", x:0, y:0, vx:0, vy:0
+    }));
+    const nodeMap = new Map(nodes.map(n => [n.id,n]));
+    const edges = (Array.isArray(data.edges) ? data.edges : []).filter(e => e && nodeMap.has(e.source) && nodeMap.has(e.target) && e.source !== e.target);
+    const typesOn = new Set(nodes.map(n => n.kind).filter(kind => student || kind !== "evaluacion"));
+    const accessOn = new Set(nodes.map(n => n.access));
+    const typeInputs = new Map(), accessInputs = new Map(), nodeElements = new Map();
+    let query = "", selectedId = null, visibleNodes = [], visibleEdges = [], drag = null;
+    let width = 800, height = 600, zoom = 1, tx = 400, ty = 300;
+    const svg = byId("graph"), viewport = byId("viewport");
+    const labelMeasure=document.createElement("canvas").getContext("2d");
+    if(labelMeasure)labelMeasure.font="500 11px "+getComputedStyle(svg).fontFamily;
+    const norm = value => String(value).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("es").trim();
+    const text = (tag, value, className) => { const el = document.createElement(tag); el.textContent = value; if (className) el.className = className; return el; };
+    function svgel(tag, attrs = {}) { const el = document.createElementNS(NS,tag); Object.entries(attrs).forEach(([k,v]) => el.setAttribute(k,String(v))); return el; }
+    function dot(kind) { const el = text("span","","type-dot"); el.style.backgroundColor = TYPES[kind].color; el.setAttribute("aria-hidden","true"); return el; }
+    function eligible(node) { return typesOn.has(node.kind) && accessOn.has(node.access); }
+    function matches(node) { return !query || norm(node.title + " " + TYPES[node.kind].label).includes(query); }
+    function safeHref(value) {
+      if (typeof value !== "string") return null;
+      const href = value.trim();
+      return !href || /[\u0000-\u001f\u007f\\]/.test(href) || /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i.test(href) ? null : href;
+    }
+    const wikiHref=student?null:safeHref(data.wikiHref);
+    if(wikiHref){byId("open-wiki").href=wikiHref;byId("open-wiki").hidden=false;}
+    function makeFilters() {
+      for (const [kind, spec] of Object.entries(TYPES)) {
+        const count = nodes.filter(n => n.kind === kind).length;
+        if (!count) continue;
+        const label = document.createElement("label"); label.className = "filter-row";
+        const input = document.createElement("input"); input.type = "checkbox"; input.checked = typesOn.has(kind); input.dataset.kind = kind;
+        input.id = "filter-type-" + kind;
+        input.addEventListener("change",() => { input.checked ? typesOn.add(kind) : typesOn.delete(kind); refresh(true,true); });
+        typeInputs.set(kind,input); label.append(input,dot(kind),text("span",spec.plural),text("span",String(count),"filter-count"));
+        byId("type-filters").append(label);
+      }
+      for (const [access,labelText] of Object.entries(ACCESS)) {
+        const count = nodes.filter(n => n.access === access).length;
+        if (!count) continue;
+        const label = document.createElement("label"); label.className = "filter-row";
+        const input = document.createElement("input"); input.type = "checkbox"; input.checked = true; input.dataset.access = access;
+        input.id = "filter-access-" + access;
+        input.addEventListener("change",() => { input.checked ? accessOn.add(access) : accessOn.delete(access); refresh(true,true); });
+        accessInputs.set(access,input); label.append(input,text("span",labelText),text("span",String(count),"filter-count"));
+        byId("access-filters").append(label);
+      }
+      byId("evaluation-note").hidden = student || !nodes.some(n => n.kind === "evaluacion");
+    }
+    function nodeBox(node) {
+      const radius=node.kind==="tema"?23:node.kind==="concepto"?19:16;
+      // Canvas text metrics do not depend on the current camera transform or
+      // selection's bold style, unlike SVG getBBox on some browser versions.
+      const lines=labelLines(node.title),measured=Math.max(...lines.map(line=>labelMeasure?labelMeasure.measureText(line).width:line.length*6),1);
+      return {w:Math.max(radius*2+20,measured)+20,
+        top:radius+12,bottom:radius+24+(lines.length-1)*14+12};
+    }
+    function bounds(items) {
+      return {left:Math.min(...items.map(n=>n.x-n.box.w/2)),right:Math.max(...items.map(n=>n.x+n.box.w/2)),
+        top:Math.min(...items.map(n=>n.y-n.box.top)),bottom:Math.max(...items.map(n=>n.y+n.box.bottom))};
+    }
+    function layout() {
+      // Only the induced visible graph participates. Sorting and a fixed work
+      // budget make the same filters and viewport produce the same arrangement.
+      const items=[...visibleNodes].sort((a,b)=>a.id.localeCompare(b.id,"es"));
+      if(!items.length)return;
+      const aspect=Math.max(.45,Math.min(3,(width-70)/Math.max(220,height-154)));
+      const adjacency=new Map(items.map(n=>[n.id,new Set()]));
+      const links=[];const seenEdges=new Set();
+      visibleEdges.forEach(e=>{const key=[e.source,e.target].sort().join("\u0000");if(seenEdges.has(key))return;
+        seenEdges.add(key);adjacency.get(e.source).add(e.target);adjacency.get(e.target).add(e.source);links.push(e);});
+      items.forEach(n=>{n.box=nodeBox(n);n.vx=n.vy=0;});
+      const components=[],visited=new Set();
+      items.forEach(start=>{if(visited.has(start.id))return;const component=[],queue=[start];visited.add(start.id);
+        for(let i=0;i<queue.length;i++){const n=queue[i];component.push(n);adjacency.get(n.id).forEach(id=>{if(!visited.has(id)){visited.add(id);queue.push(nodeMap.get(id));}});}
+        components.push(component);});
+      components.sort((a,b)=>b.length-a.length||a[0].id.localeCompare(b[0].id,"es"));
+      const pairCount=components.reduce((sum,c)=>sum+c.length*c.length,0);
+      const steps=Math.max(8,Math.min(190,Math.floor(2500000/Math.max(1,pairCount))));
+      for(const component of components){
+        // Visit from the most connected node so immediate neighbors begin close.
+        const root=[...component].sort((a,b)=>adjacency.get(b.id).size-adjacency.get(a.id).size||a.id.localeCompare(b.id,"es"))[0];
+        const order=[root],queued=new Set([root.id]);
+        for(let i=0;i<order.length;i++) [...adjacency.get(order[i].id)].sort().forEach(id=>{if(!queued.has(id)){queued.add(id);order.push(nodeMap.get(id));}});
+        const componentIds=new Set(component.map(n=>n.id)), componentLinks=links.filter(e=>componentIds.has(e.source));
+        const stretch=Math.sqrt(aspect);
+        order.forEach((n,i)=>{const angle=i*2.399963229728653,radius=75*Math.sqrt(i);n.x=Math.cos(angle)*radius*stretch;n.y=Math.sin(angle)*radius/stretch;});
+        for(let step=0;step<steps;step++){
+          // Spatial buckets keep collision work bounded for large collections.
+          const buckets=new Map();
+          const pairs=[];
+          if(component.length<=250){for(let i=0;i<component.length;i++)for(let j=i+1;j<component.length;j++)pairs.push([component[i],component[j]]);}
+          else{component.forEach(n=>{const cx=Math.floor(n.x/240),cy=Math.floor(n.y/240);
+            for(let x=cx-1;x<=cx+1;x++)for(let y=cy-1;y<=cy+1;y++)(buckets.get(x+","+y)||[]).forEach(other=>pairs.push([other,n]));
+            const key=cx+","+cy;if(!buckets.has(key))buckets.set(key,[]);buckets.get(key).push(n);});}
+          for(const [a,b] of pairs){let dx=b.x-a.x,dy=b.y-a.y;if(Math.abs(dx)+Math.abs(dy)<.01){dx=.1;dy=.2;}
+            const d=Math.max(1,Math.hypot(dx,dy)),force=Math.min(7,1800/(d*d));
+            a.vx-=dx/d*force;a.vy-=dy/d*force;b.vx+=dx/d*force;b.vy+=dy/d*force;
+            const centerDy=dy+(b.box.bottom-b.box.top-a.box.bottom+a.box.top)/2;
+            const overlapX=(a.box.w+b.box.w)/2+20-Math.abs(dx);
+            const overlapY=(a.box.top+a.box.bottom+b.box.top+b.box.bottom)/2+20-Math.abs(centerDy);
+            if(overlapX>0&&overlapY>0){if(overlapX<overlapY){const push=Math.sign(dx||1)*overlapX*.13;a.vx-=push;b.vx+=push;}
+              else{const push=Math.sign(centerDy||1)*overlapY*.13;a.vy-=push;b.vy+=push;}}
+          }
+          componentLinks.forEach(e=>{const a=nodeMap.get(e.source),b=nodeMap.get(e.target),dx=b.x-a.x,dy=b.y-a.y,d=Math.max(1,Math.hypot(dx,dy));
+            const desired=Math.max(128,(a.box.w+b.box.w)/2+35),force=(d-desired)*.018;
+            a.vx+=dx/d*force;a.vy+=dy/d*force;b.vx-=dx/d*force;b.vy-=dy/d*force;});
+          component.forEach(n=>{n.vx=(n.vx-n.x*.002/aspect)*.68;n.vy=(n.vy-n.y*.002*aspect)*.68;
+            n.x+=Math.max(-14,Math.min(14,n.vx));n.y+=Math.max(-14,Math.min(14,n.vy));});
+        }
+        // Remove remaining label collisions after the springs have settled.
+        // A spatial sweep only visits nearby rectangles, including on large maps.
+        for(let pass=0;pass<24;pass++){
+          const ordered=[...component].sort((a,b)=>a.x-a.box.w/2-(b.x-b.box.w/2));let collisions=0;
+          for(let i=0;i<ordered.length;i++)for(let j=i+1;j<ordered.length;j++){
+            const a=ordered[i],b=ordered[j],dx=b.x-a.x;
+            if(b.x-b.box.w/2>a.x+a.box.w/2+18)break;
+            const dy=b.y+(b.box.bottom-b.box.top)/2-a.y-(a.box.bottom-a.box.top)/2;
+            const ox=(a.box.w+b.box.w)/2+18-Math.abs(dx),oy=(a.box.top+a.box.bottom+b.box.top+b.box.bottom)/2+18-Math.abs(dy);
+            if(ox>0&&oy>0){collisions++;if(ox<oy){const d=Math.sign(dx||1)*(ox/2+.1);a.x-=d;b.x+=d;}else{const d=Math.sign(dy||1)*(oy/2+.1);a.y-=d;b.y+=d;}}
+          }
+          if(!collisions)break;
+        }
+      }
+      // Pack separate connected components, preserving their internal topology.
+      // Try several shelf widths and prefer a compact shape matching the canvas.
+      const rectangles=components.map(c=>{const b=bounds(c);return{nodes:c,...b,w:b.right-b.left+36,h:b.bottom-b.top+36};});
+      const area=rectangles.reduce((sum,r)=>sum+r.w*r.h,0),ideal=Math.sqrt(area*aspect),maxWidth=Math.max(...rectangles.map(r=>r.w));
+      let best=null;
+      for(const multiplier of [.65,.8,1,1.2,1.5,2]){const limit=Math.max(maxWidth,ideal*multiplier),placements=[];let x=0,y=0,rowHeight=0,totalWidth=0;
+        rectangles.forEach(r=>{if(x&&x+r.w>limit){y+=rowHeight;x=0;rowHeight=0;}placements.push({r,x,y});x+=r.w;rowHeight=Math.max(rowHeight,r.h);totalWidth=Math.max(totalWidth,x);});
+        const totalHeight=y+rowHeight,score=Math.max(totalWidth/aspect,totalHeight)**2*aspect;
+        if(!best||score<best.score)best={placements,width:totalWidth,height:totalHeight,score};
+      }
+      best.placements.forEach(({r,x,y})=>r.nodes.forEach(n=>{n.x+=x+18-r.left-best.width/2;n.y+=y+18-r.top-best.height/2;}));
+    }
+    function labelLines(value) {
+      const words = value.split(/\s+/), lines = []; let line="";
+      words.forEach(word => {
+        while (word.length>21) { if (line) { lines.push(line);line=""; } lines.push(word.slice(0,20)+"–");word=word.slice(20); }
+        if ((line+" "+word).trim().length>22 && line) { lines.push(line);line=word; }
+        else line=(line+" "+word).trim();
+      });
+      if (line) lines.push(line);
+      if (lines.length>3) return [...lines.slice(0,2),lines[2].slice(0,20)+"…"];
+      return lines;
+    }
+    function refresh(fit = false, reorganize = false) {
+      visibleNodes = nodes.filter(n => eligible(n) && matches(n));
+      const visibleIds = new Set(visibleNodes.map(n => n.id));
+      visibleEdges = edges.filter(e => visibleIds.has(e.source) && visibleIds.has(e.target));
+      if (selectedId && !visibleIds.has(selectedId)) selectedId = null;
+      nodeElements.clear(); byId("nodes").replaceChildren(); byId("edges").replaceChildren(); byId("node-list").replaceChildren();
+      visibleEdges.forEach(e => {
+        const line=svgel("line",{"class":"edge","data-source":e.source,"data-target":e.target});
+        const title=svgel("title"); title.textContent=typeof e.label === "string" ? e.label : "Relación"; line.append(title);
+        e.element=line; byId("edges").append(line);
+        e.labelElement=null;
+        if (e.label) { const label=svgel("text",{"class":"edge-label","text-anchor":"middle"}); label.textContent=String(e.label);
+          e.labelElement=label; byId("edges").append(label); }
+      });
+      visibleNodes.forEach(n => {
+        const radius=n.kind==="tema"?23:n.kind==="concepto"?19:16;
+        const group=svgel("g",{"class":"node","data-node-id":n.id,"data-kind":n.kind,"role":"button","tabindex":"0",
+          "aria-label":n.title+", "+TYPES[n.kind].label+", "+ACCESS[n.access],"aria-pressed":"false"});
+        const title=svgel("title"); title.textContent=n.title+" · "+TYPES[n.kind].label+" · "+ACCESS[n.access]; group.append(title);
+        group.append(svgel("circle",{"class":"halo",r:radius+6}),svgel("circle",{"class":"node-core",r:radius,fill:TYPES[n.kind].color}));
+        const symbol=svgel("text",{"class":"node-symbol",x:0,y:-.5}); symbol.textContent=TYPES[n.kind].symbol; group.append(symbol);
+        if (n.access!=="estudiante") {
+          const badge=svgel("g",{"class":"reserved-badge",transform:`translate(${radius-2},${-radius+2})`,"aria-hidden":"true"});
+          badge.append(svgel("circle",{r:7}),svgel("path",{d:"M-3-1H3V4H-3ZM-2-1V-3A2 2 0 0 1 2-3V-1"})); group.append(badge);
+        }
+        const label=svgel("text",{"class":"node-label"});
+        labelLines(n.title).forEach((line,i) => { const tspan=svgel("tspan",{x:0,y:radius+21+i*14});tspan.textContent=line;label.append(tspan); });
+        group.append(label);
+        group.addEventListener("keydown",e => { if (e.key==="Enter"||e.key===" ") { e.preventDefault();select(n.id,false); } });
+        nodeElements.set(n.id,group);byId("nodes").append(group);
+        const li=document.createElement("li"),button=document.createElement("button");button.type="button";button.className="list-button";button.dataset.nodeId=n.id;
+        button.setAttribute("aria-pressed",String(selectedId===n.id));
+        const copy=text("span","","list-copy");copy.append(text("span",n.title,"list-title"),text("span",(n.id.startsWith("source:")?"Original":"Ficha")+" · "+TYPES[n.kind].label,"list-kind"));
+        button.append(dot(n.kind),copy);button.addEventListener("click",() => { select(n.id,true);closeSidebar(); });li.append(button);byId("node-list").append(li);
+      });
+      if (!visibleNodes.length) byId("node-list").append(text("li","No hay elementos con estos filtros.","list-empty"));
+      byId("graph-status").textContent=`${visibleNodes.length} de ${nodes.length} nodos · ${visibleEdges.length} relaciones`;
+      byId("list-count").textContent=String(visibleNodes.length);
+      byId("search-clear").hidden=!byId("search-input").value;
+      byId("empty-state").hidden=visibleNodes.length>0;
+      byId("empty-title").textContent=nodes.length?"No hay coincidencias":"Esta vista todavía no tiene elementos";
+      byId("empty-copy").textContent=nodes.length?"Prueba otro término o activa más tipos de contenido.":"Cuando haya contenidos disponibles, aparecerán aquí sus relaciones.";
+      byId("show-all-button").hidden=!nodes.length;
+      byId("footer-summary").textContent=student?"Temas y materiales disponibles para el estudiante.":"Temas, conceptos y materiales del mapa docente.";
+      if(reorganize)layout();updatePositions();highlight();renderSelection();if (fit) fitView();
+    }
+    function updatePositions() {
+      visibleNodes.forEach(n => nodeElements.get(n.id).setAttribute("transform",`translate(${n.x},${n.y})`));
+      visibleEdges.forEach(e => { const a=nodeMap.get(e.source),b=nodeMap.get(e.target);
+        Object.entries({x1:a.x,y1:a.y,x2:b.x,y2:b.y}).forEach(([k,v])=>e.element.setAttribute(k,String(v)));
+        if(e.labelElement){e.labelElement.setAttribute("x",String((a.x+b.x)/2));e.labelElement.setAttribute("y",String((a.y+b.y)/2-6));}
+      });
+    }
+    function highlight() {
+      const neighbors=new Set();
+      visibleEdges.forEach(e => { if(e.source===selectedId)neighbors.add(e.target);if(e.target===selectedId)neighbors.add(e.source); });
+      visibleNodes.forEach(n => { const el=nodeElements.get(n.id),active=n.id===selectedId,neighbor=neighbors.has(n.id);
+        el.classList.toggle("is-selected",active);el.classList.toggle("is-neighbor",neighbor);el.classList.toggle("is-muted",Boolean(selectedId&&!active&&!neighbor));
+        el.setAttribute("aria-pressed",String(active)); });
+      visibleEdges.forEach(e => { const related=e.source===selectedId||e.target===selectedId;e.element.classList.toggle("is-related",related);e.element.classList.toggle("is-muted",Boolean(selectedId&&!related));
+        if(e.labelElement)e.labelElement.style.display=related?"":"none"; });
+      byId("node-list").querySelectorAll("button").forEach(el=>el.setAttribute("aria-pressed",String(el.dataset.nodeId===selectedId)));
+    }
+    function renderSelection() {
+      const node=nodeMap.get(selectedId);
+      byId("inspector").classList.toggle("has-selection",Boolean(node));
+      byId("selection-placeholder").hidden=Boolean(node);byId("selection-content").hidden=!node;byId("selection-close").hidden=!node;
+      if(!node)return;
+      byId("selected-title").textContent=node.title;byId("selected-type").replaceChildren(dot(node.kind),document.createTextNode(TYPES[node.kind].label));
+      byId("selected-access").textContent=ACCESS[node.access];byId("selected-reading").textContent=READING[node.reading]||"";
+      byId("reading-term").hidden=!READING[node.reading];byId("selected-reading").hidden=!READING[node.reading];
+      const href=student?null:safeHref(node.href),link=byId("open-source");link.hidden=!href;link.removeAttribute("href");
+      if(href){link.href=href;link.textContent=(node.id.startsWith("source:")?"Abrir original":"Abrir ficha")+" ↗";}
+      const documents=byId("wiki-documents");documents.replaceChildren();
+      const seenDocuments=new Set();
+      // The producer supplies own and related pages independently of the graph's
+      // display filters. Student exports must omit this metadata altogether.
+      if(!student&&Array.isArray(node.wikiDocuments))node.wikiDocuments.forEach(doc=>{
+        if(!doc||typeof doc!=="object")return;
+        const rendered=safeHref(doc.href),markdown=safeHref(doc.markdownHref),key=rendered||markdown;
+        if(!key||seenDocuments.has(key))return;seenDocuments.add(key);
+        const li=text("li","","wiki-document"),links=text("span","","wiki-document-links");
+        li.append(text("span",typeof doc.title==="string"?doc.title:node.title,"wiki-document-title"));
+        for(const [destination,label] of [[rendered,"Leer en la wiki"],[markdown,"Abrir Markdown"]]){
+          if(!destination)continue;const a=text("a",label);a.href=destination;links.append(a);
+        }
+        li.append(links);documents.append(li);
+      });
+      byId("wiki-section").hidden=!documents.childElementCount;
+      const related=new Map();
+      edges.forEach(e=>{const other=e.source===node.id?e.target:e.target===node.id?e.source:null;if(other&&eligible(nodeMap.get(other)))related.set(other,e.label||"Relacionado");});
+      byId("relations-list").replaceChildren();byId("relations-heading").textContent=`Relaciones visibles · ${related.size}`;byId("no-relations").hidden=related.size>0;
+      related.forEach((label,id)=>{const other=nodeMap.get(id),li=document.createElement("li"),button=document.createElement("button");button.type="button";button.className="relation-button";button.dataset.relatedId=id;
+        const copy=text("span","");copy.append(text("span",other.title,"relation-title"),text("span",String(label),"relation-label"));button.append(dot(other.kind),copy);
+        button.addEventListener("click",()=>{if(!matches(other)){query="";byId("search-input").value="";refresh();}select(id,true);});li.append(button);byId("relations-list").append(li);});
+    }
+    function select(id, center) { selectedId=nodeMap.has(id)?id:null;highlight();renderSelection();if(center&&selectedId){const n=nodeMap.get(selectedId);tx=width/2-n.x*zoom;ty=height*(window.innerWidth < 1120 ? 0.33 : 0.5)-n.y*zoom;applyCamera();} }
+    function applyCamera() { viewport.setAttribute("transform",`translate(${tx},${ty}) scale(${zoom})`);byId("zoom-level").textContent=Math.round(zoom*100)+" %";
+      byId("zoom-out").disabled=zoom<=MIN_ZOOM+.0001;byId("zoom-in").disabled=zoom>=2.999; }
+    function fitView() {
+      if(!visibleNodes.length){zoom=1;tx=width/2;ty=height/2;applyCamera();return;}
+      visibleNodes.forEach(n=>{n.box=nodeBox(n);});
+      const b=bounds(visibleNodes),minX=b.left-16,maxX=b.right+16,minY=b.top-16,maxY=b.bottom+16;
+      zoom=Math.max(MIN_ZOOM,Math.min(1.35,(width-70)/(maxX-minX),(height-154)/(maxY-minY)));
+      tx=width/2-(minX+maxX)/2*zoom;ty=(height-38)/2-(minY+maxY)/2*zoom;applyCamera();
+    }
+    function point(event){const r=svg.getBoundingClientRect();return{x:(event.clientX-r.left)*width/r.width,y:(event.clientY-r.top)*height/r.height};}
+    function zoomAt(factor,p={x:width/2,y:height/2}){const next=Math.max(MIN_ZOOM,Math.min(3,zoom*factor));tx=p.x-(p.x-tx)*next/zoom;ty=p.y-(p.y-ty)*next/zoom;zoom=next;applyCamera();}
+    svg.addEventListener("pointerdown",event=>{
+      if(event.button!==0||drag)return;const p=point(event),el=event.target.closest("[data-node-id]"),node=el?nodeMap.get(el.dataset.nodeId):null;
+      drag={pointer:event.pointerId,node,start:p,last:p,moved:false,tx,ty,offsetX:node?(p.x-tx)/zoom-node.x:0,offsetY:node?(p.y-ty)/zoom-node.y:0};
+      svg.setPointerCapture(event.pointerId);svg.classList.toggle("is-panning",!node);if(node)el.classList.add("is-dragging");
+    });
+    svg.addEventListener("pointermove",event=>{
+      if(!drag||drag.pointer!==event.pointerId)return;const p=point(event);drag.last=p;if(Math.hypot(p.x-drag.start.x,p.y-drag.start.y)>4)drag.moved=true;
+      if(drag.node){drag.node.x=(p.x-tx)/zoom-drag.offsetX;drag.node.y=(p.y-ty)/zoom-drag.offsetY;updatePositions();}
+      else{tx=drag.tx+p.x-drag.start.x;ty=drag.ty+p.y-drag.start.y;applyCamera();}
+    });
+    function endDrag(event){if(!drag||drag.pointer!==event.pointerId)return;const previous=drag;drag=null;svg.classList.remove("is-panning");
+      if(svg.hasPointerCapture(event.pointerId))svg.releasePointerCapture(event.pointerId);
+      if(previous.node){nodeElements.get(previous.node.id)?.classList.remove("is-dragging");if(event.type!=="pointercancel")select(previous.node.id,false);}
+      else if(!previous.moved)select(null,false);
+    }
+    svg.addEventListener("pointerup",endDrag);svg.addEventListener("pointercancel",endDrag);
+    svg.addEventListener("wheel",event=>{event.preventDefault();zoomAt(Math.exp(-event.deltaY*.0015),point(event));},{passive:false});
+    svg.addEventListener("keydown",event=>{if(event.target!==svg)return;const delta=35;if(event.key==="+"||event.key==="="){event.preventDefault();zoomAt(1.2);}else if(event.key==="-"){event.preventDefault();zoomAt(1/1.2);}else if(["ArrowLeft","ArrowRight","ArrowUp","ArrowDown"].includes(event.key)){event.preventDefault();tx+=event.key==="ArrowLeft"?delta:event.key==="ArrowRight"?-delta:0;ty+=event.key==="ArrowUp"?delta:event.key==="ArrowDown"?-delta:0;applyCamera();}});
+    byId("zoom-in").addEventListener("click",()=>zoomAt(1.25));byId("zoom-out").addEventListener("click",()=>zoomAt(.8));byId("fit-button").addEventListener("click",fitView);
+    byId("reset-button").addEventListener("click",()=>{layout();updatePositions();fitView();});
+    byId("selection-close").addEventListener("click",()=>select(null,false));
+    byId("search-input").addEventListener("input",event=>{query=norm(event.target.value);refresh(true,true);});
+    byId("search-input").addEventListener("keydown",event=>{if(event.key==="Enter"&&visibleNodes.length){select(visibleNodes[0].id,true);closeSidebar();}if(event.key==="Escape"){event.target.value="";query="";refresh(true,true);}});
+    byId("search-clear").addEventListener("click",()=>{byId("search-input").value="";query="";refresh(true,true);byId("search-input").focus();});
+    byId("show-all-button").addEventListener("click",()=>{byId("search-input").value="";query="";typeInputs.forEach((input,key)=>{input.checked=true;typesOn.add(key);});accessInputs.forEach((input,key)=>{input.checked=true;accessOn.add(key);});refresh(true,true);});
+    function closeSidebar(){byId("sidebar").classList.remove("is-open");byId("sidebar-toggle").setAttribute("aria-expanded","false");}
+    byId("sidebar-toggle").addEventListener("click",()=>{const open=byId("sidebar").classList.toggle("is-open");byId("sidebar-toggle").setAttribute("aria-expanded",String(open));if(open)byId("search-input").focus();});
+    document.addEventListener("keydown",event=>{if(event.key==="Escape"&&event.target!==byId("search-input")){select(null,false);closeSidebar();}});
+    function resize(){const r=svg.getBoundingClientRect();if(!r.width||!r.height)return;const changed=Math.abs(width-r.width)>1||Math.abs(height-r.height)>1;width=r.width;height=r.height;svg.setAttribute("viewBox",`0 0 ${width} ${height}`);if(changed){layout();updatePositions();}fitView();}
+    makeFilters();refresh(false,true);
+    new ResizeObserver(resize).observe(byId("canvas"));requestAnimationFrame(resize);
+    // Read-only inspection surface for optional browser acceptance checks.
+    window.graphView = Object.freeze({getState:()=>({audience:student?"estudiante":"docente",visibleIds:visibleNodes.map(n=>n.id),selectedId,
+      zoom,pan:{x:tx,y:ty},positions:Object.fromEntries(nodes.map(n=>[n.id,{x:n.x,y:n.y}]))})});
+  })();
+  </script>
+</body>
+</html>

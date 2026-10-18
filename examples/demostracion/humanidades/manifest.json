@@ -1,0 +1,301 @@
+{
+  "schema_version": 1,
+  "title": "Fuentes e interpretación histórica",
+  "seed": 42,
+  "bank_sha256": "43de666cd8299d663deadb08bc1d1466d0c39716c1cb584eb08f4ca9484bf1e5",
+  "bank_snapshot": "source/bank.gift",
+  "metadata": {
+    "schema_version": 1,
+    "questions": {
+      "historia-fuente": {
+        "concepts": [
+          "fuentes"
+        ]
+      },
+      "historia-contraste": {
+        "concepts": [
+          "fuentes"
+        ]
+      },
+      "historia-causalidad": {
+        "concepts": [
+          "causalidad"
+        ]
+      },
+      "historia-cronologia": {
+        "concepts": [
+          "cronologia"
+        ]
+      },
+      "historia-emparejar": {
+        "concepts": [
+          "fuentes",
+          "cronologia"
+        ]
+      }
+    },
+    "concepts": {
+      "fuentes": {
+        "label": "análisis de fuentes",
+        "guidance": "Revisa la autoría, la fecha y el propósito de cada documento, y contrasta testimonios independientes."
+      },
+      "causalidad": {
+        "label": "causalidad histórica",
+        "guidance": "Distingue coincidencia temporal y explicación causal; busca evidencias del mecanismo que conecta los acontecimientos."
+      },
+      "cronologia": {
+        "label": "cronología",
+        "guidance": "Representa las fechas en una línea temporal y comprueba el intervalo entre los extremos."
+      }
+    }
+  },
+  "excluded_question_ids": [
+    "historia-emparejar"
+  ],
+  "models": [
+    {
+      "id": "A",
+      "questions": [
+        {
+          "number": 1,
+          "source_id": "historia-fuente",
+          "source_category": "Historia/Fuentes",
+          "concepts": [
+            "fuentes"
+          ],
+          "type": "single",
+          "prompt": "Una investigadora estudia una huelga de 1910. ¿Qué documento constituye una fuente primaria del suceso?",
+          "format": "html",
+          "options": [
+            {
+              "label": "A",
+              "text": "Un manual publicado en 2020.",
+              "weight": 0.0,
+              "source_index": 1
+            },
+            {
+              "label": "B",
+              "text": "Una carta escrita durante la huelga por una participante.",
+              "weight": 100.0,
+              "source_index": 0
+            },
+            {
+              "label": "C",
+              "text": "Una novela histórica ambientada en otra ciudad.",
+              "weight": 0.0,
+              "source_index": 2
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "source_id": "historia-cronologia",
+          "source_category": "Historia/Interpretación",
+          "concepts": [
+            "cronologia"
+          ],
+          "type": "numerical",
+          "prompt": "Una asociación se funda en 1900 y se disuelve en 1925. ¿Cuántos años transcurren entre ambas fechas?",
+          "format": "plain",
+          "numerical": [
+            {
+              "weight": 100.0,
+              "feedback": "",
+              "value": 25.0,
+              "tolerance": 0.0
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "source_id": "historia-causalidad",
+          "source_category": "Historia/Interpretación",
+          "concepts": [
+            "causalidad"
+          ],
+          "type": "truefalse",
+          "prompt": "Que dos acontecimientos coincidan en el tiempo demuestra que uno causó el otro.",
+          "format": "plain",
+          "options": [
+            {
+              "label": "A",
+              "text": "Falso",
+              "weight": 100,
+              "source_index": 1
+            },
+            {
+              "label": "B",
+              "text": "Verdadero",
+              "weight": 0,
+              "source_index": 0
+            }
+          ]
+        },
+        {
+          "number": 4,
+          "source_id": "historia-contraste",
+          "source_category": "Historia/Fuentes",
+          "concepts": [
+            "fuentes"
+          ],
+          "type": "multiple",
+          "prompt": "Selecciona las prácticas que ayudan a contrastar un testimonio.",
+          "format": "plain",
+          "options": [
+            {
+              "label": "A",
+              "text": "Compararlo con fuentes independientes.",
+              "weight": 50.0,
+              "source_index": 0
+            },
+            {
+              "label": "B",
+              "text": "Examinar quién lo escribió y con qué propósito.",
+              "weight": 50.0,
+              "source_index": 1
+            },
+            {
+              "label": "C",
+              "text": "Considerarlo verdadero porque es antiguo.",
+              "weight": -100.0,
+              "source_index": 2
+            }
+          ]
+        }
+      ],
+      "files": {
+        "student_html": "modelo-A-student.html",
+        "student_pdf": "modelo-A-student.pdf",
+        "teacher_html": "modelo-A-teacher.html",
+        "teacher_pdf": "modelo-A-teacher.pdf",
+        "gift": "modelo-A.gift"
+      },
+      "pdf_status": {
+        "student": "generated",
+        "teacher": "generated"
+      }
+    },
+    {
+      "id": "B",
+      "questions": [
+        {
+          "number": 1,
+          "source_id": "historia-fuente",
+          "source_category": "Historia/Fuentes",
+          "concepts": [
+            "fuentes"
+          ],
+          "type": "single",
+          "prompt": "Una investigadora estudia una huelga de 1910. ¿Qué documento constituye una fuente primaria del suceso?",
+          "format": "html",
+          "options": [
+            {
+              "label": "A",
+              "text": "Un manual publicado en 2020.",
+              "weight": 0.0,
+              "source_index": 1
+            },
+            {
+              "label": "B",
+              "text": "Una carta escrita durante la huelga por una participante.",
+              "weight": 100.0,
+              "source_index": 0
+            },
+            {
+              "label": "C",
+              "text": "Una novela histórica ambientada en otra ciudad.",
+              "weight": 0.0,
+              "source_index": 2
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "source_id": "historia-cronologia",
+          "source_category": "Historia/Interpretación",
+          "concepts": [
+            "cronologia"
+          ],
+          "type": "numerical",
+          "prompt": "Una asociación se funda en 1900 y se disuelve en 1925. ¿Cuántos años transcurren entre ambas fechas?",
+          "format": "plain",
+          "numerical": [
+            {
+              "weight": 100.0,
+              "feedback": "",
+              "value": 25.0,
+              "tolerance": 0.0
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "source_id": "historia-contraste",
+          "source_category": "Historia/Fuentes",
+          "concepts": [
+            "fuentes"
+          ],
+          "type": "multiple",
+          "prompt": "Selecciona las prácticas que ayudan a contrastar un testimonio.",
+          "format": "plain",
+          "options": [
+            {
+              "label": "A",
+              "text": "Compararlo con fuentes independientes.",
+              "weight": 50.0,
+              "source_index": 0
+            },
+            {
+              "label": "B",
+              "text": "Examinar quién lo escribió y con qué propósito.",
+              "weight": 50.0,
+              "source_index": 1
+            },
+            {
+              "label": "C",
+              "text": "Considerarlo verdadero porque es antiguo.",
+              "weight": -100.0,
+              "source_index": 2
+            }
+          ]
+        },
+        {
+          "number": 4,
+          "source_id": "historia-causalidad",
+          "source_category": "Historia/Interpretación",
+          "concepts": [
+            "causalidad"
+          ],
+          "type": "truefalse",
+          "prompt": "Que dos acontecimientos coincidan en el tiempo demuestra que uno causó el otro.",
+          "format": "plain",
+          "options": [
+            {
+              "label": "A",
+              "text": "Falso",
+              "weight": 100,
+              "source_index": 1
+            },
+            {
+              "label": "B",
+              "text": "Verdadero",
+              "weight": 0,
+              "source_index": 0
+            }
+          ]
+        }
+      ],
+      "files": {
+        "student_html": "modelo-B-student.html",
+        "student_pdf": "modelo-B-student.pdf",
+        "teacher_html": "modelo-B-teacher.html",
+        "teacher_pdf": "modelo-B-teacher.pdf",
+        "gift": "modelo-B.gift"
+      },
+      "pdf_status": {
+        "student": "generated",
+        "teacher": "generated"
+      }
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "asistente-docente",
+  "interface": {
+    "displayName": "Asistente docente"
+  },
+  "plugins": [
+    {
+      "name": "asistente-docente",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

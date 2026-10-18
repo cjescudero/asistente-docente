@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.DS_Store
+release/
+output/
+tmp/
+.env
+.env.*
+node_modules/
+
+# Datos locales y claves: mantener siempre fuera de la fuente pública.
+*.pem
+*.key
+Thumbs.db

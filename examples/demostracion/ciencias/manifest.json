@@ -1,0 +1,291 @@
+{
+  "schema_version": 1,
+  "title": "Medición y modelos científicos",
+  "seed": 42,
+  "bank_sha256": "e58506648a4d7d7cb3c80e8bd8b37779e2f38a1c2036b1c64a0e42e1155f4680",
+  "bank_snapshot": "source/bank.gift",
+  "metadata": {
+    "schema_version": 1,
+    "questions": {
+      "ciencia-unidad": {
+        "concepts": [
+          "medicion"
+        ]
+      },
+      "ciencia-media": {
+        "concepts": [
+          "medicion"
+        ]
+      },
+      "ciencia-repetir": {
+        "concepts": [
+          "medicion"
+        ]
+      },
+      "ciencia-modelo": {
+        "concepts": [
+          "modelos"
+        ]
+      },
+      "ciencia-velocidad": {
+        "concepts": [
+          "magnitudes"
+        ]
+      },
+      "ciencia-precision": {
+        "concepts": [
+          "medicion"
+        ]
+      }
+    },
+    "concepts": {
+      "medicion": {
+        "label": "medición y precisión",
+        "guidance": "Distingue el valor medido, la unidad y el margen de tolerancia; identifica qué errores reduce repetir una medida."
+      },
+      "modelos": {
+        "label": "validez de modelos",
+        "guidance": "Explicita los supuestos del modelo y comprueba en qué situaciones son aplicables."
+      },
+      "magnitudes": {
+        "label": "relaciones entre magnitudes",
+        "guidance": "Escribe las unidades antes de operar y verifica que la expresión final tiene la dimensión esperada."
+      }
+    }
+  },
+  "excluded_question_ids": [],
+  "models": [
+    {
+      "id": "A",
+      "questions": [
+        {
+          "number": 1,
+          "source_id": "ciencia-velocidad",
+          "source_category": "Ciencias/Modelos",
+          "concepts": [
+            "magnitudes"
+          ],
+          "type": "single",
+          "prompt": "Un objeto recorre 12 metros en 4 segundos a velocidad constante. ¿Cuál es su velocidad?",
+          "format": "plain",
+          "options": [
+            {
+              "label": "A",
+              "text": "48 m/s.",
+              "weight": 0.0,
+              "source_index": 1
+            },
+            {
+              "label": "B",
+              "text": "3 m/s.",
+              "weight": 100.0,
+              "source_index": 0
+            },
+            {
+              "label": "C",
+              "text": "8 m/s.",
+              "weight": 0.0,
+              "source_index": 2
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "source_id": "ciencia-repetir",
+          "source_category": "Ciencias/Medición",
+          "concepts": [
+            "medicion"
+          ],
+          "type": "truefalse",
+          "prompt": "Repetir una medición siempre elimina todos los errores sistemáticos.",
+          "format": "plain",
+          "options": [
+            {
+              "label": "A",
+              "text": "Falso",
+              "weight": 100,
+              "source_index": 1
+            },
+            {
+              "label": "B",
+              "text": "Verdadero",
+              "weight": 0,
+              "source_index": 0
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "source_id": "ciencia-modelo",
+          "source_category": "Ciencias/Modelos",
+          "concepts": [
+            "modelos"
+          ],
+          "type": "multiple",
+          "prompt": "Selecciona las afirmaciones adecuadas sobre un modelo científico.",
+          "format": "plain",
+          "options": [
+            {
+              "label": "A",
+              "text": "Debe contrastarse con observaciones.",
+              "weight": 50.0,
+              "source_index": 0
+            },
+            {
+              "label": "B",
+              "text": "Puede tener un ámbito de validez limitado.",
+              "weight": 50.0,
+              "source_index": 1
+            },
+            {
+              "label": "C",
+              "text": "Es válido para cualquier situación por definición.",
+              "weight": -100.0,
+              "source_index": 2
+            }
+          ]
+        },
+        {
+          "number": 4,
+          "source_id": "ciencia-media",
+          "source_category": "Ciencias/Medición",
+          "concepts": [
+            "medicion"
+          ],
+          "type": "numerical",
+          "prompt": "Dos medidas de longitud son 2 m y 4 m. Su media es \\(\\bar{x}=\\frac{x_1+x_2}{2}\\). Calcula la media en metros.",
+          "format": "html",
+          "numerical": [
+            {
+              "weight": 100.0,
+              "feedback": "",
+              "value": 3.0,
+              "tolerance": 0.01
+            }
+          ]
+        }
+      ],
+      "files": {
+        "student_html": "modelo-A-student.html",
+        "student_pdf": "modelo-A-student.pdf",
+        "teacher_html": "modelo-A-teacher.html",
+        "teacher_pdf": "modelo-A-teacher.pdf",
+        "gift": "modelo-A.gift"
+      },
+      "pdf_status": {
+        "student": "generated",
+        "teacher": "generated"
+      }
+    },
+    {
+      "id": "B",
+      "questions": [
+        {
+          "number": 1,
+          "source_id": "ciencia-unidad",
+          "source_category": "Ciencias/Medición",
+          "concepts": [
+            "medicion"
+          ],
+          "type": "single",
+          "prompt": "¿Cuál de las siguientes unidades corresponde a una longitud?",
+          "format": "html",
+          "options": [
+            {
+              "label": "A",
+              "text": "Metro.",
+              "weight": 100.0,
+              "source_index": 0
+            },
+            {
+              "label": "B",
+              "text": "Segundo.",
+              "weight": 0.0,
+              "source_index": 1
+            },
+            {
+              "label": "C",
+              "text": "Kilogramo.",
+              "weight": 0.0,
+              "source_index": 2
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "source_id": "ciencia-repetir",
+          "source_category": "Ciencias/Medición",
+          "concepts": [
+            "medicion"
+          ],
+          "type": "truefalse",
+          "prompt": "Repetir una medición siempre elimina todos los errores sistemáticos.",
+          "format": "plain",
+          "options": [
+            {
+              "label": "A",
+              "text": "Falso",
+              "weight": 100,
+              "source_index": 1
+            },
+            {
+              "label": "B",
+              "text": "Verdadero",
+              "weight": 0,
+              "source_index": 0
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "source_id": "ciencia-media",
+          "source_category": "Ciencias/Medición",
+          "concepts": [
+            "medicion"
+          ],
+          "type": "numerical",
+          "prompt": "Dos medidas de longitud son 2 m y 4 m. Su media es \\(\\bar{x}=\\frac{x_1+x_2}{2}\\). Calcula la media en metros.",
+          "format": "html",
+          "numerical": [
+            {
+              "weight": 100.0,
+              "feedback": "",
+              "value": 3.0,
+              "tolerance": 0.01
+            }
+          ]
+        },
+        {
+          "number": 4,
+          "source_id": "ciencia-precision",
+          "source_category": "Ciencias/Modelos",
+          "concepts": [
+            "medicion"
+          ],
+          "type": "numerical",
+          "prompt": "Escribe el valor 0.123456789 con tolerancia absoluta 0.000000001.",
+          "format": "plain",
+          "numerical": [
+            {
+              "weight": 100.0,
+              "feedback": "",
+              "value": 0.123456789,
+              "tolerance": 1e-09
+            }
+          ]
+        }
+      ],
+      "files": {
+        "student_html": "modelo-B-student.html",
+        "student_pdf": "modelo-B-student.pdf",
+        "teacher_html": "modelo-B-teacher.html",
+        "teacher_pdf": "modelo-B-teacher.pdf",
+        "gift": "modelo-B.gift"
+      },
+      "pdf_status": {
+        "student": "generated",
+        "teacher": "generated"
+      }
+    }
+  ]
+}

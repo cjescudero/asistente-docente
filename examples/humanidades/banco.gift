@@ -1,0 +1,26 @@
+// Datos inventados para comprobar el flujo; no es un examen real.
+$CATEGORY: Historia/Fuentes
+
+::historia-fuente::[html]Una investigadora estudia una huelga de 1910. ¿Qué documento constituye una fuente primaria del suceso? {
+=Una carta escrita durante la huelga por una participante.#Es un testimonio contemporáneo que debe contrastarse.
+~Un manual publicado en 2020.#Es una interpretación posterior.
+~Una novela histórica ambientada en otra ciudad.#La ambientación no acredita un testimonio del suceso.
+}
+
+::historia-contraste::[plain]Selecciona las prácticas que ayudan a contrastar un testimonio. {
+~%50%Compararlo con fuentes independientes.#Permite comprobar coincidencias y discrepancias.
+~%50%Examinar quién lo escribió y con qué propósito.#La autoría y finalidad ayudan a interpretar el documento.
+~%-100%Considerarlo verdadero porque es antiguo.#La antigüedad no garantiza exactitud.
+}
+
+$CATEGORY: Historia/Interpretación
+
+::historia-causalidad::[plain]Que dos acontecimientos coincidan en el tiempo demuestra que uno causó el otro. {FALSE}
+
+::historia-cronologia::[plain]Una asociación se funda en 1900 y se disuelve en 1925. ¿Cuántos años transcurren entre ambas fechas? {#25:0}
+
+::historia-emparejar::[plain]Relaciona cada descripción con su concepto. {
+=Testimonio contemporáneo -> Fuente primaria
+=Interpretación posterior -> Fuente secundaria
+=Orden temporal -> Cronología
+}

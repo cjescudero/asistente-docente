@@ -1,0 +1,16 @@
+{
+  "name": "asistente-docente",
+  "owner": {
+    "name": "Carlos J. Escudero"
+  },
+  "metadata": {
+    "description": "Materiales y evaluación para cualquier asignatura"
+  },
+  "plugins": [
+    {
+      "name": "asistente-docente",
+      "source": "./",
+      "description": "Mapa docente, materiales, evaluación y feedback para cualquier disciplina."
+    }
+  ]
+}

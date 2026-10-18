@@ -1,0 +1,28 @@
+// Ejemplo sintético, con contenido suficiente en cada enunciado.
+$CATEGORY: Ciencias/Medición
+
+::ciencia-unidad::[html]¿Cuál de las siguientes unidades corresponde a una longitud? {
+=Metro.#Es una unidad de longitud.
+~Segundo.#El segundo mide tiempo.
+~Kilogramo.#El kilogramo mide masa.
+}
+
+::ciencia-media::[html]Dos medidas de longitud son 2 m y 4 m. Su media es \(\bar\{x\}\=\frac\{x_1+x_2\}\{2\}\). Calcula la media en metros. {#3:0.01}
+
+::ciencia-repetir::[plain]Repetir una medición siempre elimina todos los errores sistemáticos. {FALSE}
+
+$CATEGORY: Ciencias/Modelos
+
+::ciencia-modelo::[plain]Selecciona las afirmaciones adecuadas sobre un modelo científico. {
+~%50%Debe contrastarse con observaciones.#La comparación permite evaluar su adecuación.
+~%50%Puede tener un ámbito de validez limitado.#Sus supuestos pueden dejar de cumplirse.
+~%-100%Es válido para cualquier situación por definición.#La validez depende del contexto y la evidencia.
+}
+
+::ciencia-velocidad::[plain]Un objeto recorre 12 metros en 4 segundos a velocidad constante. ¿Cuál es su velocidad? {
+=3 m/s.#La velocidad es distancia dividida por tiempo.
+~48 m/s.#Multiplicar distancia y tiempo no calcula velocidad.
+~8 m/s.#Restar cantidades de unidades distintas no calcula velocidad.
+}
+
+::ciencia-precision::[plain]Escribe el valor 0.123456789 con tolerancia absoluta 0.000000001. {#0.123456789:0.000000001}

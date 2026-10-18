@@ -1,0 +1,31 @@
+{
+  "name": "asistente-docente",
+  "version": "0.6.0",
+  "description": "Mapa docente, materiales, evaluación y feedback para cualquier disciplina.",
+  "author": {
+    "name": "Carlos J. Escudero"
+  },
+  "homepage": "https://github.com/cjescudero/asistente-docente",
+  "repository": "https://github.com/cjescudero/asistente-docente",
+  "license": "MIT",
+  "keywords": [
+    "docencia",
+    "materiales",
+    "evaluacion",
+    "moodle",
+    "agent-skills",
+    "mapa-docente"
+  ],
+  "skills": "./skills",
+  "interface": {
+    "displayName": "Asistente docente",
+    "shortDescription": "Materiales docentes",
+    "longDescription": "Prepara las instrucciones generales de un proyecto docente. Al crear su mapa, integra la consulta de la wiki como referencia del proyecto: índice, páginas pertinentes y fuentes originales. Incluye Markdown estándar, lector HTML, grafo, actividades, apuntes, evaluación con rúbricas, bancos GIFT, exámenes impresos y feedback para Moodle.",
+    "developerName": "Carlos J. Escudero",
+    "defaultPrompt": [
+      "Crea un mapa docente con índice y grafo a partir de estas carpetas, separando contenidos del estudiante y evaluaciones reservadas.",
+      "Prepara una actividad docente con enunciado y guía del profesor a partir de estas fuentes.",
+      "Genera modelos de examen en papel y sus cuestionarios GIFT ofuscados."
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "questions": {
+    "historia-fuente": {"concepts": ["fuentes"]},
+    "historia-contraste": {"concepts": ["fuentes"]},
+    "historia-causalidad": {"concepts": ["causalidad"]},
+    "historia-cronologia": {"concepts": ["cronologia"]},
+    "historia-emparejar": {"concepts": ["fuentes", "cronologia"]}
+  },
+  "concepts": {
+    "fuentes": {"label": "análisis de fuentes", "guidance": "Revisa la autoría, la fecha y el propósito de cada documento, y contrasta testimonios independientes."},
+    "causalidad": {"label": "causalidad histórica", "guidance": "Distingue coincidencia temporal y explicación causal; busca evidencias del mecanismo que conecta los acontecimientos."},
+    "cronologia": {"label": "cronología", "guidance": "Representa las fechas en una línea temporal y comprueba el intervalo entre los extremos."}
+  }
+}

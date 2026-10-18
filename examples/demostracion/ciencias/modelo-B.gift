@@ -1,0 +1,20 @@
+$CATEGORY: examen/B
+
+::B-P001::[plain]Pregunta 01 {
+=Respuesta A
+~Respuesta B
+~Respuesta C
+}
+
+::B-P002::[plain]Pregunta 02 {
+=Respuesta A
+~Respuesta B
+}
+
+::B-P003::[plain]Pregunta 03 {#
+=%100.0%3.0:0.01
+}
+
+::B-P004::[plain]Pregunta 04 {#
+=%100.0%0.123456789:1e-09
+}

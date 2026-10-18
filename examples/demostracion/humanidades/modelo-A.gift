@@ -1,0 +1,22 @@
+$CATEGORY: examen/A
+
+::A-P001::[plain]Pregunta 01 {
+~Respuesta A
+=Respuesta B
+~Respuesta C
+}
+
+::A-P002::[plain]Pregunta 02 {#
+=%100.0%25.0:0.0
+}
+
+::A-P003::[plain]Pregunta 03 {
+=Respuesta A
+~Respuesta B
+}
+
+::A-P004::[plain]Pregunta 04 {
+~%50.0%Respuesta A
+~%50.0%Respuesta B
+~%-100.0%Respuesta C
+}

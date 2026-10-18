@@ -1,0 +1,11 @@
+{
+  "package": "mathjax",
+  "version": "3.2.2",
+  "source": "https://registry.npmjs.org/mathjax/-/mathjax-3.2.2.tgz",
+  "license": "Apache-2.0",
+  "files": {
+    "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "tex-svg.js": "d4295dc33744836935c1399feece5159577b34c5c8ffb9f1c6324cd82e03a882",
+    "package.json": "ed0d39986b7fe0653b75dfa97caa57f57fc6bc2f32d26318543927cf53aaca92"
+  }
+}

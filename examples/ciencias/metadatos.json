@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "questions": {
+    "ciencia-unidad": {"concepts": ["medicion"]},
+    "ciencia-media": {"concepts": ["medicion"]},
+    "ciencia-repetir": {"concepts": ["medicion"]},
+    "ciencia-modelo": {"concepts": ["modelos"]},
+    "ciencia-velocidad": {"concepts": ["magnitudes"]},
+    "ciencia-precision": {"concepts": ["medicion"]}
+  },
+  "concepts": {
+    "medicion": {"label": "medición y precisión", "guidance": "Distingue el valor medido, la unidad y el margen de tolerancia; identifica qué errores reduce repetir una medida."},
+    "modelos": {"label": "validez de modelos", "guidance": "Explicita los supuestos del modelo y comprueba en qué situaciones son aplicables."},
+    "magnitudes": {"label": "relaciones entre magnitudes", "guidance": "Escribe las unidades antes de operar y verifica que la expresión final tiene la dimensión esperada."}
+  }
+}

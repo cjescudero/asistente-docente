@@ -1,0 +1,14 @@
+{
+  "status": "ok",
+  "outputs": [
+    "modelo_A_CORREGIDO.csv",
+    "modelo_B_CORREGIDO.csv"
+  ],
+  "incidents": [],
+  "students": {
+    "read": 3,
+    "absent": 1,
+    "with_feedback": 2
+  },
+  "manifest_sha256": "d3486d55bc7d5debb4c8da8470a00d184840802cd4bfeb53ad434aef75b39b64"
+}
