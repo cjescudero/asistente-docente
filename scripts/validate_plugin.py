@@ -34,7 +34,7 @@ def validate(root: Path, public: bool = False) -> list[str]:
         return ["Falta un manifiesto de plugin."]
     manifest = json.loads((portable if portable.exists() else claude).read_text(encoding="utf-8"))
     if portable.exists():
-        schema = json.loads((root / "schemas/agent-plugins-1.0.0.schema.json").read_text())
+        schema = json.loads((root / "schemas/agent-plugins-1.0.0.schema.json").read_text(encoding="utf-8"))
         errors.extend(f"Manifest: {e.message}" for e in jsonschema.Draft202012Validator(schema).iter_errors(manifest))
     else:
         if set(manifest) - {"name", "version", "description", "author", "homepage", "repository", "license", "keywords"}:
@@ -93,7 +93,7 @@ def validate(root: Path, public: bool = False) -> list[str]:
                 if root not in dest.parents or not dest.exists():
                     errors.append(f"Enlace roto/fuera del paquete: {path.relative_to(root)} -> {target}")
     vendor = root / "assets/vendor/mathjax"
-    provenance = json.loads((vendor / "provenance.json").read_text())
+    provenance = json.loads((vendor / "provenance.json").read_text(encoding="utf-8"))
     for name, expected in provenance["files"].items():
         file = vendor / name
         if not file.is_file() or hashlib.sha256(file.read_bytes()).hexdigest() != expected:

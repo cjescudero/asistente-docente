@@ -43,7 +43,7 @@ def build_release(root=ROOT):
     errors = validate(root)
     if errors:
         raise ValueError("Plugin inválido: " + "; ".join(errors))
-    manifest = json.loads((root / "plugin.json").read_text())
+    manifest = json.loads((root / "plugin.json").read_text(encoding="utf-8"))
     release = root / "release"
     release.mkdir(exist_ok=True)
     hashes = {}
@@ -73,11 +73,11 @@ def build_release(root=ROOT):
             if target == "agent-plugins":
                 shutil.copyfile(root / "plugin.json", stage / "plugin.json")
                 (stage / ".codex-plugin").mkdir()
-                (stage / ".codex-plugin/plugin.json").write_text(json.dumps(adapters(manifest)[".codex-plugin/plugin.json"], ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
+                (stage / ".codex-plugin/plugin.json").write_text(json.dumps(adapters(manifest)[".codex-plugin/plugin.json"], ensure_ascii=False, indent=2)+"\n", encoding="utf-8", newline="\n")
             else:
                 (stage / ".claude-plugin").mkdir()
                 adapter = adapters(manifest)[".claude-plugin/plugin.json"]
-                (stage / ".claude-plugin/plugin.json").write_text(json.dumps(adapter, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
+                (stage / ".claude-plugin/plugin.json").write_text(json.dumps(adapter, ensure_ascii=False, indent=2)+"\n", encoding="utf-8", newline="\n")
             errors = validate(stage)
             if errors:
                 raise ValueError(f"Paquete {target}: " + "; ".join(errors))
@@ -88,8 +88,8 @@ def build_release(root=ROOT):
             content_hashes = common
             archive = release / f"asistente-docente-{manifest['version']}-{target}.zip"
             hashes[archive.name] = write_archive(stage, archive)
-    (release / "SHA256SUMS").write_text("".join(f"{digest}  {name}\n" for name,digest in hashes.items()), encoding="utf-8")
-    (release / "contents.json").write_text(json.dumps(content_hashes, indent=2)+"\n", encoding="utf-8")
+    (release / "SHA256SUMS").write_text("".join(f"{digest}  {name}\n" for name,digest in hashes.items()), encoding="utf-8", newline="\n")
+    (release / "contents.json").write_text(json.dumps(content_hashes, indent=2)+"\n", encoding="utf-8", newline="\n")
     return hashes
 
 
@@ -102,7 +102,7 @@ def build_source_archive(root=ROOT):
     from sync_manifests import sync
     if sync(root, check=True):
         raise ValueError("Regenera los manifiestos y catálogos antes de distribuir la fuente.")
-    manifest = json.loads((root / "plugin.json").read_text())
+    manifest = json.loads((root / "plugin.json").read_text(encoding="utf-8"))
     release = root / 'release'
     release.mkdir(exist_ok=True)
     archive = release / f"asistente-docente-{manifest['version']}-source.zip"
@@ -123,7 +123,7 @@ def build_source_archive(root=ROOT):
                     destination.parent.mkdir(parents=True, exist_ok=True)
                     shutil.copyfile(file, destination)
         digest = write_archive(stage, archive, prefix='asistente-docente/')
-    (release / 'SOURCE-SHA256SUMS').write_text(f'{digest}  {archive.name}\n', encoding='utf-8')
+    (release / 'SOURCE-SHA256SUMS').write_text(f'{digest}  {archive.name}\n', encoding='utf-8', newline='\n')
     return {archive.name: digest}
 
 

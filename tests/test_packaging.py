@@ -7,6 +7,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 import zipfile
 from pathlib import Path
 
@@ -57,6 +58,16 @@ class PackagingTests(unittest.TestCase):
 
     def test_reproducible_archive(self):
         self.assertEqual(build_release(self.root), self.hashes)
+
+    def test_packaging_preserves_unicode_with_legacy_system_encoding(self):
+        original_read = Path.read_text
+
+        def read_with_legacy_default(path, encoding=None, errors=None):
+            return original_read(path, encoding=encoding or 'cp1252', errors=errors)
+
+        with patch.object(Path, 'read_text', read_with_legacy_default):
+            self.assertEqual(build_release(self.root), self.hashes)
+            self.assertTrue(build_source_archive(self.root))
 
     def test_source_contains_catalogs_and_clean_rebuild_works(self):
         source_hashes = build_source_archive(self.root)
