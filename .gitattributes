@@ -1,0 +1,5 @@
+# Conservar los saltos de línea y las huellas al clonar en cualquier sistema.
+* text=auto eol=lf
+assets/vendor/** -text
+*.png binary
+*.pdf binary

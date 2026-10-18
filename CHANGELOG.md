@@ -10,6 +10,7 @@
   y ficha vacía sin disciplina, nivel ni escala heredados.
 - Guías públicas de instalación, contribución y publicación y CI multiplataforma.
 - Código QR del repositorio en el README y PNG reutilizable en presentaciones.
+- Conservación de saltos de línea e integridad de dependencias al clonar en Windows.
 
 ## 0.5.2
 

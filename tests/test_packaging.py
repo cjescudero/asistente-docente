@@ -67,7 +67,7 @@ class PackagingTests(unittest.TestCase):
         self.assertEqual(hashlib.sha256(archive_path.read_bytes()).hexdigest(), digest)
         with zipfile.ZipFile(archive_path) as archive:
             names = archive.namelist()
-            for required in ('.github/workflows/ci.yml', '.gitignore', '.agents/plugins/marketplace.json',
+            for required in ('.github/workflows/ci.yml', '.gitignore', '.gitattributes', '.agents/plugins/marketplace.json',
                              '.claude-plugin/marketplace.json', '.claude-plugin/plugin.json', 'LICENSE'):
                 self.assertIn('asistente-docente/' + required, names)
             self.assertFalse(any('/release/' in n or '/.venv/' in n or '/.git/' in n for n in names))
@@ -162,18 +162,20 @@ class PackagingTests(unittest.TestCase):
 
     def test_documented_markdown_examples_are_not_real_links(self):
         readme = self.root / "README.md"
-        original = readme.read_text(encoding="utf-8")
+        original_bytes = readme.read_bytes()
+        original = original_bytes.decode("utf-8")
         try:
             readme.write_text(original + "\n`[ejemplo](no-existe.md)`\n```md\n[otro](tampoco.md)\n```\n", encoding="utf-8")
             self.assertEqual(validate(self.root), [])
         finally:
-            readme.write_text(original, encoding="utf-8")
+            readme.write_bytes(original_bytes)
 
     def test_broken_documentation_link_is_reported(self):
         readme = self.root / "README.md"
-        original = readme.read_text(encoding="utf-8")
+        original_bytes = readme.read_bytes()
+        original = original_bytes.decode("utf-8")
         try:
             readme.write_text(original + "\n[roto](no-existe.md)\n", encoding="utf-8")
             self.assertTrue(any("no-existe.md" in error for error in validate(self.root)))
         finally:
-            readme.write_text(original, encoding="utf-8")
+            readme.write_bytes(original_bytes)
