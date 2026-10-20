@@ -10,7 +10,7 @@
     {
       "name": "asistente-docente",
       "source": "./",
-      "description": "Mapa docente, materiales, evaluación y feedback para cualquier disciplina."
+      "description": "Organiza cursos, materiales y evaluación. Instalación desde un marketplace de GitHub."
     }
   ]
 }

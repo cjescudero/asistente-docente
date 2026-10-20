@@ -14,12 +14,12 @@ from urllib.parse import unquote, urlsplit
 from validate_library import _links
 from sync_manifests import generated_files
 
-EXPECTED = {"skill-preparar-actividades-docentes", "skill-generar-apuntes-estudio",
-            "skill-evaluar-entregas", "skill-crear-bancos-preguntas",
-            "skill-preparar-examenes-papel-moodle", "skill-generar-feedback-evaluaciones",
-            "skill-redactar-espanol-claro", "skill-crear-infografias-didacticas",
-            "skill-crear-mapa-docente", "skill-consultar-mapa-docente",
-            "skill-visualizar-mapa-docente", "skill-iniciar-proyecto-docente"}
+EXPECTED = {"preparar-actividades-docentes", "generar-apuntes-estudio",
+            "evaluar-entregas", "crear-bancos-preguntas",
+            "preparar-examenes-papel-moodle", "generar-feedback-evaluaciones",
+            "redactar-espanol-claro", "crear-infografias-didacticas",
+            "crear-mapa-docente", "consultar-mapa-docente",
+            "visualizar-mapa-docente", "iniciar-proyecto-docente"}
 ALLOWED = {"name", "description", "license", "compatibility", "metadata", "allowed-tools"}
 
 

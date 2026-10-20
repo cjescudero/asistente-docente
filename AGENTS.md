@@ -4,7 +4,9 @@
 
 Este proyecto contiene doce skills docentes y utilidades portables para ChatGPT
 Work y Claude Cowork. Por decisión explícita del usuario, carpeta, identificador
-y paquetes se llaman `asistente-docente`, sin prefijo `plugin-`.
+y paquetes se llaman `asistente-docente`, sin prefijo `plugin-`. Las doce skills
+usan nombres sin prefijo `skill-` desde 0.7.0 por decisión del propietario;
+las equivalencias anteriores se documentan en `docs/MIGRACION-0.7.md`.
 
 ## Fuentes y portabilidad
 
@@ -19,6 +21,9 @@ y paquetes se llaman `asistente-docente`, sin prefijo `plugin-`.
   los avisos de terceros; el repositorio es cjescudero/asistente-docente.
 - Generar adaptadores y catálogos con scripts/sync_manifests.py; no mantener
   versiones o metadatos divergentes respecto a plugin.json.
+- Distribuir mediante marketplaces de GitHub; no presuponer disponibilidad en
+  los directorios públicos de ChatGPT o Claude. Documentar la incorporación del
+  marketplace y la instalación posterior del plugin según `docs/INSTALACION.md`.
 
 ## Invariantes
 
@@ -35,6 +40,25 @@ y paquetes se llaman `asistente-docente`, sin prefijo `plugin-`.
   El grafo es un derivado: la vista estudiantil excluye los datos reservados,
   incluidas sus dependencias, antes de serializar; un filtro visual no basta.
 
+## Proyectos docentes
+
+- El contrato compartido es `docs/PROYECTO-DOCENTE.md`: estructura `curso-v1`,
+  configuración UTF-8 con rutas relativas y selección explícita del corpus.
+- La iniciación prepara carpetas, configuración, LEEME e instrucciones. No crea
+  ni propone la wiki. La creación del mapa registra un índice real e integra
+  su consulta en el AGENTS.md del curso, preservando las reglas previas.
+- Ante conflictos en instrucciones existentes, preguntar antes de cambiarlas.
+  No imponer bloques generados ni modificar instrucciones globales.
+- Respetar exclusiones incluso mediante enlaces. Resultados, borradores y el
+  propio mapa quedan fuera del corpus; el archivo requiere selección explícita.
+  Detectar páginas dependientes de fuentes retiradas antes de reutilizarlas.
+- No sobrescribir ni mover originales sin una propuesta concreta aprobada.
+  Mantener una ubicación para cada material; separar soluciones y estudiantes.
+- Comprobar solo las entradas necesarias para el encargo. Adjuntos suficientes
+  permiten tareas sencillas aunque el curso o el mapa aún no estén preparados.
+- Los entornos operativos quedan fuera de los datos del curso y de instalaciones
+  de solo lectura. Los nombres de carpetas no gestionan permisos ni sincronización.
+
 ## Comprobaciones
 
 Desde esta carpeta, con el intérprete del entorno preparado (en macOS/Linux,
@@ -48,7 +72,7 @@ python scripts/validate_library.py examples/mapa-docente/mapa-docente
 python scripts/build_release.py --source
 ```
 
-Las pruebas PDF necesitan las dependencias de `requirements.txt` y Chromium de
+Las pruebas PDF necesitan las dependencias de `requirements-pdf.txt` y Chromium de
 Playwright. Comprobar visualmente los PDF representativos. Registrar por separado
 la validación local y las pruebas reales en ChatGPT Work, Claude Cowork y Moodle.
 Para cambios del grafo o del lector de la wiki, comprobar en un navegador los
@@ -61,6 +85,11 @@ python tests/check_graph_browser.py
 python tests/check_graph_layout.py
 python tests/check_wiki_browser.py
 ```
+
+Para cambios de inicialización y selección, comprobar proyecto nuevo, repetición,
+AGENTS.md previo, conflictos, selección aplazada, exclusiones, retirada de fuentes
+y migraciones con colisiones y enlaces. Verificar el modo de previsualización
+sin cambios y el uso desde otra carpeta y con instalación de solo lectura.
 
 Revisar escritorio y móvil y guardar las capturas fuera del paquete. Si no hay
 navegador disponible, declarar esa revisión pendiente; las pruebas unitarias no

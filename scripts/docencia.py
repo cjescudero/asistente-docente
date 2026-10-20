@@ -15,8 +15,24 @@ sys.path.insert(0, str(ROOT))
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description="Asistente docente: bancos, exámenes y feedback.")
+    parser = argparse.ArgumentParser(description="Asistente docente: proyectos, bancos, exámenes y feedback.")
     commands = parser.add_subparsers(dest="command", required=True)
+    project = commands.add_parser("init-project", help="Preparar un curso sin crear la wiki")
+    project.add_argument("root", type=Path)
+    selection = project.add_mutually_exclusive_group()
+    selection.add_argument("--include", action="append", help="Carpeta relativa elegida; se puede repetir")
+    selection.add_argument("--no-sources", action="store_true", help="Elegir explícitamente ninguna fuente")
+    project.add_argument("--exclude", action="append", help="Archivo o subcarpeta relativa; sin patrones")
+    project.add_argument("--dry-run", action="store_true")
+    check = commands.add_parser("check-project", help="Diagnosticar estructura y entradas sin modificarlas")
+    check.add_argument("root", type=Path)
+    migration = commands.add_parser("plan-migration", help="Previsualizar movimientos y enlaces; nunca mover")
+    migration.add_argument("root", type=Path)
+    migration.add_argument("--moves", type=Path, required=True, help="Lista JSON de objetos from/to")
+    register = commands.add_parser("register-map", help="Registrar un mapa real ya validado")
+    register.add_argument("root", type=Path)
+    register.add_argument("map_dir", type=Path)
+    register.add_argument("--dry-run", action="store_true")
     bank = commands.add_parser("validate-bank", help="Validar un banco GIFT sin modificarlo")
     bank.add_argument("bank", type=Path)
     exam = commands.add_parser("build-exams", help="Generar modelos en papel y GIFT ofuscado")
@@ -43,10 +59,28 @@ def main(argv=None):
     markdown.add_argument("--html-only", action="store_true")
     doctor = commands.add_parser("doctor", help="Comprobar capacidades locales sin instalar dependencias")
     doctor.add_argument("--pdf", action="store_true", help="Exigir también las capacidades PDF")
+    doctor.add_argument("--project", type=Path, help="Añadir diagnóstico del curso")
     args = parser.parse_args(argv)
     try:
         status = 0
-        if args.command == "validate-bank":
+        if args.command == "init-project":
+            from docencia.project import initialize_project
+            result = initialize_project(args.root, include=[] if args.no_sources else args.include,
+                                        exclude=args.exclude, dry_run=args.dry_run)
+            status = 2 if result["status"] == "pending_approval" else 0
+        elif args.command == "check-project":
+            from docencia.project import check_project
+            result = check_project(args.root)
+            status = {"ok": 0, "incomplete": 2, "invalid": 1}[result["status"]]
+        elif args.command == "plan-migration":
+            from docencia.project import plan_migration
+            moves = json.loads(args.moves.read_text(encoding="utf-8-sig"))
+            result = plan_migration(args.root, moves)
+            status = 1 if result["status"] == "invalid" else 0
+        elif args.command == "register-map":
+            from docencia.project_map import register_map
+            result = register_map(args.root, args.map_dir, dry_run=args.dry_run)
+        elif args.command == "validate-bank":
             from docencia.gift import parse_gift
             questions = parse_gift(args.bank.read_text(encoding="utf-8-sig"))
             types = {}
@@ -86,6 +120,14 @@ def main(argv=None):
             result["basic_ready"] = all(result[k] for k in ["python_supported", "mathjax", "markdown"])
             result["pdf_ready"] = result["basic_ready"] and result["playwright"] and result["chromium"]
             status = 0 if result["pdf_ready" if args.pdf else "basic_ready"] else 2
+            if args.project:
+                from docencia.project import check_project
+                result["project"] = check_project(args.project)
+                result["project_tools_ready"] = result["python_supported"]
+                if result["project"]["status"] == "invalid":
+                    status = 1
+                elif result["project"]["status"] != "ok" and status == 0:
+                    status = 2
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return status
     except (ValueError, OSError, RuntimeError) as exc:

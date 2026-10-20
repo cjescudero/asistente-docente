@@ -8,18 +8,19 @@ No depende de Notion, Obsidian, una base de datos ni un servicio externo.
 
 Crear o actualizar el mapa incluye integrarlo como punto de partida en el
 `AGENTS.md` de la raíz del proyecto docente. No es necesario ejecutar antes
-[iniciar el proyecto docente](../skills/skill-iniciar-proyecto-docente/SKILL.md):
-esa skill prepara instrucciones generales y no lanza ni propone crear el mapa.
+[iniciar el proyecto docente](../skills/iniciar-proyecto-docente/SKILL.md):
+esa skill prepara el curso y su selección de fuentes, y no lanza ni propone
+crear el mapa.
 
 ## Tres responsabilidades
 
-- [Crear el mapa](../skills/skill-crear-mapa-docente/SKILL.md) inventaría las
+- [Crear el mapa](../skills/crear-mapa-docente/SKILL.md) inventaría las
   carpetas elegidas, lee, sintetiza, relaciona y mantiene los contenidos. Integra
   el bloque de consulta en el `AGENTS.md` del proyecto y utiliza la skill visual
   para generar o actualizar lector y grafo docentes.
-- [Consultar el mapa](../skills/skill-consultar-mapa-docente/SKILL.md) recorre el
+- [Consultar el mapa](../skills/consultar-mapa-docente/SKILL.md) recorre el
   índice y contrasta evidencias para responder o preparar un encargo. No escribe.
-- [Visualizar el mapa](../skills/skill-visualizar-mapa-docente/SKILL.md) transforma
+- [Visualizar el mapa](../skills/visualizar-mapa-docente/SKILL.md) transforma
   páginas y enlaces existentes en un lector y un grafo interactivos. Puede ejecutarse por separado sin
   volver a sintetizar el material ni modificar los originales.
 
@@ -30,7 +31,7 @@ completo en una sola operación; también puede regenerar únicamente el gráfic
 ## Punto de partida del proyecto
 
 La skill de creación o actualización usa la
-[plantilla del bloque de consulta](../skills/skill-crear-mapa-docente/assets/agents-mapa.md)
+[plantilla del bloque de consulta](../skills/crear-mapa-docente/assets/agents-mapa.md)
 para añadir o actualizar en el `AGENTS.md` del proyecto docente la ruta a
 `index.md` y sus orígenes. Debe conocer la raíz del proyecto antes de
 escribir allí; si falta, la solicita sin adivinarla desde las carpetas del mapa.
@@ -57,36 +58,49 @@ grafo tampoco reescribe `AGENTS.md`.
 
 ## Carpetas elegidas por el profesor
 
-La entrada es **una o varias carpetas identificadas por el usuario**. No existe
-una carpeta de origen fija ni una búsqueda automática por carpetas personales.
-Si faltan las ubicaciones necesarias, solicitarlas. Los nombres siguientes son
-solo una organización sugerida cuando se crea un proyecto nuevo:
+La entrada es **una o varias carpetas identificadas por el usuario**. En cursos
+inicializados, leer la selección y exclusiones de `proyecto-docente.json` según
+el [contrato común](PROYECTO-DOCENTE.md). No hay descubrimiento automático. Una
+selección pendiente requiere aclarar las fuentes antes de crear el mapa; la
+presencia de archivos en el curso no los incorpora al corpus.
+
+El árbol del curso está en ese contrato. La wiki reside en `docente/mapa-docente/`
+en proyectos nuevos; un mapa previo conserva su ruta hasta una migración
+aprobada. Su organización interna es:
 
 ```text
-curso/
-  AGENTS.md                 instrucciones y entrada al Mapa docente
-  materiales-docentes/       originales que se usan en el curso
-  archivo-evaluaciones/      otro origen elegido: exámenes y soluciones
-  mapa-docente/              documentación generada
-    index.md                entrada general para el profesor
-    index.html              lector navegable de la wiki, generado desde Markdown
-    LEEME.md                alcance, fuentes y convenciones de uso
-    fuentes.json            raíces, fuentes y metadatos de las páginas
-    contenidos/
-      conceptos/
-      programa/
-      presentaciones/
-      apuntes/
-      practicas/
-      talleres/
-    reservado/
-      evaluaciones/
-      soluciones/
-      conceptos/            síntesis que dependen de fuentes reservadas
-    incidencias.md
-    log.md
-    grafo-docente.html
+docente/mapa-docente/
+  index.md                entrada general para el profesor
+  index.html              lector navegable generado desde Markdown
+  LEEME.md                alcance, fuentes y convenciones de uso
+  fuentes.json            raíces, fuentes y metadatos de las páginas
+  contenidos/
+    conceptos/
+    programa/
+    presentaciones/
+    apuntes/
+    practicas/
+    talleres/
+  reservado/
+    evaluaciones/
+    soluciones/
+    conceptos/            síntesis que dependen de fuentes reservadas
+  incidencias.md
+  log.md
+  grafo-docente.html
 ```
+
+`fuentes.json` mantiene su formato y registra lo inventariado y leído. La
+configuración del proyecto selecciona lo permitido: prevalece sobre un registro
+anterior si una fuente se retira o excluye. No reintroducirla por un enlace.
+Identificar páginas dependientes directas e indirectas y revisarlas antes de
+reutilizarlas. Una consulta informa sin escribir; el mantenimiento autorizado
+corrige el mapa. Solo generar lector o grafo tras superar la validación.
+
+Resultados, borradores y el propio mapa quedan fuera del corpus; `archivo/`
+requiere selección explícita. Clasificar una fuente o seleccionarla no concede
+permiso de difusión. Registrar la carpeta del mapa en la configuración únicamente
+cuando exista su `index.md`; una carpeta vacía no es una wiki.
 
 Los originales existentes conservan sus nombres y ubicación. Cada raíz se
 registra mediante una ruta relativa a `mapa-docente/`, y cada fuente mediante
@@ -105,7 +119,7 @@ No reemplazarla silenciosamente por una ruta personal absoluta.
 ## Markdown normal y organización por contenido
 
 Las páginas son texto Markdown: títulos, párrafos, listas y enlaces comunes
-como `[Media](../conceptos/media.md)` o `[Diapositivas](../../../materiales-docentes/tema-1.pdf)`.
+como `[Media](../conceptos/media.md)` o `[Diapositivas](../../../fuentes/tema-1.pdf)`.
 No usar enlaces dobles de aplicaciones wiki, bloques propietarios ni bases de
 Notion. No exigir YAML en las páginas; los metadatos están en `fuentes.json`.
 Obsidian u otro editor pueden abrirlas, pero no son parte del formato.
@@ -191,8 +205,10 @@ de acceso, incluso si se ha omitido accidentalmente un enlace en el texto.
 
 ## Incorporación y mantenimiento
 
-1. Delimitar raíces y encargo. Inventariar documentos sin declararlos leídos.
-   Excluir entregas y datos personales del alumnado del mapa reutilizable.
+1. Delimitar raíces y encargo aplicando la selección y exclusiones vigentes.
+   Detectar fuentes retiradas y páginas dependientes antes de reutilizarlas.
+   Inventariar documentos admitidos sin declararlos leídos. Excluir entregas
+   y datos personales del alumnado del mapa reutilizable.
 2. Revisar fuentes prioritarias, incluidos gráficos, tablas o fórmulas que
    cambien su interpretación. No ejecutar macros ni celdas de notebooks al leer.
    Si falta un lector, registrar el límite y continuar con material accesible.
@@ -205,8 +221,8 @@ de acceso, incluso si se ha omitido accidentalmente un enlace en el texto.
    ediciones docentes y no regenerar páginas ajenas al cambio.
 6. Integrar el bloque de consulta en el `AGENTS.md` de la raíz conocida del
    proyecto, conservando sus reglas y comprobando las rutas desde ese archivo.
-7. Validar el conjunto y generar de nuevo el lector y el grafo docentes mediante la skill
-   visual. Si falla la generación, el derivado anterior queda desactualizado y no
+7. Validar el conjunto y su correspondencia con el corpus. Solo si esa
+   validación pasa, generar el lector y el grafo docentes mediante la skill visual. Si falla la generación, el derivado anterior queda desactualizado y no
    debe presentarse como reflejo del estado nuevo. No declarar éxito por tener
    solo el diseño o el código del gráfico.
 

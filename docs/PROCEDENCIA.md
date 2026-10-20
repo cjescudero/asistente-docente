@@ -9,13 +9,13 @@ La fuente de referencia es la carpeta exportada `.agents/skills` del proyecto de
 | Entrada de origen | Destino o decisión |
 | --- | --- |
 | `project-guide` | Orientación y selección de flujos en [USO](USO.md); sin una skill genérica adicional |
-| `preparar-materiales-ti` | `skill-preparar-actividades-docentes` |
-| `generar-apuntes-estudio-ti` | `skill-generar-apuntes-estudio` |
+| `preparar-materiales-ti` | `preparar-actividades-docentes` |
+| `generar-apuntes-estudio-ti` | `generar-apuntes-estudio` |
 | `crear-apuntes-estudio-ti` | Alias histórico absorbido por la anterior; no se distribuye como skill duplicada |
-| `corregir-taller-ti` | `skill-evaluar-entregas` |
-| `generar-cuestionarios-ti` | `skill-crear-bancos-preguntas` y `skill-preparar-examenes-papel-moodle` |
+| `corregir-taller-ti` | `evaluar-entregas` |
+| `generar-cuestionarios-ti` | `crear-bancos-preguntas` y `preparar-examenes-papel-moodle` |
 | `generar-cuestionarios-ti-talleres-1-4` | Alias histórico absorbido por los flujos de bancos y exámenes |
-| `retroalimentar-cuestionarios-offline-ti` | `skill-generar-feedback-evaluaciones` |
+| `retroalimentar-cuestionarios-offline-ti` | `generar-feedback-evaluaciones` |
 | `sincronizar-documentacion-talleres` | Criterios de coherencia documental y mantenimiento, sin skill docente adicional |
 | `verificacion-cambios-talleres` | Validación técnica y comprobaciones de entrega del nuevo proyecto |
 
@@ -25,11 +25,11 @@ La adaptación elimina rutas personales, bloques T1–T4/T5–T8/T9–T12, cuota
 
 ## Dos skills adicionales del propietario
 
-**`redactar-espanol-tecnico-simplificado`.** Da origen a `skill-redactar-espanol-claro`. Se conservan prioridad de precisión, audiencia, incertidumbre, referentes inequívocos, elección de formato y comprobación del resultado. Se adaptan ejemplos y referencias a capacidades del anfitrión. No se copia el estándar ASD-STE100 ni se afirma certificación: se mantiene la adaptación editorial propia inspirada en el inglés técnico simplificado, cuya referencia es la [FAQ del STEMG](https://asd-ste100.org/STE_faq.html).
+**`redactar-espanol-tecnico-simplificado`.** Da origen a `redactar-espanol-claro`. Se conservan prioridad de precisión, audiencia, incertidumbre, referentes inequívocos, elección de formato y comprobación del resultado. Se adaptan ejemplos y referencias a capacidades del anfitrión. No se copia el estándar ASD-STE100 ni se afirma certificación: se mantiene la adaptación editorial propia inspirada en el inglés técnico simplificado, cuya referencia es la [FAQ del STEMG](https://asd-ste100.org/STE_faq.html).
 
 La fuente original atribuye inspiración sobre escritura simplificada y formatos de explicación al [post de Andrej Karpathy](https://x.com/karpathy/status/2105819303471976479), cuyo texto aportó el propietario. Esa atribución no convierte las pautas editoriales de la skill en resultados experimentales ni en un método avalado por el autor.
 
-**`skill-handdrawn-educational-infographics`.** Da origen a `skill-crear-infografias-didacticas`. Se conservan el brief, los patrones, la separación entre apoyo oral e infografía autónoma, el estilo crema/tinta/pastel y la revisión de legibilidad. Se adapta la exigencia de generación nativa a la capacidad disponible. Si falta esa capacidad, se entrega brief y prompt; SVG u otras alternativas no sustituyen la imagen por defecto.
+**`skill-handdrawn-educational-infographics`.** Da origen a `crear-infografias-didacticas`. Se conservan el brief, los patrones, la separación entre apoyo oral e infografía autónoma, el estilo crema/tinta/pastel y la revisión de legibilidad. Se adapta la exigencia de generación nativa a la capacidad disponible. Si falta esa capacidad, se entrega brief y prompt; SVG u otras alternativas no sustituyen la imagen por defecto.
 
 No se incorporan el PNG ni los trece JPG de referencias visuales del origen: no se encontró licencia ni atribución documentada para esos archivos. La descripción textual del estilo es suficiente para este paquete.
 
@@ -56,8 +56,8 @@ síntesis enlazada e instrucciones de uso, así como las operaciones de incorpor
 consulta y revisión. La versión 0.2.0 adaptó estas ideas como biblioteca docente;
 la versión 0.3.0 desarrolla el nombre y flujo propios **Mapa docente**.
 
-`wikiforge` se corresponde conceptualmente con `skill-crear-mapa-docente`;
-`wiki-query`, con `skill-consultar-mapa-docente`. Son equivalencias de
+`wikiforge` se corresponde conceptualmente con `crear-mapa-docente`;
+`wiki-query`, con `consultar-mapa-docente`. Son equivalencias de
 función, no alias instalados ni copias literales. No se redistribuyen los ZIP de
 origen ni se atribuye a esos adjuntos una licencia no declarada.
 
@@ -81,7 +81,7 @@ apuntes, prácticas y talleres pueden relacionarse sin mezclar en material públ
 evaluaciones, soluciones o criterios reservados. La compatibilidad de lectura con
 versión 1 no implica migrar automáticamente los mapas existentes.
 
-La tercera skill, `skill-visualizar-mapa-docente`, añade un grafo HTML autónomo
+La tercera skill, `visualizar-mapa-docente`, añade un grafo HTML autónomo
 generado por código del proyecto. Crear o mantener el mapa la invoca al terminar
 cuando hay Python; también puede usarse para regenerar la vista de forma
 independiente. Consultar conserva el modo de solo lectura.
@@ -96,7 +96,7 @@ implementación o este contrato de acceso a los adjuntos de referencia o a Karpa
 ## Puesta en marcha del proyecto docente (0.5.0)
 
 En la versión 0.5.0, por petición inicial del propietario,
-`skill-iniciar-proyecto-docente` creaba o integraba instrucciones en el `AGENTS.md`
+`iniciar-proyecto-docente` creaba o integraba instrucciones en el `AGENTS.md`
 del proyecto docente antes de proponer su wiki. Este reparto se corrigió en
 0.5.1, como se detalla a continuación.
 La lectura del índice y la profundización en páginas pertinentes retoman el
@@ -118,7 +118,7 @@ Mapa docente incorpora en el `AGENTS.md` raíz del proyecto el bloque que exige
 partir de su índice y seguir únicamente los enlaces relevantes hasta los
 originales cuando haga falta. No es necesario iniciar el proyecto previamente.
 
-La plantilla del bloque pasa a `skill-crear-mapa-docente`. La integración conserva
+La plantilla del bloque pasa a `crear-mapa-docente`. La integración conserva
 las reglas propias del proyecto y actualiza el bloque anterior sin duplicarlo.
 La raíz debe estar identificada por el contexto o el usuario; no se deduce
 recorriendo ancestros. Así se mantiene la navegación gradual sin volver a
@@ -132,6 +132,21 @@ modifica solo lo indicado en un AGENTS.md existente y pregunta ante conflictos.
 Establece español claro por defecto para el proyecto y aclara ubicación y tipos
 de materiales cuando se desconocen. Esto actualiza la restricción de preguntas
 sobre orígenes de 0.5.1; se mantiene la separación respecto a crear el mapa.
+
+## Organización del curso y entrada guiada (0.7.0)
+
+El plan aprobado por el propietario el 20 de octubre de 2026 amplía la puesta en
+marcha: estructura uniforme, configuración de fuentes y exclusiones, LEEME y
+AGENTS.md respetado. Conserva la separación respecto a crear la wiki y traslada
+su selección a una decisión explícita del profesor durante la inicialización.
+La selección no acredita lectura ni autorización para publicar.
+
+El reparto `alumnado/`, `docente/` y `archivo/`, la exclusión de resultados y
+borradores, y los nombres de skills sin prefijo son decisiones de este proyecto.
+No se atribuyen a las referencias de Karpathy ni a los adjuntos iniciales.
+La configuración complementa el registro del mapa sin modificar su formato.
+Las equivalencias para proyectos anteriores están en
+[Migración a 0.7](MIGRACION-0.7.md).
 
 ## Formatos y dependencias
 

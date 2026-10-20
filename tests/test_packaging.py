@@ -48,9 +48,9 @@ class PackagingTests(unittest.TestCase):
                 self.assertNotIn("plugin.json" if "-claude.zip" in name else ".claude-plugin/plugin.json", names)
                 self.assertEqual(json.loads(archive.read(expected))["name"], "asistente-docente")
                 self.assertEqual(sum(n.startswith("skills/") and n.endswith("/SKILL.md") for n in names), 12)
-                self.assertIn("skills/skill-iniciar-proyecto-docente/SKILL.md", names)
-                self.assertIn("skills/skill-crear-mapa-docente/assets/agents-mapa.md", names)
-                self.assertNotIn("skills/skill-iniciar-proyecto-docente/assets/agents-proyecto.md", names)
+                self.assertIn("skills/iniciar-proyecto-docente/SKILL.md", names)
+                self.assertIn("skills/crear-mapa-docente/assets/agents-mapa.md", names)
+                self.assertNotIn("skills/iniciar-proyecto-docente/assets/agents-proyecto.md", names)
                 self.assertTrue(all(not n.startswith(("/", "bin/")) and "\\" not in n and ".." not in Path(n).parts for n in names))
                 self.assertFalse(any(".venv" in n or "__pycache__" in n or n.endswith(".zip") for n in names))
                 entries.append({n:archive.read(n) for n in names if Path(n).name != 'plugin.json'})
@@ -58,6 +58,36 @@ class PackagingTests(unittest.TestCase):
 
     def test_reproducible_archive(self):
         self.assertEqual(build_release(self.root), self.hashes)
+
+    def test_course_and_external_environment_preview_from_both_packages(self):
+        for name in self.hashes:
+            with self.subTest(package=name), tempfile.TemporaryDirectory() as temp:
+                base = Path(temp).resolve()
+                install = base / "plugin"
+                with zipfile.ZipFile(self.root / "release" / name) as archive:
+                    archive.extractall(install)
+                # Probar sin site-packages y con instalación de solo lectura.
+                paths = list(install.rglob("*")) + [install]
+                try:
+                    for path in paths:
+                        path.chmod(0o555 if path.is_dir() else 0o444)
+                    preview = subprocess.run([sys.executable, "-S", str(install / "scripts/setup_environment.py"),
+                                              "--dry-run"], cwd=base, capture_output=True, text=True,
+                                             encoding="utf-8")
+                    self.assertEqual(preview.returncode, 0, preview.stderr)
+                    destination = Path(json.loads(preview.stdout)[0][-1])
+                    self.assertFalse(destination.is_relative_to(install))
+                    course = base / "curso"
+                    result = subprocess.run([sys.executable, "-S", str(install / "scripts/docencia.py"),
+                                             "init-project", str(course)], cwd=base,
+                                            capture_output=True, text=True, encoding="utf-8")
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    self.assertFalse(json.loads(result.stdout)["wiki_created"])
+                    self.assertTrue((course / "AGENTS.md").is_file())
+                    self.assertEqual(list((course / "docente/mapa-docente").iterdir()), [])
+                finally:
+                    for path in reversed(paths):
+                        path.chmod(0o755 if path.is_dir() else 0o644)
 
     def test_packaging_preserves_unicode_with_legacy_system_encoding(self):
         original_read = Path.read_text

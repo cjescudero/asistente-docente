@@ -19,12 +19,18 @@ La fuente conserva también `.codex-plugin/plugin.json`, generado para clientes
 Codex que lo admitan. Los catálogos `.agents/plugins/marketplace.json` y
 `.claude-plugin/marketplace.json` permiten distribuir desde un repositorio GitHub.
 Los catálogos se incluyen en la fuente, no en los ZIP de un plugin individual.
-La [guía de instalación](INSTALACION.md) separa esos flujos y sus requisitos.
+La [guía de instalación](INSTALACION.md) separa profesores, administradores y
+usuarios avanzados. La distribución se realiza mediante marketplaces
+personalizados de GitHub; no se publicará en los directorios públicos de ChatGPT
+ni de Claude. En ChatGPT, el administrador incorpora y habilita el plugin antes
+de que lo instalen los profesores; en Claude, se añade primero el repositorio
+desde Personalizar. Una instalación en Codex no sustituye la importación al
+espacio de trabajo de ChatGPT.
 No se necesitan MCP, hooks ni variables exclusivas de un anfitrión.
 
-La versión 0.6.0 distribuye doce skills en ambos paquetes:
-`asistente-docente-0.6.0-agent-plugins.zip` y
-`asistente-docente-0.6.0-claude.zip`. El Mapa docente usa páginas Markdown con
+La versión 0.7.0 prepara doce skills, con nombres sin prefijo, en ambos paquetes:
+`asistente-docente-0.7.0-agent-plugins.zip` y
+`asistente-docente-0.7.0-claude.zip`. El Mapa docente usa páginas Markdown con
 enlaces relativos estándar e inventario JSON; no requiere Notion, Obsidian ni
 frontmatter. Su grafo se genera con Python estándar y funciona como HTML autónomo
 sin acceso a la red. La lectura del corpus y la revisión visual requieren las
@@ -32,7 +38,12 @@ capacidades correspondientes del anfitrión.
 El lector navegable `index.html` requiere `markdown-it-py` al generarse;
 su consulta posterior es local y no necesita Python, servidor ni conexión.
 
-Cada carpeta fuente debe haber sido elegida por el usuario. El registro versión 2
+La preparación normal de utilidades usa la caché del usuario; el entorno
+`.venv` de `--dev` se reserva para desarrollo del plugin.
+
+La estructura del curso y el contrato de `proyecto-docente.json` están en
+[Proyecto docente](PROYECTO-DOCENTE.md). Cada carpeta fuente debe haber sido
+elegida por el usuario y respetar las exclusiones vigentes. El registro versión 2
 admite varias raíces relativas y clasifica por separado las páginas, sus fuentes
 y sus accesos. Si no hay una ruta relativa posible, como entre distintas unidades
 de Windows, se debe comunicar la limitación. El plugin no mueve ni copia los
@@ -40,10 +51,14 @@ originales para resolverla sin una petición que lo autorice.
 
 ## Prueba en cada anfitrión
 
-1. Construir los paquetes y comprobar los hashes de `release/SHA256SUMS`.
-2. Instalar desde el catálogo del repositorio siguiendo la guía. Usar el ZIP
-   solo si el anfitrión ofrece esa opción. Registrar cualquier limitación de acceso.
-3. Confirmar nombre, versión 0.6.0 y doce skills; comprobar que los recursos del
+1. Elegir la revisión que se probará y construir sus paquetes. Comprobar los
+   hashes de `release/SHA256SUMS`. GitHub solo proporciona las revisiones ya
+   subidas; para probar una copia local, usar el recorrido avanzado de la guía.
+2. Incorporar el marketplace y después instalar el plugin siguiendo la guía.
+   Registrar quién realizó la importación, qué roles tienen acceso y cualquier
+   limitación. Usar el ZIP solo si el anfitrión ofrece esa opción; no confundir
+   esa prueba con una importación del marketplace.
+3. Confirmar nombre, versión 0.7.0 y doce skills; comprobar que los recursos del
    paquete son accesibles desde las skills.
 4. Pedir una actividad breve con fuentes sintéticas. Revisar rigor, nivel,
    separación entre enunciado y solución y generación real de Markdown/PDF.
@@ -66,17 +81,23 @@ originales para resolverla sin una petición que lo autorice.
 10. Generar la vista estudiantil. Inspeccionar los datos del HTML: excluir fuentes
     no autorizadas, páginas que dependan de ellas directa o indirectamente y
     enlaces salientes a archivos. El filtro docente no basta para esta prueba.
-11. En un proyecto de prueba externo al plugin, invocar la puesta en marcha.
-    Comprobar que crea o integra instrucciones generales en `AGENTS.md`, conserva
-    las reglas y pregunta ante conflictos. Verificar español claro por defecto
-    y la pregunta por ubicación y tipos de materiales solo si faltan. No debe
-    proponer ni invocar la creación del mapa.
+11. En un proyecto de prueba externo al plugin, pedir «Inicia mi proyecto docente».
+    Comprobar estructura, `proyecto-docente.json`, `LEEME.md`, `AGENTS.md` preservado
+    y pregunta ante conflictos. Verificar español claro por defecto, selección
+    explícita o aplazada y exclusiones. La carpeta del mapa debe quedar vacía.
+    Repetir sin duplicar ni borrar decisiones. Probar carpeta inexistente, vacía,
+    sin archivos seleccionados y no accesible; una tarea con adjuntos suficientes
+    no debe quedar bloqueada. No debe proponer ni invocar la creación del mapa.
     Después pedir crear el mapa de carpetas elegidas: debe integrar su bloque en
     `AGENTS.md` con rutas válidas desde él. Probar también sin puesta en marcha
     previa y con un bloque de la versión 0.5.0. Repetir sin duplicar reglas.
     Consultar desde el índice hasta un original enlazado, evitando ciclos y la
     lectura completa del corpus y sin modificarlo durante la consulta.
-12. Registrar fecha, versión del anfitrión, pasos, resultados y limitaciones.
+12. Retirar una fuente del corpus después de usarla en el mapa: detectar páginas
+    dependientes, impedir su reutilización sin revisión y no generar derivados
+    mientras la validación falle. Probar migración con colisiones y enlaces: el
+    informe no debe mover archivos; la aplicación espera una propuesta aprobada.
+13. Registrar fecha, versión del anfitrión, pasos, resultados y limitaciones.
 
 Una cuenta puede permitir skills pero restringir ejecución, dependencias o
 generación de archivos. El paquete no instala automáticamente un runtime en el
@@ -85,16 +106,18 @@ requiere acceso a los archivos del curso; instalar el plugin no comparte esos
 archivos entre anfitriones. Si no existe un lector para un formato, registrar
 la fuente pendiente o no legible, sin inventar su contenido.
 
-La puesta en marcha genera instrucciones generales en `AGENTS.md`; la creación
+La puesta en marcha prepara estructura, configuración e instrucciones en
+`AGENTS.md`; la creación
 o actualización del mapa incorpora en ese archivo el bloque que lo establece
 como punto de partida del proyecto. Su carga automática depende del anfitrión.
 Comprobar que las incorpora a la tarea; si no lo hace, adjuntar el archivo o pedir
 su lectura explícita. Ninguna de estas skills crea `CLAUDE.md` ni modifica
 instrucciones globales como efecto secundario.
 
-Sin Python, el agente puede mantener el Markdown mediante las capacidades de
-archivos disponibles, pero debe declarar la validación automática y el grafo
-pendientes. Generar HTML no demuestra que se hayan probado sus controles. Una
+Sin Python, el agente puede preparar carpetas, configuración, instrucciones y
+Markdown mediante herramientas de archivos. Debe declarar las comprobaciones
+automáticas y los derivados que requieran capacidades ausentes como pendientes.
+No guardar entornos dentro del curso ni de una instalación de solo lectura. Generar HTML no demuestra que se hayan probado sus controles. Una
 vista docente contiene información aunque sus nodos estén ocultos; ni Markdown
 ni HTML aplican permisos. La vista estudiantil no distribuye los originales.
 
@@ -107,4 +130,7 @@ anterior ni los originales. Véase [Mapa docente](MAPA-DOCENTE.md).
 Licencia MIT y repositorio elegidos por el propietario. Los paquetes incluyen
 los avisos de terceros. Seguir [la guía de publicación](PUBLICACION-GITHUB.md)
 para revisar la fuente, construir artefactos y comprobar las instalaciones
-reales. La preparación local no publica repositorios, marketplaces ni plugins.
+reales. La preparación local no publica repositorios, marketplaces ni plugins. La
+release 0.6.0 se conserva y la fuente 0.7.0 se distribuye desde `main`.
+Una nueva release con ZIP y las instalaciones reales se registran por separado
+de la subida del código, la construcción y la validación locales.

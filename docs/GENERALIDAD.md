@@ -46,3 +46,14 @@ sintéticos existentes; no acredita resultados pedagógicos en todas las discipl
 Los cambios concretos fueron condicionar español claro al idioma del encargo y
 permitir identificadores acordados fuera de una institución. La fuente pública
 incluye instrucciones de mantenimiento autocontenidas.
+
+## Organización común desde 0.7.0
+
+El árbol del curso organiza responsabilidades, no el contenido de una disciplina.
+Asignatura, nivel, idioma, objetivos, escala y criterios siguen procediendo del
+encargo. `proyecto-docente.json` guarda selección de fuentes y rutas; no impone un
+temario. Los campos pedagógicos permanecen en la ficha opcional o la conversación.
+
+Las tareas con texto o adjuntos suficientes siguen disponibles sin inicializar
+un curso ni crear una wiki. La selección y las exclusiones se aplican cuando se
+utiliza el corpus del proyecto. Véase [Proyecto docente](PROYECTO-DOCENTE.md).

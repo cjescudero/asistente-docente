@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "structure": "curso-v1",
+  "sources": {
+    "selected": true,
+    "include": [
+      "alumnado/materiales",
+      "docente/fuentes",
+      "docente/evaluaciones"
+    ],
+    "exclude": [
+      "docente/evaluaciones/examen-retirado.md"
+    ]
+  },
+  "map": null
+}

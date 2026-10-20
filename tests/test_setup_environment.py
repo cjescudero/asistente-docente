@@ -16,6 +16,28 @@ import setup_environment as setup
 
 
 class SetupTests(unittest.TestCase):
+    def test_runtime_defaults_to_user_cache_on_all_platforms(self):
+        with tempfile.TemporaryDirectory() as temp:
+            home = Path(temp)
+            version = json.loads((ROOT / 'plugin.json').read_text(encoding='utf-8'))['version']
+            for platform, prefix in (('darwin', home / 'Library/Caches'),
+                                     ('win32', home / 'AppData/Local'),
+                                     ('linux', home / '.cache')):
+                target = setup.default_destination(platform=platform, environ={}, home=home)
+                self.assertEqual(target, prefix / 'asistente-docente' / version / 'venv')
+                self.assertFalse(target.is_relative_to(ROOT))
+            self.assertEqual(setup.default_destination(dev=True), ROOT / '.venv')
+
+    def test_runtime_cannot_be_created_among_course_materials(self):
+        from docencia.project import initialize_project
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / 'curso'
+            initialize_project(root)
+            with patch.object(sys, 'argv', ['setup', '--venv', str(root / 'alumnado/venv'), '--dry-run']), \
+                    redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
+                setup.main()
+            self.assertFalse((root / 'alumnado/venv').exists())
+
     def test_basic_and_pdf_dependencies_are_distinct(self):
         basic = setup.commands(Path('entorno con espacios'), windows=False)
         self.assertEqual(len(basic), 2)

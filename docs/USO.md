@@ -4,50 +4,46 @@ El plugin reúne doce skills que comparten criterios de claridad y trazabilidad.
 
 | Necesidad | Skill |
 | --- | --- |
-| Preparar las instrucciones generales de un proyecto docente | [Iniciar proyecto docente](../skills/skill-iniciar-proyecto-docente/SKILL.md) |
-| Organizar carpetas elegidas y establecer el mapa como entrada del proyecto | [Crear Mapa docente](../skills/skill-crear-mapa-docente/SKILL.md) |
-| Localizar evidencia en el mapa sin modificarlo | [Consultar Mapa docente](../skills/skill-consultar-mapa-docente/SKILL.md) |
-| Generar o regenerar el lector HTML de la wiki y su grafo | [Visualizar Mapa docente](../skills/skill-visualizar-mapa-docente/SKILL.md) |
-| Enunciados, talleres y guía del profesor | [Preparar actividades](../skills/skill-preparar-actividades-docentes/SKILL.md) |
-| Teoría y materiales de estudio | [Generar apuntes](../skills/skill-generar-apuntes-estudio/SKILL.md) |
-| Trabajos entregados y rúbricas | [Evaluar entregas](../skills/skill-evaluar-entregas/SKILL.md) |
-| Preguntas y metadatos conceptuales | [Crear bancos](../skills/skill-crear-bancos-preguntas/SKILL.md) |
-| Papel y respuestas ofuscadas en Moodle | [Preparar exámenes](../skills/skill-preparar-examenes-papel-moodle/SKILL.md) |
-| Resultados y comentarios de mejora | [Generar feedback](../skills/skill-generar-feedback-evaluaciones/SKILL.md) |
-| Claridad, precisión y formato explicativo | [Redactar español claro](../skills/skill-redactar-espanol-claro/SKILL.md) |
-| Imágenes con estilo de boceto didáctico | [Crear infografías](../skills/skill-crear-infografias-didacticas/SKILL.md) |
+| Preparar el curso, elegir fuentes y conciliar sus instrucciones | [Iniciar proyecto docente](../skills/iniciar-proyecto-docente/SKILL.md) |
+| Organizar carpetas elegidas y establecer el mapa como entrada del proyecto | [Crear Mapa docente](../skills/crear-mapa-docente/SKILL.md) |
+| Localizar evidencia en el mapa sin modificarlo | [Consultar Mapa docente](../skills/consultar-mapa-docente/SKILL.md) |
+| Generar o regenerar el lector HTML de la wiki y su grafo | [Visualizar Mapa docente](../skills/visualizar-mapa-docente/SKILL.md) |
+| Enunciados, talleres y guía del profesor | [Preparar actividades](../skills/preparar-actividades-docentes/SKILL.md) |
+| Teoría y materiales de estudio | [Generar apuntes](../skills/generar-apuntes-estudio/SKILL.md) |
+| Trabajos entregados y rúbricas | [Evaluar entregas](../skills/evaluar-entregas/SKILL.md) |
+| Preguntas y metadatos conceptuales | [Crear bancos](../skills/crear-bancos-preguntas/SKILL.md) |
+| Papel y respuestas ofuscadas en Moodle | [Preparar exámenes](../skills/preparar-examenes-papel-moodle/SKILL.md) |
+| Resultados y comentarios de mejora | [Generar feedback](../skills/generar-feedback-evaluaciones/SKILL.md) |
+| Claridad, precisión y formato explicativo | [Redactar español claro](../skills/redactar-espanol-claro/SKILL.md) |
+| Imágenes con estilo de boceto didáctico | [Crear infografías](../skills/crear-infografias-didacticas/SKILL.md) |
 
 ## Iniciar el proyecto docente
 
-Pedir «Prepara este proyecto para trabajar con material docente» activa
-`skill-iniciar-proyecto-docente`. La skill actúa en la raíz del proyecto elegido,
-no en el `AGENTS.md` global ni en el del plugin. Si ya hay instrucciones, las
-lee y conserva; modifica únicamente los puntos indicados, sin reorganizar el
-resto. Ante conflictos muestra las reglas incompatibles y pregunta antes de
-cambiar esa parte.
-Repetir la puesta en marcha no debe duplicar esa sección.
+Instala el plugin, abre la carpeta del curso y pide **«Inicia mi proyecto docente»**.
+El agente aclara solo los datos que faltan, prepara el árbol uniforme y guarda
+`proyecto-docente.json`, `LEEME.md` y `AGENTS.md`. El contrato de estructura,
+selección y herramientas está en [Proyecto docente](PROYECTO-DOCENTE.md).
 
-La puesta en marcha prepara instrucciones generales del trabajo docente. No
-crea ni invoca el Mapa docente ni pregunta si se quiere crearlo. Sí solicita
-la ubicación y el tipo de los contenidos de origen cuando falten: teoría,
-prácticas, talleres, exámenes, soluciones u otros. Reutiliza lo ya conocido y
-registra ese contexto sin inventariar ni recorrer todos los materiales.
-Incorpora en AGENTS.md el uso predeterminado de `skill-redactar-espanol-claro`
-para redactar en español, salvo indicación distinta del encargo; si contradice
-una regla previa, pregunta antes de cambiarla.
-Si ya hay un bloque de consulta de un mapa, lo conserva;
-no es un requisito haber creado un mapa para iniciar el proyecto.
+Si ya existen materiales, el agente presenta movimientos y enlaces afectados
+antes de reorganizarlos. No sobrescribe archivos ni instrucciones. Modifica
+solo lo autorizado en `AGENTS.md` y pregunta ante conflictos. Repetir la puesta
+en marcha no duplica reglas ni borra un mapa o una selección previos.
 
-El archivo es texto portable; su carga automática depende del anfitrión. Si el
-agente no lo lee automáticamente, hay que incorporarlo como instrucciones del
-proyecto o pedirle que lo lea al comenzar. La skill no crea un `CLAUDE.md` ni
-modifica configuraciones globales como efecto secundario.
+El profesor elige las carpetas y exclusiones del corpus, o aplaza esa selección.
+La inicialización no lee todo el material, no crea ni propone la wiki y deja su
+carpeta vacía cuando no existe. Establece `redactar-espanol-claro` para escribir
+en español y conserva un bloque de consulta de mapa existente. Crear un mapa
+más adelante es un encargo separado.
+
+Comprobar que el anfitrión incorpora `AGENTS.md`. Si no, pedir su lectura
+explícita o utilizar las instrucciones de carpeta disponibles. No se crea
+`CLAUDE.md` ni se cambian configuraciones globales por sistema.
 
 ## Trabajar con un curso
 
 Usar la [ficha Markdown](../templates/ficha-asignatura.md) o su [ejemplo JSON](../templates/ficha-asignatura.json) como contexto. Registrar objetivos, audiencia, fuentes vigentes, criterios y recursos permitidos. No imponer la estructura de una asignatura anterior ni usar exámenes reservados como fuente de apuntes sin autorización.
 
-Guardar materiales y resultados fuera del paquete instalado. Mantener fuentes y derivados diferenciados: por ejemplo, `materiales`, `bancos`, `examenes` y `resultados` en el espacio del curso. Los nombres son orientativos; no se exige esa estructura.
+Guardar materiales y resultados fuera del paquete instalado. En proyectos inicializados, usar el árbol `curso-v1`: borradores en `docente/borradores/`, datos individuales en `docente/resultados/` y material destinado a estudiantes en `alumnado/`. La entrega al alumnado debe formar parte del encargo; no mantener copias de exportación por sistema. Una tarea con texto o adjuntos suficientes no exige crear un proyecto ni llenar carpetas.
 
 Para materiales escritos, entregar Markdown y PDF por defecto. El Mapa docente usa Markdown navegable, registro JSON, lector `index.html` y grafo HTML; el PDF solo se añade si se pide una copia estática. Un notebook es opcional. Una petición de imagen o vídeo conserva su formato: ni un prompt ni un guion cuentan como archivo final generado. Las infografías requieren una capacidad de imágenes disponible; si falta, esa skill entrega brief y prompt, sin cambiar por defecto a SVG. El grafo del mapa se construye a partir de datos y enlaces, sin generación de imágenes.
 
@@ -56,12 +52,14 @@ Para materiales escritos, entregar Markdown y PDF por defecto. El Mapa docente u
 Pedir «Crea un Mapa docente con estas dos carpetas, separando el curso actual de
 los exámenes anteriores» activa la creación. El profesor debe elegir las carpetas:
 puede haber una o varias, pero ninguna se presupone o descubre automáticamente.
-La selección ya indicada se reutiliza; no hay que confirmarla en cada consulta.
+La selección guardada y sus exclusiones se reutilizan; no hay que confirmarlas
+en cada consulta. Una fuente retirada o excluida no puede reintroducirse por un
+enlace ni por un registro antiguo. Sus páginas dependientes requieren revisión.
 No hace falta ejecutar previamente la skill de puesta en marcha.
 
 Al crear o actualizar el mapa, la propia skill integra en el `AGENTS.md` de la
 raíz del proyecto docente el bloque de consulta, siguiendo su
-[plantilla](../skills/skill-crear-mapa-docente/assets/agents-mapa.md). Si esa raíz
+[plantilla](../skills/crear-mapa-docente/assets/agents-mapa.md). Si esa raíz
 no está identificada, la solicita; no la deduce buscando carpetas ascendentes.
 Conserva las instrucciones previas y actualiza el bloque del mapa una sola vez,
 incluido el que pudiera existir desde la versión 0.5.0. Las rutas al índice y a
@@ -85,14 +83,14 @@ El resultado incluye índice, fichas, conceptos, referencias precisas, estados d
 lectura y lagunas explícitas. Las páginas son Markdown estándar con enlaces
 normales; no requieren Notion, Obsidian ni frontmatter. Crear o mantener el mapa
 incluye generar su lector `index.html` y su grafo mediante la skill de visualización
-cuando están las capacidades necesarias. También puede pedirse regenerar solo uno.
+cuando están las capacidades necesarias y la validación del corpus y sus
+dependencias pasa. También puede pedirse regenerar solo uno.
 
-Una estructura posible es `materiales-docentes/`, `archivo-evaluaciones/` y
-`mapa-docente/`, con `index.md`, `LEEME.md`, `fuentes.json`, `incidencias.md` y
-`log.md`. Bajo `contenidos/` se pueden separar conceptos, presentaciones, apuntes,
-prácticas y talleres; bajo `reservado/`, evaluaciones, soluciones y criterios
-reservados. Estas rutas son ejemplos, nunca carpetas fijas. El acceso de una
-página y su tipo se registran por separado.
+El mapa de un curso inicializado está en `docente/mapa-docente/`, con `index.md`,
+`LEEME.md`, `fuentes.json`, `incidencias.md` y `log.md`. Un mapa previo conserva
+su ruta hasta una migración autorizada. Bajo `contenidos/` se separan conceptos,
+presentaciones, apuntes, prácticas y talleres; bajo `reservado/`, evaluaciones,
+soluciones y criterios reservados. El acceso y el tipo se registran por separado.
 
 Los originales se conservan en sus carpetas. No se mueven ni copian para crear
 el mapa; una copia requiere que se haya pedido. `fuentes.json` usa
@@ -117,6 +115,10 @@ actualizarlos, la migración a versión 2 se prepara en una copia del mapa,
 conservando la versión anterior y los originales; la consulta no migra nada.
 
 ## Ejecutar las utilidades
+
+Este apartado es para agentes y mantenimiento. El profesor puede solicitar los
+resultados en lenguaje natural. La preparación del curso y el diagnóstico con
+`doctor --project` se describen en [Proyecto docente](PROYECTO-DOCENTE.md).
 
 La CLI funciona mediante la ruta del script y no requiere instalar el módulo `docencia` como paquete. Requiere Python 3.10 o posterior. El PDF utiliza las dependencias declaradas en el plugin y Chromium de Playwright; su disponibilidad debe comprobarse en el entorno real.
 

@@ -1,7 +1,11 @@
 # Contratos de datos, versión 1
 
-Los archivos JSON usan UTF-8 y `schema_version: 1`. Las rutas incluidas en un
-manifiesto son relativas a su carpeta. Los módulos Python usan diccionarios JSON.
+Los contratos de banco, examen y feedback usan JSON UTF-8 y `schema_version: 1`.
+Las rutas incluidas en un manifiesto son relativas a su carpeta. Los módulos
+Python usan diccionarios JSON. El contrato independiente de
+`proyecto-docente.json` y sus rutas relativas al curso está en
+[Proyecto docente](PROYECTO-DOCENTE.md); `fuentes.json` conserva la versión 2
+descrita en [Mapa docente](MAPA-DOCENTE.md).
 
 ## Banco
 

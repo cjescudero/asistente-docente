@@ -43,6 +43,14 @@ Conserva el español natural de las instrucciones y respeta el idioma solicitado
 para los resultados. Las fuentes, rúbricas y datos del docente viven fuera del
 plugin. No conviertas los ejemplos en valores predeterminados.
 
+Mantén doce skills con nombres sin prefijo; las equivalencias históricas viven
+en [migración](docs/MIGRACION-0.7.md). Conserva coherencia entre la inicialización,
+las utilidades y el [contrato común](docs/PROYECTO-DOCENTE.md), sin introducir una
+segunda configuración de fuentes en la ficha pedagógica. El modo de
+previsualización no debe mutar el curso; las migraciones solo aplican propuestas
+concretas aprobadas. Comprueba fuentes excluidas y dependencias retiradas, no solo
+el caso de una carpeta vacía.
+
 Añade pruebas cuando cambie un comportamiento observable. Una nueva skill debe
 indicar cuándo usarla, qué necesita y qué entrega, con recursos relativos al
 paquete. Documenta capacidades ausentes y conserva originales y contenido ajeno.

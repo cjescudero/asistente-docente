@@ -11,9 +11,11 @@ import argparse
 import hashlib
 import json
 import re
+import sys
 from pathlib import Path, PurePosixPath
 from urllib.parse import unquote, urlsplit
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 SOURCE_FIELDS = {"id", "title", "path", "kind", "course", "currency", "access",
                  "reading", "reviewed_locators", "sha256", "page"}
@@ -120,7 +122,7 @@ def _validate_pages(data, guide, errors, warnings):
             errors.append("Página de contenido sin registrar en pages: " + name)
 
 
-def validate_library(guide_dir, sources_root=None, source_roots=None):
+def validate_library(guide_dir, sources_root=None, source_roots=None, project_root=None):
     """Return {status, errors, warnings, sources}; perform no filesystem writes."""
     errors, warnings = [], ["No se comprueban encabezados ni anclas de los enlaces Markdown."]
     result = {"status": "invalid", "errors": errors, "warnings": warnings, "sources": 0}
@@ -154,6 +156,19 @@ def validate_library(guide_dir, sources_root=None, source_roots=None):
         errors.append("Para schema_version 2 usar --source-root ID=DIR, no --sources-root.")
     if version != 2 and sources_root is not None:
         overrides = {**overrides, "principal": sources_root}
+    # Comprobar la selección antes de leer o calcular huellas de los originales.
+    from docencia.project_map import check_map_policy
+    try:
+        policy = check_map_policy(guide, data, source_roots=overrides,
+                                  project_root=project_root, link_extractor=_links)
+    except (OSError, ValueError, TypeError, RuntimeError) as exc:
+        errors.append(f"No se pudo comprobar la selección del curso: {exc}")
+        return result
+    if policy["status"] != "not_applicable":
+        result["project_policy"] = policy
+        if policy["status"] != "ok":
+            errors.extend(policy["errors"])
+            return result
     if not isinstance(declared_roots, dict) or not declared_roots:
         errors.append("source_roots debe declarar una o varias carpetas elegidas por el usuario.")
         declared_roots = {}
@@ -297,6 +312,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("guide_dir", metavar="GUIDE_DIR")
     parser.add_argument("--sources-root", metavar="DIR")
+    parser.add_argument("--project", metavar="ROOT", help="Raíz del curso; se detecta en antecesores por defecto")
     parser.add_argument("--source-root", metavar="ID=DIR", action="append", default=[],
                         help="Reubicar una raíz declarada (schema 2); se puede repetir.")
     args = parser.parse_args(argv)
@@ -306,7 +322,7 @@ def main(argv=None):
         if not separator or not name or not path or name in overrides:
             parser.error("--source-root requiere ID=DIR, con ID no repetido.")
         overrides[name] = path
-    result = validate_library(args.guide_dir, args.sources_root, overrides)
+    result = validate_library(args.guide_dir, args.sources_root, overrides, project_root=args.project)
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 0 if result["status"] == "ok" else 1
 

@@ -7,34 +7,44 @@ del agente; las pruebas Python no sustituyen su ejecución en el anfitrión.
 
 | Skill | Petición representativa | Resultado esperado |
 | --- | --- | --- |
-| `skill-iniciar-proyecto-docente` | Poner en marcha un proyecto con material docente. | AGENTS.md respetado, cambios limitados al encargo y consulta ante conflictos; español claro por defecto y pregunta por ubicación y tipos de materiales si faltan, sin iniciar el mapa. |
-| `skill-crear-mapa-docente` | Crear un Mapa docente de dos carpetas elegidas: materiales actuales y archivo de evaluaciones. | Índice, páginas Markdown y fuentes trazables; bloque en AGENTS.md para consultar desde el índice; originales intactos, acceso y lectura explícitos, lector y grafo cuando hay capacidades. |
-| `skill-consultar-mapa-docente` | Localizar material y criterios vigentes para diseñar una práctica y evaluarla. | Respuesta con evidencia original, distinción de histórico/vigente y contexto para el siguiente encargo; sin editar el mapa ni regenerar el grafo. |
-| `skill-visualizar-mapa-docente` | Regenerar el grafo docente y una vista para estudiantes. | HTML autónomos con arrastre, zoom, búsqueda, filtros y panel; la exportación estudiantil excluye datos reservados y sus dependencias transitivas, sin enlaces a archivos. |
-| `skill-preparar-actividades-docentes` | Crear un taller de análisis histórico con fuentes aportadas. | Enunciado autónomo y solución docente separados; objetivos y evidencias de aprendizaje. |
-| `skill-generar-apuntes-estudio` | Preparar apuntes de ecología para primer curso a partir de un capítulo. | Explicación sustentada, símbolos definidos y Markdown/PDF; sin inventar fuentes. |
-| `skill-evaluar-entregas` | Evaluar tres ensayos sintéticos con una rúbrica. | Justificación individual por criterio; sin imponer escala sobre diez ni penalizar uso supuesto de IA. |
-| `skill-crear-bancos-preguntas` | Generar preguntas de literatura con distractores razonados. | Banco GIFT válido con IDs y metadatos conceptuales, sin añadir hechos no sustentados. |
-| `skill-preparar-examenes-papel-moodle` | Crear dos modelos impresos de un banco. | PDFs, solucionarios, GIFT ofuscados, snapshot y manifiesto con idéntico orden. |
-| `skill-generar-feedback-evaluaciones` | Devolver comentarios conceptuales a partir de exportaciones. | CSV preservado, orientación sustentada y bloqueo de duplicados/ausencias ambiguas. |
-| `skill-redactar-espanol-claro` | Simplificar una explicación manteniendo todas sus condiciones. | Español natural y preciso, sin resumir ni declarar certificación STE. |
-| `skill-crear-infografias-didacticas` | Crear una diapositiva dibujada sobre una cadena causal. | Imagen revisada si hay generador; diseño y prompt claramente identificados si no lo hay. |
+| `iniciar-proyecto-docente` | Poner en marcha un proyecto con material docente. | Estructura de curso, configuración de fuentes, LEEME y AGENTS.md respetado; consulta ante conflictos, español claro y datos pendientes explícitos, sin iniciar el mapa. |
+| `crear-mapa-docente` | Crear un Mapa docente de dos carpetas elegidas: materiales actuales y archivo de evaluaciones. | Índice, páginas Markdown y fuentes trazables; bloque en AGENTS.md para consultar desde el índice; originales intactos, acceso y lectura explícitos, lector y grafo cuando hay capacidades. |
+| `consultar-mapa-docente` | Localizar material y criterios vigentes para diseñar una práctica y evaluarla. | Respuesta con evidencia original, distinción de histórico/vigente y contexto para el siguiente encargo; sin editar el mapa ni regenerar el grafo. |
+| `visualizar-mapa-docente` | Regenerar el grafo docente y una vista para estudiantes. | HTML autónomos con arrastre, zoom, búsqueda, filtros y panel; la exportación estudiantil excluye datos reservados y sus dependencias transitivas, sin enlaces a archivos. |
+| `preparar-actividades-docentes` | Crear un taller de análisis histórico con fuentes aportadas. | Enunciado autónomo y solución docente separados; objetivos y evidencias de aprendizaje. |
+| `generar-apuntes-estudio` | Preparar apuntes de ecología para primer curso a partir de un capítulo. | Explicación sustentada, símbolos definidos y Markdown/PDF; sin inventar fuentes. |
+| `evaluar-entregas` | Evaluar tres ensayos sintéticos con una rúbrica. | Justificación individual por criterio; sin imponer escala sobre diez ni penalizar uso supuesto de IA. |
+| `crear-bancos-preguntas` | Generar preguntas de literatura con distractores razonados. | Banco GIFT válido con IDs y metadatos conceptuales, sin añadir hechos no sustentados. |
+| `preparar-examenes-papel-moodle` | Crear dos modelos impresos de un banco. | PDFs, solucionarios, GIFT ofuscados, snapshot y manifiesto con idéntico orden. |
+| `generar-feedback-evaluaciones` | Devolver comentarios conceptuales a partir de exportaciones. | CSV preservado, orientación sustentada y bloqueo de duplicados/ausencias ambiguas. |
+| `redactar-espanol-claro` | Simplificar una explicación manteniendo todas sus condiciones. | Español natural y preciso, sin resumir ni declarar certificación STE. |
+| `crear-infografias-didacticas` | Crear una diapositiva dibujada sobre una cadena causal. | Imagen revisada si hay generador; diseño y prompt claramente identificados si no lo hay. |
 
 ## Casos de aceptación de la puesta en marcha
 
-- Proyecto nuevo sin mapa: crear instrucciones generales en el `AGENTS.md`
-  local, con español claro por defecto; preguntar por ubicación y tipos de
-  materiales desconocidos, sin proponer una wiki ni inventariar las fuentes.
+- Proyecto nuevo sin mapa: crear el árbol `curso-v1`, configuración, LEEME y
+  AGENTS.md con español claro. Preguntar por ubicación, tipos y selección de
+  materiales que falten; dejar la carpeta del mapa vacía, sin proponer una wiki.
 - Proyecto con instrucciones propias: modificar solo lo indicado, conservando
   texto y organización ajenos al encargo. Repetir sin duplicar reglas.
 - Regla existente incompatible con la petición o el estilo predeterminado:
   explicar el conflicto y preguntar; no sobrescribir mientras falta la respuesta.
 - Orígenes y tipos ya indicados: reutilizarlos sin volver a preguntar. Si solo
   falta el tipo de material, pedir únicamente ese dato.
-- Redacción: registrar `skill-redactar-espanol-claro` como opción predeterminada
+- Redacción: registrar `redactar-espanol-claro` como opción predeterminada
   del proyecto, sin cambiar su activación global ni inventar su disponibilidad.
 - Proyecto con un bloque de consulta del mapa: conservarlo sin reemplazarlo ni
   regenerar la documentación.
+
+- Selección aplazada: guardar `selected: false` y listas vacías; no interpretar
+  la ausencia de selección como permiso para recorrer el curso.
+- Entradas: distinguir carpeta inexistente, vacía, sin archivos seleccionados y
+  no accesible. Resolver una corrección con texto suficiente aunque estén vacías.
+- Migración: informar movimientos, colisiones y enlaces sin aplicar cambios;
+  esperar aprobación de la propuesta antes de mover originales.
+
+El [contrato común](PROYECTO-DOCENTE.md) se aplica a las doce skills según las
+entradas necesarias. Las equivalencias de nombres están en [migración](MIGRACION-0.7.md).
 
 ## Casos de aceptación del Mapa docente
 
@@ -50,6 +60,9 @@ del agente; las pruebas Python no sustituyen su ejecución en el anfitrión.
   original vigente o identificar la ausencia de criterio aplicable.
 - Elegir dos raíces con nombres distintos de los del ejemplo. Crear el registro
   versión 2 y abrir originales mediante rutas relativas sin moverlos.
+- Excluir una fuente ya registrada: identificar dependencias directas e
+  indirectas, no reutilizar síntesis afectadas antes de revisarlas y bloquear
+  derivados mientras no se supere la validación. Un enlace no readmite la fuente.
 - Cambiar una fuente después de registrarla. Detectar la huella distinta,
   revisar los contenidos afectados y actualizar el mapa y su grafo; no conservar
   una síntesis como actual sin volver a comprobarla.

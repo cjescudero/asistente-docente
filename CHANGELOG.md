@@ -1,5 +1,24 @@
 # Historial
 
+## 0.7.0 — código en main
+
+- Inicio rápido con incorporación de marketplaces GitHub e instalación posterior;
+  guías separadas para profesores, administradores y usuarios avanzados.
+  Sin distribución en los directorios públicos de ChatGPT o Claude.
+- Puesta en marcha guiada con estructura de curso, configuración de fuentes,
+  LEEME e instrucciones locales respetadas; no crea ni propone la wiki.
+- Selección explícita de carpetas y exclusiones, diagnóstico de entradas y
+  previsualización de la preparación y de las migraciones.
+- Corpus separado de resultados, borradores y mapa; revisión de dependencias
+  al retirar fuentes y comprobación previa a generar derivados.
+- Nombres de las doce skills sin prefijo y tabla de equivalencias para actualizar
+  proyectos anteriores sin duplicar skills.
+- Materiales en una sola ubicación y guía para profesores en tres pasos;
+  documentación de compatibilidad, capacidades y migración.
+- Fuente y marketplaces 0.7.0 en la rama `main`. Se conserva la release 0.6.0;
+  la actualización del código no crea una nueva release ni acredita instalaciones
+  reales en los anfitriones.
+
 ## 0.6.0
 
 - Preparación para GitHub bajo MIT, con repositorio y avisos de terceros.
@@ -33,7 +52,7 @@
 
 ## 0.5.0
 
-- Nueva `skill-iniciar-proyecto-docente`, con plantilla para crear o completar
+- Nueva `iniciar-proyecto-docente`, con plantilla para crear o completar
   el `AGENTS.md` del proyecto docente conservando sus instrucciones existentes.
   El plugin reúne doce skills.
 - Las tareas docentes parten del índice de la wiki, recorren los enlaces

@@ -1,6 +1,88 @@
 # Validación local
 
-Fecha: 18 de octubre de 2026. Versión actual: **0.6.0**.
+Fecha: 20 de octubre de 2026. Versión preparada localmente: **0.7.0**.
+
+## Revisión de la instalación desde GitHub
+
+La revisión documental del 20 de octubre de 2026 contrasta la importación del
+marketplace en ChatGPT, los menús de Claude en español y las alternativas de
+Codex CLI y Claude Code con las fuentes oficiales enlazadas en
+[Instalación](INSTALACION.md). Distingue la incorporación del catálogo, la
+instalación del plugin y las políticas de la organización. No se prevé publicar
+el plugin en los directorios públicos de las plataformas.
+
+Pasan la sincronización de manifiestos, la validación del plugin para
+distribución pública en GitHub y la validación del catálogo mediante Claude
+Code. Se repiten y superan las **10 pruebas de empaquetado**, incluidos recursos
+comunes, construcción reproducible y uso desde otra carpeta. La revisión de
+enlaces locales y anclas se realiza sobre la documentación modificada.
+
+Las huellas de 45 archivos confirman que esta revisión conserva las skills,
+scripts, biblioteca Python, recursos visuales y `AGENTS.md` existentes. No se
+repiten pruebas funcionales de evaluación ni de PDF, porque no cambia su código.
+Estas comprobaciones no acreditan una importación o instalación real desde las
+interfaces de ChatGPT o Claude, ni una publicación de los cambios en GitHub.
+
+## Puesta en marcha y organización del curso (0.7.0)
+
+**260 pruebas superadas en macOS, Python 3.12.9.** La ejecución general pasó
+258 y dejó las dos PDF opcionales omitidas; ambas se ejecutaron después con
+Chrome local y también pasaron. Se conservan las pruebas de bancos, exámenes,
+feedback, integridad y paquetes, y se añaden 54 para esta versión.
+
+Comprobaciones nuevas:
+
+- Curso nuevo, previsualización sin cambios, repetición sin alteración de bytes
+  ni fechas, instrucciones anteriores conservadas y propuestas ante conflictos.
+- Selección pendiente frente a selección vacía, rutas portables, carpetas
+  inexistentes/vacías/sin archivos seleccionados y acceso denegado simulado.
+- Exclusiones por archivo y subárbol, resultados y borradores fuera del corpus,
+  enlaces simbólicos sin capacidad de eludir la selección y fuentes no leídas
+  durante el diagnóstico.
+- Examen reservado seleccionado y ausencia de su contenido en la vista
+  estudiantil; retirada de una fuente y detección de dependencias transitivas.
+  La validación se detiene antes de abrir los originales excluidos y bloquea la
+  regeneración sin sobrescribir los HTML anteriores.
+- Registro de un mapa real sin cambiar instrucciones ni selección; compatibilidad
+  de mapas antiguos sin configuración de curso y del formato `fuentes.json`.
+- Migraciones sin cambios, huellas de contenidos, destinos repetidos/existentes,
+  solapamientos entre movimientos y enlaces Markdown que necesitan actualización.
+- Utilidades ejecutadas desde otra carpeta sin `site-packages`, diagnóstico PDF
+  separado y creación del curso desde ambos ZIP con el plugin de solo lectura.
+  Preparación del entorno en caché externa con manifiesto OpenAI o Claude.
+- Curso de ejemplo copiado fuera del plugin: selección exacta de tres fuentes,
+  exclusión del examen retirado y carpeta del mapa vacía.
+
+También se reprodujo la preparación de carpetas, instrucciones y configuración
+mediante herramientas de archivos, sin ejecutar Python en esa preparación.
+La comprobación posterior confirmó la estructura completa, fuentes pendientes,
+mapa vacío y ausencia de `CLAUDE.md`. Esto acredita la alternativa de archivos
+en este entorno; no demuestra que otros anfitriones seleccionen automáticamente
+la skill o dispongan de esas herramientas.
+
+Se comprobaron el lector y el grafo con Chrome temporal, sin la sesión del
+usuario y con solicitudes remotas bloqueadas. Pasaron los tres programas de
+comprobación: navegación, anclas, enlaces, filtros, búsqueda, selección,
+Reorganizar, Ajustar, arrastre, escritorio, móvil y mapas de hasta 600 nodos.
+Revisadas las capturas del ejemplo en escritorio y móvil. Los renderizadores
+visuales no cambian; se verifica que la nueva validación conserva su recorrido.
+
+Los nombres de las doce skills, enlaces, licencia, recursos y manifiestos pasan
+la validación pública. El catálogo Claude pasa además `claude plugin validate`.
+Ambos paquetes mantienen contenidos funcionales idénticos y construcción
+reproducible; la fuente extraída reconstruye los ZIP desde otra carpeta.
+
+**Pendiente fuera de la validación local:** ejecutar esta versión en Windows y
+Linux, donde está preparada la matriz de GitHub Actions; instalarla y probar
+el inicio real en ChatGPT Work y Claude Cowork; verificar la carga de instrucciones
+en cada anfitrión. Las rutas de caché de los tres sistemas se comprueban en pruebas
+locales, lo que no sustituye ejecutarlas en esos sistemas. Tampoco se han hecho
+nuevas importaciones en Moodle.
+
+La release pública 0.6.0 se conserva. La fuente 0.7.0 se distribuye desde `main`;
+su subida no crea una nueva release ni instala el plugin automáticamente.
+La revisión de instrucciones es local; no garantiza las decisiones pedagógicas
+ni la activación de skills en otros modelos.
 
 ## Preparación pública y generalidad (0.6.0)
 
@@ -265,8 +347,9 @@ importado preguntas o comentarios en una instancia real de Moodle. La
 compatibilidad de empaquetado no sustituye esas pruebas. Están descritas en
 [compatibilidad](COMPATIBILIDAD.md) y [Moodle](MOODLE.md).
 
-El pipeline de GitHub está preparado para Linux, macOS y Windows, pero no se ha
-ejecutado en GitHub. No se ha publicado el proyecto ni se ha asignado una licencia
-pública a su contenido propio. Los casos del [catálogo](CATALOGO.md) permiten
+El pipeline está preparado para Linux, macOS y Windows. Sus resultados para
+cada revisión se consultan en [GitHub Actions](https://github.com/cjescudero/asistente-docente/actions);
+no se deducen de las comprobaciones locales descritas aquí.
+El proyecto tiene licencia MIT y una release 0.6.0 publicada. Los casos del [catálogo](CATALOGO.md) permiten
 evaluar cada skill en los anfitriones; la suite Python comprueba las utilidades,
 no todas las decisiones pedagógicas del agente.

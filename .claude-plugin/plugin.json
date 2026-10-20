@@ -1,7 +1,7 @@
 {
   "name": "asistente-docente",
-  "version": "0.6.0",
-  "description": "Mapa docente, materiales, evaluación y feedback para cualquier disciplina.",
+  "version": "0.7.0",
+  "description": "Organiza cursos, materiales y evaluación. Instalación desde un marketplace de GitHub.",
   "author": {
     "name": "Carlos J. Escudero"
   },

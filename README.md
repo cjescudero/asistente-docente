@@ -2,10 +2,72 @@
 
 Doce skills para organizar fuentes, crear materiales, evaluar y devolver feedback en
 cualquier asignatura. La fuente común genera paquetes para **ChatGPT Work** y
-**Claude Cowork**. Versión **0.6.0**, bajo [MIT](LICENSE).
+**Claude Cowork**. Versión **0.7.0** en la rama `main`, bajo [MIT](LICENSE).
 [Instalación y primer uso](docs/INSTALACION.md) ·
-[Descargar paquetes](https://github.com/cjescudero/asistente-docente/releases/latest) ·
+[Versión publicada 0.6.0](https://github.com/cjescudero/asistente-docente/releases/tag/v0.6.0) ·
 [Repositorio](https://github.com/cjescudero/asistente-docente).
+
+## Inicio rápido
+
+**Asistente docente se distribuye desde GitHub mediante marketplaces
+personalizados. No se publicará en los directorios públicos de ChatGPT ni de
+Claude.** Un marketplace es un catálogo que incorporas a tu aplicación; después
+puedes instalar los plugins que contiene.
+
+### Instalación en ChatGPT
+
+Primero, una persona con **permisos de administración** debe incorporarlo al
+espacio de trabajo de ChatGPT:
+
+1. Abrir la [consola de administración de ChatGPT](https://admin.openai.com)
+   y elegir el espacio de trabajo.
+2. Entrar en **Plugins → Añadir → Importar marketplace**.
+3. Introducir `https://github.com/cjescudero/asistente-docente` como origen y
+   **dejar vacío el campo Ruta**.
+4. Importar el marketplace, autorizar GitHub si se solicita y habilitar
+   **Asistente docente** para los profesores.
+
+Después, el profesor puede abrir **Plugins**, elegir la sección de su espacio
+de trabajo e instalar **Asistente docente**. Si no tienes permisos de
+administración, facilita el enlace del repositorio al responsable de tu
+organización para que realice esa configuración inicial.
+[Procedimiento oficial de importación](https://help.openai.com/en/articles/20001504-importing-and-syncing-plugin-marketplaces-from-github).
+
+Si utilizas una cuenta individual sin espacio de trabajo administrado, consulta
+la [alternativa avanzada con Codex](docs/INSTALACION.md#codex-cli).
+
+### Instalación en Claude
+
+1. Abre **Personalizar → Plugins**. En Cowork, entra primero en **Cowork**.
+2. Elige **Agregar → Agregar mercado → Agregar desde un repositorio**.
+3. Introduce `https://github.com/cjescudero/asistente-docente` y añade el marketplace.
+4. En **Descubrir**, selecciona **Asistente docente** (puede aparecer como
+   `asistente-docente`) del marketplace que acabas de añadir y pulsa **Agregar**
+   para instalarlo.
+
+Esos son los nombres de la [ayuda oficial en español de Claude](https://support.claude.com/es/articles/13837440-usar-plugins-en-claude).
+En inglés: **Customize → Plugins → Add → Add marketplace → Add from a repository**.
+Si tu organización restringe los marketplaces, pide al responsable que autorice
+esta fuente.
+
+### Primer uso
+
+Inicia una conversación nueva en ChatGPT Work o Claude Cowork, abre o selecciona
+la carpeta del curso y permite al agente trabajar con ella. Escribe:
+
+**«Inicia mi proyecto docente».**
+
+El agente pregunta por el contexto, los materiales y las exclusiones que falten;
+prepara las carpetas `alumnado/`, `docente/` y `archivo/`, la configuración y una
+guía breve. Conserva tus instrucciones y consulta los conflictos. Comprueba qué
+está disponible y qué falta. La wiki se crea por encargo separado. Si ya hay
+materiales, presenta una propuesta antes de reorganizarlos. No necesitas escribir
+comandos.
+
+Este recorrido corresponde a la **0.7.0 de la rama `main`**. Si ya tenías el
+marketplace incorporado, sincronízalo y comprueba la versión instalada antes de
+probar las novedades. [Guía para el profesor](docs/PROYECTO-DOCENTE.md) ·
+[Migrar desde 0.6](docs/MIGRACION-0.7.md).
 
 <a href="https://github.com/cjescudero/asistente-docente">
   <img src="assets/qr-repositorio.png" alt="Código QR del repositorio de Asistente docente en GitHub" width="288" height="288">
@@ -16,7 +78,8 @@ para usarlo en presentaciones.
 
 ## Qué incluye
 
-Puesta en marcha del proyecto con `AGENTS.md`, Mapa docente con índice, conceptos,
+Puesta en marcha con estructura de curso, selección de fuentes, configuración,
+`LEEME.md` y `AGENTS.md`; Mapa docente con índice, conceptos,
 consultas trazables y grafo HTML, actividades y
 enunciados, apuntes, evaluación de entregas con rúbricas, bancos
 GIFT, modelos impresos con GIFT ofuscado, feedback para Moodle, redacción clara e
@@ -33,15 +96,20 @@ y su [índice de ejemplo](examples/mapa-docente/mapa-docente/index.md).
 
 ## Puesta en marcha del proyecto docente
 
-Pedir «Pon en marcha este proyecto docente» activa
-[iniciar proyecto docente](skills/skill-iniciar-proyecto-docente/SKILL.md).
-La skill crea o complementa las instrucciones generales del `AGENTS.md` del
-proyecto del curso, modificando solo lo indicado y preguntando ante conflictos.
-Establece `skill-redactar-espanol-claro` como opción predeterminada para escribir
-en español y pregunta dónde están los materiales y qué contiene cada carpeta
-cuando no esté claro. No lanza la creación del mapa y conserva las instrucciones
-existentes para consultarlo.
-Véase el [flujo de puesta en marcha](docs/USO.md#iniciar-el-proyecto-docente).
+`iniciar-proyecto-docente` organiza `alumnado/`, `docente/` y `archivo/`, guarda
+la selección explícita en `proyecto-docente.json` y prepara `LEEME.md` y
+`AGENTS.md`. Conserva las instrucciones existentes y pregunta ante conflictos.
+Establece `redactar-espanol-claro` para escribir en español y aclara dónde están
+los contenidos y qué son cuando falte esa información.
+
+Los materiales nuevos se preparan en `docente/borradores/`; las entregas,
+calificaciones y feedback se guardan en `docente/resultados/`, fuera de la wiki.
+`alumnado/conocimientos/` recoge aclaraciones útiles, sin duplicar el mapa.
+La carpeta `docente/mapa-docente/` queda vacía hasta un encargo de creación.
+La selección de fuentes no autoriza su publicación ni acredita que se hayan leído.
+Consulta el [árbol completo y el contrato](docs/PROYECTO-DOCENTE.md).
+El [curso de ejemplo](examples/proyecto-docente/README.md) permite probar la
+iniciación, la selección y las exclusiones con materiales sintéticos.
 
 ## Mapa docente
 
@@ -53,15 +121,17 @@ reúne la evidencia del encargo sin volver a recorrer toda la documentación.
 Esta integración conserva las reglas previas y no exige ejecutar antes la skill
 de puesta en marcha. Si no se conoce la raíz del proyecto, se solicita.
 
-El profesor elige explícitamente una o varias carpetas de origen;
-no hay una carpeta fija ni se descubren materiales por defecto. Los originales
+El profesor elige explícitamente una o varias carpetas de origen y sus
+exclusiones. El mapa reutiliza la selección guardada; no descubre fuentes ni
+amplía el corpus por seguir enlaces. Resultados, borradores y el propio mapa
+quedan excluidos. Las páginas dependientes de fuentes retiradas requieren revisión. Los originales
 no se mueven, editan ni copian salvo petición expresa de copia.
 
-Por ejemplo, un curso puede mantener `materiales-docentes/`,
-`archivo-evaluaciones/` y `mapa-docente/`. Dentro del mapa, `contenidos/` organiza
+En un curso inicializado, el mapa reside en `docente/mapa-docente/`. Un mapa
+previo conserva su ubicación hasta una migración acordada. Dentro del mapa, `contenidos/` organiza
 conceptos, presentaciones, apuntes, prácticas y talleres; `reservado/` separa
 evaluaciones, soluciones y criterios que no deben trasladarse al alumnado.
-Los nombres son orientativos. El tipo de material y su acceso son clasificaciones
+La organización interna se adapta al contenido. El tipo de material y su acceso son clasificaciones
 independientes.
 
 Las páginas usan enlaces Markdown normales, sin dependencia de Notion, Obsidian
@@ -71,7 +141,8 @@ al mapa y a cada raíz. Si no se puede representar una ubicación con rutas
 relativas, como entre unidades distintas en Windows, se comunica la limitación;
 no se trasladan ni copian archivos automáticamente.
 
-Crear o actualizar el mapa incluye regenerar el lector `index.html` y el grafo.
+Crear o actualizar el mapa incluye regenerar el lector `index.html` y el grafo
+tras validar las páginas y su correspondencia con el corpus vigente.
 El lector abre el índice Markdown renderizado y permite navegar entre páginas,
 buscar y consultar por separado los contenidos reservados. Ambos HTML funcionan
 sin servidor. El grafo permite arrastrar, ampliar, buscar y filtrar nodos;
@@ -102,43 +173,48 @@ sin él. [Alcance y revisión de generalidad](docs/GENERALIDAD.md).
 
 ## Instalación
 
-Sigue la [guía para ChatGPT Work/Codex y Claude](docs/INSTALACION.md).
-El repositorio incluye catálogos para instalar desde GitHub y ambos adaptadores.
+Sigue la [guía para profesores, administradores y usuarios avanzados](docs/INSTALACION.md).
+El repositorio incluye los marketplaces de ambas plataformas. Primero se
+incorpora ese origen de GitHub y después se instala el plugin en la cuenta.
 No basta con copiar una skill aislada: comparte referencias y utilidades con
 el resto del paquete. La instalación depende de las capacidades de la cuenta.
 
-Los artefactos de la versión son:
+Los artefactos preparados para 0.7.0 son:
 
-- `asistente-docente-0.6.0-agent-plugins.zip`: Agent Plugins y adaptador Codex.
-- `asistente-docente-0.6.0-claude.zip`: plugin para Claude.
-- `asistente-docente-0.6.0-source.zip`: fuente con catálogos y automatización GitHub.
+- `asistente-docente-0.7.0-agent-plugins.zip`: Agent Plugins y adaptador Codex.
+- `asistente-docente-0.7.0-claude.zip`: plugin para Claude.
+- `asistente-docente-0.7.0-source.zip`: fuente con catálogos y automatización GitHub.
 
-## Entorno local
+## Utilidades para agentes y desarrollo
 
 Se necesita **Python 3.10 o posterior** para las utilidades. No hay claves API ni
-servidores que configurar. Instalar las instrucciones en un anfitrión y preparar
-estas herramientas son operaciones independientes.
+servidores que configurar. El agente puede preparar carpetas e instrucciones mediante herramientas de
+archivos sin Python. Los comandos siguientes documentan las utilidades; no son
+un requisito para pedir la puesta en marcha en lenguaje natural.
 
 macOS/Linux, desde la carpeta del plugin:
 
 ```sh
 python3 scripts/setup_environment.py
-.venv/bin/python scripts/docencia.py doctor
 ```
 
 Windows PowerShell:
 
 ```powershell
 py -3 scripts/setup_environment.py
-.venv\Scripts\python.exe scripts/docencia.py doctor
 ```
 
-`doctor` distingue `basic_ready` y `pdf_ready`; usa `doctor --pdf` para exigir
+La preparación normal usa la caché del usuario, fuera del plugin y del curso;
+el instalador muestra la ruta del intérprete y cómo ejecutar el diagnóstico.
+`--dev` conserva `.venv` para desarrollo. `doctor --project RUTA_CURSO` añade la
+comprobación del proyecto; `doctor` sin esa opción mantiene el diagnóstico de
+capacidades. Distingue `basic_ready` y `pdf_ready`; usa `doctor --pdf` para exigir
 las capacidades PDF. Un PDF concreto requiere comprobar su generación.
 
 La instalación básica prepara Markdown y el lector de la wiki. Añade `--pdf`
 para instalar Playwright y Chromium; `--dev` prepara validaciones y pruebas.
-`--venv` permite usar una carpeta externa en instalaciones de solo lectura.
+`--venv` permite preparar un entorno fuera del curso y de una instalación
+de solo lectura; reutilizar el entorno del anfitrión cuando ya sea suficiente.
 `--dry-run` muestra las operaciones. `sh install.sh` conserva el acceso rápido
 en macOS/Linux y acepta las mismas opciones.
 
@@ -150,8 +226,10 @@ el PDF pendiente. La generación de imágenes requiere esa capacidad del anfitri
 
 ## Ejemplo completo sin datos reales
 
-Usa una carpeta de resultados **externa al plugin**, por ejemplo una carpeta
-hermana llamada `demo-docente`:
+Los comandos siguientes son ejemplos para agentes y desarrollo. Usan `.venv`
+preparado con `--dev`; con la instalación normal, sustituir el intérprete por la
+ruta indicada por el instalador. Guarda resultados **fuera del plugin**, por
+ejemplo en una carpeta hermana llamada `demo-docente`:
 
 ```sh
 .venv/bin/python scripts/docencia.py validate-bank examples/humanidades/banco.gift
@@ -224,6 +302,11 @@ y construye paquetes como artefactos; no publica releases ni notas de alumnos.
 Los ZIP excluyen entornos, cachés y datos operativos. `SHA256SUMS` permite
 comprobar su integridad; `contents.json` registra el contenido común.
 
+La fuente 0.7.0 se distribuye desde la rama `main`. La release 0.6.0 se conserva;
+una nueva release con ZIP requiere publicación explícita. La subida del código
+no demuestra una instalación real en cada anfitrión.
+La distribución se mantiene en los marketplaces de GitHub; no se solicita
+publicación en los directorios públicos de OpenAI ni de Anthropic.
 El contenido propio está bajo MIT por decisión del propietario. MathJax y el
 esquema Agent Plugins conservan sus avisos Apache-2.0. Consulta cómo
 [contribuir](CONTRIBUTING.md) y [preparar la publicación en GitHub](docs/PUBLICACION-GITHUB.md).

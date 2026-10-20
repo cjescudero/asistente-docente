@@ -1,7 +1,7 @@
 {
   "name": "asistente-docente",
-  "version": "0.6.0",
-  "description": "Mapa docente, materiales, evaluación y feedback para cualquier disciplina.",
+  "version": "0.7.0",
+  "description": "Organiza cursos, materiales y evaluación. Instalación desde un marketplace de GitHub.",
   "author": {
     "name": "Carlos J. Escudero"
   },
@@ -20,10 +20,10 @@
   "interface": {
     "displayName": "Asistente docente",
     "shortDescription": "Materiales docentes",
-    "longDescription": "Prepara las instrucciones generales de un proyecto docente. Al crear su mapa, integra la consulta de la wiki como referencia del proyecto: índice, páginas pertinentes y fuentes originales. Incluye Markdown estándar, lector HTML, grafo, actividades, apuntes, evaluación con rúbricas, bancos GIFT, exámenes impresos y feedback para Moodle.",
+    "longDescription": "Se distribuye desde GitHub mediante un marketplace personalizado. Tras incorporarlo e instalar el plugin, abre la carpeta del curso y pide «Inicia mi proyecto docente». Prepara una estructura común, instrucciones y selección explícita de fuentes, respetando el contenido existente. La wiki se crea por encargo separado. Incluye lector HTML, grafo, actividades, apuntes, rúbricas, bancos GIFT, exámenes impresos y feedback para Moodle.",
     "developerName": "Carlos J. Escudero",
     "defaultPrompt": [
-      "Crea un mapa docente con índice y grafo a partir de estas carpetas, separando contenidos del estudiante y evaluaciones reservadas.",
+      "Inicia mi proyecto docente en esta carpeta y ayúdame a elegir las fuentes del curso.",
       "Prepara una actividad docente con enunciado y guía del profesor a partir de estas fuentes.",
       "Genera modelos de examen en papel y sus cuestionarios GIFT ofuscados."
     ]

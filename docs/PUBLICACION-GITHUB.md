@@ -5,6 +5,12 @@ Destino elegido por el propietario:
 Contenido propio bajo [MIT](../LICENSE); terceros en [NOTICE](../NOTICE.md).
 No se publica nada al instalar, validar ni construir este proyecto.
 
+La distribución acordada utiliza los marketplaces de este repositorio.
+**No se publicará en los directorios públicos de ChatGPT ni de Claude.**
+Una release de GitHub es una entrega de código y paquetes; no incorpora el
+plugin a las cuentas del profesorado. La [guía de instalación](INSTALACION.md)
+explica la importación del marketplace y la instalación posterior.
+
 ## Fuente que se debe subir
 
 La raíz del repositorio debe ser la carpeta `asistente-docente`, con `README.md`,
@@ -30,8 +36,9 @@ python -m unittest discover -s tests -v
 python scripts/build_release.py --source
 ```
 
-La comprobación pública exige licencia y URL, pero no certifica que el remoto
-exista, sea público o se pueda instalar desde una cuenta concreta.
+La opción `--public` comprueba licencia y URL para distribuir el código
+públicamente en GitHub. No solicita una publicación en directorios de plugins
+ni certifica que el remoto se pueda instalar desde una cuenta concreta.
 La carpeta `release/` incluye dos ZIP de plugin, uno de fuente y sus huellas;
 los paquetes de plugin no llevan catálogos. Se excluyen entornos, cachés, archivos
 `.env`, claves privadas habituales y ZIP anteriores. Esa exclusión no sustituye
