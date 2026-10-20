@@ -1,5 +1,6 @@
 """Recorrido operativo sin dependencias instaladas y desde otra carpeta."""
 import json
+import os
 import shutil
 from pathlib import Path
 import subprocess
@@ -84,6 +85,23 @@ class ProjectCliTests(unittest.TestCase):
         self.assertEqual(result.returncode, 1)
         self.assertEqual(json.loads(result.stdout)["status"], "invalid")
         self.assertNotIn("Traceback", result.stderr)
+
+    def test_json_streams_are_utf8_with_legacy_console_encoding(self):
+        environment = dict(os.environ, PYTHONIOENCODING="cp1252")
+        created = subprocess.run(
+            [sys.executable, "-S", str(ROOT / "scripts/docencia.py"), "init-project", str(self.course)],
+            cwd=self.base, capture_output=True, env=environment)
+        self.assertEqual(created.returncode, 0, created.stderr)
+        data = json.loads(created.stdout.decode("utf-8"))
+        self.assertEqual(Path(data["root"]), self.course)
+        missing = self.course / "banco-árabe-資料.gift"
+        failed = subprocess.run(
+            [sys.executable, "-S", str(ROOT / "scripts/docencia.py"), "validate-bank", str(missing)],
+            cwd=self.base, capture_output=True, env=environment)
+        self.assertEqual(failed.returncode, 1)
+        error = json.loads(failed.stderr.decode("utf-8"))
+        self.assertIn(missing.name, error["message"])
+        self.assertNotIn("Traceback", failed.stderr.decode("utf-8"))
 
     def test_distributed_example_has_explicit_selection_and_no_wiki(self):
         shutil.copytree(ROOT / "examples/proyecto-docente/curso", self.course)

@@ -115,6 +115,9 @@ def run_example(destination, *, pdf=False):
 
 
 if __name__ == "__main__":
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("destination", type=Path)
     parser.add_argument("--pdf", action="store_true", help="Exigir generación real de PDF con Chromium")

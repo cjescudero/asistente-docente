@@ -15,6 +15,10 @@ sys.path.insert(0, str(ROOT))
 
 
 def main(argv=None):
+    # Contrato UTF-8 también cuando Windows redirige stdout/stderr a una tubería.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description="Asistente docente: proyectos, bancos, exámenes y feedback.")
     commands = parser.add_subparsers(dest="command", required=True)
     project = commands.add_parser("init-project", help="Preparar un curso sin crear la wiki")

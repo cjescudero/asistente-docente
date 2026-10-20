@@ -120,10 +120,10 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual((output / manifest["catalog_snapshot"]).read_bytes(), before[self.catalog])
         self.assertEqual((output / manifest["selection_snapshot"]).read_bytes(), before[self.selection])
         self.assertFalse(list(output.rglob("*.md")))
-        (self.root / "historia.gift").write_text("::cambio::Cambio{T}")
+        (self.root / "historia.gift").write_text("::cambio::Cambio{T}", encoding="utf-8")
         self.assertEqual((output / "source/banks/historia.gift").read_bytes(),
                          before[self.root / "historia.gift"])
-        self.assertEqual(json.loads((output / "manifest.json").read_text()), manifest)
+        self.assertEqual(json.loads((output / "manifest.json").read_text(encoding="utf-8")), manifest)
 
     def test_all_models_have_same_quotas_and_reproduce_with_seed(self):
         manifest = self.build()
@@ -135,7 +135,7 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(len(set(first_two)), 4)
         report = manifest["selection_report"]
         self.assertEqual(report["pairwise_overlap"][0]["shared_questions"], 0)
-        self.assertEqual(json.loads((self.root / "out/coverage.json").read_text()), report)
+        self.assertEqual(json.loads((self.root / "out/coverage.json").read_text(encoding="utf-8")), report)
 
     def test_overlapping_quotas_use_augmenting_matching(self):
         path, metadata = self.metadata("historia")
@@ -186,7 +186,7 @@ class CatalogTests(unittest.TestCase):
     def test_changed_material_blocks_new_exam_without_touching_existing_snapshot(self):
         manifest = self.build()
         snapshot = (self.root / "out/source/bank.gift").read_bytes()
-        (self.root / self.materials["texto"]["path"]).write_text("Nueva versión")
+        (self.root / self.materials["texto"]["path"]).write_text("Nueva versión", encoding="utf-8")
         with self.assertRaisesRegex(ValueError, "ha cambiado"):
             self.build("changed")
         self.assertEqual((self.root / "out/source/bank.gift").read_bytes(), snapshot)
@@ -219,7 +219,7 @@ class CatalogTests(unittest.TestCase):
         self.select([{"label": "Examen histórico", "count": 1, "material_ids": ["examen"]}])
         manifest = self.build(questions=1, models=1)
         self.assertEqual(manifest["models"][0]["questions"][0]["source_id"], "historia::repetida")
-        student = (self.root / "out/modelo-A-student.html").read_text()
+        student = (self.root / "out/modelo-A-student.html").read_text(encoding="utf-8")
         self.assertNotIn("Examen anterior", student)
         self.assertNotIn("source_refs", student)
 
@@ -355,7 +355,7 @@ class CatalogTests(unittest.TestCase):
             with self.subTest(field=field), self.assertRaises(ValueError):
                 validate_catalog(self.catalog)
         self.save(path, original)
-        (self.root / "historia.gift").write_text("")
+        (self.root / "historia.gift").write_text("", encoding="utf-8")
         with self.assertRaisesRegex(ValueError, "vacío"):
             validate_catalog(self.catalog)
 
@@ -392,7 +392,7 @@ class CatalogTests(unittest.TestCase):
         manifest = self.build(questions=4, models=1)
         self.assertEqual(manifest["excluded_question_ids"], ["pares::parejas"])
         self.assertNotIn("matching", {q["type"] for q in manifest["models"][0]["questions"]})
-        parsed = parse_gift((self.root / "out/source/bank.gift").read_text())
+        parsed = parse_gift((self.root / "out/source/bank.gift").read_text(encoding="utf-8"))
         self.assertIn("matching", {q["type"] for q in parsed})
 
 

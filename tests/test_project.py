@@ -48,7 +48,7 @@ class ProjectTests(unittest.TestCase):
         for relative in PROJECT_DIRECTORIES:
             self.assertTrue((self.root / relative).is_dir())
         self.assertEqual(list((self.root / "docente/mapa-docente").iterdir()), [])
-        self.assertIn("`redactar-espanol-claro`", (self.root / "AGENTS.md").read_text())
+        self.assertIn("`redactar-espanol-claro`", (self.root / "AGENTS.md").read_text(encoding="utf-8"))
         self.assertEqual(check_project(self.root)["selection_status"], "pending")
 
     def test_second_initialization_is_byte_and_timestamp_identical(self):
@@ -108,7 +108,7 @@ class ProjectTests(unittest.TestCase):
         altered = AGENTS_BLOCK.replace("conservar rigor", "conservar el rigor")
         agents = self.file("AGENTS.md", "Antes\n" + altered + "\nDespués\n")
         result = initialize_project(self.root)
-        self.assertEqual(agents.read_text(), "Antes\n" + altered + "\nDespués\n")
+        self.assertEqual(agents.read_text(encoding="utf-8"), "Antes\n" + altered + "\nDespués\n")
         self.assertEqual(result["proposals"][0]["proposed_content"], "Antes\n" + AGENTS_BLOCK + "\nDespués\n")
 
     def test_selection_preserved_unless_explicit_and_empty_is_distinct_from_pending(self):
@@ -124,9 +124,9 @@ class ProjectTests(unittest.TestCase):
         initialize_project(self.root)
         config = load_project(self.root)
         text = json.dumps(config, ensure_ascii=False, separators=(",", ":"))
-        (self.root / CONFIG_NAME).write_text(text)
+        (self.root / CONFIG_NAME).write_text(text, encoding="utf-8")
         initialize_project(self.root)
-        self.assertEqual((self.root / CONFIG_NAME).read_text(), text)
+        self.assertEqual((self.root / CONFIG_NAME).read_text(encoding="utf-8"), text)
 
     def test_map_registration_preserved_and_requires_real_index(self):
         initialize_project(self.root)
@@ -200,11 +200,11 @@ class ProjectTests(unittest.TestCase):
 
     def test_controlling_symlinks_rejected_before_any_mutation(self):
         external = Path(self.temporary.name) / "ajeno.md"
-        external.write_text("No tocar")
+        external.write_text("No tocar", encoding="utf-8")
         self.symlink(self.root / "AGENTS.md", external)
         with self.assertRaises(ValueError):
             initialize_project(self.root)
-        self.assertEqual(external.read_text(), "No tocar")
+        self.assertEqual(external.read_text(encoding="utf-8"), "No tocar")
         self.assertEqual([item.name for item in self.root.iterdir()], ["AGENTS.md"])
 
     def test_directory_symlink_rejected_before_writing_outside(self):
@@ -244,7 +244,7 @@ class ProjectTests(unittest.TestCase):
         bad["schema_version"] = True
         self.save(bad)
         self.assertEqual(check_project(self.root)["status"], "invalid")
-        (self.root / CONFIG_NAME).write_text('{"schema_version": 1, "schema_version": 2}')
+        (self.root / CONFIG_NAME).write_text('{"schema_version": 1, "schema_version": 2}', encoding="utf-8")
         self.assertEqual(check_project(self.root)["status"], "invalid")
 
     def test_find_project_prefers_nearest_and_does_not_hide_invalid_config(self):

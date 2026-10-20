@@ -4,9 +4,15 @@ Fecha: 20 de octubre de 2026. Validación local previa a la publicación de **0.
 
 ## Resultado de 0.8.0
 
-**346 pruebas automatizadas aprobadas**, incluidas las dos pruebas PDF
+**347 pruebas automatizadas aprobadas**, incluidas las dos pruebas PDF
 opcionales activadas con `RUN_PDF_TESTS=1`. Ejecución local en macOS con Python
 3.12.9 y Chromium disponible indicado mediante `ASISTENTE_DOCENTE_CHROMIUM`.
+Durante la preparación de la release, GitHub detectó una diferencia de codificación
+en Windows. Se fijó UTF-8 para stdout/stderr de la CLI y del ejemplo, se hicieron
+explícitas las lecturas de archivos en las pruebas y se añadió una regresión con
+consola cp1252, acentos y caracteres fuera de esa codificación. La suite local
+completa volvió a pasar con PDF tras la corrección.
+
 Este apartado documenta la ejecución local. Los resultados remotos para Windows,
 Linux y macOS se registran por separado en [GitHub Actions](https://github.com/cjescudero/asistente-docente/actions/workflows/ci.yml);
 no se deducen de estas pruebas locales.

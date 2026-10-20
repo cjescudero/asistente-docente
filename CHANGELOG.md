@@ -2,6 +2,9 @@
 
 ## 0.8.0 — 2026-10-20
 
+- Salida UTF-8 explícita de la CLI y del ejemplo reproducible, también en
+  terminales de Windows con codificación heredada; lecturas de pruebas portables.
+
 - Nueva skill `orientar-docente`: trece skills, ayuda contextual y ejemplos de
   peticiones sin ejecutar otros procesos. La inicialización recomienda el mapa
   y ofrece orientación, conservando el encargo explícito para crearlo.
