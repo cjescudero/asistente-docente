@@ -1,6 +1,29 @@
 # Alcance para distintas materias
 
-Revisión del 18 de octubre de 2026, sobre las doce skills y sus recursos.
+Revisión ampliada el 20 de octubre de 2026 para las trece skills de 0.8.0.
+
+## Orientación y evaluación conectadas (0.8.0)
+
+Las actividades se diseñan por diálogo y pueden ser análisis de fuentes,
+problemas, trabajos de campo o experimentos; código y notebooks son opciones,
+no supuestos. Se parte del acceso del alumnado a IA y se piden evidencias de
+comprensión, sin inventar obligación de uso ni sanciones. El registro vincula
+versión, enunciado, plantillas y rúbrica completa reservada.
+
+Los bancos enlazan materiales y actividades mediante identificadores,
+localizadores, objetivos y dificultad estimada. Los exámenes históricos ayudan
+a calibrar; no fijan el temario vigente. La composición aplica cuotas comunes,
+semilla y trazabilidad entre banco, papel y Moodle. El feedback solo propone
+materiales estudiantiles y prioriza dificultades según puntos y evidencias.
+
+La orientación consulta índices y configuración sin exigir conocer nombres de
+skills. Recomienda el mapa con las fuentes elegidas, sin crearlo automáticamente,
+y permite tareas con adjuntos suficientes. El ejemplo de 0.8 combina
+humanidades, ciencias y una actividad experimental con plantillas diferentes
+de un notebook. Las comprobaciones de comportamiento y ejecución se distinguen
+en [Validación](VALIDACION.md).
+
+## Revisión base de 0.6 y 0.7
 El plugin organiza procedimientos docentes; el contenido y los criterios de
 validez proceden del encargo y de sus fuentes. No incluye una base universal
 de conocimientos ni sustituye la revisión del profesor.

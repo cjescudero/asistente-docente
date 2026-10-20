@@ -9,7 +9,7 @@ No depende de Notion, Obsidian, una base de datos ni un servicio externo.
 Crear o actualizar el mapa incluye integrarlo como punto de partida en el
 `AGENTS.md` de la raíz del proyecto docente. No es necesario ejecutar antes
 [iniciar el proyecto docente](../skills/iniciar-proyecto-docente/SKILL.md):
-esa skill prepara el curso y su selección de fuentes, y no lanza ni propone
+esa skill prepara el curso y su selección de fuentes, y recomienda, sin lanzar automáticamente,
 crear el mapa.
 
 ## Tres responsabilidades

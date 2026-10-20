@@ -1,6 +1,6 @@
 ---
 name: evaluar-entregas
-description: Evaluar trabajos, prácticas, informes o notebooks entregados por estudiantes con el enunciado y una rúbrica explícita, y redactar feedback basado en evidencias. No usar para crear materiales, procesar respuestas de exámenes ofuscados ni atribuir plagio o uso de IA sin pruebas.
+description: Evaluar actividades, trabajos, informes o notebooks descargados de Moodle con su enunciado, rúbrica y resolución disponibles; generar puntuaciones justificadas y feedback en una copia de la hoja Moodle. No usar para crear materiales, procesar exámenes ofuscados ni atribuir uso de IA sin pruebas.
 ---
 
 # Evaluar entregas
@@ -15,26 +15,39 @@ lo necesario para el encargo: respetar selección y exclusiones, consultar el
 adjuntos suficientes permiten avanzar sin exigir una wiki ni carpetas llenas.
 No incorporar entradas de este encargo al corpus automáticamente.
 
-Guardar entregas, notas e informes individuales en `docente/resultados/` del
-curso cuando esté inicializado; esos datos quedan fuera de la wiki. No usar
-la exclusión del corpus para impedir la evaluación expresamente solicitada.
+Organizar cada lote en `docente/resultados/entregas/<actividad>/<convocatoria>/`
+cuando el curso esté inicializado: originales descargados, archivos de
+identificación y resultados de corrección separados. Conservar los originales
+intactos. Todo el lote queda fuera de la wiki; esa exclusión no impide la
+evaluación expresamente solicitada.
 
 ## Preparar la evaluación
 
-Leer el enunciado vigente, la rúbrica, las restricciones de la actividad y, si existe, la guía docente. Confirmar la identidad mediante el identificador acordado para el encargo o el institucional disponible, sin emparejar personas por un nombre parecido. Examinar únicamente las entregas necesarias para el encargo.
+Leer el enunciado utilizado, la rúbrica, las restricciones y la resolución o guía
+disponibles. Si existe `actividad.json`, comprobar su versión y los archivos
+asociados conforme al [registro de actividad](../../docs/ACTIVIDADES.md).
+Confirmar la identidad mediante identificadores explícitos, sin emparejar personas
+por parecido de nombres. Para grupos, requerir la correspondencia grupo–miembros
+y la regla docente para repartir la calificación. Examinar solo el lote solicitado.
 
 Si no existe rúbrica suficiente, proponer criterios antes de asignar calificaciones definitivas. Se puede avanzar con un análisis cualitativo explícitamente provisional. Usar la [referencia de evaluación](references/evaluacion.md) para extracción, evidencias y casos ambiguos.
 
 ## Flujo
 
-1. Inventariar las entregas incluidas y sus identificadores. Separar ausencias, archivos ilegibles y entregas válidas; una falla de extracción no es una respuesta incorrecta.
+1. Inventariar las entregas y la exportación Moodle elegida: hoja de calificación sin conexión de una tarea o CSV del libro de calificaciones. Distinguir su identificador de participante del ID de usuario; no intercambiarlos. Resolver correspondencias con archivos explícitos cuando proceda. Separar ausencias, archivos ilegibles y entregas válidas; una falla de extracción no es una respuesta incorrecta.
 2. Leer contenido y anexos pertinentes. En notebooks, examinar texto, código y salidas; no ejecutar automáticamente código de estudiantes. Una respuesta puede estar en un bloque de código o junto al texto de la pregunta.
 3. Evaluar por criterio, registrando evidencia concreta: sección, página, celda o fragmento breve. Reconocer alternativas correctas aunque no coincidan con la solución docente.
 4. Calcular la nota solo con la escala y ponderación establecidas. Comprobar sumas, máximos, penalizaciones autorizadas y coherencia entre casos comparables. No recalibrar notas por una distribución esperada sin instrucción del profesor.
 5. Redactar feedback breve: logro observado, dificultad sustentada y siguiente acción de mejora. No mencionar la nota dentro del comentario por defecto si ya existe una columna destinada a ella.
-6. Preparar informe docente y, si se solicita, una copia del CSV de calificaciones. Conservar identificadores y columnas ajenas al cambio; modificar notas únicamente cuando la evaluación lo requiera expresamente. Registrar incidencias antes de importar.
-7. Entregar resultados para revisión docente. La importación en Moodle es manual y sigue la [guía de Moodle](../../docs/MOODLE.md). El comando `build-feedback` procesa cuestionarios con manifiesto; no corrige ensayos ni aplica esta rúbrica automáticamente.
+6. Guardar la evaluación estructurada con evidencias por criterio y preparar el perfil de columnas según [Calificaciones de actividades](../../docs/CALIFICACIONES.md). El agente y el profesor valoran las evidencias; la utilidad comprueba cálculos, correspondencias y exportación, sin corregir los trabajos por sí misma.
+7. Generar una copia de la hoja elegida con nota y comentario de los casos evaluados, preservando filas, identificadores y columnas ajenas. Registrar valor anterior, valor nuevo y justificación. Los datos obligatorios inconsistentes o correspondencias ambiguas bloquean la exportación; conservar el análisis cualitativo para resolverlas. No transformar entregas ausentes, ilegibles o pendientes en cero.
+8. Entregar evaluación por criterio, CSV, registro de cambios e incidencias para revisión docente. La importación es manual. Distinguir una rúbrica local de la calificación avanzada configurada en Moodle y comprobar las limitaciones de cada vía conforme a la [guía Moodle](../../docs/MOODLE.md); no cambiar de procedimiento automáticamente.
 
 ## Cierre
 
 Entregar una tabla de evaluación por criterio o el formato pedido, comentarios individuales y un resumen de dificultades del grupo sin exponer datos innecesarios. Distinguir notas calculadas, casos pendientes y comprobaciones no realizadas. Para informes extensos, entregar Markdown y PDF cuando el entorno permita verificarlo.
+
+Para feedback de cuestionarios ya puntuados con un manifiesto, usar
+[generar feedback](../generar-feedback-evaluaciones/SKILL.md). Esa tarea conserva
+las notas existentes; la corrección de entregas usa las puntuaciones justificadas
+de esta evaluación.

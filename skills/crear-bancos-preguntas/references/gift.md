@@ -26,9 +26,23 @@ Las llaves, signos y barras de una expresión matemática pueden coincidir con l
 
 ## Metadatos para el aprendizaje
 
-Los metadatos se guardan aparte del GIFT y siguen el [contrato](../../../docs/CONTRATOS.md). Una pregunta puede vincular varios conceptos, un objetivo y una orientación de repaso; cada concepto puede tener una etiqueta y un consejo general. Escribir consejos accionables sin revelar el examen: «Contrasta la procedencia y el propósito de las fuentes» resulta más útil que «La opción B era la correcta».
+Los bancos nuevos requieren metadatos separados del GIFT y una entrada en el
+[catálogo de bancos](../../../docs/BANCOS.md). Cada pregunta declara materiales
+de origen y localizadores, conceptos, objetivo, dificultad estimada y orientación
+de repaso. Puede apoyarse en varias fuentes, que mantienen su ubicación original.
+Los ejemplos de bancos o exámenes anteriores ayudan a calibrar dificultad y
+estilo, pero no determinan los contenidos vigentes.
 
-Sin metadatos suficientes, informar de esa carencia. No atribuir a un error un concepto ni una causa psicológica que los datos no sostengan.
+Los conceptos pueden añadir consejos y referencias de repaso. Las referencias
+dirigidas al alumnado deben estar declaradas como accesibles al estudiante;
+no incluir soluciones ni rúbricas reservadas. Escribir consejos accionables sin
+revelar el examen: «Contrasta la procedencia y el propósito de las fuentes»
+resulta más útil que «La opción B era la correcta».
+
+Un banco antiguo sin metadatos completos sigue siendo legible por la entrada
+individual de GIFT. Señalar lo que falta y completarlo antes de prometer una
+selección equilibrada por procedencia o dificultad. No atribuir a un error un
+concepto ni una causa psicológica que los datos no sostengan.
 
 ## Control didáctico
 

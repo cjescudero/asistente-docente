@@ -12,10 +12,12 @@ import csv
 import hashlib
 import io
 import json
+import posixpath
 import re
 from collections import OrderedDict
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
+from urllib.parse import unquote, urlsplit
 
 
 class FeedbackError(ValueError):
@@ -73,30 +75,127 @@ def _check_question(question, source):
         raise ValueError("Los criterios numéricos del modelo no coinciden con el snapshot.")
 
 
-def _conceptual(questions, scores, metadata):
+def _priority(config):
+    result = {"max_concepts": 3, "marked_threshold": Decimal("0.5"), "min_evidence": 2}
+    if not isinstance(config, dict) or set(config) - set(result):
+        raise ValueError("feedback_priority admite max_concepts, marked_threshold y min_evidence.")
+    result.update(config)
+    for key in ("max_concepts", "min_evidence"):
+        if type(result[key]) is not int or result[key] < 1:
+            raise ValueError(f"{key} debe ser un entero positivo.")
+    result["marked_threshold"] = _number(result["marked_threshold"])
+    if not 0 <= result["marked_threshold"] <= 1:
+        raise ValueError("marked_threshold debe estar entre 0 y 1.")
+    return result
+
+
+def _reference_key(path):
+    """Compare snapshot declarations lexically; do not reopen mutable sources."""
+    if not isinstance(path, str) or not path:
+        raise ValueError("Un material declarado necesita una ruta no vacía.")
+    parsed = urlsplit(unquote(unquote(path)))
+    return parsed.scheme.lower(), parsed.netloc.lower(), posixpath.normpath(parsed.path)
+
+
+def _material_access(metadata):
+    if "materials" not in metadata:
+        return None
+    materials = metadata["materials"]
+    if not isinstance(materials, dict):
+        raise ValueError("materials debe ser un objeto de materiales declarados.")
+    access_by_path = {}
+    for item in materials.values():
+        if not isinstance(item, dict) or item.get("access") not in ("estudiante", "docente"):
+            raise ValueError("Un material declarado necesita access estudiante o docente.")
+        key = _reference_key(item.get("path"))
+        if key in access_by_path and access_by_path[key] != item["access"]:
+            raise ValueError("Los materiales declaran accesos contradictorios para una misma ruta.")
+        access_by_path[key] = item["access"]
+    return access_by_path
+
+
+def _student_references(detail, material_access=None):
+    """Only emit explicitly student-accessible references with safe destinations."""
+    references = detail.get("references", [])
+    if not isinstance(references, list):
+        raise ValueError("references debe ser una lista.")
+    result = []
+    for reference in references:
+        if not isinstance(reference, dict):
+            raise ValueError("Cada referencia debe ser un objeto.")
+        if reference.get("access") != "estudiante":
+            continue  # An absent or teacher access label never grants student access.
+        title, path = reference.get("title"), reference.get("path")
+        if not isinstance(title, str) or not title.strip() or not isinstance(path, str) or not path:
+            raise ValueError("La referencia estudiantil necesita title y path.")
+        decoded = unquote(unquote(path))
+        if any(ord(char) < 32 for char in title + decoded) or any(char in decoded for char in "\\<>\""):
+            raise ValueError("La referencia contiene caracteres inseguros.")
+        parsed = urlsplit(decoded)
+        if parsed.scheme:
+            if parsed.scheme not in ("http", "https") or not parsed.hostname or parsed.username or parsed.password:
+                raise ValueError("La URL estudiantil debe ser HTTP(S), sin credenciales.")
+        elif parsed.netloc or decoded.startswith("/") or not parsed.path:
+            raise ValueError("La referencia debe usar una ruta relativa o una URL HTTP(S).")
+        parts = parsed.path.split("/")
+        if any(part in (".", "..") for part in parts) or "docente" in [part.casefold() for part in parts]:
+            raise ValueError("La referencia estudiantil no puede salir de su raíz ni enlazar material docente reservado.")
+        if material_access is not None:
+            key = _reference_key(path)
+            if key not in material_access:
+                raise ValueError("La referencia estudiantil no corresponde a un material declarado.")
+            if material_access[key] != "estudiante":
+                raise ValueError("La referencia estudiantil contradice el acceso reservado del material declarado.")
+        result.append(f"{title.strip()}: {path}")
+    return result
+
+
+def _conceptual(questions, scores, metadata, priorities=None):
+    priorities = _priority(priorities or {})
+    material_access = _material_access(metadata)
     missed = [q for q in questions if scores[str(q["number"])][0] is None
               or scores[str(q["number"])][0] < scores[str(q["number"])][1]]
     if not missed:
         return "Has alcanzado la puntuación máxima en los aspectos evaluados."
-    labels, guidance = [], []
-    for question in missed:
+    concepts = OrderedDict()
+    for question in questions:
         entry = metadata.get("questions", {}).get(question["source_id"], {})
-        for concept in question.get("concepts", entry.get("concepts", [])):
-            detail = metadata.get("concepts", {}).get(concept, {})
-            label = detail.get("label") or concept
-            if label and label not in labels:
-                labels.append(label)
-            advice = detail.get("guidance")
-            if advice and advice not in guidance:
-                guidance.append(advice)
-        advice = entry.get("guidance")
-        if advice and advice not in guidance:
-            guidance.append(advice)
-    parts = ["Conviene reforzar: " + "; ".join(labels) + "."] if labels else [
-        "Revisa los contenidos evaluados con puntuación inferior al máximo."]
-    parts.extend(_sentence(advice) for advice in guidance)
-    if not labels and not guidance:
-        parts.append("Los metadatos no incluyen orientaciones conceptuales específicas.")
+        score, maximum = scores[str(question["number"])]
+        for concept in dict.fromkeys(question.get("concepts", entry.get("concepts", []))):
+            if not isinstance(concept, str) or not concept:
+                raise ValueError("Los conceptos deben tener identificadores de texto no vacíos.")
+            item = concepts.setdefault(concept, {"score": Decimal(0), "maximum": Decimal(0),
+                                                "count": 0, "entries": []})
+            item["score"] += score if score is not None else 0
+            item["maximum"] += maximum
+            item["count"] += 1
+            if score is None or score < maximum:
+                item["entries"].append(entry)
+    selected = [(concept, value) for concept, value in concepts.items()
+                if value["score"] < value["maximum"]]
+    selected.sort(key=lambda item: (-(1 - item[1]["score"] / item[1]["maximum"]), -item[1]["count"]))
+    parts = []
+    for concept, value in selected[:priorities["max_concepts"]]:
+        detail = metadata.get("concepts", {}).get(concept, {})
+        label = detail.get("label") or concept
+        marked = (value["score"] / value["maximum"] < priorities["marked_threshold"]
+                  and value["count"] >= priorities["min_evidence"])
+        prefix = "Dificultad acusada en" if marked else "Aspecto a revisar:"
+        parts.append(_sentence(f"{prefix} {label}"))
+        guidance = [detail.get("guidance")] + [entry.get("guidance") for entry in value["entries"]]
+        parts.extend(_sentence(advice) for advice in dict.fromkeys(guidance) if advice)
+        references = _student_references(detail, material_access)
+        for entry in value["entries"]:
+            references.extend(_student_references(entry, material_access))
+        if references:
+            parts.append("Material para repasar: " + "; ".join(dict.fromkeys(references)) + ".")
+    if not selected:
+        guidance = [metadata.get("questions", {}).get(question["source_id"], {}).get("guidance")
+                    for question in missed]
+        parts.append("Revisa los contenidos evaluados con puntuación inferior al máximo.")
+        parts.extend(_sentence(advice) for advice in dict.fromkeys(guidance) if advice)
+        if not any(guidance):
+            parts.append("Los metadatos no incluyen orientaciones conceptuales específicas.")
     return " ".join(parts)
 
 
@@ -208,7 +307,7 @@ def _write_report(output, report):
 
 
 def build_feedback(manifest_path, input_paths, config_path, output_dir, *,
-                   detailed=False, consolidated=False):
+                   detailed=False, consolidated=False, gradebook_path=None):
     """Return an audit report and write only fully validated UTF-8-BOM CSVs.
 
     Any ambiguous input blocks every CSV in this batch. Existing CSVs also block
@@ -224,7 +323,7 @@ def build_feedback(manifest_path, input_paths, config_path, output_dir, *,
         output.mkdir(parents=True, exist_ok=True)
     except OSError as exc:
         raise FeedbackError(f"No se puede crear la carpeta de salida: {exc}") from exc
-    report = {"status": "blocked", "outputs": [], "incidents": [],
+    report = {"status": "blocked", "outputs": [], "incidents": [], "audit": [],
               "students": {"read": 0, "absent": 0, "with_feedback": 0},
               "manifest_sha256": None}
 
@@ -283,15 +382,41 @@ def build_feedback(manifest_path, input_paths, config_path, output_dir, *,
         metadata = manifest.get("metadata") or {}
         if not isinstance(metadata, dict):
             raise ValueError("Los metadatos deben ser un objeto JSON.")
-        for name in ("identifier_column", "model_column", "feedback_column", "status_column"):
+        required_columns = ["identifier_column", "model_column", "status_column"]
+        if gradebook_path is None:
+            required_columns.append("feedback_column")
+        for name in required_columns:
             if not isinstance(config.get(name), str) or not config[name]:
                 raise ValueError(f"Falta la columna explícita {name} en la configuración.")
-        fixed_columns = [config[name] for name in ("identifier_column", "model_column", "feedback_column", "status_column")]
+        fixed_columns = [config[name] for name in required_columns]
         if len(set(fixed_columns)) != len(fixed_columns):
             raise ValueError("Identificador, modelo, estado y comentario deben usar columnas distintas.")
         for name in ("absent_values", "blank_values"):
             if not isinstance(config.get(name, []), list) or any(not isinstance(token, str) for token in config.get(name, [])):
                 raise ValueError(f"{name} debe ser una lista de textos explícitos.")
+        priorities = _priority(config.get("feedback_priority", {}))
+        gradebook = None
+        if gradebook_path is not None:
+            gradebook = config.get("gradebook")
+            if not isinstance(gradebook, dict) or set(gradebook) - {
+                    "identifier_column", "feedback_column", "grade_column",
+                    "model_column", "default_model", "delimiter"}:
+                raise ValueError("Se requiere un perfil gradebook explícito con columnas y modelo.")
+            book_columns = []
+            for name in ("identifier_column", "feedback_column", "grade_column"):
+                if not isinstance(gradebook.get(name), str) or not gradebook[name]:
+                    raise ValueError(f"Falta gradebook.{name}.")
+                book_columns.append(gradebook[name])
+            if ("model_column" in gradebook) == ("default_model" in gradebook):
+                raise ValueError("gradebook debe declarar exactamente model_column o default_model.")
+            if "model_column" in gradebook:
+                if not isinstance(gradebook["model_column"], str) or not gradebook["model_column"]:
+                    raise ValueError("gradebook.model_column debe ser texto no vacío.")
+                book_columns.append(gradebook["model_column"])
+            elif gradebook["default_model"] not in models:
+                raise ValueError("El modelo predeterminado del libro no pertenece al manifiesto.")
+            if len(book_columns) != len(set(book_columns)):
+                raise ValueError("Las columnas del libro deben ser distintas.")
         if not isinstance(config.get("models", {}), dict):
             raise ValueError("models en configuración debe ser un mapa por identificador.")
         if set(config.get("models", {})) - set(models):
@@ -330,7 +455,7 @@ def build_feedback(manifest_path, input_paths, config_path, output_dir, *,
         incident("INVALID_INPUT", str(exc))
         return finish()
 
-    groups, all_rows, seen_identifiers = OrderedDict(), [], set()
+    groups, all_rows, seen_identifiers, feedback_by_key = OrderedDict(), [], set(), {}
     absent_values, blank_values = set(config.get("absent_values", [])), set(config.get("blank_values", []))
     for path in paths:
         try:
@@ -346,15 +471,20 @@ def build_feedback(manifest_path, input_paths, config_path, output_dir, *,
         for line, cells in rows:
             report["students"]["read"] += 1
             context = {"file": path.name, "row": line}
-            identifier = cells[positions[config["identifier_column"]]].strip()
+            raw_identifier = cells[positions[config["identifier_column"]]]
+            identifier = raw_identifier.strip()
             model_id = cells[positions[config["model_column"]]]
             if not identifier:
                 incident("MISSING_IDENTIFIER", "La fila no tiene identificador; no se atribuye un resultado.", **context)
                 continue
-            if identifier in seen_identifiers:
+            if gradebook is not None and identifier != raw_identifier:
+                incident("INVALID_IDENTIFIER", "El identificador tiene espacios externos; confirma la correspondencia exacta.", **context)
+                continue
+            identity_key = (identifier, model_id) if gradebook is not None else identifier
+            if identity_key in seen_identifiers:
                 incident("DUPLICATE_IDENTIFIER", "Identificador repetido entre filas, archivos o modelos; requiere revisión.", **context)
                 continue
-            seen_identifiers.add(identifier)
+            seen_identifiers.add(identity_key)
             if model_id not in models:
                 incident("UNKNOWN_MODEL", "El modelo de la fila no coincide con el manifiesto.", **context)
                 continue
@@ -367,7 +497,8 @@ def build_feedback(manifest_path, input_paths, config_path, output_dir, *,
             if missing:
                 incident("MISSING_COLUMN", "Faltan columnas configuradas: " + ", ".join(missing), **context)
                 continue
-            if model_id in groups and (groups[model_id]["header"] != header or groups[model_id]["formatting"] != formatting):
+            if gradebook is None and model_id in groups and (
+                    groups[model_id]["header"] != header or groups[model_id]["formatting"] != formatting):
                 incident("INCOMPATIBLE_CSV", "El mismo modelo usa columnas o dialectos incompatibles entre archivos.", **context)
                 continue
             groups.setdefault(model_id, {"header": header, "formatting": formatting, "rows": []})
@@ -401,7 +532,7 @@ def build_feedback(manifest_path, input_paths, config_path, output_dir, *,
                 if not valid_row:
                     continue
                 try:
-                    feedback = _conceptual(model["questions"], scores, metadata)
+                    feedback = _conceptual(model["questions"], scores, metadata, priorities)
                     if detailed:
                         for question in model["questions"]:
                             number = str(question["number"])
@@ -416,12 +547,62 @@ def build_feedback(manifest_path, input_paths, config_path, output_dir, *,
                     continue
                 report["students"]["with_feedback"] += 1
             result = list(cells)
-            result[positions[config["feedback_column"]]] = feedback
+            if gradebook is None:
+                result[positions[config["feedback_column"]]] = feedback
+            feedback_by_key[(identifier, model_id)] = feedback
             groups[model_id]["rows"].append(result)
             all_rows.append((header, formatting, result))
 
     if not report["students"]["read"]:
         incident("NO_STUDENTS", "No hay filas de estudiantes para procesar.")
+    if gradebook is not None:
+        try:
+            gradebook_file = Path(gradebook_path).expanduser().resolve()
+            header, rows, formatting = _read_csv(gradebook_file, gradebook.get("delimiter"))
+            report["gradebook_sha256"] = hashlib.sha256(gradebook_file.read_bytes()).hexdigest()
+            if not rows:
+                raise ValueError("El libro de calificaciones no contiene filas.")
+            if any(column not in header for column in book_columns):
+                raise ValueError("Faltan columnas declaradas del libro de calificaciones.")
+            positions = {column: index for index, column in enumerate(header)}
+            groups, all_rows, found = OrderedDict(), [], set()
+            for line, cells in rows:
+                raw_identifier = cells[positions[gradebook["identifier_column"]]]
+                identifier = raw_identifier.strip()
+                model_id = (cells[positions[gradebook["model_column"]]]
+                            if "model_column" in gradebook else gradebook["default_model"])
+                key = (identifier, model_id)
+                if not identifier:
+                    incident("MISSING_IDENTIFIER", "Fila del libro sin identificador.", row=line)
+                    continue
+                if identifier != raw_identifier:
+                    incident("INVALID_IDENTIFIER", "El identificador del libro tiene espacios externos; confirma la correspondencia exacta.", row=line)
+                    continue
+                if key in found:
+                    incident("DUPLICATE_GRADEBOOK_IDENTIFIER", "Fila repetida en el libro para el mismo identificador y modelo.", row=line)
+                    continue
+                found.add(key)
+                if model_id not in models:
+                    incident("UNKNOWN_MODEL", "Modelo del libro desconocido o vacío; no se atribuye por intuición.", row=line)
+                    continue
+                result = list(cells)
+                if key in feedback_by_key:
+                    before = result[positions[gradebook["feedback_column"]]]
+                    result[positions[gradebook["feedback_column"]]] = feedback_by_key[key]
+                    report["audit"].append({"identifier": identifier, "model": model_id,
+                                            "before": before, "after": feedback_by_key[key],
+                                            "grade_preserved": cells[positions[gradebook["grade_column"]]]})
+                else:
+                    incident("NO_DETAIL", "Fila conservada: no hay detalle por pregunta para este participante y modelo.",
+                             level="warning", row=line, model=model_id)
+                groups.setdefault(model_id, {"header": header, "formatting": formatting, "rows": []})["rows"].append(result)
+                all_rows.append((header, formatting, result))
+            for identifier, model_id in feedback_by_key.keys() - found:
+                incident("UNMATCHED_DETAIL", "Un resultado detallado no tiene correspondencia en el libro.",
+                         identifier=identifier, model=model_id)
+            paths.append(gradebook_file)
+        except (OSError, ValueError, TypeError, KeyError, UnicodeError, csv.Error) as exc:
+            incident("INVALID_GRADEBOOK", str(exc))
     targets = []
     for model_id, group in groups.items():
         safe_id = re.sub(r"[^A-Za-z0-9_.-]", "_", model_id)

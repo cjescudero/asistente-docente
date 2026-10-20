@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "structure": "curso-v1",
+  "sources": {
+    "selected": true,
+    "include": [
+      "alumnado/materiales",
+      "alumnado/actividades"
+    ],
+    "exclude": []
+  },
+  "map": null
+}

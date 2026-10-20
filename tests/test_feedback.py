@@ -6,9 +6,10 @@ import hashlib
 import json
 import tempfile
 import unittest
+from decimal import Decimal
 from pathlib import Path
 
-from docencia.feedback import FeedbackError, _PACKAGE_ROOT, build_feedback
+from docencia.feedback import FeedbackError, _PACKAGE_ROOT, _conceptual, build_feedback
 
 
 class FeedbackTests(unittest.TestCase):
@@ -366,6 +367,199 @@ class FeedbackTests(unittest.TestCase):
         header = self.header.copy()
         header[-1] = header[-2]
         self.assert_blocked(self.run_feedback([self.input(header=header)]), "INVALID_CSV")
+
+    def test_single_wrong_answer_is_review_not_marked_difficulty(self):
+        self.rows[0][3] = "0"
+        result = self.run_feedback()
+        text = self.output_rows(result)[1][6]
+        self.assertIn("Aspecto a revisar", text)
+        self.assertNotIn("Dificultad acusada", text)
+
+    def test_priorities_use_all_evidence_and_limit_three_concepts(self):
+        questions, scores = [], {}
+        # Equal losses: the concept with more questions has higher priority.
+        for concept, count, score in (("aislado", 1, "0"), ("repetido", 2, "0"),
+                                      ("parcial", 2, "0.4"), ("leve", 3, "0.9")):
+            for _ in range(count):
+                number = len(questions) + 1
+                questions.append({"number": number, "source_id": str(number), "concepts": [concept]})
+                scores[str(number)] = Decimal(score), Decimal(1)
+        text = _conceptual(questions, scores, {})
+        self.assertLess(text.index("repetido"), text.index("aislado"))
+        self.assertIn("Dificultad acusada en repetido", text)
+        self.assertIn("Aspecto a revisar: aislado", text)
+        self.assertIn("Dificultad acusada en parcial", text)
+        self.assertNotIn("leve", text)
+
+    def test_correct_questions_count_towards_concept_threshold(self):
+        questions = [{"number": index, "source_id": str(index), "concepts": ["concepto"]}
+                     for index in (1, 2)]
+        scores = {"1": (Decimal(0), Decimal(1)), "2": (Decimal(1), Decimal(1))}
+        text = _conceptual(questions, scores, {})
+        self.assertNotIn("Dificultad acusada", text)  # Exactly 50%; threshold is strictly lower.
+        self.assertIn("Aspecto a revisar", text)
+        text = _conceptual(questions, scores, {}, {"marked_threshold": "0.6"})
+        self.assertIn("Dificultad acusada", text)
+
+    def test_priority_configuration_is_validated_even_for_absent_students(self):
+        self.rows[0][2] = "No presentado"
+        self.config["feedback_priority"] = {"max_concepts": 0}
+        self.assert_blocked(self.run_feedback(), "INVALID_INPUT")
+
+    def test_only_explicit_student_references_are_included(self):
+        self.manifest["metadata"]["concepts"]["balance"]["references"] = [
+            {"title": "Guía de unidades", "path": "alumnado/materiales/unidades.md", "access": "estudiante"},
+            {"title": "SECRET_SOLUTION", "path": "docente/soluciones/examen.md", "access": "docente"},
+            {"title": "UNCLASSIFIED", "path": "material.md"}]
+        result = self.run_feedback()
+        self.assertEqual(result["status"], "ok", result)
+        feedback = self.output_rows(result)[1][6]
+        self.assertIn("alumnado/materiales/unidades.md", feedback)
+        self.assertNotIn("SECRET", feedback)
+        self.assertNotIn("UNCLASSIFIED", feedback)
+
+    def test_unsafe_or_reserved_student_reference_blocks_export(self):
+        for index, path in enumerate(("javascript:alert(1)", "file:///secret",
+                                      "../secreto.md", "https://usuario:clave@example.org/apuntes",
+                                      "docente/soluciones/examen.md", "%2e%2e/secreto.md",
+                                      r"C:\secret.md", "//example.org/apuntes")):
+            with self.subTest(path=path):
+                self.out = self.root / f"reference-{index}"
+                self.manifest["metadata"]["concepts"]["balance"]["references"] = [
+                    {"title": "Referencia", "path": path, "access": "estudiante"}]
+                self.assert_blocked(self.run_feedback(), "INVALID_METADATA")
+
+    def test_question_reference_cannot_override_reserved_material_in_additive_manifest(self):
+        from docencia.gift import escape_gift
+        source_id = "banco-historia::one"
+        self.bank.write_text(self.bank.read_text().replace("::one::", f"::{escape_gift(source_id)}::"),
+                             encoding="utf-8")
+        self.manifest["bank_sha256"] = hashlib.sha256(self.bank.read_bytes()).hexdigest()
+        question = self.manifest["models"][0]["questions"][0]
+        question.update(source_id=source_id, source_bank_id="banco-historia", source_question_id="one")
+        metadata = self.manifest["metadata"]
+        metadata["questions"][source_id] = metadata["questions"].pop("one")
+        metadata["materials"] = {"examen": {"path": "referencias/examen-reservado.md", "access": "docente",
+                                            "title": "Material reservado"}}
+        metadata["questions"][source_id]["references"] = [
+            {"path": "referencias/examen-reservado.md", "access": "estudiante", "title": "SECRET_RESERVED"}]
+        result = self.run_feedback()
+        self.assert_blocked(result, "INVALID_METADATA")
+        self.assertNotIn("SECRET_RESERVED", json.dumps(result))
+
+    def test_reference_must_be_declared_when_material_registry_exists(self):
+        metadata = self.manifest["metadata"]
+        metadata["materials"] = {"guia": {"path": "alumnado/guia.md", "access": "estudiante"}}
+        metadata["questions"]["one"]["references"] = [
+            {"path": "alumnado/otra.md", "access": "estudiante", "title": "Otra"}]
+        self.assert_blocked(self.run_feedback(), "INVALID_METADATA")
+
+    def test_registered_student_reference_allows_fragment_and_keeps_original_grades(self):
+        metadata = self.manifest["metadata"]
+        metadata["materials"] = {"guia": {"path": "alumnado/guia.md", "access": "estudiante"}}
+        metadata["questions"]["one"]["references"] = [
+            {"path": "alumnado/guia.md#unidades", "access": "estudiante", "title": "Guía de unidades"}]
+        result = self.run_feedback()
+        self.assertEqual(result["status"], "ok", result)
+        self.assertIn("alumnado/guia.md#unidades", self.output_rows(result)[1][6])
+        self.assertEqual(self.output_rows(result)[1][7], "7,25")
+
+    def test_legacy_without_materials_uses_explicit_safe_student_reference(self):
+        self.manifest["metadata"]["questions"]["one"]["references"] = [
+            {"path": "alumnado/guia.md", "access": "estudiante", "title": "Guía"},
+            {"path": "referencias/reservado.md", "access": "docente", "title": "SECRET_RESERVED"}]
+        result = self.run_feedback()
+        self.assertEqual(result["status"], "ok", result)
+        text = self.output_rows(result)[1][6]
+        self.assertIn("alumnado/guia.md", text)
+        self.assertNotIn("SECRET_RESERVED", text)
+
+    def test_conflicting_material_access_blocks_even_if_question_claims_student(self):
+        metadata = self.manifest["metadata"]
+        metadata["materials"] = {"uno": {"path": "alumnado/guia.md", "access": "estudiante"},
+                                "dos": {"path": "alumnado/./guia.md", "access": "docente"}}
+        metadata["questions"]["one"]["references"] = [
+            {"path": "alumnado/guia.md", "access": "estudiante", "title": "Guía"}]
+        self.assert_blocked(self.run_feedback(), "INVALID_METADATA")
+
+    def gradebook(self, rows=None, header=None):
+        self.config["gradebook"] = {"identifier_column": "ID", "feedback_column": "Feedback actividad",
+                                   "grade_column": "Nota actividad", "default_model": "A"}
+        header = header or ["ID", "Nota actividad", "Feedback actividad", "Ajena"]
+        rows = rows or [["sintetico-002", "8,75", "Conservar sin detalle", "reserva"],
+                        ["sintetico-001", "7,25", "Comentario anterior", "Conservar"]]
+        return self.input("libro.csv", rows=rows, header=header)
+
+    def test_separate_gradebook_preserves_grades_rows_and_unmatched_comments(self):
+        book = self.gradebook()
+        before = book.read_bytes()
+        source = self.input(header=self.header[:6] + self.header[7:],
+                            rows=[self.rows[0][:6] + self.rows[0][7:]])
+        self.config.pop("feedback_column")
+        result = self.run_feedback([source], gradebook_path=book)
+        self.assertEqual(result["status"], "ok", result)
+        rows = self.output_rows(result)
+        self.assertEqual([row[0] for row in rows[1:]], ["sintetico-002", "sintetico-001"])
+        self.assertEqual(rows[1], ["sintetico-002", "8,75", "Conservar sin detalle", "reserva"])
+        self.assertEqual(rows[2][1], "7,25")
+        self.assertIn("Balance", rows[2][2])
+        self.assertEqual(book.read_bytes(), before)
+        self.assertEqual(result["audit"][0]["grade_preserved"], "7,25")
+
+    def test_separate_gradebook_clears_absent_feedback_but_preserves_grade(self):
+        self.rows[0][2:4] = ["No presentado", ""]
+        result = self.run_feedback(gradebook_path=self.gradebook())
+        self.assertEqual(result["status"], "ok", result)
+        row = self.output_rows(result)[2]
+        self.assertEqual(row[1:3], ["7,25", ""])
+
+    def test_separate_gradebook_requires_original_numeric_grade_column(self):
+        book = self.gradebook()
+        self.config["gradebook"].pop("grade_column")
+        self.assert_blocked(self.run_feedback(gradebook_path=book), "INVALID_INPUT")
+
+    def test_gradebook_ambiguity_blocks_without_changing_any_original(self):
+        book = self.gradebook(rows=[["sintetico-001", "7,25", "", ""],
+                                   ["sintetico-001", "7,25", "", ""]])
+        before = book.read_bytes()
+        self.assert_blocked(self.run_feedback(gradebook_path=book), "DUPLICATE_GRADEBOOK_IDENTIFIER")
+        self.assertEqual(book.read_bytes(), before)
+
+    def test_detail_without_gradebook_match_blocks_instead_of_dropping_it(self):
+        book = self.gradebook(rows=[["sintetico-099", "4", "Anterior", ""]])
+        self.assert_blocked(self.run_feedback(gradebook_path=book), "UNMATCHED_DETAIL")
+
+    def test_gradebook_requires_explicit_model_mapping(self):
+        book = self.gradebook()
+        self.config["gradebook"].pop("default_model")
+        self.assert_blocked(self.run_feedback(gradebook_path=book), "INVALID_INPUT")
+
+    def test_multiple_models_join_on_explicit_id_and_model_only(self):
+        second = copy.deepcopy(self.manifest["models"][0])
+        second["id"] = "B"
+        self.manifest["models"].append(second)
+        self.rows.append(self.rows[0].copy())
+        self.rows[1][1] = "B"
+        self.rows[1][3] = "1"
+        book = self.gradebook(
+            header=["ID", "Nota actividad", "Feedback actividad", "Ajena", "Modelo papel"],
+            rows=[["sintetico-001", "8,00", "B anterior", "uno", "B"],
+                  ["sintetico-001", "7,25", "A anterior", "dos", "A"]])
+        self.config["gradebook"].pop("default_model")
+        self.config["gradebook"]["model_column"] = "Modelo papel"
+        result = self.run_feedback(gradebook_path=book, consolidated=True)
+        self.assertEqual(result["status"], "ok", result)
+        self.assertEqual(len(result["outputs"]), 3)
+        rows = self.output_rows(result, 2)
+        self.assertEqual([row[4] for row in rows[1:]], ["B", "A"])
+        self.assertEqual([row[1] for row in rows[1:]], ["8,00", "7,25"])
+        self.assertIn("puntuación máxima", rows[1][2])
+        self.assertIn("Balance", rows[2][2])
+
+    def test_global_grade_without_question_scores_never_infers_concepts(self):
+        book = self.gradebook()
+        self.rows[0][3] = ""
+        self.assert_blocked(self.run_feedback(gradebook_path=book), "MISSING_SCORE")
 
 
 if __name__ == "__main__":

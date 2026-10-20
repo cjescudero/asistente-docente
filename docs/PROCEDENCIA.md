@@ -162,3 +162,17 @@ El propietario eligió MIT el 18 de octubre de 2026 para el código, documentaci
 y adaptaciones propias. Véase [LICENSE](../LICENSE). MathJax y el esquema Agent
 Plugins conservan Apache-2.0 y sus avisos; la licencia propia no los sustituye.
 El registro de [NOTICE](../NOTICE.md) identifica sus fuentes, licencias y huellas.
+
+
+## Orientación y evaluación conectadas (0.8.0)
+
+La skill `orientar-docente`, el catálogo de bancos, la selección con cuotas y la
+exportación de evaluaciones estructuradas son desarrollo propio bajo MIT. El
+registro de actividades y los ejemplos de humanidades, ciencias y medición son
+sintéticos: no contienen entregas ni calificaciones de personas reales.
+
+Las limitaciones de las dos vías Moodle se contrastan con las referencias
+oficiales enlazadas en [Calificaciones](CALIFICACIONES.md) y [Moodle](MOODLE.md).
+Esa revisión documental no equivale a probar importaciones en un servidor real.
+La inspiración ASD-STE100 sigue siendo una adaptación de claridad al español;
+no se presenta como conformidad o certificación de ese estándar en inglés.

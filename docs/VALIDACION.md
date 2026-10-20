@@ -1,5 +1,69 @@
 # Validación local
 
+Fecha: 20 de octubre de 2026. Validación local previa a la publicación de **0.8.0**.
+
+## Resultado de 0.8.0
+
+**346 pruebas automatizadas aprobadas**, incluidas las dos pruebas PDF
+opcionales activadas con `RUN_PDF_TESTS=1`. Ejecución local en macOS con Python
+3.12.9 y Chromium disponible indicado mediante `ASISTENTE_DOCENTE_CHROMIUM`.
+Este apartado documenta la ejecución local. Los resultados remotos para Windows,
+Linux y macOS se registran por separado en [GitHub Actions](https://github.com/cjescudero/asistente-docente/actions/workflows/ci.yml);
+no se deducen de estas pruebas locales.
+
+| Comprobación | Resultado local |
+| --- | --- |
+| Inicialización nueva y repetida | Estructura aditiva, entregas excluidas, instrucciones conservadas y propuestas ante conflictos; mapa vacío. |
+| Orientación | Revisión de instrucciones y casos: fuentes pendientes, decisión de no usar fuentes, mapa existente, adjuntos suficientes y nota global sin detalle. No equivale a una prueba en los anfitriones. |
+| Actividades | Ejemplo experimental con enunciado, plantilla, rúbrica reservada, guía y registro; revisión de un caso de humanidades sin imponer programación. |
+| Bancos y modelos | Tres bancos sintéticos con fuentes múltiples e IDs coincidentes; cuotas, semilla, insuficiencia, solapamiento, huellas, exclusiones, escapes y snapshots. |
+| Corrección | Hoja de tarea y libro, grupo con miembros explícitos, duplicados, ausencias y documentos ilegibles/pendientes, versiones, cálculo y auditoría; límites de redondeo y CSV sin cambios ajenos. |
+| Feedback | Máximo configurable, umbral y evidencia mínima, dificultad acusada frente a fallo aislado, referencias reservadas rechazadas y notas originales conservadas. |
+| Compatibilidad | Bancos únicos y manifiestos anteriores; catálogo y campos de procedencia aditivos; funciones actuales de mapas y selección pasan sus regresiones. |
+| Portabilidad | Recorrido completo por CLI desde otra carpeta y desde ambos paquetes extraídos con instalación de solo lectura; inicialización sin dependencias de terceros. |
+| Distribución | Trece skills; validación pública de manifiestos, enlaces y recursos; equivalencia funcional y construcción reproducible de ambos paquetes y del archivo fuente. |
+
+La [demostración reproducible](../examples/recorrido-docente/README.md) se ejecutó
+además con PDF real: tres modelos, seis preguntas por modelo, seis PDF de
+estudiante/docente, GIFT ofuscados, manifiesto y bancos congelados, más el PDF del enunciado de
+la actividad asociado a su registro. La revisión visual cubrió ese enunciado, las dos páginas del modelo A estudiantil y la primera página del
+solucionario B. Se comprobó la numeración de los tres PDF estudiantiles contra
+el GIFT y el manifiesto, verdadero/falso con B correcta y tolerancias numéricas.
+No hay créditos ni soluciones en los PDF estudiantiles ni enunciados originales
+en los cuestionarios ofuscados.
+
+El catálogo reutiliza las doce preguntas para dieciocho posiciones: el informe
+muestra las coincidencias entre modelos, sin afirmar un óptimo global. Las dos
+vías de actividad producen 8,75/10 para el grupo evaluado y conservan el caso sin
+entrega. El feedback mantiene literalmente las notas del libro y vacía el
+comentario del caso no presentado.
+
+La revisión independiente detectó y corrigió dos casos límite, con regresiones:
+referencias por pregunta que reclasificaban una fuente docente como estudiantil,
+y redondeo capaz de superar una escala cuyo máximo no admite los decimales
+configurados. La prueba de instalación de solo lectura detectó y corrigió que
+la copia del ejemplo heredaba permisos no editables. Tras completar el PDF del
+enunciado, se repitieron las 14 comprobaciones de integración y empaquetado,
+todas aprobadas, y el recorrido completo con PDF.
+
+También se comprobaron el frontmatter de la nueva skill con el validador de
+Agent Skills, el catálogo y el manifiesto con Claude Code, la sincronización de adaptadores,
+el mapa anterior y 219 enlaces locales y anclas de la documentación revisada. La revisión de comportamiento fue por lectura
+de instrucciones y casos, no una evaluación en conversaciones reales de ChatGPT
+Work o Claude Cowork.
+
+**Pendiente fuera de esta entrega:** instalación real de 0.8.0 en ChatGPT Work y
+Claude Cowork e importación en un servidor Moodle. La distribución del código y
+los paquetes se recoge en la [release 0.8.0](https://github.com/cjescudero/asistente-docente/releases/tag/v0.8.0). Las limitaciones de Moodle se contrastaron con documentación
+oficial enlazada, sin subir datos ni cambiar calificaciones. La release 0.6.0 y
+los paquetes anteriores se conservan. No se modificaron las copias instaladas
+de las skills ni las instrucciones generales del workspace.
+
+## Historial de comprobaciones anteriores
+
+Los apartados siguientes registran validaciones de 0.7 y versiones previas;
+sus recuentos y fechas no describen la nueva ejecución de 0.8.
+
 Fecha: 20 de octubre de 2026. Versión preparada localmente: **0.7.0**.
 
 ## Revisión de la instalación desde GitHub

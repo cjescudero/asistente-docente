@@ -19,7 +19,7 @@ EXPECTED = {"preparar-actividades-docentes", "generar-apuntes-estudio",
             "preparar-examenes-papel-moodle", "generar-feedback-evaluaciones",
             "redactar-espanol-claro", "crear-infografias-didacticas",
             "crear-mapa-docente", "consultar-mapa-docente",
-            "visualizar-mapa-docente", "iniciar-proyecto-docente"}
+            "visualizar-mapa-docente", "iniciar-proyecto-docente", "orientar-docente"}
 ALLOWED = {"name", "description", "license", "compatibility", "metadata", "allowed-tools"}
 
 

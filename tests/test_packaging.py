@@ -47,8 +47,9 @@ class PackagingTests(unittest.TestCase):
                     self.assertIn('.codex-plugin/plugin.json', names)
                 self.assertNotIn("plugin.json" if "-claude.zip" in name else ".claude-plugin/plugin.json", names)
                 self.assertEqual(json.loads(archive.read(expected))["name"], "asistente-docente")
-                self.assertEqual(sum(n.startswith("skills/") and n.endswith("/SKILL.md") for n in names), 12)
+                self.assertEqual(sum(n.startswith("skills/") and n.endswith("/SKILL.md") for n in names), 13)
                 self.assertIn("skills/iniciar-proyecto-docente/SKILL.md", names)
+                self.assertIn("skills/orientar-docente/SKILL.md", names)
                 self.assertIn("skills/crear-mapa-docente/assets/agents-mapa.md", names)
                 self.assertNotIn("skills/iniciar-proyecto-docente/assets/agents-proyecto.md", names)
                 self.assertTrue(all(not n.startswith(("/", "bin/")) and "\\" not in n and ".." not in Path(n).parts for n in names))
@@ -84,7 +85,14 @@ class PackagingTests(unittest.TestCase):
                     self.assertEqual(result.returncode, 0, result.stderr)
                     self.assertFalse(json.loads(result.stdout)["wiki_created"])
                     self.assertTrue((course / "AGENTS.md").is_file())
+                    self.assertTrue((course / "docente/resultados/entregas").is_dir())
                     self.assertEqual(list((course / "docente/mapa-docente").iterdir()), [])
+                    connected = subprocess.run(
+                        [sys.executable, str(install / "examples/recorrido-docente/comprobar.py"),
+                         str(base / "recorrido")], cwd=base, capture_output=True,
+                        text=True, encoding="utf-8")
+                    self.assertEqual(connected.returncode, 0, connected.stderr)
+                    self.assertTrue(json.loads(connected.stdout)["originals_preserved"])
                 finally:
                     for path in reversed(paths):
                         path.chmod(0o755 if path.is_dir() else 0o644)

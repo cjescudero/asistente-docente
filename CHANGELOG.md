@@ -1,5 +1,23 @@
 # Historial
 
+## 0.8.0 — 2026-10-20
+
+- Nueva skill `orientar-docente`: trece skills, ayuda contextual y ejemplos de
+  peticiones sin ejecutar otros procesos. La inicialización recomienda el mapa
+  y ofrece orientación, conservando el encargo explícito para crearlo.
+- Carpeta de entregas por actividad y convocatoria, fuera de la wiki;
+  actualización aditiva con conservación de instrucciones y consulta de conflictos.
+- Diseño dialogado de actividades para cualquier disciplina y alumnado con
+  acceso a IA; enunciado, plantillas, rúbrica docente y registro de versión.
+- Bancos vinculados a uno o varios materiales, catálogo validado y composición
+  reproducible de modelos con cuotas, procedencia y cobertura verificables.
+- Exportación de evaluaciones estructuradas a hoja de tarea o libro de
+  calificaciones Moodle, con cálculos comprobados, auditoría y bloqueos de ambigüedad.
+- Feedback con hasta tres prioridades, umbral y evidencia configurables, y
+  cruce opcional con el libro de calificaciones sin modificar sus notas.
+- Ejemplos sintéticos, compatibilidad con bancos y manifiestos anteriores y
+  paquetes comunes. Las importaciones reales y la publicación son pasos separados.
+
 ## 0.7.0 — código en main
 
 - Inicio rápido con incorporación de marketplaces GitHub e instalación posterior;

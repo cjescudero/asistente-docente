@@ -8,6 +8,8 @@ import json
 import random
 from pathlib import Path
 
+from .banks import (coverage_report, load_catalog, load_selection, select_models,
+                    serialize_bank)
 from .gift import parse_gift
 from .render import document, external_output, fragment, print_pdf
 
@@ -33,6 +35,9 @@ def prepare(question: dict, number: int, rng: random.Random, metadata: dict) -> 
               "source_category": question["category"], "concepts": info.get("concepts", []),
               "type": question["type"], "prompt": question["prompt"],
               "format": question["format"]}
+    for field in ("source_bank_id", "source_question_id", "source_refs", "difficulty", "objective"):
+        if field in info:
+            result[field] = info[field]
     if question["type"] == "numerical":
         result["numerical"] = question["numerical"]
         return result
@@ -151,20 +156,37 @@ def validate_metadata(metadata: dict, bank: list[dict]):
             raise ValueError(f"Concepto no válido: {key}.")
 
 
-def build_exams(bank_path: str | Path, output_dir: str | Path, *, title: str = "Evaluación",
+def build_exams(bank_path: str | Path | None, output_dir: str | Path, *, title: str = "Evaluación",
                 models: int = 2, questions: int = 5, seed: int = 42,
                 metadata_path: str | Path | None = None, per_category: dict | None = None,
-                html_only: bool = False) -> dict:
+                html_only: bool = False, catalog_path: str | Path | None = None,
+                selection_path: str | Path | None = None,
+                project_root: str | Path | None = None) -> dict:
     output = external_output(output_dir)
     if output.exists() and any(output.iterdir()):
         raise ValueError("La carpeta de examen debe estar vacía; no se sobrescriben modelos.")
-    raw = Path(bank_path).read_bytes()
-    bank = parse_gift(raw.decode("utf-8-sig"))
-    metadata = (json.loads(Path(metadata_path).read_text(encoding="utf-8-sig"))
-                if metadata_path else {"schema_version": 1, "questions": {}, "concepts": {}})
-    validate_metadata(metadata, bank)
-    if not 1 <= models <= 100 or questions < 1:
+    if (type(models) is not int or type(questions) is not int
+            or not 1 <= models <= 100 or questions < 1):
         raise ValueError("Usa entre 1 y 100 modelos y al menos una pregunta.")
+    catalog = selection = None
+    if catalog_path is not None:
+        if bank_path is not None or metadata_path is not None or per_category is not None:
+            raise ValueError("El catálogo no se combina con banco único, metadatos externos o cuotas por categoría.")
+        if selection_path is None:
+            raise ValueError("El catálogo requiere un archivo de selección explícita.")
+        selection = load_selection(selection_path, questions)
+        catalog = load_catalog(catalog_path, project_root=project_root,
+                               bank_ids=selection["selection"]["banks"])
+        bank, metadata = catalog["bank"], catalog["metadata"]
+        raw = serialize_bank(bank)
+    else:
+        if bank_path is None or selection_path is not None:
+            raise ValueError("Indica un banco GIFT o un catálogo con su selección.")
+        raw = Path(bank_path).read_bytes()
+        bank = parse_gift(raw.decode("utf-8-sig"))
+        metadata = (json.loads(Path(metadata_path).read_text(encoding="utf-8-sig"))
+                    if metadata_path else {"schema_version": 1, "questions": {}, "concepts": {}})
+        validate_metadata(metadata, bank)
     available = [q for q in bank if q["type"] in SUPPORTED]
     excluded = [q["id"] for q in bank if q["type"] not in SUPPORTED]
     if len(available) < questions:
@@ -180,19 +202,31 @@ def build_exams(bank_path: str | Path, output_dir: str | Path, *, title: str = "
     rng = random.Random(seed)
     used = {q["id"]: 0 for q in available}
     built = []
+    selections = None
+    if catalog is not None:
+        selections, used = select_models(bank, metadata, selection["selection"], models, rng)
+        by_id = {q["id"]: q for q in bank}
     for i in range(models):
-        selected = []
-        pools = per_category or {None: questions}
-        for category, count in pools.items():
-            candidates = [q for q in available if category is None or q["category"] == category]
-            rng.shuffle(candidates)
-            candidates.sort(key=lambda q: used[q["id"]])
-            selected.extend(candidates[:count])
-        for q in selected:
-            used[q["id"]] += 1
-        rng.shuffle(selected)
-        built.append({"id": model_id(i), "questions": [prepare(q, j+1, rng, metadata)
-                      for j, q in enumerate(selected)], "files": {}, "pdf_status": {}})
+        if selections is not None:
+            selected = [by_id[qid] for qid, _ in selections[i]]
+        else:
+            selected = []
+            pools = per_category or {None: questions}
+            for category, count in pools.items():
+                candidates = [q for q in available if category is None or q["category"] == category]
+                rng.shuffle(candidates)
+                candidates.sort(key=lambda q: used[q["id"]])
+                selected.extend(candidates[:count])
+            for q in selected:
+                used[q["id"]] += 1
+            rng.shuffle(selected)
+        model = {"id": model_id(i), "questions": [prepare(q, j+1, rng, metadata)
+                 for j, q in enumerate(selected)], "files": {}, "pdf_status": {}}
+        if selections is not None:
+            for prepared, (_, quota) in zip(model["questions"], selections[i]):
+                prepared["quota_label"] = selection["selection"]["quotas"][quota]["label"]
+            model["coverage"] = coverage_report(selections[i], metadata, selection["selection"]["quotas"])
+        built.append(model)
     # Validar todos los HTML y GIFT antes de escribir cualquier resultado.
     rendered = []
     for model in built:
@@ -206,6 +240,36 @@ def build_exams(bank_path: str | Path, output_dir: str | Path, *, title: str = "
     manifest = {"schema_version": 1, "title": title, "seed": seed,
                 "bank_sha256": hashlib.sha256(raw).hexdigest(), "bank_snapshot": "source/bank.gift",
                 "metadata": metadata, "excluded_question_ids": excluded, "models": built}
+    if catalog is not None:
+        (output / "source/banks").mkdir()
+        manifest["source_banks"] = []
+        for original in catalog["banks"]:
+            entry = {"id": original["id"], "questions": original["questions"]}
+            for field, suffix in (("gift", ".gift"), ("metadata", ".metadata.json")):
+                snapshot = f"source/banks/{original['id']}{suffix}"
+                content = original[f"{field}_bytes"]
+                (output / snapshot).write_bytes(content)
+                entry[f"{field}_snapshot"] = snapshot
+                entry[f"{field}_sha256"] = hashlib.sha256(content).hexdigest()
+            manifest["source_banks"].append(entry)
+        for kind, content in (("catalog", catalog["catalog_bytes"]),
+                              ("selection", selection["selection_bytes"])):
+            snapshot = f"source/{kind}.json"
+            (output / snapshot).write_bytes(content)
+            manifest[f"{kind}_snapshot"] = snapshot
+            manifest[f"{kind}_sha256"] = hashlib.sha256(content).hexdigest()
+        ids_per_model = [{q["source_id"] for q in model["questions"]} for model in built]
+        manifest["selection_report"] = {
+            "method": "Cuotas simultáneas con coste de reutilización y comparación de cuatro propuestas "
+                      "por modelo para reducir solapamientos; sin garantía de óptimo global.",
+            "question_usage": used,
+            "pairwise_overlap": [
+                {"models": [built[a]["id"], built[b]["id"]],
+                 "shared_questions": len(ids_per_model[a] & ids_per_model[b])}
+                for a in range(models) for b in range(a + 1, models)
+            ],
+            "coverage": {model["id"]: model["coverage"] for model in built},
+        }
     for model, (student, teacher, gift) in zip(built, rendered):
         stem = f"modelo-{model['id']}"
         for role, content in [("student", student), ("teacher", teacher)]:
@@ -221,4 +285,7 @@ def build_exams(bank_path: str | Path, output_dir: str | Path, *, title: str = "
         gift_path.write_text(gift, encoding="utf-8")
         model["files"]["gift"] = gift_path.name
     (output / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
+    if catalog is not None:
+        (output / "coverage.json").write_text(
+            json.dumps(manifest["selection_report"], ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return manifest

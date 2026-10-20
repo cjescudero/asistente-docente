@@ -14,10 +14,11 @@ ninguno de esos pasos automáticamente.
 - [Instalación para administradores](#instalación-para-administradores): permisos y actualizaciones.
 - [Instalación avanzada](#instalación-avanzada): Codex CLI, Claude Code y Python.
 
-Esta documentación corresponde a la versión 0.7.0 de la rama `main`. La release
-0.6.0 se conserva como entrega anterior con ZIP. Si ya incorporaste el marketplace,
+Esta documentación corresponde a la [versión 0.8.0](https://github.com/cjescudero/asistente-docente/releases/tag/v0.8.0).
+Comprueba la versión instalada antes de probar las novedades. Las versiones
+anteriores se conservan. Si ya incorporaste el marketplace,
 sincroniza su contenido y verifica la versión mostrada por la aplicación antes
-de probar el recorrido de 0.7.0. Una referencia fijada a una revisión anterior
+de probar el recorrido de 0.8.0. Una referencia fijada a una revisión anterior
 seguirá usando esa revisión hasta que su administrador la cambie.
 
 ## Instalación para profesores
@@ -67,7 +68,7 @@ los conoces. La skill ya implementada:
 - Respeta las instrucciones previas, pregunta ante conflictos y conserva la
   preferencia de español claro. Propone una migración antes de mover originales.
 - Comprueba las entradas y capacidades disponibles y explica lo pendiente.
-  La puesta en marcha deja la carpeta del mapa vacía; no crea ni propone la wiki.
+  La puesta en marcha deja la carpeta del mapa vacía; recomienda crear la wiki y ofrece orientación, pero no la crea sin encargo.
 
 Comprueba que el agente ha leído `AGENTS.md`; si su aplicación no lo carga,
 pídele que lo lea al comenzar. El plugin no genera `CLAUDE.md` por sistema.

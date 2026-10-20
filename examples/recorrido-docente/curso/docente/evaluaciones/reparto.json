@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "banks": [
+    "humanidades",
+    "ciencias",
+    "experimental"
+  ],
+  "quotas": [
+    {
+      "label": "humanidades-basica",
+      "count": 1,
+      "concepts": [
+        "critica-fuentes"
+      ],
+      "difficulty": "basica"
+    },
+    {
+      "label": "humanidades-intermedia",
+      "count": 1,
+      "concepts": [
+        "critica-fuentes"
+      ],
+      "difficulty": "intermedia"
+    },
+    {
+      "label": "ciencias-basica",
+      "count": 1,
+      "concepts": [
+        "medicion"
+      ],
+      "difficulty": "basica"
+    },
+    {
+      "label": "ciencias-intermedia",
+      "count": 1,
+      "concepts": [
+        "medicion"
+      ],
+      "difficulty": "intermedia"
+    },
+    {
+      "label": "experimental-basica",
+      "count": 1,
+      "concepts": [
+        "evidencia-experimental"
+      ],
+      "difficulty": "basica"
+    },
+    {
+      "label": "experimental-intermedia",
+      "count": 1,
+      "concepts": [
+        "evidencia-experimental"
+      ],
+      "difficulty": "intermedia"
+    }
+  ]
+}

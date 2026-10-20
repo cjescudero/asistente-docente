@@ -23,6 +23,7 @@ curso/
 │   ├── borradores/
 │   ├── mapa-docente/
 │   └── resultados/
+│       └── entregas/
 └── archivo/
 ```
 
@@ -35,13 +36,16 @@ para cada material, con sus derivados necesarios, sin copias de exportación por
 sistema. Un archivo Markdown y su PDF son formatos del mismo material.
 
 `docente/resultados/` contiene entregas, calificaciones y feedback. No alimenta
-la wiki. `archivo/` guarda materiales apartados del trabajo habitual y solo
+la wiki. Cada lote se guarda en `entregas/<actividad>/<convocatoria>/` con
+`originales/`, `identificacion/` y `correccion/` cuando se recibe. Se conservan
+las descargas y sus identificadores; no se reorganizan lotes previos sin acuerdo.
+`archivo/` guarda materiales apartados del trabajo habitual y solo
 alimenta el mapa si el profesor selecciona explícitamente esa carpeta o una de
 sus subcarpetas. Los nombres de las carpetas organizan contenidos: no conceden
 ni restringen acceso.
 
 La inicialización deja `docente/mapa-docente/` vacía. No crea el índice, el lector,
-el grafo ni propone o invoca la creación de la wiki. Cuando el profesor encargue
+el grafo. Recomienda el mapa y ofrece orientación, sin invocar su creación. Cuando el profesor encargue
 crear el mapa, esa skill incorporará el índice real a `AGENTS.md`.
 
 ## Configuración operativa
@@ -107,7 +111,8 @@ copiar originales para resolverla por iniciativa propia.
 4. Incorporar `redactar-espanol-claro` para textos en español. Conservar cualquier
    bloque de mapa existente y sus rutas; no añadir una entrada ficticia.
 5. Comprobar capacidades y comunicar lo disponible y lo pendiente, sin lanzar
-   otro flujo docente al cerrar la inicialización.
+   otro flujo docente al cerrar la inicialización. Ofrecer `orientar-docente`,
+   recomendar el mapa y esperar a que el profesor formule ese encargo.
 
 Los ayudantes de archivos proponen texto cuando `AGENTS.md` ya existe; el agente
 integra solo lo autorizado. No aceptar un bloque generado como sustitución de las

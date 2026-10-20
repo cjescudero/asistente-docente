@@ -10,7 +10,7 @@
     {
       "name": "asistente-docente",
       "source": "./",
-      "description": "Organiza cursos, materiales y evaluación. Instalación desde un marketplace de GitHub."
+      "description": "Orienta al docente y conecta materiales, actividades, bancos y evaluación para Moodle. Marketplace de GitHub."
     }
   ]
 }

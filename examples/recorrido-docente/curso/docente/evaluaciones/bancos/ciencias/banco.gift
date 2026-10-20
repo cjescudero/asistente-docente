@@ -1,0 +1,7 @@
+::Q01::Temperatura y energía son la misma magnitud. {FALSE}
+
+::Q02::Una muestra pasa de 20 a 25 grados Celsius. ¿Cuánto aumenta su temperatura, en grados Celsius? {#5:0.1}
+
+::Q03::¿Qué limitación persiste al repetir muchas lecturas con un instrumento mal calibrado? {=Un posible sesgo de calibración ~La inexistencia de temperatura ~La necesidad de expresar unidades desaparece}
+
+::Q04::Una variación de 5 grados Celsius equivale numéricamente a una variación de 5 kelvin. {TRUE}

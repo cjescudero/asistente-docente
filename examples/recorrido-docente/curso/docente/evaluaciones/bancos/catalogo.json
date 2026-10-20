@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "banks": [
+    {
+      "id": "humanidades",
+      "gift": "humanidades/banco.gift",
+      "metadata": "humanidades/metadatos.json"
+    },
+    {
+      "id": "ciencias",
+      "gift": "ciencias/banco.gift",
+      "metadata": "ciencias/metadatos.json"
+    },
+    {
+      "id": "experimental",
+      "gift": "experimental/banco.gift",
+      "metadata": "experimental/metadatos.json"
+    }
+  ]
+}

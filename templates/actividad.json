@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "id": "comparar-fuentes",
+  "version": "1.0.0",
+  "title": "Comparar testimonios de un mismo acontecimiento",
+  "objectives": [
+    "Contrastar la procedencia, el propósito y los límites de dos fuentes.",
+    "Justificar una interpretación con evidencias verificables."
+  ],
+  "sources": [
+    {
+      "id": "fuentes-vigentes",
+      "path": "../../fuentes/testimonios.md",
+      "locator": "Apartados Testimonio A y Testimonio B",
+      "role": "current",
+      "audience": "estudiante"
+    },
+    {
+      "id": "actividad-anterior",
+      "path": "../../../archivo/actividad-anterior.md",
+      "locator": "Tareas y duración",
+      "role": "inspiration",
+      "audience": "docente"
+    }
+  ],
+  "files": {
+    "statement": {
+      "path": "estudiante/enunciado.md",
+      "audience": "estudiante"
+    },
+    "templates": [
+      {
+        "id": "ficha-comparacion",
+        "path": "estudiante/ficha-comparacion.md",
+        "audience": "estudiante"
+      }
+    ],
+    "rubric": {
+      "path": "docente/rubrica.md",
+      "audience": "docente"
+    },
+    "teaching_guide": {
+      "path": "docente/guia-correccion.md",
+      "audience": "docente"
+    }
+  }
+}

@@ -1,18 +1,23 @@
 # Uso de Asistente docente
 
-El plugin reúne doce skills que comparten criterios de claridad y trazabilidad. Se puede pedir directamente el resultado en lenguaje natural. La ficha del curso ayuda cuando hay decisiones docentes relevantes; no es un trámite obligatorio para cada petición.
+El plugin reúne trece skills que comparten criterios de claridad y trazabilidad.
+Se puede pedir directamente el resultado en lenguaje natural, sin conocer sus
+nombres. Para descubrir el siguiente paso, pregunta **«¿Qué puedo hacer ahora
+con mi asignatura?»**. La ficha del curso ayuda cuando hay decisiones docentes
+relevantes; no es un trámite obligatorio para cada petición.
 
 | Necesidad | Skill |
 | --- | --- |
 | Preparar el curso, elegir fuentes y conciliar sus instrucciones | [Iniciar proyecto docente](../skills/iniciar-proyecto-docente/SKILL.md) |
+| Conocer opciones y entradas necesarias según el estado del curso | [Orientar al docente](../skills/orientar-docente/SKILL.md) |
 | Organizar carpetas elegidas y establecer el mapa como entrada del proyecto | [Crear Mapa docente](../skills/crear-mapa-docente/SKILL.md) |
 | Localizar evidencia en el mapa sin modificarlo | [Consultar Mapa docente](../skills/consultar-mapa-docente/SKILL.md) |
 | Generar o regenerar el lector HTML de la wiki y su grafo | [Visualizar Mapa docente](../skills/visualizar-mapa-docente/SKILL.md) |
-| Enunciados, talleres y guía del profesor | [Preparar actividades](../skills/preparar-actividades-docentes/SKILL.md) |
+| Diseñar por diálogo enunciados, plantillas y rúbrica docente | [Preparar actividades](../skills/preparar-actividades-docentes/SKILL.md) |
 | Teoría y materiales de estudio | [Generar apuntes](../skills/generar-apuntes-estudio/SKILL.md) |
-| Trabajos entregados y rúbricas | [Evaluar entregas](../skills/evaluar-entregas/SKILL.md) |
-| Preguntas y metadatos conceptuales | [Crear bancos](../skills/crear-bancos-preguntas/SKILL.md) |
-| Papel y respuestas ofuscadas en Moodle | [Preparar exámenes](../skills/preparar-examenes-papel-moodle/SKILL.md) |
+| Corregir trabajos y preparar notas y feedback para Moodle | [Evaluar entregas](../skills/evaluar-entregas/SKILL.md) |
+| Bancos asociados a materiales y actividades | [Crear bancos](../skills/crear-bancos-preguntas/SKILL.md) |
+| Combinar bancos en modelos impresos y respuestas ofuscadas | [Preparar exámenes](../skills/preparar-examenes-papel-moodle/SKILL.md) |
 | Resultados y comentarios de mejora | [Generar feedback](../skills/generar-feedback-evaluaciones/SKILL.md) |
 | Claridad, precisión y formato explicativo | [Redactar español claro](../skills/redactar-espanol-claro/SKILL.md) |
 | Imágenes con estilo de boceto didáctico | [Crear infografías](../skills/crear-infografias-didacticas/SKILL.md) |
@@ -30,22 +35,82 @@ solo lo autorizado en `AGENTS.md` y pregunta ante conflictos. Repetir la puesta
 en marcha no duplica reglas ni borra un mapa o una selección previos.
 
 El profesor elige las carpetas y exclusiones del corpus, o aplaza esa selección.
-La inicialización no lee todo el material, no crea ni propone la wiki y deja su
-carpeta vacía cuando no existe. Establece `redactar-espanol-claro` para escribir
-en español y conserva un bloque de consulta de mapa existente. Crear un mapa
-más adelante es un encargo separado.
+La inicialización deja la carpeta del mapa vacía cuando no existe, recomienda
+crearlo y ofrece orientación para continuar. Su creación requiere un encargo del
+profesor. Establece `redactar-espanol-claro` para escribir en español y conserva
+un bloque de consulta de mapa existente.
 
 Comprobar que el anfitrión incorpora `AGENTS.md`. Si no, pedir su lectura
 explícita o utilizar las instrucciones de carpeta disponibles. No se crea
 `CLAUDE.md` ni se cambian configuraciones globales por sistema.
 
+## Descubrir qué hacer a continuación
+
+La orientación consulta las instrucciones, la configuración y los índices
+disponibles. Presenta opciones adecuadas al estado del curso con ejemplos y
+archivos necesarios:
+
+| Situación | Ejemplo de petición |
+| --- | --- |
+| Materiales elegidos, sin mapa | «Crea el mapa docente de las fuentes seleccionadas». |
+| Mapa disponible | «Localiza los materiales sobre este tema» o «Muéstrame el mapa». |
+| Materiales para diseñar una actividad | «Ayúdame a preparar un taller sobre estas fuentes y su rúbrica». |
+| Materiales o actividad ya definidos | «Crea un banco de preguntas asociado a estos apuntes y a esta actividad». |
+| Bancos disponibles | «Prepara tres modelos de evaluación de estos temas y prácticas». |
+| Entregas descargadas de Moodle | «Corrige este lote con su enunciado y rúbrica y prepara las calificaciones». |
+| Examen ya puntuado | «Añade recomendaciones de mejora a partir del detalle de respuestas y las notas». |
+
+Preguntar qué se puede hacer no inicia esos procesos ni lee todo el corpus.
+Si falta una entrada, el agente la identifica. Se puede realizar una tarea con
+adjuntos suficientes aunque el curso todavía no tenga mapa.
+
+Como apoyo se ofrecen apuntes para estudiantes, español claro inspirado en
+ASD-STE100 e infografías o diapositivas visuales individuales. La skill de
+infografías conserva ese alcance; no promete presentaciones editables.
+
 ## Trabajar con un curso
 
 Usar la [ficha Markdown](../templates/ficha-asignatura.md) o su [ejemplo JSON](../templates/ficha-asignatura.json) como contexto. Registrar objetivos, audiencia, fuentes vigentes, criterios y recursos permitidos. No imponer la estructura de una asignatura anterior ni usar exámenes reservados como fuente de apuntes sin autorización.
 
-Guardar materiales y resultados fuera del paquete instalado. En proyectos inicializados, usar el árbol `curso-v1`: borradores en `docente/borradores/`, datos individuales en `docente/resultados/` y material destinado a estudiantes en `alumnado/`. La entrega al alumnado debe formar parte del encargo; no mantener copias de exportación por sistema. Una tarea con texto o adjuntos suficientes no exige crear un proyecto ni llenar carpetas.
+Guardar materiales y resultados fuera del paquete instalado. En proyectos
+inicializados, usar el árbol `curso-v1`: borradores en `docente/borradores/`,
+bancos incorporados al catálogo en `docente/evaluaciones/bancos/`, lotes de
+entregas en `docente/resultados/entregas/<actividad>/<convocatoria>/` y material
+destinado a estudiantes en `alumnado/`. La entrega al alumnado debe formar parte
+del encargo; no mantener copias de exportación por sistema. Una tarea con texto
+o adjuntos suficientes no exige crear un proyecto ni llenar carpetas.
 
 Para materiales escritos, entregar Markdown y PDF por defecto. El Mapa docente usa Markdown navegable, registro JSON, lector `index.html` y grafo HTML; el PDF solo se añade si se pide una copia estática. Un notebook es opcional. Una petición de imagen o vídeo conserva su formato: ni un prompt ni un guion cuentan como archivo final generado. Las infografías requieren una capacidad de imágenes disponible; si falta, esa skill entrega brief y prompt, sin cambiar por defecto a SVG. El grafo del mapa se construye a partir de datos y enlaces, sin generación de imágenes.
+
+## Actividades, bancos y evaluación
+
+Para diseñar una actividad, el agente aclara objetivos, materiales, ejemplos
+anteriores, condiciones y entregables por etapas. Propone evidencias de
+aprendizaje considerando el acceso del alumnado a modelos de IA y pregunta las
+condiciones de uso que falten. Produce enunciado, plantillas adecuadas y rúbrica
+docente, con una guía de corrección cuando corresponda. El enunciado comunica
+criterios generales; la rúbrica completa permanece reservada. El registro
+`actividad.json` relaciona las fuentes y archivos de esa versión. Véase
+[Actividades](ACTIVIDADES.md).
+
+Los bancos se vinculan a diapositivas, apuntes, ejercicios o actividades concretos.
+Sus metadatos permiten combinar preguntas según contenido y dificultad. Los
+exámenes antiguos pueden servir para calibrar estilo y nivel sin convertirlos
+en temario vigente. La composición de modelos presenta antes un reparto y
+declara insuficiencias; no inventa preguntas para rellenarlas. Véase
+[Bancos y composición de modelos](BANCOS.md).
+
+La corrección de entregas aplica enunciado, rúbrica y resolución disponibles.
+Si faltan criterios suficientes, propone acordarlos antes de asignar notas
+definitivas. Los trabajos y archivos Moodle se identifican por claves explícitas.
+La utilidad prepara una copia de la hoja de tarea o del libro de calificaciones
+con notas justificadas y feedback; conserva los casos pendientes y la trazabilidad
+de cambios. Véase [Calificaciones de actividades](CALIFICACIONES.md).
+
+El feedback de exámenes parte de puntuaciones por pregunta y del manifiesto.
+Prioriza hasta tres dificultades y recomendaciones de mejora, conservando las
+notas de Moodle. La nota global por sí sola no permite saber qué conceptos
+fallaron. Ambos recorridos terminan en archivos revisables para importación manual.
 
 ## Crear y consultar el Mapa docente
 
@@ -186,6 +251,21 @@ leído o comprendido todo el material.
 
 ### Banco y modelos
 
+Para bancos asociados a varios materiales, validar el catálogo y componer con un
+reparto acordado. El formato del catálogo y de la selección se detalla en
+[Bancos](BANCOS.md):
+
+```sh
+python "$ASISTENTE_DOCENTE/scripts/docencia.py" validate-catalog \
+  docente/evaluaciones/bancos/catalogo.json --project .
+python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-exams \
+  --catalog docente/evaluaciones/bancos/catalogo.json --selection reparto.json \
+  --project . --output examen --title "Evaluación de fuentes" \
+  --models 2 --questions 5 --seed 42
+```
+
+También se mantiene la entrada de un único banco:
+
 ```sh
 python "$ASISTENTE_DOCENTE/scripts/docencia.py" validate-bank banco.gift
 python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-exams banco.gift \
@@ -193,11 +273,18 @@ python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-exams banco.gift \
   --title "Evaluación de fuentes" --models 2 --questions 5 --seed 42
 ```
 
-`--metadata` es opcional. Los metadatos vinculan los identificadores de preguntas con conceptos y orientaciones para el feedback; siguen el [contrato](CONTRATOS.md). No usar la ficha de asignatura como metadatos.
+`--metadata` es opcional para la entrada de un GIFT anterior. Los nuevos bancos
+del catálogo requieren procedencia, objetivos, conceptos, dificultad y
+orientaciones de repaso. Completar los datos que falten antes de prometer
+equilibrio basado en ellos. No usar la ficha de asignatura como metadatos.
 
 Para cuotas por categoría, añadir `--per-category cuotas.json`, cuyo contenido es un objeto de nombre exacto de categoría a cantidad. Su suma debe coincidir con `--questions`. Por ejemplo, `{"Fuentes": 3, "Argumentación": 2}` solo sirve para un banco con esas categorías exactas.
 
-La salida debe ser una carpeta nueva o vacía. Incluye `manifest.json`, el snapshot del banco y archivos separados por modelo: HTML/PDF de estudiante, HTML/PDF docente y GIFT ofuscado. Los identificadores y rutas concretas están en el manifiesto. Guardar todo el conjunto; no conservar únicamente los PDF.
+La salida debe ser una carpeta nueva o vacía. Incluye `manifest.json`, bancos
+congelados y archivos separados por modelo: HTML/PDF de estudiante, HTML/PDF
+docente y GIFT ofuscado. La composición por catálogo conserva la identidad de
+banco y pregunta, y ofrece cobertura, dificultad y reutilización. Los
+identificadores y rutas están en el manifiesto. Guardar el conjunto completo.
 
 El banco puede contener emparejamiento, pero este tipo queda fuera del flujo ofuscado de v1. Revisar la lista de identificadores excluidos y confirmar que la selección sigue cumpliendo el objetivo. No interpretar una exclusión como pregunta aplicada.
 
@@ -223,7 +310,35 @@ python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-feedback examen/manifest.j
 
 Repetir `--input` para varios CSV. La configuración debe mapear columnas reales, identificadores, modelo, estado, máximos y valores declarados de ausencia o blanco; véase [Moodle](MOODLE.md). Los mapas pueden variar por modelo. No suponer que todos los CSV usan el mismo separador o escala.
 
+Para añadir comentarios a una copia del libro de calificaciones, aportar esa
+exportación vigente mediante `--gradebook calificaciones.csv` y declarar las
+columnas y correspondencias necesarias en el perfil. El detalle por pregunta
+sigue siendo obligatorio; el libro no lo sustituye. Se preservan sus notas,
+filas y columnas ajenas al feedback.
+
+El objeto opcional `feedback_priority` configura `max_concepts` (3),
+`marked_threshold` (0.5) y `min_evidence` (2). Con los valores predeterminados,
+un concepto con menos del 50 % y al menos dos preguntas puede describirse como
+dificultad acusada; un fallo aislado se presenta como aspecto a revisar.
+
 Se generan CSV por modelo cuando no hay incidencias bloqueantes. `--consolidated` añade consolidado si se solicita. `--detailed` pide feedback más detallado y requiere datos suficientes; el modo normal es conceptual. Las notas originales y las columnas ajenas al comentario se conservan. La herramienta no corrige trabajos abiertos ni reevalúa notas de Moodle.
+
+### Calificaciones de actividades
+
+Una vez revisadas las entregas y preparada la evaluación estructurada, generar
+la copia importable desde el archivo Moodle elegido:
+
+```sh
+python "$ASISTENTE_DOCENTE/scripts/docencia.py" export-grades evaluacion.json \
+  --input calificaciones.csv --config perfil-moodle.json --output correccion
+```
+
+El [contrato de calificaciones](CALIFICACIONES.md) describe la evaluación, el
+perfil de columnas y las correspondencias individuales o grupales. La utilidad
+comprueba cálculos y exporta notas y comentarios; la valoración académica
+corresponde al agente y al profesor. Revisar incidencias y cambios antes de
+importar. Una hoja de tarea y un libro de calificaciones son vías diferentes:
+comprobar el método configurado en Moodle conforme a [la guía](MOODLE.md).
 
 ## Verificar y entregar
 

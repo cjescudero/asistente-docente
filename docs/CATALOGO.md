@@ -1,22 +1,23 @@
 # Catálogo y casos de aceptación
 
-El plugin contiene doce skills. La selección puede ser automática por descripción
+El plugin contiene trece skills. La selección puede ser automática por descripción
 o explícita por nombre. No se necesita un enrutador que cargue todas las
 instrucciones para cada petición. Los siguientes casos son una guía de evaluación del comportamiento
 del agente; las pruebas Python no sustituyen su ejecución en el anfitrión.
 
 | Skill | Petición representativa | Resultado esperado |
 | --- | --- | --- |
-| `iniciar-proyecto-docente` | Poner en marcha un proyecto con material docente. | Estructura de curso, configuración de fuentes, LEEME y AGENTS.md respetado; consulta ante conflictos, español claro y datos pendientes explícitos, sin iniciar el mapa. |
+| `iniciar-proyecto-docente` | Poner en marcha un proyecto con material docente. | Estructura de curso, configuración de fuentes, LEEME y AGENTS.md respetado; consulta ante conflictos, español claro, orientación y recomendación del mapa, sin crearlo automáticamente. |
+| `orientar-docente` | ¿Qué puedo hacer ahora con mi asignatura? | Opciones según el estado del curso, ejemplos de peticiones y entradas que faltan; sin leer todo el corpus ni iniciar procesos por su cuenta. |
 | `crear-mapa-docente` | Crear un Mapa docente de dos carpetas elegidas: materiales actuales y archivo de evaluaciones. | Índice, páginas Markdown y fuentes trazables; bloque en AGENTS.md para consultar desde el índice; originales intactos, acceso y lectura explícitos, lector y grafo cuando hay capacidades. |
 | `consultar-mapa-docente` | Localizar material y criterios vigentes para diseñar una práctica y evaluarla. | Respuesta con evidencia original, distinción de histórico/vigente y contexto para el siguiente encargo; sin editar el mapa ni regenerar el grafo. |
 | `visualizar-mapa-docente` | Regenerar el grafo docente y una vista para estudiantes. | HTML autónomos con arrastre, zoom, búsqueda, filtros y panel; la exportación estudiantil excluye datos reservados y sus dependencias transitivas, sin enlaces a archivos. |
-| `preparar-actividades-docentes` | Crear un taller de análisis histórico con fuentes aportadas. | Enunciado autónomo y solución docente separados; objetivos y evidencias de aprendizaje. |
+| `preparar-actividades-docentes` | Ayúdame a diseñar un taller de análisis histórico con estas fuentes. | Diálogo sobre conocimientos, materiales, ejemplos previos y uso de IA; enunciado, plantillas y rúbrica docente de la misma versión, con guía cuando corresponda. |
 | `generar-apuntes-estudio` | Preparar apuntes de ecología para primer curso a partir de un capítulo. | Explicación sustentada, símbolos definidos y Markdown/PDF; sin inventar fuentes. |
-| `evaluar-entregas` | Evaluar tres ensayos sintéticos con una rúbrica. | Justificación individual por criterio; sin imponer escala sobre diez ni penalizar uso supuesto de IA. |
-| `crear-bancos-preguntas` | Generar preguntas de literatura con distractores razonados. | Banco GIFT válido con IDs y metadatos conceptuales, sin añadir hechos no sustentados. |
-| `preparar-examenes-papel-moodle` | Crear dos modelos impresos de un banco. | PDFs, solucionarios, GIFT ofuscados, snapshot y manifiesto con idéntico orden. |
-| `generar-feedback-evaluaciones` | Devolver comentarios conceptuales a partir de exportaciones. | CSV preservado, orientación sustentada y bloqueo de duplicados/ausencias ambiguas. |
+| `evaluar-entregas` | Corregir ensayos descargados de Moodle con su enunciado y rúbrica. | Evidencia y puntuación por criterio, CSV de notas y feedback sobre copia, trazabilidad de cambios y casos pendientes; sin sancionar supuesto uso de IA. |
+| `crear-bancos-preguntas` | Crear preguntas de estos apuntes y de una actividad de literatura. | Bancos GIFT, procedencia, localizadores, conceptos, objetivos, dificultad y repaso en catálogo; inspiración histórica diferenciada del contenido vigente. |
+| `preparar-examenes-papel-moodle` | Combinar preguntas de dos temas y una práctica para tres modelos. | Reparto de cobertura acordado, modelos comparables y reproducibles, PDF, solucionarios, GIFT ofuscados, bancos congelados e informe de reutilización. |
+| `generar-feedback-evaluaciones` | Añadir comentarios al libro de calificaciones a partir del detalle del examen. | Hasta tres dificultades sustentadas y recomendaciones accesibles; notas preservadas y bloqueo de correspondencias ambiguas. |
 | `redactar-espanol-claro` | Simplificar una explicación manteniendo todas sus condiciones. | Español natural y preciso, sin resumir ni declarar certificación STE. |
 | `crear-infografias-didacticas` | Crear una diapositiva dibujada sobre una cadena causal. | Imagen revisada si hay generador; diseño y prompt claramente identificados si no lo hay. |
 
@@ -24,7 +25,8 @@ del agente; las pruebas Python no sustituyen su ejecución en el anfitrión.
 
 - Proyecto nuevo sin mapa: crear el árbol `curso-v1`, configuración, LEEME y
   AGENTS.md con español claro. Preguntar por ubicación, tipos y selección de
-  materiales que falten; dejar la carpeta del mapa vacía, sin proponer una wiki.
+  materiales que falten; dejar la carpeta del mapa vacía, recomendar su creación
+  y ofrecer orientación. Crear el mapa requiere un encargo del profesor.
 - Proyecto con instrucciones propias: modificar solo lo indicado, conservando
   texto y organización ajenos al encargo. Repetir sin duplicar reglas.
 - Regla existente incompatible con la petición o el estilo predeterminado:
@@ -43,8 +45,51 @@ del agente; las pruebas Python no sustituyen su ejecución en el anfitrión.
 - Migración: informar movimientos, colisiones y enlaces sin aplicar cambios;
   esperar aprobación de la propuesta antes de mover originales.
 
-El [contrato común](PROYECTO-DOCENTE.md) se aplica a las doce skills según las
+El [contrato común](PROYECTO-DOCENTE.md) se aplica a las trece skills según las
 entradas necesarias. Las equivalencias de nombres están en [migración](MIGRACION-0.7.md).
+
+## Casos de aceptación de orientación, actividades y evaluación
+
+- Curso recién iniciado: recomendar el mapa, explicar cómo pedirlo y ofrecer
+  ayuda. No leer originales, crear páginas ni ejecutar otra skill solo porque
+  el usuario pregunte qué puede hacer.
+- Curso con mapa y bancos: consultar configuración e índices relevantes y
+  ofrecer preparar evaluaciones a partir de los materiales asociados. Si falta
+  una fuente, explicar la carencia sin buscar en carpetas vecinas.
+- Taller de historia con dos fuentes y un ejemplo antiguo: preguntar por nivel
+  y objetivos pendientes, distinguir material vigente de inspiración y proponer
+  evidencias de comparación. Entregar ficha, enunciado y rúbrica reservada; no
+  convertirlo en una tarea de programación.
+- Actividad de ciencias experimentales: acordar recursos y observaciones que se
+  recogerán; preparar registro de mediciones y rúbrica. Comprobar que no aparecen
+  datos inventados como resultados realizados y que hay alternativas válidas.
+- Uso de IA sin política indicada: proponer evidencias de decisiones y contraste
+  y preguntar las condiciones relevantes. No imponer prohibiciones, sanciones
+  ni uso obligatorio.
+- Banco de diapositivas y banco de una actividad: cada pregunta conserva sus
+  fuentes y localizadores; una pregunta con varias fuentes no se reduce a una
+  asociación inventada. El histórico calibra dificultad sin ampliar el temario.
+- Dos bancos con el mismo título GIFT: conservar ambas identidades mediante el
+  banco de origen; detectar duplicados dentro de cada banco.
+- Fondo insuficiente para un reparto: informar la cuota que no puede cubrirse,
+  ofrecer ajuste o ampliación de bancos y no producir un examen con cobertura
+  distinta sin que el profesor lo acuerde.
+- Varios modelos: mismos cupos de contenido y dificultad, ausencia de repetición
+  dentro de un modelo y reutilización documentada entre ellos. Comparar cada
+  opción y cada pregunta entre PDF, GIFT y manifiesto, incluido verdadero/falso.
+- Entrega grupal: requerir miembros e identificadores explícitos y la política de
+  nota común o individual. Un nombre parecido o una carpeta no constituye una
+  correspondencia.
+- Hoja Moodle de tarea y libro de calificaciones: conservar filas y columnas
+  ajenas, registrar cambios y detectar IDs duplicados. Un caso ilegible o ausente
+  queda pendiente; no se convierte en cero.
+- Feedback de un concepto con dos fallos y otro con un fallo aislado: ordenar por
+  proporción perdida y evidencia, distinguir dificultad acusada de aspecto a
+  revisar y limitar a tres prioridades. Solo recomendar fuentes autorizadas para
+  el alumnado; conservar las notas calculadas por Moodle.
+- Exportación con una nota global únicamente: explicar que falta el detalle
+  para atribuir dificultades conceptuales. No reconstruir respuestas ni temas
+  fallados a partir de esa nota.
 
 ## Casos de aceptación del Mapa docente
 

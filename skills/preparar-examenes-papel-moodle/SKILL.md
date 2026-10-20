@@ -1,6 +1,6 @@
 ---
 name: preparar-examenes-papel-moodle
-description: Seleccionar preguntas de un banco GIFT para modelos de examen en papel y producir PDF, solucionario, GIFT de respuestas ofuscadas y manifiesto coherentes para Moodle. No usar para inventar un banco completo, importar automáticamente en Moodle ni generar feedback de resultados.
+description: Combinar bancos GIFT de materiales o actividades para preparar modelos de examen equilibrados, PDF de estudiante, solucionarios y GIFT ofuscados coherentes con su manifiesto Moodle. Usar también con un único banco. No inventar preguntas durante la composición ni importar automáticamente en Moodle.
 ---
 
 # Preparar exámenes en papel y Moodle
@@ -21,13 +21,14 @@ esa entrega; mantener soluciones y criterios docentes separados.
 
 ## Flujo
 
-1. Validar el banco y leer objetivos, reglas de selección y metadatos. Acordar número de modelos, preguntas, cobertura y restricciones si faltan. No asumir cuatro modelos ni una cantidad fija por asignatura.
-2. Comprobar que el banco permite ese reparto. Evitar repetición entre modelos cuando haya fondo suficiente y mantener cobertura comparable. Si no es posible cumplir la selección, comunicar el motivo sin relajar cuotas silenciosamente.
-3. Preparar una salida nueva fuera del plugin. Ejecutar `python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-exams banco.gift --metadata metadatos.json --output examen --title "Evaluación de fuentes" --models 2 --questions 5 --seed 42`. Localizar la raíz instalada en `ASISTENTE_DOCENTE` y resolver las entradas en el espacio del curso. `--metadata` es opcional; la semilla permite reproducir la selección. Usar `--per-category` según la ayuda para cuotas explícitas.
-4. Conservar banco congelado, huella y manifiesto junto con los modelos. El manifiesto registra identificadores, categorías, numeración, orden de opciones y pesos; no reconstruir estos datos por semejanza de texto o leyendo solo un PDF.
-5. Revisar cada modelo: número y orden de preguntas, letras, unidades, fórmulas, saltos de página y legibilidad. Contrastar papel, solucionario y GIFT con el manifiesto. La respuesta correcta debe permanecer en su posición, también en verdadero/falso y selección múltiple.
-6. Entregar PDF de estudiante y solucionario en archivos claramente separados, GIFT ofuscado y manifiesto. Los HTML son derivados útiles para inspección; `--html-only` no completa una petición de PDF.
-7. Explicar la importación y configuración manual de [Moodle](../../docs/MOODLE.md): sin barajar preguntas ni respuestas, y sin revelar soluciones o feedback durante la evaluación. Verificar el cuestionario con una cuenta o vista de estudiante antes de usarlo.
+1. Recuperar lo ya conocido y preguntar únicamente por lo que falte: título, temas o actividades que evaluar, número de preguntas y modelos, tipos admitidos, dificultad y restricciones. No asumir cantidades fijas ni una asignatura técnica.
+2. Localizar los bancos asociados a esos materiales en el [catálogo](../../docs/BANCOS.md), validar sus archivos y leer sus objetivos y metadatos. Preparar un reparto de cobertura y dificultad común a todos los modelos y presentarlo al profesor antes de generar. Un banco anterior puede usarse como entrada única; si faltan metadatos, solicitar completarlos antes de prometer equilibrio por contenido o dificultad.
+3. Comprobar disponibilidad para cada cuota. La selección debe ser reproducible mediante semilla, sin duplicados dentro de un modelo y con preferencia por preguntas menos usadas y menor solapamiento. El informe expresa el equilibrio y reutilización obtenidos; no afirmar que sean un óptimo matemático. Ante un fondo insuficiente, proponer ajustar el reparto o ampliar bancos con la skill correspondiente. No relajar cuotas ni inventar preguntas durante la composición.
+4. Preparar una salida nueva fuera del plugin y usar `build-exams` con el catálogo y selección acordados conforme a [Bancos y composición](../../docs/BANCOS.md). Se conserva la entrada de un GIFT: `python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-exams banco.gift --metadata metadatos.json --output examen --title "Evaluación de fuentes" --models 2 --questions 5 --seed 42`. Localizar la raíz instalada en `ASISTENTE_DOCENTE`; resolver entradas y salidas en el curso.
+5. Conservar todos los bancos utilizados congelados, sus huellas, metadatos y manifiesto junto con los modelos. La procedencia distingue banco y pregunta original aunque dos bancos reutilicen un mismo título GIFT. No reconstruir categorías, numeración, opciones ni pesos por semejanza de texto o leyendo solo un PDF.
+6. Revisar cada modelo: número y orden de preguntas, letras, unidades, fórmulas, saltos de página y legibilidad. Contrastar papel, solucionario y GIFT con el manifiesto. La respuesta correcta debe permanecer en su posición, también en verdadero/falso y selección múltiple.
+7. Entregar PDF de estudiante y solucionario en archivos claramente separados, GIFT ofuscado, manifiesto e informe de cobertura, dificultad y reutilización. Los HTML son derivados útiles para inspección; `--html-only` no completa una petición de PDF.
+8. Explicar la importación y configuración manual de [Moodle](../../docs/MOODLE.md): sin barajar preguntas ni respuestas, y sin revelar soluciones o feedback durante la evaluación. Verificar el cuestionario con una cuenta o vista de estudiante antes de usarlo.
 
 ## Límites que conservar
 

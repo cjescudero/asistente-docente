@@ -21,7 +21,13 @@ la exclusión del corpus para impedir la evaluación expresamente solicitada.
 
 ## Entradas y comprobaciones
 
-Leer el manifiesto oficial, su snapshot y los metadatos conceptuales. Leer encabezados y filas necesarias de los CSV exportados para identificar las columnas; no inspeccionar datos de estudiantes ajenos al encargo. Revisar el [contrato de feedback](../../docs/CONTRATOS.md) y la [guía Moodle](../../docs/MOODLE.md).
+Leer el manifiesto oficial, sus snapshots y los metadatos conceptuales. Se necesita
+detalle por pregunta: una nota global no permite inferir dificultades conceptuales.
+Leer encabezados y filas necesarias de los CSV para identificar columnas; no
+inspeccionar datos de estudiantes ajenos al encargo. Si el comentario debe ir al
+libro de calificaciones, pedir una exportación vigente y una correspondencia
+explícita con los resultados detallados. Revisar el [contrato de feedback](../../docs/CONTRATOS.md)
+y la [guía Moodle](../../docs/MOODLE.md).
 
 La configuración JSON debe identificar la columna de estudiante, modelo, estado y feedback, y mapear preguntas a columnas y máximos. Si distintos modelos usan encabezados o escalas diferentes, usar los mapas por modelo. No deducir el identificador, la escala ni el modelo por el nombre del archivo cuando los datos sean ambiguos.
 
@@ -29,11 +35,12 @@ La configuración JSON debe identificar la columna de estudiante, modelo, estado
 
 1. Comprobar integridad del manifiesto y correspondencia de los modelos con la exportación. Usar el banco congelado del examen, no el banco actual del curso.
 2. Configurar identificadores como texto, separador y significado de valores vacíos y ausencias. Distinguir cero, respuesta en blanco, no presentado, columna ausente y archivo no legible.
-3. Revisar duplicados, estudiantes en varios modelos, columnas necesarias y valores fuera de escala. Registrar incidencias; no elegir silenciosamente una fila ni convertir datos ausentes en errores del estudiante.
+3. Revisar duplicados, estudiantes en varios modelos, columnas necesarias y valores fuera de escala. Para el libro de calificaciones, cruzar solo por identificadores declarados, conservando su nota original. Registrar incidencias; no elegir silenciosamente una fila ni convertir datos ausentes en errores del estudiante.
 4. Ejecutar `python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-feedback examen/manifest.json --input resultados.csv --config feedback.json --output comentarios`. Repetir `--input` para varios archivos. Localizar la raíz instalada en `ASISTENTE_DOCENTE` y resolver las entradas y salidas en el espacio del curso conforme a [uso](../../docs/USO.md).
 5. Revisar el informe de incidencias antes de usar un CSV. Los datos obligatorios ambiguos o incompletos impiden exportar CSV; resolver la fuente o la configuración y repetir, sin parchear comentarios a ciegas. En modo detallado, una selección individual vacía o no interpretable genera un aviso y conserva el feedback conceptual, sin inventar una respuesta.
-6. Comprobar comentarios de casos representativos: acierto total, fallo parcial, blanco, no presentado y conceptos sin metadatos. No atribuir una causa específica a un fallo si solo se conoce la puntuación.
-7. Entregar CSV por modelo, informe de ejecución y, solo si se solicita, consolidado mediante `--consolidated`. El modo `--detailed` requiere petición expresa y datos suficientes; no activarlo por defecto.
+6. Priorizar hasta tres dificultades mediante la proporción de puntos perdidos y la cantidad de evidencias. Por defecto, considerar acusada una dificultad con menos del 50 % de puntuación en un concepto evaluado por al menos dos preguntas; un fallo aislado es un aspecto a revisar. Estos parámetros son configurables: explicar el alcance de la evidencia, sin diagnosticar una causa psicológica.
+7. Comprobar comentarios de acierto total, fallo parcial, blanco, no presentado, evidencia escasa y conceptos sin metadatos. Usar orientaciones de repaso y referencias a materiales accesibles al estudiante; no enlazar soluciones, rúbricas ni exámenes reservados.
+8. Entregar CSV por modelo, informe de ejecución y, solo si se solicita, consolidado mediante `--consolidated`. El modo `--detailed` requiere petición expresa y datos suficientes; no activarlo por defecto.
 
 ## Criterios de salida
 

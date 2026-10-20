@@ -1,6 +1,6 @@
 ---
 name: iniciar-proyecto-docente
-description: Preparar o ajustar un proyecto docente con estructura de curso, selección explícita de fuentes, configuración, LEEME y AGENTS.md respetado. Usar al iniciar el proyecto o actualizar su organización; preguntar por datos que falten y conflictos. No crea ni propone crear el Mapa docente.
+description: Preparar o ajustar un proyecto docente con estructura de curso, selección explícita de fuentes, configuración, LEEME y AGENTS.md respetado. Usar al iniciar el proyecto o actualizar su organización; preguntar por datos que falten y conflictos. Recomienda el mapa y ofrece orientación sin crearlo automáticamente.
 ---
 
 # Iniciar un proyecto docente
@@ -40,6 +40,12 @@ actividades y conocimientos; `docente/` para fuentes, evaluaciones, soluciones,
 rúbricas, borradores, mapa y resultados; y `archivo/`. Guardar `proyecto-docente.json`
 y un `LEEME.md` breve con la función de las carpetas y ejemplos de peticiones.
 Dejar `docente/mapa-docente/` vacía y `map: null` cuando aún no exista mapa.
+Incluir `docente/resultados/entregas/`. Cada lote de entregas tendrá una carpeta
+por actividad y convocatoria, con `originales/`, `identificacion/` y `correccion/`
+cuando se reciba. Conservar las descargas de Moodle y sus identificadores; no
+inventar correspondencias por nombres. Todo `docente/resultados/` queda fuera
+del corpus. Añadir carpetas vacías en cursos existentes es una actualización
+aditiva; no reorganizar entregas previas sin una propuesta aprobada.
 
 En un proyecto existente, distinguir añadir carpetas vacías de reorganizar
 archivos. Antes de mover originales, presentar correspondencias, destinos,
@@ -109,6 +115,11 @@ instrucciones de carpeta. No crear `CLAUDE.md` por sistema ni modificar reglas
 globales.
 
 Entregar las rutas del proyecto y una explicación breve de qué está listo y qué
-falta. No preguntar por crear la wiki, proponerla ni invocar su skill. Si el
-profesor ha pedido también un mapa, tratarlo como encargo separado de
+falta. Ofrecer [orientación docente](../orientar-docente/SKILL.md) con ejemplos de
+peticiones y recomendar crear el mapa con las fuentes elegidas como siguiente
+paso; si ya existe, recomendar consultarlo. Si falta la selección, orientar
+primero a elegir fuentes. Si el profesor decidió trabajar sin ellas, ofrecer
+tareas con sus adjuntos sin insistir en crear el mapa. La recomendación no es un encargo:
+no invocar su creación hasta que el profesor la pida. Si ya la ha solicitado,
+tratarla como encargo separado de
 [crear el Mapa docente](../crear-mapa-docente/SKILL.md), conservando la selección.

@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "asistente-docente",
-  "version": "0.7.0",
-  "description": "Organiza cursos, materiales y evaluación. Instalación desde un marketplace de GitHub.",
+  "version": "0.8.0",
+  "description": "Orienta al docente y conecta materiales, actividades, bancos y evaluación para Moodle. Marketplace de GitHub.",
   "author": {
     "name": "Carlos J. Escudero"
   },
@@ -19,12 +19,12 @@
       "interface": {
         "displayName": "Asistente docente",
         "shortDescription": "Materiales docentes",
-        "longDescription": "Se distribuye desde GitHub mediante un marketplace personalizado. Tras incorporarlo e instalar el plugin, abre la carpeta del curso y pide «Inicia mi proyecto docente». Prepara una estructura común, instrucciones y selección explícita de fuentes, respetando el contenido existente. La wiki se crea por encargo separado. Incluye lector HTML, grafo, actividades, apuntes, rúbricas, bancos GIFT, exámenes impresos y feedback para Moodle.",
+        "longDescription": "Se distribuye desde GitHub mediante un marketplace personalizado. Tras instalarlo, abre la carpeta del curso y pide «Inicia mi proyecto docente» o «¿Qué puedo hacer ahora?». Prepara la estructura y la selección de fuentes, recomienda el mapa sin crearlo automáticamente y guía el diseño de actividades con plantillas y rúbricas docentes. Vincula bancos a materiales, combina modelos de examen y prepara notas y feedback para importar manualmente en Moodle. Incluye apuntes, español claro e infografías.",
         "developerName": "Carlos J. Escudero",
         "defaultPrompt": [
-          "Inicia mi proyecto docente en esta carpeta y ayúdame a elegir las fuentes del curso.",
-          "Prepara una actividad docente con enunciado y guía del profesor a partir de estas fuentes.",
-          "Genera modelos de examen en papel y sus cuestionarios GIFT ofuscados."
+          "Inicia mi proyecto docente en esta carpeta y oriéntame sobre qué puedo hacer después.",
+          "Diseñemos una actividad con enunciado, plantillas y rúbrica docente a partir de estas fuentes.",
+          "Prepara modelos de examen equilibrados combinando los bancos de estos materiales."
         ]
       }
     }

@@ -1,10 +1,10 @@
 # Asistente docente
 
-Doce skills para organizar fuentes, crear materiales, evaluar y devolver feedback en
+Trece skills para organizar fuentes, crear materiales, evaluar y devolver feedback en
 cualquier asignatura. La fuente común genera paquetes para **ChatGPT Work** y
-**Claude Cowork**. Versión **0.7.0** en la rama `main`, bajo [MIT](LICENSE).
+**Claude Cowork**. Versión **0.8.0**, bajo [MIT](LICENSE).
 [Instalación y primer uso](docs/INSTALACION.md) ·
-[Versión publicada 0.6.0](https://github.com/cjescudero/asistente-docente/releases/tag/v0.6.0) ·
+[Descargar la versión 0.8.0](https://github.com/cjescudero/asistente-docente/releases/tag/v0.8.0) ·
 [Repositorio](https://github.com/cjescudero/asistente-docente).
 
 ## Inicio rápido
@@ -60,14 +60,15 @@ la carpeta del curso y permite al agente trabajar con ella. Escribe:
 El agente pregunta por el contexto, los materiales y las exclusiones que falten;
 prepara las carpetas `alumnado/`, `docente/` y `archivo/`, la configuración y una
 guía breve. Conserva tus instrucciones y consulta los conflictos. Comprueba qué
-está disponible y qué falta. La wiki se crea por encargo separado. Si ya hay
+está disponible y qué falta. Al terminar, te orienta y recomienda crear el mapa
+docente; lo creará cuando se lo pidas. Si ya hay
 materiales, presenta una propuesta antes de reorganizarlos. No necesitas escribir
 comandos.
 
-Este recorrido corresponde a la **0.7.0 de la rama `main`**. Si ya tenías el
-marketplace incorporado, sincronízalo y comprueba la versión instalada antes de
-probar las novedades. [Guía para el profesor](docs/PROYECTO-DOCENTE.md) ·
-[Migrar desde 0.6](docs/MIGRACION-0.7.md).
+Este recorrido corresponde a la **0.8.0**. Si ya tienes el marketplace,
+actualiza su contenido y comprueba la versión instalada. Publicar una versión
+en GitHub no actualiza por sí solo una instalación existente. [Guía para el profesor](docs/PROYECTO-DOCENTE.md) ·
+[Actualizar a 0.8](docs/MIGRACION-0.8.md).
 
 <a href="https://github.com/cjescudero/asistente-docente">
   <img src="assets/qr-repositorio.png" alt="Código QR del repositorio de Asistente docente en GitHub" width="288" height="288">
@@ -78,11 +79,13 @@ para usarlo en presentaciones.
 
 ## Qué incluye
 
-Puesta en marcha con estructura de curso, selección de fuentes, configuración,
+Orientación contextual mediante «¿Qué puedo hacer ahora?». Puesta en marcha
+con estructura de curso, selección de fuentes, configuración,
 `LEEME.md` y `AGENTS.md`; Mapa docente con índice, conceptos,
 consultas trazables y grafo HTML, actividades y
 enunciados, apuntes, evaluación de entregas con rúbricas, bancos
-GIFT, modelos impresos con GIFT ofuscado, feedback para Moodle, redacción clara e
+GIFT asociados a los materiales, modelos equilibrados combinando bancos,
+GIFT ofuscado, notas de actividades y feedback priorizado para Moodle, redacción clara e
 infografías didácticas. [Guía de uso](docs/USO.md) y
 [catálogo de skills](docs/CATALOGO.md).
 
@@ -105,11 +108,33 @@ los contenidos y qué son cuando falte esa información.
 Los materiales nuevos se preparan en `docente/borradores/`; las entregas,
 calificaciones y feedback se guardan en `docente/resultados/`, fuera de la wiki.
 `alumnado/conocimientos/` recoge aclaraciones útiles, sin duplicar el mapa.
-La carpeta `docente/mapa-docente/` queda vacía hasta un encargo de creación.
+Los lotes de entregas se organizan por actividad y convocatoria en
+`docente/resultados/entregas/`. La carpeta `docente/mapa-docente/` queda vacía
+hasta un encargo de creación. Puedes pedir orientación en cualquier momento.
 La selección de fuentes no autoriza su publicación ni acredita que se hayan leído.
 Consulta el [árbol completo y el contrato](docs/PROYECTO-DOCENTE.md).
 El [curso de ejemplo](examples/proyecto-docente/README.md) permite probar la
 iniciación, la selección y las exclusiones con materiales sintéticos.
+
+## Del material a la evaluación
+
+Puedes empezar por **«¿Qué puedo hacer ahora con mi asignatura?»**. La ayuda
+consulta los índices disponibles y propone siguientes pasos con sus entradas.
+
+- **Actividades:** diálogo sobre conocimientos, fuentes y condiciones de IA;
+  enunciado, plantillas pertinentes y rúbrica completa reservada al docente.
+- **Bancos y exámenes:** preguntas vinculadas a materiales o actividades,
+  reparto de contenidos y dificultad, modelos PDF y GIFT ofuscado sincronizados.
+- **Corrección:** evidencias por criterio y actualización de una copia de la
+  hoja de tarea o del libro de calificaciones, con identificadores explícitos.
+- **Feedback de examen:** hasta tres dificultades prioritarias y recomendaciones
+  desde materiales del estudiante; conserva las notas calculadas por Moodle.
+
+[Actividades](docs/ACTIVIDADES.md) · [Bancos](docs/BANCOS.md) ·
+[Calificaciones](docs/CALIFICACIONES.md) · [Recorrido de ejemplo](examples/recorrido-docente/README.md).
+Las importaciones en Moodle son manuales. Las ayudas complementarias son
+infografías y diapositivas visuales individuales, apuntes y español claro inspirado
+en ASD-STE100; no se promete una presentación editable.
 
 ## Mapa docente
 
@@ -179,11 +204,11 @@ incorpora ese origen de GitHub y después se instala el plugin en la cuenta.
 No basta con copiar una skill aislada: comparte referencias y utilidades con
 el resto del paquete. La instalación depende de las capacidades de la cuenta.
 
-Los artefactos preparados para 0.7.0 son:
+La [release 0.8.0](https://github.com/cjescudero/asistente-docente/releases/tag/v0.8.0) ofrece:
 
-- `asistente-docente-0.7.0-agent-plugins.zip`: Agent Plugins y adaptador Codex.
-- `asistente-docente-0.7.0-claude.zip`: plugin para Claude.
-- `asistente-docente-0.7.0-source.zip`: fuente con catálogos y automatización GitHub.
+- `asistente-docente-0.8.0-agent-plugins.zip`: Agent Plugins y adaptador Codex.
+- `asistente-docente-0.8.0-claude.zip`: plugin para Claude.
+- `asistente-docente-0.8.0-source.zip`: fuente con catálogos y automatización GitHub.
 
 ## Utilidades para agentes y desarrollo
 
@@ -302,8 +327,8 @@ y construye paquetes como artefactos; no publica releases ni notas de alumnos.
 Los ZIP excluyen entornos, cachés y datos operativos. `SHA256SUMS` permite
 comprobar su integridad; `contents.json` registra el contenido común.
 
-La fuente 0.7.0 se distribuye desde la rama `main`. La release 0.6.0 se conserva;
-una nueva release con ZIP requiere publicación explícita. La subida del código
+La versión 0.8.0 se distribuye desde GitHub con su fuente y paquetes. Las
+versiones anteriores se conservan. La subida del código
 no demuestra una instalación real en cada anfitrión.
 La distribución se mantiene en los marketplaces de GitHub; no se solicita
 publicación en los directorios públicos de OpenAI ni de Anthropic.

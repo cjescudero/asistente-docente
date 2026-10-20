@@ -35,8 +35,14 @@ def main(argv=None):
     register.add_argument("--dry-run", action="store_true")
     bank = commands.add_parser("validate-bank", help="Validar un banco GIFT sin modificarlo")
     bank.add_argument("bank", type=Path)
+    catalog = commands.add_parser("validate-catalog", help="Validar catálogo, procedencia y metadatos de bancos")
+    catalog.add_argument("catalog", type=Path)
+    catalog.add_argument("--project", type=Path, help="Raíz del curso para resolver materiales y selección")
     exam = commands.add_parser("build-exams", help="Generar modelos en papel y GIFT ofuscado")
-    exam.add_argument("bank", type=Path)
+    exam.add_argument("bank", type=Path, nargs="?")
+    exam.add_argument("--catalog", type=Path)
+    exam.add_argument("--selection", type=Path, help="Selección de bancos y cuotas de cobertura/dificultad")
+    exam.add_argument("--project", type=Path, help="Raíz del curso del catálogo")
     exam.add_argument("--output", type=Path, required=True)
     exam.add_argument("--metadata", type=Path)
     exam.add_argument("--title", default="Evaluación")
@@ -52,6 +58,12 @@ def main(argv=None):
     feedback.add_argument("--output", type=Path, required=True)
     feedback.add_argument("--detailed", action="store_true")
     feedback.add_argument("--consolidated", action="store_true")
+    feedback.add_argument("--gradebook", type=Path, help="CSV de calificaciones para cruzar con el detalle")
+    grades = commands.add_parser("export-grades", help="Comprobar una evaluación y preparar una copia de la hoja Moodle")
+    grades.add_argument("evaluation", type=Path)
+    grades.add_argument("--input", type=Path, required=True)
+    grades.add_argument("--config", type=Path, required=True)
+    grades.add_argument("--output", type=Path, required=True)
     markdown = commands.add_parser("render-markdown", help="Convertir Markdown a HTML autocontenido y PDF")
     markdown.add_argument("input", type=Path)
     markdown.add_argument("--output", type=Path, required=True)
@@ -61,6 +73,15 @@ def main(argv=None):
     doctor.add_argument("--pdf", action="store_true", help="Exigir también las capacidades PDF")
     doctor.add_argument("--project", type=Path, help="Añadir diagnóstico del curso")
     args = parser.parse_args(argv)
+    if args.command == "build-exams":
+        if bool(args.bank) == bool(args.catalog):
+            parser.error("build-exams requiere un banco GIFT o --catalog, de forma excluyente.")
+        if args.catalog and not args.selection:
+            parser.error("--catalog requiere --selection con el reparto acordado.")
+        if args.catalog and (args.metadata or args.per_category):
+            parser.error("Con --catalog, los metadatos y las cuotas proceden del catálogo y --selection.")
+        if not args.catalog and (args.selection or args.project):
+            parser.error("--selection y --project requieren --catalog.")
     try:
         status = 0
         if args.command == "init-project":
@@ -87,12 +108,17 @@ def main(argv=None):
             for question in questions:
                 types[question["type"]] = types.get(question["type"], 0) + 1
             result = {"status": "ok", "questions": len(questions), "types": types}
+        elif args.command == "validate-catalog":
+            from docencia.banks import validate_catalog
+            result = validate_catalog(args.catalog, project_root=args.project)
         elif args.command == "build-exams":
             from docencia.exams import build_exams
             quotas = json.loads(args.per_category.read_text(encoding="utf-8-sig")) if args.per_category else None
             manifest = build_exams(args.bank, args.output, title=args.title, models=args.models,
                                    questions=args.questions, seed=args.seed, metadata_path=args.metadata,
-                                   per_category=quotas, html_only=args.html_only)
+                                   per_category=quotas, html_only=args.html_only,
+                                   catalog_path=args.catalog, selection_path=args.selection,
+                                   project_root=args.project)
             statuses = {m["id"]: m["pdf_status"] for m in manifest["models"]}
             pending = any(str(s).startswith("PDF pendiente") for states in statuses.values() for s in states.values())
             result = {"status": "pdf_pending" if pending else "ok", "manifest": str(args.output.resolve()/"manifest.json"),
@@ -101,7 +127,12 @@ def main(argv=None):
         elif args.command == "build-feedback":
             from docencia.feedback import build_feedback
             result = build_feedback(args.manifest, args.input, args.config, args.output,
-                                    detailed=args.detailed, consolidated=args.consolidated)
+                                    detailed=args.detailed, consolidated=args.consolidated,
+                                    gradebook_path=args.gradebook)
+            status = 0 if result["status"] == "ok" else 1
+        elif args.command == "export-grades":
+            from docencia.grading import export_grades
+            result = export_grades(args.evaluation, args.input, args.config, args.output)
             status = 0 if result["status"] == "ok" else 1
         elif args.command == "render-markdown":
             from docencia.render import render_markdown

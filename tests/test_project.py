@@ -62,6 +62,27 @@ class ProjectTests(unittest.TestCase):
         self.assertEqual(self.snapshot(), before)
         self.assertEqual(check_project(self.root)["status"], "ok")
 
+    def test_previous_course_adds_submissions_without_rewriting_or_selecting_them(self):
+        initialize_project(self.root, include=["alumnado/materiales"])
+        (self.root / "docente/resultados/entregas").rmdir()
+        agents = self.file("AGENTS.md", "# Reglas previas\nNo propongas un mapa.\n")
+        guide = self.file("LEEME.md", "# Guía conservada\n")
+        original = self.file("docente/resultados/lote-antiguo/respuesta.txt", "Entrega sintética.")
+        before = self.snapshot()
+        preview = initialize_project(self.root, dry_run=True)
+        self.assertIn("docente/resultados/entregas/", preview["would_create"])
+        self.assertEqual(self.snapshot(), before)
+        result = initialize_project(self.root)
+        self.assertEqual(result["status"], "pending_approval")
+        self.assertTrue((self.root / "docente/resultados/entregas").is_dir())
+        self.assertEqual(agents.read_bytes(), before["AGENTS.md"][0])
+        self.assertEqual(guide.read_bytes(), before["LEEME.md"][0])
+        self.assertEqual(original.read_bytes(), before["docente/resultados/lote-antiguo/respuesta.txt"][0])
+        submission = self.file("docente/resultados/entregas/actividad/ordinaria/originales/evidencia.txt")
+        self.assertFalse(source_allowed(self.root, load_project(self.root), submission))
+        self.assertIsNone(load_project(self.root)["map"])
+        self.assertEqual(list((self.root / "docente/mapa-docente").iterdir()), [])
+
     def test_dry_run_does_not_create_root(self):
         result = initialize_project(self.root, include=["docente/fuentes"], dry_run=True)
         self.assertEqual(result["status"], "dry_run")

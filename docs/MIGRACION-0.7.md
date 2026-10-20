@@ -87,10 +87,13 @@ versión 1 conservan la vía de migración descrita en [Mapa docente](MAPA-DOCEN
 
 Respetar el `AGENTS.md` existente y su bloque de consulta. Incorporar estructura,
 selección y nombres dentro del alcance solicitado, sin reformatear lo ajeno.
-Preguntar ante conflictos. Inicializar de nuevo no crea ni propone una wiki y
+Preguntar ante conflictos. En 0.7.0, inicializar de nuevo no crea ni propone una wiki y
 no reemplaza un mapa real por un estado pendiente.
 
 Tras actualizar, comprobar los nombres visibles en el anfitrión y realizar una
 petición pequeña con fuentes sintéticas. La validación local de paquetes no
 sustituye esa comprobación. Registrar por separado las pruebas locales, la
 instalación real y cualquier publicación de una nueva release.
+
+Desde 0.8.0 se recomienda el mapa sin ejecutarlo automáticamente. Consulta
+[la actualización a 0.8](MIGRACION-0.8.md).

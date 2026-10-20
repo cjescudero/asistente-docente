@@ -2,9 +2,9 @@
 
 ## Alcance
 
-Este proyecto contiene doce skills docentes y utilidades portables para ChatGPT
+Este proyecto contiene trece skills docentes y utilidades portables para ChatGPT
 Work y Claude Cowork. Por decisión explícita del usuario, carpeta, identificador
-y paquetes se llaman `asistente-docente`, sin prefijo `plugin-`. Las doce skills
+y paquetes se llaman `asistente-docente`, sin prefijo `plugin-`. Las skills
 usan nombres sin prefijo `skill-` desde 0.7.0 por decisión del propietario;
 las equivalencias anteriores se documentan en `docs/MIGRACION-0.7.md`.
 
@@ -33,8 +33,17 @@ las equivalencias anteriores se documentan en `docs/MIGRACION-0.7.md`.
   enunciados, explicaciones o soluciones al contenido visible del GIFT ofuscado.
 - Conservar el banco y su huella. El feedback usa el manifiesto y su snapshot,
   no un banco modificado después de generar el examen.
+- En exámenes combinados, conservar banco y pregunta originales, cuotas de
+  cobertura y dificultad, reutilización y snapshots. No inventar preguntas para
+  suplir un reparto inviable ni prometer un óptimo matemático.
 - No convertir datos ausentes en errores del estudiante ni resolver duplicados
   silenciosamente. Conservar notas, identificadores y columnas ajenas al feedback.
+- La exportación de actividades actualiza solo nota y comentario autorizados,
+  con identificación explícita, comprobación de cálculo y auditoría. El feedback
+  de exámenes conserva la nota de Moodle y prioriza hasta tres dificultades.
+- Diseñar actividades mediante diálogo para cualquier disciplina, considerando
+  acceso a IA. Vincular enunciado, plantillas, rúbrica y versión; reservar la
+  rúbrica completa y soluciones al docente, comunicando criterios generales.
 - Una salida HTML o un prompt no equivalen a un PDF o una imagen generados.
 - El Mapa docente usa raíces elegidas por el usuario y enlaces Markdown relativos.
   El grafo es un derivado: la vista estudiantil excluye los datos reservados,
@@ -44,14 +53,19 @@ las equivalencias anteriores se documentan en `docs/MIGRACION-0.7.md`.
 
 - El contrato compartido es `docs/PROYECTO-DOCENTE.md`: estructura `curso-v1`,
   configuración UTF-8 con rutas relativas y selección explícita del corpus.
-- La iniciación prepara carpetas, configuración, LEEME e instrucciones. No crea
-  ni propone la wiki. La creación del mapa registra un índice real e integra
+- La iniciación prepara carpetas, configuración, LEEME e instrucciones. Ofrece
+  orientación y recomienda el mapa, sin crearlo ni invocarlo sin encargo.
+  `orientar-docente` consulta configuración e índices y propone tareas sin
+  ejecutarlas. La creación del mapa registra un índice real e integra
   su consulta en el AGENTS.md del curso, preservando las reglas previas.
 - Ante conflictos en instrucciones existentes, preguntar antes de cambiarlas.
   No imponer bloques generados ni modificar instrucciones globales.
 - Respetar exclusiones incluso mediante enlaces. Resultados, borradores y el
   propio mapa quedan fuera del corpus; el archivo requiere selección explícita.
   Detectar páginas dependientes de fuentes retiradas antes de reutilizarlas.
+- Organizar lotes en `docente/resultados/entregas/<actividad>/<convocatoria>/`,
+  separando originales, identificación y corrección. Mantener todo ese árbol
+  fuera del corpus, incluso cuando haya enlaces desde materiales elegidos.
 - No sobrescribir ni mover originales sin una propuesta concreta aprobada.
   Mantener una ubicación para cada material; separar soluciones y estudiantes.
 - Comprobar solo las entradas necesarias para el encargo. Adjuntos suficientes

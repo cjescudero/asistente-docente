@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "id": "medir-y-justificar",
+  "version": "1.0.0",
+  "title": "Medir y justificar",
+  "objectives": [
+    "Registrar mediciones trazables.",
+    "Justificar interpretaciones y límites."
+  ],
+  "sources": [
+    {
+      "id": "temperatura",
+      "path": "../../../alumnado/materiales/temperatura.md",
+      "locator": "Magnitudes y Medición",
+      "role": "current",
+      "audience": "estudiante"
+    }
+  ],
+  "files": {
+    "statement": {
+      "path": "../../../alumnado/actividades/medir-y-justificar/enunciado.md",
+      "audience": "estudiante"
+    },
+    "templates": [
+      {
+        "id": "informe",
+        "path": "../../../alumnado/actividades/medir-y-justificar/plantilla.md",
+        "audience": "estudiante"
+      }
+    ],
+    "rubric": {
+      "path": "../../rubricas/medir-y-justificar.md",
+      "audience": "docente"
+    },
+    "teaching_guide": {
+      "path": "../../soluciones/medir-y-justificar.md",
+      "audience": "docente"
+    }
+  }
+}
