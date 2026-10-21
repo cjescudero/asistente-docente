@@ -1,5 +1,11 @@
 # Historial
 
+## 0.11.3 — 2026-10-21
+
+- Presentación para profesorado en `.zenodo.json`, con recorridos, alcance y enlaces.
+- Metadatos incluidos en el paquete fuente; DOI y versión gestionados por la integración GitHub–Zenodo.
+- Incluye la guía visual de los procesos docentes.
+
 ## 0.11.2 — 2026-10-21
 
 - Categorías Moodle por cuestionario y nombre visible Modelo 01, Modelo 02…

@@ -108,7 +108,7 @@ def build_source_archive(root=ROOT):
     archive = release / f"asistente-docente-{manifest['version']}-source.zip"
     with tempfile.TemporaryDirectory() as temp:
         stage = Path(temp)
-        for name in (*FOLDERS, *FILES, 'plugin.json', '.github', '.agents', '.claude-plugin', '.codex-plugin', '.gitignore', '.gitattributes'):
+        for name in (*FOLDERS, *FILES, 'plugin.json', '.zenodo.json', '.github', '.agents', '.claude-plugin', '.codex-plugin', '.gitignore', '.gitattributes'):
             source = root / name
             if source.is_symlink():
                 raise ValueError(f"Enlace simbólico no distribuible: {name}")

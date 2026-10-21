@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "asistente-docente",
-  "version": "0.11.2",
+  "version": "0.11.3",
   "description": "Organiza conocimiento docente, crea actividades y bancos con variantes y prepara cuestionarios y feedback para Moodle.",
   "author": {
     "name": "Carlos J. Escudero"

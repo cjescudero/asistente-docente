@@ -65,3 +65,13 @@ actualizar su adaptador y la documentación, manteniendo las skills compartidas.
 Configurar en GitHub la descripción, los temas docentes y los canales de issues.
 Activar los avisos privados de seguridad si se ofrece ese canal. No se afirma
 ninguna de estas configuraciones remotas hasta verificarla.
+
+## Presentación en Zenodo
+
+`.zenodo.json` mantiene título, descripción, autoría, licencia y enlaces para las
+releases archivadas por la integración de GitHub. No fija DOI, fecha ni versión:
+se dejan a la integración. No crear depósitos independientes para estas releases.
+Editar este archivo no actualiza retroactivamente registros publicados; comprobar
+el nuevo registro tras publicar la release y distinguir publicación en GitHub de
+archivado confirmado en Zenodo. Si se añade CITATION.cff, Zenodo da prioridad a
+.zenodo.json; mantener coherentes ambas fuentes.

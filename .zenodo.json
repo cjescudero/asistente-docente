@@ -1,0 +1,34 @@
+{
+  "title": "Asistente docente: organización de materiales, actividades y evaluación con agentes de IA",
+  "upload_type": "software",
+  "description": "<p><strong>Asistente docente ayuda al profesorado a organizar sus materiales, diseñar actividades y preparar una evaluación conectada con lo que enseña.</strong> Es un plugin abierto con doce skills reutilizables para agentes de IA, pensado para cualquier asignatura o disciplina y distribuido para ChatGPT Work y Claude Cowork.</p>\n<p><strong>Un recorrido completo</strong><br>Materiales → mapa docente → actividades y bancos de preguntas → evaluación → notas y feedback para Moodle.</p>\n<ul><li><strong>Organizar el conocimiento:</strong> preparar o adaptar la carpeta del curso y construir una wiki explicativa con referencias a las fuentes, lector HTML y grafo de conceptos.</li><li><strong>Diseñar actividades:</strong> acordar objetivos, tareas y evidencias mediante diálogo; producir enunciados, plantillas y rúbricas docentes teniendo en cuenta el acceso del alumnado a IA.</li><li><strong>Preparar cuestionarios:</strong> crear bancos vinculados a los materiales y combinarlos en modelos imprimibles, con GIFT ofuscado para Moodle y un manifiesto que conserva las correspondencias.</li><li><strong>Evaluar y orientar:</strong> revisar entregas mediante criterios y evidencias, preparar notas y comentarios importables y generar observaciones de mejora desde los resultados de los cuestionarios.</li><li><strong>Comunicar:</strong> crear apuntes, infografías y diapositivas visuales individuales, con español claro por defecto.</li></ul>\n<p><strong>Cómo empezar</strong><br>Instala el plugin desde el marketplace del repositorio, abre la carpeta del curso y pide: «Inicia mi proyecto docente». La ayuda contextual orienta sobre los siguientes pasos sin exigir conocer los nombres de las skills.</p>\n<p><a href=\"https://github.com/cjescudero/asistente-docente/blob/main/docs/INSTALACION.md\">Instalación y primer uso</a> · <a href=\"https://github.com/cjescudero/asistente-docente/blob/main/docs/ESQUEMAS-PROCESOS.md\">Esquemas de los procesos</a> · <a href=\"https://github.com/cjescudero/asistente-docente/releases\">Descargas</a> · <a href=\"https://github.com/cjescudero/asistente-docente\">Código y documentación</a></p>\n<p><strong>Supervisión docente y alcance</strong><br>El profesor revisa contenidos, criterios y resultados. La integración con Moodle se realiza mediante archivos e importación manual; el plugin no se conecta automáticamente al campus. Los documentos del alumnado se separan de soluciones y rúbricas reservadas. La generación de PDF e imágenes depende de las capacidades disponibles. No se distribuye desde los directorios públicos de plugins, sino desde marketplaces de GitHub.</p>\n<p><strong>Software abierto</strong><br>Contenido propio bajo licencia MIT, con avisos de terceros incluidos en el repositorio. Zenodo conserva las versiones archivadas para su consulta y cita; GitHub reúne el desarrollo y la documentación vigente.</p>",
+  "creators": [
+    {
+      "name": "Escudero, Carlos J."
+    }
+  ],
+  "license": "mit",
+  "access_right": "open",
+  "language": "spa",
+  "keywords": [
+    "docencia",
+    "inteligencia artificial",
+    "agentes de IA",
+    "Agent Skills",
+    "materiales didácticos",
+    "evaluación",
+    "Moodle",
+    "mapa docente",
+    "educación abierta"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/cjescudero/asistente-docente/blob/main/docs/ESQUEMAS-PROCESOS.md",
+      "relation": "isDocumentedBy"
+    },
+    {
+      "identifier": "https://github.com/cjescudero/asistente-docente/blob/main/docs/INSTALACION.md",
+      "relation": "isDocumentedBy"
+    }
+  ]
+}
