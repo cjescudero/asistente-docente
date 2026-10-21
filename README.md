@@ -2,22 +2,18 @@
 
 Doce skills para organizar fuentes, crear materiales, evaluar y devolver feedback en
 cualquier asignatura. La fuente común genera paquetes para **ChatGPT Work** y
-**Claude Cowork**. Versión **0.11.0**, bajo [MIT](LICENSE).
+**Claude Cowork**, bajo [MIT](LICENSE).
 [Instalación y primer uso](docs/INSTALACION.md) ·
-[Última release publicada: 0.11.0](https://github.com/cjescudero/asistente-docente/releases/tag/v0.11.0) ·
+[Descargas y novedades](https://github.com/cjescudero/asistente-docente/releases) ·
 [Repositorio](https://github.com/cjescudero/asistente-docente).
 
 Las doce skills se agrupan por categoría: actividades, cuestionarios, mapa y
 proyecto docente, junto con apuntes y apoyos visuales. Consulta sus
 [nombres y funciones](docs/CATALOGO.md).
 
-La versión **0.10.0** incorpora cuatro modelos por defecto, bancos
-con principales y variantes, propuesta razonada de cantidad y duración y una
-wiki explicativa. Consulta el
+Incluye ayuda contextual, bancos con preguntas principales y variantes, cuatro
+modelos de cuestionario por defecto y una wiki explicativa. Consulta el
 [ejemplo de variantes](examples/cuestionarios-variantes/README.md).
-
-La versión **0.11.0** añade ayuda contextual durante la conversación y
-organiza los datos técnicos del curso y de cada cuestionario en carpetas propias.
 
 ## Inicio rápido
 
@@ -78,8 +74,8 @@ docente; lo creará cuando se lo pidas. Si ya hay
 materiales, presenta una propuesta antes de reorganizarlos. No necesitas escribir
 comandos.
 
-La organización descrita corresponde a la **0.11.0**. Comprueba la versión
-instalada: publicar en GitHub no actualiza por sí solo una instalación existente.
+Al actualizar el plugin, comprueba que tu espacio de trabajo haya sincronizado
+el marketplace: publicar en GitHub no actualiza por sí solo una instalación existente.
 [Guía para el profesor](docs/PROYECTO-DOCENTE.md).
 
 <a href="https://github.com/cjescudero/asistente-docente">
@@ -111,7 +107,7 @@ y su [índice de ejemplo](examples/mapa-docente/mapa-docente/index.md).
 
 ## Puesta en marcha del proyecto docente
 
-`proyecto-docente-inicializacion-adaptacion` prepara la estructura `curso-v3` y guarda
+`proyecto-docente-inicializacion-adaptacion` prepara la estructura del curso y guarda
 la selección explícita en `_datos_internos_proyecto/proyecto-docente.json`; prepara `LEEME.md` y
 `AGENTS.md`. Conserva las instrucciones existentes y pregunta ante conflictos.
 Establece `espanol-conciso-redaccion` para escribir en español y aclara dónde están
@@ -185,15 +181,14 @@ excluidos; los materiales creados necesitan selección explícita y estado revis
 o listo para entregar. Los borradores permanecen fuera. Las páginas dependientes de fuentes retiradas requieren revisión. Los originales
 no se mueven, editan ni copian salvo petición expresa de copia.
 
-En un curso nuevo, el mapa reside en `mapa-docente/`. Un mapa
-previo conserva su ubicación hasta una migración acordada. Dentro del mapa, `contenidos/` organiza
+El mapa reside en `mapa-docente/`. Dentro de él, `contenidos/` organiza
 conceptos, presentaciones, apuntes, prácticas y talleres; `reservado/` separa
 evaluaciones, soluciones y criterios que no deben trasladarse al alumnado.
 La organización interna se adapta al contenido. El tipo de material y su acceso son clasificaciones
 independientes.
 
 Las páginas usan enlaces Markdown normales, sin dependencia de Notion, Obsidian
-o frontmatter obligatorio. el registro `fuentes.json`, versión 2, registra varias raíces
+o frontmatter obligatorio. El registro `fuentes.json` documenta varias raíces
 en `source_roots`, las fuentes y las páginas en `pages`. Las rutas son relativas
 al mapa y a cada raíz. Si no se puede representar una ubicación con rutas
 relativas, como entre unidades distintas en Windows, se comunica la limitación;
@@ -237,17 +232,14 @@ incorpora ese origen de GitHub y después se instala el plugin en la cuenta.
 No basta con copiar una skill aislada: comparte referencias y utilidades con
 el resto del paquete. La instalación depende de las capacidades de la cuenta.
 
-La [release 0.11.0](https://github.com/cjescudero/asistente-docente/releases/tag/v0.11.0) ofrece:
-
-- `asistente-docente-0.11.0-agent-plugins.zip`: Agent Plugins y adaptador Codex.
-- `asistente-docente-0.11.0-claude.zip`: plugin para Claude.
-- `asistente-docente-0.11.0-source.zip`: fuente con catálogos y automatización GitHub.
-
-Las versiones anteriores y sus paquetes se conservan.
+En [Descargas y novedades](https://github.com/cjescudero/asistente-docente/releases)
+se ofrecen los paquetes Agent Plugins, Claude y código fuente, junto con sus
+huellas de integridad. La guía avanzada explica cuándo descargar uno.
 
 ## Utilidades para agentes y desarrollo
 
-Se necesita **Python 3.10 o posterior** para las utilidades. No hay claves API ni
+Se necesita **Python** para las utilidades; la [guía avanzada](docs/INSTALACION.md#instalación-avanzada)
+indica la versión mínima. No hay claves API ni
 servidores que configurar. El agente puede preparar carpetas e instrucciones mediante herramientas de
 archivos sin Python. Los comandos siguientes documentan las utilidades; no son
 un requisito para pedir la puesta en marcha en lenguaje natural.
@@ -332,7 +324,7 @@ No se sobrescriben resultados de cuestionarios ni comentarios existentes.
   todos los filtros, autoenlaces y extensiones de un curso Moodle.
   HTML activo, SVG, MathML e imágenes incrustadas en enunciados requieren una
   adaptación explícita y se rechazan, sin perder contenido silenciosamente.
-- Matemáticas: `\(...\)` y `\[...\]`, con MathJax 3.2.2 local (base, ams y
+- Matemáticas: `\(...\)` y `\[...\]`, con MathJax local (base, ams y
   newcommand). Sin carga remota de extensiones. Escapar símbolos GIFT en el banco.
 - Feedback: exportaciones UTF-8/UTF-8 BOM y separador coma, punto y coma o tabulador.
   Las columnas y los máximos son explícitos; no se presume escala sobre diez.
@@ -342,7 +334,7 @@ No se sobrescriben resultados de cuestionarios ni comentarios existentes.
   El validador comprueba inventario, rutas, enlaces y huellas; no ingiere PDF,
   ejecuta notebooks ni certifica la corrección semántica de una síntesis.
   El grafo deriva relaciones de enlaces Markdown reales, no de proximidad visual.
-  El registro del mapa usa la versión 2 del contrato para lector y grafo.
+  El registro del mapa documenta las fuentes y páginas necesarias para lector y grafo.
 
 [Contratos técnicos](docs/CONTRATOS.md) · [Guía Moodle](docs/MOODLE.md)
 
@@ -361,15 +353,13 @@ y construye paquetes como artefactos; no publica releases ni notas de alumnos.
 Los ZIP excluyen entornos, cachés y datos operativos. `SHA256SUMS` permite
 comprobar su integridad; `contents.json` registra el contenido común.
 
-La versión 0.11.0 se distribuye desde GitHub con su fuente y paquetes. Las
-versiones anteriores se conservan. La subida del código
-no demuestra una instalación real en cada anfitrión.
+La subida del código no demuestra una instalación real en cada anfitrión.
 La distribución se mantiene en los marketplaces de GitHub; no se solicita
 publicación en los directorios públicos de OpenAI ni de Anthropic.
 El contenido propio está bajo MIT por decisión del propietario. MathJax y el
 esquema Agent Plugins conservan sus avisos Apache-2.0. Consulta cómo
 [contribuir](CONTRIBUTING.md) y [preparar la publicación en GitHub](docs/PUBLICACION-GITHUB.md).
-Los paquetes se distribuyen en las [versiones publicadas](https://github.com/cjescudero/asistente-docente/releases).
+Los paquetes se distribuyen en [GitHub Releases](https://github.com/cjescudero/asistente-docente/releases).
 
 [Procedencia](docs/PROCEDENCIA.md) · [Avisos](NOTICE.md) ·
 [Validación realizada](docs/VALIDACION.md)
