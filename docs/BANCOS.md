@@ -2,26 +2,26 @@
 
 Un banco nuevo combina un archivo GIFT, metadatos pedagógicos y referencias a
 los materiales que lo sustentan. Cada material conserva su ubicación original.
-Los bancos y exámenes anteriores pueden orientar la dificultad y el estilo;
+Los bancos y cuestionarios anteriores pueden orientar la dificultad y el estilo;
 el profesor decide qué contenidos siguen vigentes.
 
 Pide, por ejemplo: «Crea un banco sobre estas diapositivas y esta actividad.
-Utiliza el examen del año pasado para calibrar la dificultad». El agente debe
+Utiliza el cuestionario del año pasado para calibrar la dificultad». El agente debe
 acordar los objetivos y la cobertura, comprobar las fuentes autorizadas y
 proponer las preguntas antes de incorporarlas a una evaluación.
 
 ## Archivos y raíces
 
-En cursos v2, cada banco nuevo se guarda en `creados/bancos/<id>/`, con GIFT,
-metadatos, `material-docente.json` de tipo `banco` y estado visible en `LEEME.md`.
-Un borrador conserva ese destino al revisarse. El catálogo está en
-`creados/bancos/catalogo.json` y puede enlazar bancos aportados bajo
+En cursos `curso-v3`, cada banco nuevo se guarda en `materiales_generados/bancos/<id>/`,
+con GIFT y `LEEME.md` visibles; los metadatos y `material-docente.json`
+de tipo `banco` van en `_datos_internos/`. Un borrador conserva ese destino
+al revisarse. El catálogo está en
+`materiales_generados/bancos/_datos_internos/catalogo.json` y puede enlazar bancos aportados bajo
 `fuentes/evaluaciones/bancos/` sin copiarlos. La presencia en el catálogo no
 acredita revisión pedagógica ni autoriza entregar el banco con soluciones.
-Los cursos anteriores mantienen sus ubicaciones y contratos.
 
 Los bancos se entregan **sin comprimir**, con enlaces directos a `banco.gift` y
-`metadatos.json`, y su guía y registro en la misma carpeta. El GIFT es el archivo
+`_datos_internos/metadatos.json`, y su guía y registro en la misma carpeta. El GIFT es el archivo
 de preguntas que se usa con Moodle; los JSON documentan procedencia y variantes
 para las utilidades docentes. El ZIP solo es opcional ante petición del profesor
 o una limitación comprobada de entrega, explicada y sin sustituir los archivos
@@ -38,11 +38,11 @@ Los contratos JSON usan UTF-8 y `schema_version: 1`:
 
 `path_base: "project"` permite que `gift` y `metadata` sean relativos a la raíz
 del curso y enlacen bancos de distintas ramas. Es la opción de los catálogos
-nuevos de curso-v2. Si el campo falta o vale `"catalog"`, las rutas siguen siendo
+nuevos de curso-v3. Si el campo falta o vale `"catalog"`, las rutas siguen siendo
 relativas a la carpeta del catálogo, conservando compatibilidad.
 
 Las rutas de materiales y recomendaciones son relativas a la raíz del curso.
-La utilidad localiza `proyecto-docente.json` en los antecesores del catálogo;
+La utilidad localiza la configuración del curso en `_datos_internos_proyecto/` desde el catálogo;
 `--project` permite indicar esa raíz. `path_base: "project"` requiere una raíz
 explícita o descubierta en la configuración. Para un catálogo antiguo fuera de
 un proyecto, la raíz predeterminada sigue siendo su carpeta. No se admiten rutas
@@ -57,7 +57,7 @@ Ejemplo de catálogo:
   "path_base": "project",
   "banks": [
     {"id": "historia-fuentes", "gift": "fuentes/evaluaciones/bancos/historia.gift", "metadata": "fuentes/evaluaciones/bancos/historia.metadata.json"},
-    {"id": "actividad-medicion", "gift": "creados/bancos/medicion/banco.gift", "metadata": "creados/bancos/medicion/metadatos.json"}
+    {"id": "actividad-medicion", "gift": "materiales_generados/bancos/medicion/banco.gift", "metadata": "materiales_generados/bancos/medicion/_datos_internos/metadatos.json"}
   ]
 }
 ```
@@ -78,7 +78,7 @@ Cada entrada de `materials` incluye:
 
 La utilidad comprueba las exclusiones y la selección del curso antes de leer
 el original para verificar su huella. Si cambia, exige revisar las preguntas
-dependientes antes de crear otro examen; no actualiza la huella automáticamente.
+dependientes antes de crear otro cuestionario; no actualiza la huella automáticamente.
 Una selección de fuentes aplazada, una fuente excluida, ilegible o inexistente
 impide usar el banco afectado. Las entregas y resultados permanecen fuera del
 corpus. Elegir una fuente no autoriza su publicación.
@@ -263,20 +263,24 @@ que otras no elegibles para ese reparto.
 
 Tipos imprimibles: `single`, `multiple`, `truefalse`, `numerical`. Los
 emparejamientos se conservan en el banco congelado y se enumeran como excluidos
-del examen; no pueden solicitarse como tipo de una cuota.
+del cuestionario; no pueden solicitarse como tipo de una cuota.
 
 ## Uso de las utilidades y resultados
 
 El agente puede ejecutar las utilidades; el profesor no necesita conocer estos
 comandos. Los destinos de resultados deben estar fuera del plugin instalado:
+Antes de ejecutar `build-cuestionarios`, guardar la selección acordada en el
+`_datos_internos/seleccion.json` del cuestionario. No dejarla suelta en la
+carpeta superior ni reutilizar una salida que ya contenga modelos.
 
 ```sh
-python scripts/docencia.py validate-catalog /curso/creados/bancos/catalogo.json
-python scripts/docencia.py build-exams \
-  --catalog /curso/creados/bancos/catalogo.json \
-  --selection /curso/creados/cuestionarios/seleccion.json \
-  --title "Evaluación de fuentes y medición" \
-  --questions 5 --models 4 --seed 42 --layout curso-v2 --output /curso/creados/cuestionarios/parcial-01
+python scripts/docencia.py validate-catalog /curso/materiales_generados/bancos/_datos_internos/catalogo.json
+python scripts/docencia.py build-cuestionarios \
+  --catalog /curso/materiales_generados/bancos/_datos_internos/catalogo.json \
+  --selection /curso/materiales_generados/cuestionarios/parcial-01/_datos_internos/seleccion.json \
+  --title "Cuestionario de fuentes y medición" \
+  --questions 5 --models 4 --seed 42 --layout curso-v3 \
+  --output /curso/materiales_generados/cuestionarios/parcial-01
 ```
 
 La entrada antigua de un único GIFT y sus metadatos opcionales sigue disponible.
@@ -284,7 +288,7 @@ Los bancos antiguos sin procedencia completa pueden usarse por esa vía; el
 agente debe completar sus metadatos antes de ofrecer el equilibrio por materiales
 y dificultad del catálogo.
 
-La API Python mantiene `build_exams(bank_path, output_dir, ...)`. Para el
+La API Python mantiene `build_cuestionarios(bank_path, output_dir, ...)`. Para el
 catálogo usa `bank_path=None`, `catalog_path=...`, `selection_path=...` y,
 opcionalmente, `project_root=...`. No se mezclan catálogo y selección con un
 banco único, metadatos externos o cuotas antiguas por categoría.
@@ -292,14 +296,13 @@ banco único, metadatos externos o cuotas antiguas por categoría.
 serializable con recuentos; las inconsistencias producen `ValueError` y no
 modifican los archivos.
 
-En `--layout curso-v2`, la salida contiene `alumnado/` para modelos HTML/PDF
-sin soluciones y `docente/` para solucionarios, GIFT, `manifest.json`, `source/`
-y `coverage.json`. Las rutas del manifiesto se resuelven desde `docente/`;
-los modelos estudiantiles se enlazan con `../alumnado/`. La raíz del examen
-contiene `material-docente.json` de tipo `cuestionario` (se admite `examen` en registros anteriores), inicialmente `borrador`, y
-`LEEME.md`. Revisar antes de cambiar el estado. Sin esa opción se conserva la
-distribución plana anterior. No reorganizar manualmente archivos después de
-generar el manifiesto.
+En `--layout curso-v3`, la salida contiene `alumnado/` para modelos
+HTML/PDF sin soluciones, `docente/` para solucionarios y GIFT y
+`_datos_internos/` para selección, manifiesto, informe y bancos congelados.
+La selección se guarda antes de generar y es el único archivo previo permitido.
+El manifiesto resuelve sus rutas desde `_datos_internos/`; no mover archivos
+después de generar. El registro `_datos_internos/material-docente.json` se
+inicia como `borrador`, con estado visible en `LEEME.md`.
 
 Las salidas mantienen PDF estudiantil, solucionario separado, HTML y GIFT
 ofuscado. Si falta la capacidad PDF, se conservan fuentes y HTML y se declara
@@ -319,8 +322,8 @@ campos previos `bank_snapshot`, `bank_sha256`, `metadata` y `models`. Añade:
 sin categoría al principio para respetar la sintaxis GIFT. Se comprueba que al
 releerlo conserva enunciados, categorías, tipos, opciones, pesos, tolerancias y
 feedback. Los originales GIFT y JSON también se congelan byte a byte. Los
-materiales docentes no se duplican dentro del examen. Modificar los originales
-después no altera un examen ya generado.
+materiales docentes no se duplican dentro del cuestionario. Modificar los originales
+después no altera un cuestionario ya generado.
 
 Estos archivos contienen datos docentes reservados. Solo las salidas identificadas
 como estudiantiles se entregan al alumnado. La importación de GIFT no configura
@@ -335,9 +338,9 @@ tras la evaluación, el feedback requiere detalle por pregunta, manifiesto y hoj
 Moodle. Si esas salidas ya existen para la misma versión, ofrecer utilizarlas,
 revisarlas o actualizarlas según [los flujos docentes](FLUJOS-DOCENTES.md).
 
-La CLI conserva el nombre técnico `build-exams` por compatibilidad. `--models`
+La CLI usa `build-cuestionarios`. `--models`
 vale 4 cuando se omite; `--questions` es obligatorio y refleja la propuesta
-acordada. La API `build_exams` conserva su nombre y la entrada antigua. Las
+acordada. La API `docencia.cuestionarios.build_cuestionarios` conserva la entrada de un único GIFT. Las
 variantes y familias quedan registradas en los metadatos y el manifiesto.
 
 ## Leer el informe de diversidad

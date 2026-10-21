@@ -35,7 +35,7 @@ No abrir ni distribuir una vista docente como vista estudiantil.
 ## Regenerar vistas
 
 Este recorrido escribe solo el lector, el grafo o ambos, según lo solicitado.
-Conservar originales, Markdown, `fuentes.json`, incidencias, log, configuración
+Conservar originales, Markdown, el registro `fuentes.json` (`_datos_internos/fuentes.json` en `curso-v3`), incidencias, log, configuración
 y `AGENTS.md`; no actualizar sus fechas o reglas como efecto secundario.
 Si la validación detecta fuentes retiradas, dependencias pendientes o errores
 que exigen editar la wiki, explicar qué mantenimiento hace falta y solicitar
@@ -44,13 +44,13 @@ identificada como desactualizada; no reparar contenidos silenciosamente.
 
 ## Preparar la vista
 
-Leer el [contrato del Mapa docente](../../../docs/MAPA-DOCENTE.md), `index.md` y `fuentes.json` del mapa seleccionado. Comprobar la selección y las exclusiones de `proyecto-docente.json` cuando exista, las páginas registradas, sus fuentes y sus accesos. Detectar fuentes retiradas y dependencias directas o indirectas antes de generar HTML; no representar como actual una página pendiente de revisión por esa retirada. No descubrir ni añadir carpetas automáticamente para completar el grafo. Mantener intactos originales, páginas y metadatos al regenerar únicamente esta vista.
+Leer el [contrato del Mapa docente](../../../docs/MAPA-DOCENTE.md), `index.md` y el registro `fuentes.json` (`_datos_internos/fuentes.json` en `curso-v3`) del mapa seleccionado. Comprobar la selección y las exclusiones de la configuración del curso (`_datos_internos_proyecto/proyecto-docente.json` en `curso-v3`) cuando exista, las páginas registradas, sus fuentes y sus accesos. Detectar fuentes retiradas y dependencias directas o indirectas antes de generar HTML; no representar como actual una página pendiente de revisión por esa retirada. No descubrir ni añadir carpetas automáticamente para completar el grafo. Mantener intactos originales, páginas y metadatos al regenerar únicamente esta vista.
 
 El destino predeterminado es **docente**. En esa vista, distinguir visualmente las evaluaciones y mantenerlas ocultas al abrir mediante el filtro previsto, con posibilidad de mostrarlas. Esa ocultación es una preferencia de presentación: los datos siguen en el HTML docente y no constituyen un control de acceso.
 
 ## Generar y comprobar
 
-1. Ejecutar el [validador](../../../scripts/validate_library.py) con `python "$ASISTENTE_DOCENTE/scripts/validate_library.py" mapa-docente`, resolviendo instalación y mapa reales. Si aparecen errores estructurales, solicitar el mantenimiento del mapa antes de regenerar; hacerlo directamente solo cuando el encargo ya incluya crear o actualizar contenidos. Un registro antiguo puede validarse sin ser apto para todas las funciones del grafo: seguir el contrato de compatibilidad, sin migrarlo silenciosamente.
+1. Ejecutar el [validador](../../../scripts/validate_library.py) con `python "$ASISTENTE_DOCENTE/scripts/validate_library.py" mapa-docente`, resolviendo instalación y mapa reales. Si aparecen errores estructurales, solicitar el mantenimiento del mapa antes de regenerar; hacerlo directamente solo cuando el encargo ya incluya crear o actualizar contenidos. Usar el registro vigente y detener la generación si faltan datos necesarios para el grafo.
 2. Solo tras superar la validación del mapa y del corpus, usar el [generador de grafo](../../../scripts/build_graph.py): `python "$ASISTENTE_DOCENTE/scripts/build_graph.py" mapa-docente --output mapa-docente/grafo-docente.html --wiki-output mapa-docente/index.html --audience docente`. Genera el lector y el grafo con enlaces recíprocos. Para regenerar solo el lector, usar [build_wiki.py](../../../scripts/build_wiki.py): `python "$ASISTENTE_DOCENTE/scripts/build_wiki.py" mapa-docente --graph mapa-docente/grafo-docente.html`. Para regenerar solo el grafo, omitir `--wiki-output`. La creación o actualización del mapa incluye ambos derivados; una consulta ordinaria no los regenera. Respetar un encargo que limite la actualización a uno de ellos.
 3. Derivar nodos y relaciones del registro, los vínculos página–fuente y los enlaces Markdown normales entre páginas. No añadir relaciones inventadas, cuotas de enlaces o conexiones basadas solo en proximidad visual. Distinguir una relación de navegación de una afirmación conceptual.
 4. Abrir los HTML con una capacidad de vista disponible. Comprobar arrastre, zoom, búsqueda y filtros; tras filtrar, «Reorganizar» debe redistribuir solo los nodos visibles conservando selección y filtros, y «Ajustar» solo encuadrar. Revisar etiquetas y evaluaciones inicialmente ocultas. Seleccionar una fuente y un concepto: comprobar sus accesos a documentos de la wiki renderizados y a los Markdown originales. En `index.html`, recorrer índice → página → enlace a otra página → volver, incluyendo un encabezado con ancla. El lector debe distinguir materiales compartibles y reservados.

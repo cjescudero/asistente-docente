@@ -28,9 +28,9 @@ desde Personalizar. Una instalación en Codex no sustituye la importación al
 espacio de trabajo de ChatGPT.
 No se necesitan MCP, hooks ni variables exclusivas de un anfitrión.
 
-La versión 0.10.0 incluye doce skills, con nombres sin prefijo, en ambos paquetes:
-`asistente-docente-0.10.0-agent-plugins.zip` y
-`asistente-docente-0.10.0-claude.zip`. El Mapa docente usa páginas Markdown con
+La versión 0.11.0 incluye doce skills, con nombres sin prefijo, en ambos paquetes:
+`asistente-docente-0.11.0-agent-plugins.zip` y
+`asistente-docente-0.11.0-claude.zip`. El Mapa docente usa páginas Markdown con
 enlaces relativos estándar e inventario JSON; no requiere Notion, Obsidian ni
 frontmatter. Su grafo se genera con Python estándar y funciona como HTML autónomo
 sin acceso a la red. La lectura del corpus y la revisión visual requieren las
@@ -41,7 +41,7 @@ su consulta posterior es local y no necesita Python, servidor ni conexión.
 La preparación normal de utilidades usa la caché del usuario; el entorno
 `.venv` de `--dev` se reserva para desarrollo del plugin.
 
-La estructura del curso y el contrato de `proyecto-docente.json` están en
+La estructura del curso y el contrato de `_datos_internos_proyecto/proyecto-docente.json` están en
 [Proyecto docente](PROYECTO-DOCENTE.md). Cada carpeta fuente debe haber sido
 elegida por el usuario y respetar las exclusiones vigentes. El registro versión 2
 admite varias raíces relativas y clasifica por separado las páginas, sus fuentes
@@ -58,7 +58,7 @@ originales para resolverla sin una petición que lo autorice.
    Registrar quién realizó la importación, qué roles tienen acceso y cualquier
    limitación. Usar el ZIP solo si el anfitrión ofrece esa opción; no confundir
    esa prueba con una importación del marketplace.
-3. Confirmar nombre, versión 0.10.0 y doce skills; comprobar que los recursos del
+3. Confirmar nombre, versión elegida y doce skills; comprobar que los recursos del
    paquete son accesibles desde las skills.
 4. Pedir una actividad breve con fuentes sintéticas. Revisar rigor, nivel,
    separación entre enunciado y solución y generación real de Markdown/PDF.
@@ -68,7 +68,7 @@ originales para resolverla sin una petición que lo autorice.
    hay, comprobar que se entrega diseño y prompt sin declarar imagen generada.
 7. Preparar fuera del plugin una copia del ejemplo sintético del Mapa docente,
    eligiendo explícitamente sus dos carpetas fuente. Consultar contenidos vigentes
-   y el examen histórico: comprobar citas, lectura parcial y que no se escriben
+   y el cuestionario histórico: comprobar citas, lectura parcial y que no se escriben
    páginas, log ni grafo durante la consulta.
 8. Añadir una fuente sintética y pedir actualizar el mapa. Comprobar páginas
    afectadas y regeneración del lector y del grafo. Modificar después una fuente ya registrada:
@@ -107,7 +107,7 @@ originales para resolverla sin una petición que lo autorice.
 15. En un curso Moodle de pruebas, elegir expresamente hoja de tarea o libro;
     revisar identificadores, calificación avanzada y vista previa antes de importar.
     Comprobar conservación de otras columnas, ausencia de ceros inventados y
-    feedback desde el detalle sin modificar las notas del examen. No usar datos
+    feedback desde el detalle sin modificar las notas del cuestionario. No usar datos
     reales para esta prueba sin autorización.
 16. Registrar fecha, versión del anfitrión, pasos, resultados y limitaciones.
 
@@ -143,7 +143,7 @@ Licencia MIT y repositorio elegidos por el propietario. Los paquetes incluyen
 los avisos de terceros. Seguir [la guía de publicación](PUBLICACION-GITHUB.md)
 para revisar la fuente, construir artefactos y comprobar las instalaciones
 reales. La preparación local no publica repositorios, marketplaces ni plugins. La
-release 0.6.0 se conserva y la versión 0.10.0 se distribuye desde GitHub con
+release 0.6.0 se conserva y la versión 0.11.0 se distribuye desde GitHub con
 su fuente y paquetes.
 Una nueva release con ZIP y las instalaciones reales se registran por separado
 de la subida del código, la construcción y la validación locales.

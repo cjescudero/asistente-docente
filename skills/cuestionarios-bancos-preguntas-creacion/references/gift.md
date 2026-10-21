@@ -28,7 +28,7 @@ Para selección múltiple, definir explícitamente los porcentajes positivos y, 
 
 Usar texto claro o `[html]` con HTML simple: párrafos, listas, énfasis, tablas pequeñas, subíndices, superíndices y entidades. Para fórmulas, el motor PDF admite `\(...\)` en línea y `\[...\]` en bloque mediante MathJax local; no usa `$` como delimitador. El perfil incorpora `base`, `ams` y `newcommand`, sin carga dinámica de extensiones. Los errores matemáticos bloquean el PDF y conservan el HTML. Verificar por separado el filtro matemático de Moodle: una fórmula que se ve como código literal no está renderizada.
 
-Las llaves, signos y barras de una expresión matemática pueden coincidir con la sintaxis GIFT. Validar su recorrido completo desde banco a examen; no reemplazar fórmulas por imágenes generadas mediante IA.
+Las llaves, signos y barras de una expresión matemática pueden coincidir con la sintaxis GIFT. Validar su recorrido completo desde banco a cuestionario; no reemplazar fórmulas por imágenes generadas mediante IA.
 
 ## Metadatos para el aprendizaje
 
@@ -36,13 +36,13 @@ Los bancos nuevos requieren metadatos separados del GIFT y una entrada en el
 [catálogo de bancos](../../../docs/BANCOS.md). Cada pregunta declara materiales
 de origen y localizadores, conceptos, objetivo, dificultad estimada y orientación
 de repaso. Puede apoyarse en varias fuentes, que mantienen su ubicación original.
-Los ejemplos de bancos o exámenes anteriores ayudan a calibrar dificultad y
+Los ejemplos de bancos o cuestionarios anteriores ayudan a calibrar dificultad y
 estilo, pero no determinan los contenidos vigentes.
 
 Los conceptos pueden añadir consejos y referencias de repaso. Las referencias
 dirigidas al alumnado deben estar declaradas como accesibles al estudiante;
 no incluir soluciones ni rúbricas reservadas. Escribir consejos accionables sin
-revelar el examen: «Contrasta la procedencia y el propósito de las fuentes»
+revelar el cuestionario: «Contrasta la procedencia y el propósito de las fuentes»
 resulta más útil que «La opción B era la correcta».
 
 Un banco antiguo sin metadatos completos sigue siendo legible por la entrada

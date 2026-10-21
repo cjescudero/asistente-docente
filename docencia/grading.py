@@ -108,8 +108,8 @@ def _activity_record(evaluation, config, config_file):
     This is provenance validation, not an interpretation of Markdown criteria.
     A known course root also prevents following symlinks outside that root.
     """
-    course_root = next((parent for parent in (config_file.parent, *config_file.parent.parents)
-                        if (parent / "proyecto-docente.json").is_file()), None)
+    from .project import find_project
+    course_root = find_project(config_file.parent)
 
     def document(base, relative):
         _text(relative, "Ruta de documento de actividad")

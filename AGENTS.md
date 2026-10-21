@@ -5,9 +5,8 @@
 Este proyecto contiene doce skills docentes y utilidades portables para ChatGPT
 Work y Claude Cowork. Por decisión explícita del usuario, carpeta, identificador
 y paquetes se llaman `asistente-docente`, sin prefijo `plugin-`. Las skills
-usan nombres sin prefijo `skill-` desde 0.7.0 por decisión del propietario;
-desde 0.9.0 se agrupan por categoría. Las equivalencias están en
-`docs/MIGRACION-0.9.md` y las anteriores en `docs/MIGRACION-0.7.md`.
+usan nombres sin prefijo `skill-` y se agrupan por categoría. La organización
+vigente se documenta en `docs/PROYECTO-DOCENTE.md`.
 
 ## Fuentes y portabilidad
 
@@ -47,15 +46,15 @@ desde 0.9.0 se agrupan por categoría. Las equivalencias están en
 - Separar soluciones docentes y documentos del estudiante. No trasladar
   enunciados, explicaciones o soluciones al contenido visible del GIFT ofuscado.
 - Conservar el banco y su huella. El feedback usa el manifiesto y su snapshot,
-  no un banco modificado después de generar el examen.
-- En exámenes combinados, conservar banco y pregunta originales, cuotas de
+  no un banco modificado después de generar el cuestionario.
+- En cuestionarios combinados, conservar banco y pregunta originales, cuotas de
   cobertura y dificultad, reutilización y snapshots. No inventar preguntas para
   suplir un reparto inviable ni prometer un óptimo matemático.
 - No convertir datos ausentes en errores del estudiante ni resolver duplicados
   silenciosamente. Conservar notas, identificadores y columnas ajenas al feedback.
 - La exportación de actividades actualiza solo nota y comentario autorizados,
   con identificación explícita, comprobación de cálculo y auditoría. El feedback
-  de exámenes conserva la nota de Moodle y prioriza hasta tres dificultades.
+  de cuestionarios conserva la nota de Moodle y prioriza hasta tres dificultades.
 - Diseñar actividades mediante diálogo para cualquier disciplina, considerando
   acceso a IA. Vincular enunciado, plantillas, rúbrica y versión; reservar la
   rúbrica completa y soluciones al docente, comunicando criterios generales.
@@ -66,15 +65,20 @@ desde 0.9.0 se agrupan por categoría. Las equivalencias están en
 
 ## Proyectos docentes
 
-- El contrato compartido es `docs/PROYECTO-DOCENTE.md`: nuevos cursos `curso-v2`,
-  configuración UTF-8 con rutas relativas y selección explícita del corpus.
-  Conservar `curso-v1` y rutas anteriores de `curso-v2` hasta una migración concreta aprobada; no deducir la
-  procedencia de los documentos antiguos por su carpeta.
-- Separar originales en `fuentes/` y materiales nuevos en `creados/`, por tipo.
-  Usar `cuestionarios/` en cursos nuevos; respetar `questionnaire_paths` y las
-  rutas `examenes/` anteriores hasta su migración aprobada, sin mover snapshots.
-  Cada actividad o examen reúne documentos de alumnado y docente en subcarpetas.
-  El estado se registra en `material-docente.json` y se muestra en `LEEME.md`;
+- El contrato compartido es `docs/PROYECTO-DOCENTE.md`: cursos `curso-v3`,
+  configuración UTF-8 en `_datos_internos_proyecto/proyecto-docente.json` con
+  rutas relativas y selección explícita del corpus. No leer configuraciones de
+  formatos anteriores como proyectos docentes. Si aparece otra configuración en
+  la raíz, señalar la ambigüedad antes de iniciar. No deducir la procedencia
+  de materiales aportados por su carpeta.
+- Separar originales en `fuentes/` y materiales nuevos en
+  `materiales_generados/`, por tipo. Usar `cuestionarios/` y las rutas fijas de
+  `questionnaire_paths` del formato actual, sin regenerar snapshots usados.
+  Cada actividad o cuestionario reúne documentos de alumnado y docente en subcarpetas.
+  El estado se registra en `_datos_internos/material-docente.json` y se muestra
+  en `LEEME.md`; cada cuestionario reúne selección, manifiesto y bancos
+  congelados en su `_datos_internos/`. Un banco guarda allí sus metadatos y el
+  catálogo de bancos se guarda en `bancos/_datos_internos/`;
   revisar o reutilizar un material no exige moverlo ni duplicarlo.
 - Antes de inicializar o adaptar, inventariar el contenido existente. Los nombres
   son pistas; comprobar lo necesario y distinguir evidencia y dudas. Mostrar
@@ -85,13 +89,16 @@ desde 0.9.0 se agrupan por categoría. Las equivalencias están en
   Mantener la consulta separada y de solo lectura.
 - La iniciación prepara carpetas, configuración, LEEME e instrucciones. Ofrece
   orientación y recomienda el mapa, sin crearlo ni invocarlo sin encargo.
-  `proyecto-docente-ayuda` consulta configuración e índices y propone tareas sin
-  ejecutarlas. La creación del mapa registra un índice real e integra
+  `proyecto-docente-ayuda` se invoca siempre como ayuda inline ante dudas de uso,
+  flujos, archivos, resultados, posibilidades o siguientes pasos, también durante
+  otra skill y al orientar al cierre. Revisa la conversación disponible y el estado
+  pertinente del curso, sin repetir datos conocidos ni leer todo el corpus.
+  No invocarse recursivamente ni ejecutar nuevos procesos por orientar. La creación del mapa registra un índice real e integra
   su consulta en el AGENTS.md del curso, preservando las reglas previas.
 - Ante conflictos en instrucciones existentes, preguntar antes de cambiarlas.
   No imponer bloques generados ni modificar instrucciones globales.
-- Respetar exclusiones incluso mediante enlaces. Resultados y el propio mapa
-  quedan fuera del corpus; creados requiere selección explícita y un registro
+- Respetar exclusiones incluso mediante enlaces. Resultados, datos internos y el propio mapa
+  quedan fuera del corpus; materiales_generados requiere selección explícita y un registro
   revisado o listo para entregar. Los borradores quedan fuera; archivo requiere selección explícita.
   Detectar páginas dependientes de fuentes retiradas antes de reutilizarlas.
 - Organizar lotes nuevos en `resultados/<actividad>/<convocatoria>/`,
@@ -106,7 +113,7 @@ desde 0.9.0 se agrupan por categoría. Las equivalencias están en
 - Al terminar una skill, aplicar `docs/FLUJOS-DOCENTES.md`: sugerir los siguientes
   pasos según registros y archivos pertinentes, sin ejecutar tareas ni dar por
   completados resultados por la mera existencia de una carpeta. Respetar los
-  flujos inicio → mapa, actividad → corrección y banco → examen → feedback.
+  flujos inicio → mapa, actividad → corrección y banco → cuestionario → feedback.
   Ofrecer apuntes y diapositivas visuales individuales como apoyos. Usar español
   conciso por defecto, salvo indicación distinta del docente.
 

@@ -15,12 +15,12 @@ import re
 from pathlib import Path
 from urllib.parse import quote, unquote, urlsplit, urlunsplit
 
-from .project import CONFIG_NAME, _inside, _relative, _root, _safe_path
+from .project import CONFIG_NAME, CONFIG_V3, _inside, _relative, _root, _safe_path
 
 SKIP_DIRECTORIES = {".git", ".venv", "venv", "node_modules", "__pycache__", ".pytest_cache"}
 LINK = re.compile(r"!?\[[^\]\n]*\]\(\s*(?:<([^>\n]+)>|([^\s)]+))(?:\s+[^\n)]*)?\)")
 REFERENCE = re.compile(r"(?m)^ {0,3}\[[^\]\n]+\]:\s*(?:<([^>\n]+)>|(\S+))")
-CONTROL_FILES = {CONFIG_NAME, "AGENTS.md", "LEEME.md"}
+CONTROL_FILES = {CONFIG_NAME, CONFIG_V3, "AGENTS.md", "LEEME.md"}
 
 
 def _files(folder: Path):
@@ -142,7 +142,7 @@ def _review_metadata(root: Path, moves: list[dict]) -> tuple[list[dict], list[st
             elif lower == "material-docente.json":
                 kind, reason = "material", "Conservar identidad, tipo y estado; comprobar su carpeta estable y el LEEME asociado."
             elif "manifest" in lower or "manifiesto" in lower:
-                kind, reason = "exam_snapshot", "Preservar el manifiesto y los bancos congelados; comprobar referencias externas sin regenerar el examen."
+                kind, reason = "exam_snapshot", "Preservar el manifiesto y los bancos congelados; comprobar referencias externas sin regenerar el cuestionario."
             elif "metadatos" in lower or "metadata" in lower or lower.endswith(".meta.json"):
                 kind, reason = "metadata", "Revisar localizadores y referencias a materiales según la base de rutas declarada."
             else:
@@ -165,7 +165,7 @@ def plan_migration(root, moves) -> dict:
     result = {"status": "ready", "root": str(root), "moves": [], "errors": [],
               "warnings": ["Esta propuesta no mueve archivos ni actualiza enlaces.",
                            "Revisión automática limitada a enlaces Markdown ordinarios. Revisar manualmente PDF, documentos ofimáticos, HTML y enlaces construidos.",
-                           "Tras aprobar y aplicar movimientos, revisar configuración, catálogos, registros de actividad y metadatos del mapa; preservar los manifiestos y snapshots de exámenes.",
+                           "Tras aprobar y aplicar movimientos, revisar configuración, catálogos, registros de actividad y metadatos del mapa; preservar los manifiestos y snapshots de cuestionarios.",
                            "metadata_reviews identifica registros para revisión semántica; no determina automáticamente qué campos deben cambiar."],
               "links": [], "metadata_reviews": [], "requires_approval": True}
     if not root.is_dir():
@@ -182,8 +182,9 @@ def plan_migration(root, moves) -> dict:
                 raise ValueError("Un movimiento contiene nombres alternativos contradictorios.")
             source = _relative(item.get("source", item.get("from")), label="source")
             destination = _relative(item.get("destination", item.get("to")), label="destination")
-            if source in CONTROL_FILES or destination in CONTROL_FILES:
-                raise ValueError("AGENTS.md, LEEME.md y proyecto-docente.json requieren una modificación separada, no una reubicación.")
+            config_relocation = source == CONFIG_NAME and destination == CONFIG_V3
+            if (source in CONTROL_FILES or destination in CONTROL_FILES) and not config_relocation:
+                raise ValueError("AGENTS.md, LEEME.md y la configuración requieren una propuesta específica; no se reubican implícitamente.")
             source_path, destination_path = _safe_path(root, source), _safe_path(root, destination)
             if source == destination:
                 raise ValueError(f"Origen y destino son iguales: {source}")

@@ -1,0 +1,11 @@
+$CATEGORY: cuestionario/A
+
+::A-P001::[plain]Pregunta 01 {#
+=%100.0%40.0:0.0
+}
+
+::A-P002::[plain]Pregunta 02 {
+=Respuesta A
+~Respuesta B
+~Respuesta C
+}

@@ -19,7 +19,7 @@ def main(argv=None):
     for stream in (sys.stdout, sys.stderr):
         if hasattr(stream, "reconfigure"):
             stream.reconfigure(encoding="utf-8")
-    parser = argparse.ArgumentParser(description="Asistente docente: proyectos, bancos, exámenes y feedback.")
+    parser = argparse.ArgumentParser(description="Asistente docente: proyectos, bancos, cuestionarios y feedback.")
     commands = parser.add_subparsers(dest="command", required=True)
     project = commands.add_parser("init-project", help="Preparar un curso sin crear la wiki")
     project.add_argument("root", type=Path)
@@ -42,21 +42,22 @@ def main(argv=None):
     catalog = commands.add_parser("validate-catalog", help="Validar catálogo, procedencia y metadatos de bancos")
     catalog.add_argument("catalog", type=Path)
     catalog.add_argument("--project", type=Path, help="Raíz del curso para resolver materiales y selección")
-    exam = commands.add_parser("build-exams", help="Generar modelos en papel y GIFT ofuscado")
-    exam.add_argument("bank", type=Path, nargs="?")
-    exam.add_argument("--catalog", type=Path)
-    exam.add_argument("--selection", type=Path, help="Selección de bancos y cuotas de cobertura/dificultad")
-    exam.add_argument("--project", type=Path, help="Raíz del curso del catálogo")
-    exam.add_argument("--output", type=Path, required=True)
-    exam.add_argument("--metadata", type=Path)
-    exam.add_argument("--title", default="Cuestionario")
-    exam.add_argument("--models", type=int, default=4, help="Número de modelos acordado (predeterminado: 4)")
-    exam.add_argument("--questions", type=int, required=True, help="Preguntas por modelo, tras acordar cobertura y duración")
-    exam.add_argument("--seed", type=int, default=42)
-    exam.add_argument("--per-category", type=Path, help="JSON: categoría -> cantidad; suma --questions")
-    exam.add_argument("--html-only", action="store_true")
-    exam.add_argument("--layout", choices=("flat", "curso-v2"), default="flat",
-                      help="curso-v2 separa alumnado y docente; flat conserva la salida anterior")
+    questionnaire = commands.add_parser("build-cuestionarios",
+                                        help="Generar modelos de cuestionario en papel y GIFT ofuscado")
+    questionnaire.add_argument("bank", type=Path, nargs="?")
+    questionnaire.add_argument("--catalog", type=Path)
+    questionnaire.add_argument("--selection", type=Path, help="Selección de bancos y cuotas de cobertura/dificultad")
+    questionnaire.add_argument("--project", type=Path, help="Raíz del curso del catálogo")
+    questionnaire.add_argument("--output", type=Path, required=True)
+    questionnaire.add_argument("--metadata", type=Path)
+    questionnaire.add_argument("--title", default="Cuestionario")
+    questionnaire.add_argument("--models", type=int, default=4, help="Número de modelos acordado (predeterminado: 4)")
+    questionnaire.add_argument("--questions", type=int, required=True, help="Preguntas por modelo, tras acordar cobertura y duración")
+    questionnaire.add_argument("--seed", type=int, default=42)
+    questionnaire.add_argument("--per-category", type=Path, help="JSON: categoría -> cantidad; suma --questions")
+    questionnaire.add_argument("--html-only", action="store_true")
+    questionnaire.add_argument("--layout", choices=("flat", "curso-v3"), default="flat",
+                      help="curso-v3 agrupa selección, manifiesto y snapshots en el cuestionario")
     feedback = commands.add_parser("build-feedback", help="Preparar comentarios CSV sin modificar notas")
     feedback.add_argument("manifest", type=Path)
     feedback.add_argument("--input", action="append", type=Path, required=True)
@@ -79,9 +80,9 @@ def main(argv=None):
     doctor.add_argument("--pdf", action="store_true", help="Exigir también las capacidades PDF")
     doctor.add_argument("--project", type=Path, help="Añadir diagnóstico del curso")
     args = parser.parse_args(argv)
-    if args.command == "build-exams":
+    if args.command == "build-cuestionarios":
         if bool(args.bank) == bool(args.catalog):
-            parser.error("build-exams requiere un banco GIFT o --catalog, de forma excluyente.")
+            parser.error("build-cuestionarios requiere un banco GIFT o --catalog, de forma excluyente.")
         if args.catalog and not args.selection:
             parser.error("--catalog requiere --selection con el reparto acordado.")
         if args.catalog and (args.metadata or args.per_category):
@@ -117,17 +118,18 @@ def main(argv=None):
         elif args.command == "validate-catalog":
             from docencia.banks import validate_catalog
             result = validate_catalog(args.catalog, project_root=args.project)
-        elif args.command == "build-exams":
-            from docencia.exams import build_exams
+        elif args.command == "build-cuestionarios":
+            from docencia.cuestionarios import build_cuestionarios
             quotas = json.loads(args.per_category.read_text(encoding="utf-8-sig")) if args.per_category else None
-            manifest = build_exams(args.bank, args.output, title=args.title, models=args.models,
+            manifest = build_cuestionarios(args.bank, args.output, title=args.title, models=args.models,
                                    questions=args.questions, seed=args.seed, metadata_path=args.metadata,
                                    per_category=quotas, html_only=args.html_only,
                                    catalog_path=args.catalog, selection_path=args.selection,
                                    project_root=args.project, layout=args.layout)
             statuses = {m["id"]: m["pdf_status"] for m in manifest["models"]}
             pending = any(str(s).startswith("PDF pendiente") for states in statuses.values() for s in states.values())
-            manifest_dir = args.output.resolve() / "docente" if args.layout == "curso-v2" else args.output.resolve()
+            manifest_dir = (args.output.resolve() / "_datos_internos" if args.layout == "curso-v3"
+                            else args.output.resolve())
             result = {"status": "pdf_pending" if pending else "ok", "manifest": str(manifest_dir / "manifest.json"),
                       "excluded_question_ids": manifest["excluded_question_ids"], "pdf_status": statuses}
             status = 2 if pending else 0

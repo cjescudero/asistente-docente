@@ -22,10 +22,10 @@ class ConnectedWorkflowTests(unittest.TestCase):
         cls.destination = Path(cls.temp.name) / "demostración"
         cls.summary = example.run_example(cls.destination)
         cls.course = cls.destination / "curso"
-        cls.exams = cls.course / "creados/cuestionarios/fuentes-mediciones-evidencias"
+        cls.exams = cls.course / "materiales_generados/cuestionarios/fuentes-mediciones-evidencias"
         cls.batch = cls.course / "resultados/medir-y-justificar/ordinaria"
         cls.exam_batch = cls.course / "resultados/fuentes-mediciones-evidencias/ordinaria"
-        cls.manifest = json.loads((cls.exams / "docente/manifest.json").read_text(encoding="utf-8"))
+        cls.manifest = json.loads((cls.exams / "_datos_internos/manifest.json").read_text(encoding="utf-8"))
 
     @classmethod
     def tearDownClass(cls):
@@ -39,7 +39,7 @@ class ConnectedWorkflowTests(unittest.TestCase):
         self.assertTrue(self.summary["originals_preserved"])
         self.assertFalse(self.summary["wiki_created"])
         self.assertFalse(self.summary["activity_pdf_registered"])
-        self.assertTrue((self.course / "creados/actividades/medir-y-justificar/alumnado/impresion/enunciado.html").is_file())
+        self.assertTrue((self.course / "materiales_generados/actividades/medir-y-justificar/alumnado/impresion/enunciado.html").is_file())
         first_ids = set()
         for model in self.manifest["models"]:
             self.assertEqual(model["coverage"]["difficulty"], {"basica": 3, "intermedia": 3})
@@ -54,17 +54,17 @@ class ConnectedWorkflowTests(unittest.TestCase):
         self.assertEqual(len(self.manifest["source_banks"]), 3)
 
     def test_provenance_stable_locations_and_audiences_remain_separate(self):
-        config = json.loads((self.course / "proyecto-docente.json").read_text(encoding="utf-8"))
-        self.assertEqual(config["structure"], "curso-v2")
+        config = json.loads((self.course / "_datos_internos_proyecto/proyecto-docente.json").read_text(encoding="utf-8"))
+        self.assertEqual(config["structure"], "curso-v3")
         self.assertFalse((self.course / "docente").exists())
         self.assertFalse((self.course / "alumnado").exists())
         self.assertEqual(list((self.course / "mapa-docente").iterdir()), [])
-        catalog = json.loads((self.course / "creados/bancos/catalogo.json").read_text(encoding="utf-8"))
+        catalog = json.loads((self.course / "materiales_generados/bancos/_datos_internos/catalogo.json").read_text(encoding="utf-8"))
         self.assertEqual(catalog["path_base"], "project")
         historical = next(bank for bank in catalog["banks"] if bank["id"] == "humanidades")
         self.assertTrue(historical["gift"].startswith("fuentes/evaluaciones/bancos/"))
         self.assertTrue((self.course / historical["gift"]).is_file())
-        self.assertFalse((self.course / "creados/bancos/humanidades").exists())
+        self.assertFalse((self.course / "materiales_generados/bancos/humanidades").exists())
         for bank in catalog["banks"]:
             metadata = json.loads((self.course / bank["metadata"]).read_text(encoding="utf-8"))
             for material in metadata["materials"].values():
@@ -72,9 +72,9 @@ class ConnectedWorkflowTests(unittest.TestCase):
         student_files = list((self.exams / "alumnado").iterdir())
         self.assertEqual(len(student_files), 3)
         self.assertTrue(all(path.suffix == ".html" for path in student_files))
-        self.assertTrue((self.exams / "docente/manifest.json").is_file())
+        self.assertTrue((self.exams / "_datos_internos/manifest.json").is_file())
         self.assertEqual(len(list((self.exams / "docente").glob("*.gift"))), 3)
-        state = json.loads((self.exams / "material-docente.json").read_text(encoding="utf-8"))
+        state = json.loads((self.exams / "_datos_internos/material-docente.json").read_text(encoding="utf-8"))
         self.assertEqual(state["status"], "borrador")
         self.assertIn("borrador", (self.exams / "LEEME.md").read_text(encoding="utf-8"))
 
@@ -101,11 +101,11 @@ class ConnectedWorkflowTests(unittest.TestCase):
                     "C": ("003", "", "7,00")}
         for model, values in expected.items():
             row = self.csv(folder / f"modelo_{model}_CORREGIDO.csv", ";")[0]
-            self.assertEqual(tuple(row[k] for k in ("Usuario", "Nota examen", "Otra nota")), values)
+            self.assertEqual(tuple(row[k] for k in ("Usuario", "Nota cuestionario", "Otra nota")), values)
             if model == "C":
-                self.assertEqual(row["Comentario examen"], "")
+                self.assertEqual(row["Comentario cuestionario"], "")
             else:
-                text = row["Comentario examen"]
+                text = row["Comentario cuestionario"]
                 self.assertIn("Dificultad acusada en Crítica de fuentes", text)
                 self.assertIn("Aspecto a revisar: Magnitudes y medición", text)
                 self.assertNotIn("docente/", text)
@@ -120,7 +120,7 @@ class ConnectedWorkflowTests(unittest.TestCase):
         ):
             output = self.destination / "invalid"
             result = subprocess.run([sys.executable, str(ROOT / "scripts/docencia.py"),
-                                     "build-exams", *arguments, "--output", str(output)],
+                                     "build-cuestionarios", *arguments, "--output", str(output)],
                                     cwd=self.destination, capture_output=True, text=True, encoding="utf-8")
             self.assertEqual(result.returncode, 2)
             self.assertFalse(output.exists())

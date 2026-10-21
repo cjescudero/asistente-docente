@@ -1,6 +1,6 @@
 {
   "name": "asistente-docente",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "Organiza conocimiento docente, crea actividades y bancos con variantes y prepara cuestionarios y feedback para Moodle.",
   "author": {
     "name": "Carlos J. Escudero"
@@ -25,7 +25,7 @@
     "defaultPrompt": [
       "Inicia mi proyecto docente en esta carpeta y oriéntame sobre qué puedo hacer después.",
       "Diseñemos una actividad con enunciado, plantillas y rúbrica docente a partir de estas fuentes.",
-      "Prepara modelos de examen equilibrados combinando los bancos de estos materiales."
+      "Prepara modelos de cuestionario equilibrados combinando los bancos de estos materiales."
     ]
   }
 }

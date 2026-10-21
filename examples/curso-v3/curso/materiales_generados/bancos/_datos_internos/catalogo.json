@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "path_base": "project",
+  "banks": [
+    {
+      "id": "fuentes-medicion",
+      "gift": "materiales_generados/bancos/fuentes-medicion/banco.gift",
+      "metadata": "materiales_generados/bancos/fuentes-medicion/_datos_internos/metadatos.json"
+    }
+  ]
+}

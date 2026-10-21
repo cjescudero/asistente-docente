@@ -30,7 +30,7 @@ vincula justificación con fuentes y análisis de medidas repetidas:
 
 ## Referencias reservadas del profesor
 
-- [f004 · Examen 2024-25 y solución](reservado/evaluaciones/f004.md): antecedente
+- [f004 · Cuestionario 2024-25 y solución](reservado/evaluaciones/f004.md): antecedente
   histórico con acceso restringido. Sus pesos no se trasladan al curso actual.
 - [Evaluación de mediciones](reservado/conceptos/evaluacion-medicion.md): mapa
   interno que conecta materiales actuales y evaluación histórica.

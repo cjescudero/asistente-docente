@@ -20,13 +20,26 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 SOURCE_FIELDS = {"id", "title", "path", "kind", "course", "currency", "access",
                  "reading", "reviewed_locators", "sha256", "page"}
 CHOICES = {
-    "kind": {"diapositivas", "presentacion", "apuntes", "examen", "evaluacion", "practica", "taller", "rubrica", "programa", "otro"},
+    "kind": {"diapositivas", "presentacion", "apuntes", "cuestionario", "examen", "evaluacion", "practica", "taller", "rubrica", "programa", "otro"},
     "currency": {"vigente", "historica", "desconocida"},
     "access": {"docente", "estudiante", "restringido", "desconocido"},
     "reading": {"pendiente", "parcial", "completa", "no_legible"},
 }
 PAGE_KINDS = {"concepto", "tema", "presentacion", "apuntes", "practica", "taller", "evaluacion", "programa", "otro"}
 ADMIN_PAGES = {"index.md", "LEEME.md", "incidencias.md", "log.md"}
+
+
+def registry_path(guide: Path) -> Path:
+    old = guide / "fuentes.json"
+    new = guide / "_datos_internos/fuentes.json"
+    present = [path for path in (old, new) if path.exists() or path.is_symlink()]
+    if len(present) > 1:
+        raise ValueError("El mapa contiene dos registros fuentes.json; resuelve el conflicto.")
+    if not present:
+        raise ValueError("Falta el registro fuentes.json del mapa.")
+    if present[0].is_symlink() or not _inside(present[0].resolve(), guide):
+        raise ValueError("fuentes.json se resuelve fuera del mapa o es un enlace simbólico.")
+    return present[0]
 
 
 def _inside(path, root):
@@ -130,9 +143,7 @@ def validate_library(guide_dir, sources_root=None, source_roots=None, project_ro
         guide = Path(guide_dir).expanduser().resolve()
         if not guide.is_dir():
             raise ValueError("GUIDE_DIR no es una carpeta existente.")
-        registry = guide / "fuentes.json"
-        if not _inside(registry.resolve(), guide):
-            raise ValueError("fuentes.json se resuelve fuera de GUIDE_DIR.")
+        registry = registry_path(guide)
         data = json.loads(registry.read_text(encoding="utf-8-sig"))
         if not isinstance(data, dict):
             raise ValueError("fuentes.json debe contener un objeto JSON.")

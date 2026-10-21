@@ -19,11 +19,17 @@ lo necesario para el encargo: respetar selección y exclusiones, consultar el
 adjuntos suficientes permiten avanzar sin exigir una wiki ni carpetas llenas.
 No incorporar entradas de este encargo al corpus automáticamente.
 
-En `curso-v2`, guardar cada actividad en `creados/actividades/<id>/`, con
+Ante dudas sobre el uso, flujo, archivos o resultados del plugin, o preguntas
+sobre siguientes pasos y posibilidades, invocar
+[Proyecto docente: ayuda](../proyecto-docente-ayuda/SKILL.md) antes de responder.
+Transferirle el objetivo, las decisiones conocidas y los resultados de esta tarea;
+tras resolver la duda, retomar el encargo ya autorizado.
+
+En `curso-v3`, guardar cada actividad en `materiales_generados/actividades/<id>/`, con
 `alumnado/` para enunciado y plantillas y `docente/` para rúbrica, guía y
-`actividad.json`. Mantener `material-docente.json` y `LEEME.md` con el estado
+`_datos_internos/actividad.json`. Mantener `_datos_internos/material-docente.json` y `LEEME.md` con el estado
 visible en la raíz de la actividad. Un borrador conserva su ubicación al revisarse.
-Respetar destinos explícitos y cursos anteriores según el contrato común.
+Respetar los destinos explícitos acordados dentro del contrato común.
 
 ## Preparar el encargo
 
@@ -46,7 +52,7 @@ Consultar la [guía de actividades](references/actividades.md) y el [registro de
 4. Preparar una guía de corrección o solución orientativa cuando corresponda, con alternativas válidas y errores frecuentes. En actividades abiertas, una respuesta modelo no es la única respuesta admisible.
 5. Recorrer la actividad con la información del enunciado. Comprobar viabilidad, datos, unidades, referencias, correspondencia entre tareas y criterios y utilidad de las plantillas. Registrar como estimación cualquier duración no comprobada en clase.
 6. Entregar Markdown editable y PDF por defecto. Usar `python "$ASISTENTE_DOCENTE/scripts/docencia.py" render-markdown enunciado.md --output salida`, donde `ASISTENTE_DOCENTE` es la raíz instalada localizada por el anfitrión. Resolver entradas y salidas fuera del plugin. Si falta el motor PDF, conservar Markdown y HTML e identificar el PDF pendiente.
-7. Guardar `actividad.json` según su [contrato](../../docs/ACTIVIDADES.md), con identificador, versión, objetivos, fuentes y rutas de enunciado, plantillas, rúbrica y guía disponible. Comprobar que los archivos existen y corresponden a la misma versión; no registrar un PDF pendiente como generado.
+7. Guardar `_datos_internos/actividad.json` según su [contrato](../../docs/ACTIVIDADES.md), con identificador, versión, objetivos, fuentes y rutas de enunciado, plantillas, rúbrica y guía disponible. Mantener la base contractual de las rutas y ajustar los valores relativos al mover el registro. Comprobar que los archivos existen y corresponden a la misma versión; no registrar un PDF pendiente como generado.
 
 ## Criterios de entrega
 
@@ -59,6 +65,8 @@ Para apuntes autónomos, usar [generar apuntes](../apuntes-estudio-creacion/SKIL
 
 ## Sugerir el siguiente paso
 
-Aplicar el [cierre contextual de los flujos](../../docs/FLUJOS-DOCENTES.md):
+Invocar [Proyecto docente: ayuda](../proyecto-docente-ayuda/SKILL.md) para preparar
+el [cierre contextual de los flujos](../../docs/FLUJOS-DOCENTES.md), una sola vez
+por respuesta y reutilizando el contexto y las comprobaciones disponibles:
 proponer de uno a tres pasos pertinentes basados en resultados comprobados,
 sin iniciar otra tarea por el mero hecho de sugerirla. Proponer evaluar esta versión de la actividad cuando haya entregas identificadas. Si todavía no las hay, indicar que se necesitan entregas, criterios y hoja Moodle para devolver notas; también puede proponerse un banco asociado a la actividad.

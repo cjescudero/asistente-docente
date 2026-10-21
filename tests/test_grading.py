@@ -287,7 +287,8 @@ class GradingTests(unittest.TestCase):
 
     def test_activity_record_binds_version_and_hashes_documents(self):
         self.activity_record()
-        (self.root / "proyecto-docente.json").write_text('{"schema_version":1}', encoding="utf-8")
+        from docencia.project import initialize_project
+        initialize_project(self.root, include=[])
         result = self.run_export()
         self.assertEqual(result["status"], "ok", result)
         record = result["activity_record"]

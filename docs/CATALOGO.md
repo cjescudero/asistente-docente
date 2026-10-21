@@ -8,7 +8,7 @@ del agente; las pruebas Python no sustituyen su ejecución en el anfitrión.
 | Skill | Petición representativa | Resultado esperado |
 | --- | --- | --- |
 | `proyecto-docente-inicializacion-adaptacion` | Poner en marcha un proyecto con material docente. | Estructura de curso, configuración de fuentes, LEEME y AGENTS.md respetado; consulta ante conflictos, español claro, orientación y recomendación del mapa, sin crearlo automáticamente. |
-| `proyecto-docente-ayuda` | ¿Qué puedo hacer ahora con mi asignatura? | Opciones según el estado del curso, ejemplos de peticiones y entradas que faltan; sin leer todo el corpus ni iniciar procesos por su cuenta. |
+| `proyecto-docente-ayuda` | ¿Qué puedo hacer ahora con mi asignatura? ¿Para qué sirve este archivo? | Ayuda inline invocada también desde otra skill; recupera decisiones y resultados de la conversación, comprueba el estado pertinente y responde sin iniciar tareas nuevas. |
 | `mapa-docente-creacion-visualizacion` | Crear un Mapa docente de dos carpetas elegidas: materiales actuales y archivo de evaluaciones. | Índice, páginas Markdown y fuentes trazables; bloque en AGENTS.md para consultar desde el índice; originales intactos, acceso y lectura explícitos, lector y grafo cuando hay capacidades. |
 | `mapa-docente-consulta` | Localizar material y criterios vigentes para diseñar una práctica y evaluarla. | Respuesta con evidencia original, distinción de histórico/vigente y contexto para el siguiente encargo; sin editar el mapa ni regenerar el grafo. |
 | `mapa-docente-creacion-visualizacion` | Regenerar el grafo docente y una vista para estudiantes. | HTML autónomos con arrastre, zoom, búsqueda, filtros y panel; la exportación estudiantil excluye datos reservados y sus dependencias transitivas, sin enlaces a archivos. |
@@ -17,7 +17,7 @@ del agente; las pruebas Python no sustituyen su ejecución en el anfitrión.
 | `actividades-evaluacion` | Corregir ensayos descargados de Moodle con su enunciado y rúbrica. | Evidencia y puntuación por criterio, CSV de notas y feedback sobre copia, trazabilidad de cambios y casos pendientes; sin sancionar supuesto uso de IA. |
 | `cuestionarios-bancos-preguntas-creacion` | Crear preguntas de estos apuntes y de una actividad de literatura. | Bancos GIFT, procedencia, localizadores, conceptos, objetivos, dificultad y repaso en catálogo; inspiración histórica diferenciada del contenido vigente. |
 | `cuestionarios-modelos-imprimir-evaluar` | Combinar preguntas de dos temas y una práctica para tres modelos. | Reparto de cobertura acordado, modelos comparables y reproducibles, PDF, solucionarios, GIFT ofuscados, bancos congelados e informe de reutilización. |
-| `cuestionarios-observaciones-calificaciones-alumnado` | Añadir comentarios al libro de calificaciones a partir del detalle del examen. | Hasta tres dificultades sustentadas y recomendaciones accesibles; notas preservadas y bloqueo de correspondencias ambiguas. |
+| `cuestionarios-observaciones-calificaciones-alumnado` | Añadir comentarios al libro de calificaciones a partir del detalle del cuestionario. | Hasta tres dificultades sustentadas y recomendaciones accesibles; notas preservadas y bloqueo de correspondencias ambiguas. |
 | `espanol-conciso-redaccion` | Simplificar una explicación manteniendo todas sus condiciones. | Español natural y preciso, sin resumir ni declarar certificación STE. |
 | `infografias-didacticas-creacion` | Crear una diapositiva dibujada sobre una cadena causal. | Imagen revisada si hay generador; diseño y prompt claramente identificados si no lo hay. |
 
@@ -43,7 +43,7 @@ se declara en `agents/openai.yaml`; el orden y su presentación dependen del anf
 
 ## Casos de aceptación de la puesta en marcha
 
-- Proyecto nuevo sin mapa: crear el árbol `curso-v2`, configuración, LEEME y
+- Proyecto nuevo sin mapa: crear el árbol `curso-v3`, configuración, LEEME y
   AGENTS.md con español claro. Preguntar por ubicación, tipos y selección de
   materiales que falten; dejar la carpeta del mapa vacía, recomendar su creación
   y ofrecer orientación. Crear el mapa requiere un encargo del profesor.
@@ -71,12 +71,22 @@ se declara en `agents/openai.yaml`; el orden y su presentación dependen del anf
   esperar aprobación de la propuesta antes de mover originales.
 
 El [contrato común](PROYECTO-DOCENTE.md) se aplica a las doce skills según las
-entradas necesarias. Las equivalencias están en [migración a 0.10](MIGRACION-0.10.md) y [migración a 0.9](MIGRACION-0.9.md).
+entradas necesarias.
+
+## Ayuda inline
+
+Las dudas de uso, posibilidades y siguientes pasos se atienden mediante
+`proyecto-docente-ayuda`, incluso durante otra skill y al preparar orientación
+al cierre. Es invocación de la ayuda, no una sugerencia para que el profesor la
+pida. Revisar el contexto disponible y los registros pertinentes, contestar la
+duda primero y no repetir decisiones conocidas. Ver
+[casos de revisión](FLUJOS-DOCENTES.md#casos-de-revisión-de-la-ayuda-inline).
+La ayuda no se invoca a sí misma ni sustituye los flujos de contenido disciplinar.
 
 ## Casos de aceptación de orientación, actividades y evaluación
 
 - Curso recién iniciado: recomendar el mapa, explicar cómo pedirlo y ofrecer
-  ayuda. No leer originales, crear páginas ni ejecutar otra skill solo porque
+  ayuda. No leer originales, crear páginas ni ejecutar skills de producción solo porque
   el usuario pregunte qué puede hacer.
 - Curso con mapa y bancos: consultar configuración e índices relevantes y
   ofrecer preparar evaluaciones a partir de los materiales asociados. Si falta
@@ -97,7 +107,7 @@ entradas necesarias. Las equivalencias están en [migración a 0.10](MIGRACION-0
 - Dos bancos con el mismo título GIFT: conservar ambas identidades mediante el
   banco de origen; detectar duplicados dentro de cada banco.
 - Fondo insuficiente para un reparto: informar la cuota que no puede cubrirse,
-  ofrecer ajuste o ampliación de bancos y no producir un examen con cobertura
+  ofrecer ajuste o ampliación de bancos y no producir un cuestionario con cobertura
   distinta sin que el profesor lo acuerde.
 - Varios modelos: mismos cupos de contenido y dificultad, ausencia de repetición
   dentro de un modelo y reutilización documentada entre ellos. Comparar cada
@@ -139,7 +149,7 @@ entradas necesarias. Las equivalencias están en [migración a 0.10](MIGRACION-0
 - Abrir las páginas en un lector Markdown común. Comprobar enlaces normales,
   sin wikilinks, frontmatter obligatorio ni dependencia de Notion u Obsidian.
 - Revisar un concepto, una presentación, una práctica y un taller. Separar tipo
-  documental, acceso y vigencia, sin convertir un examen antiguo en criterio actual.
+  documental, acceso y vigencia, sin convertir un cuestionario antiguo en criterio actual.
 - Usar el grafo sin red: arrastrar nodos, ampliar, buscar, filtrar y leer el panel.
   La vista docente oculta evaluaciones al inicio pero permite mostrarlas y abrir
   sus páginas; ocultación no equivale a eliminación.
@@ -180,14 +190,14 @@ reales de interfaz. La utilidad de migración prepara propuestas sin aplicarlas.
 | Caso | Conducta que debe verificarse |
 | --- | --- |
 | Carpeta vacía | Confirmar que no hay errores de acceso, preparar estructura sin inventariar lecturas ficticias. |
-| Carpeta mezclada con teoría, exámenes y entregas | Inventariar antes de crear; inspeccionar lo necesario, separar resultados y proponer tabla y árbol. |
+| Carpeta mezclada con teoría, cuestionarios y entregas | Inventariar antes de crear; inspeccionar lo necesario, separar resultados y proponer tabla y árbol. |
 | `final-2025.pdf` contiene una actividad vigente | El nombre es pista; preguntar procedencia, estado y audiencia que el contenido no acredite. |
 | Archivo ilegible | Marcar pendiente, pedir aclaración y no incluir su traslado entre los movimientos ejecutables. |
 | Aprobación completa | Aplicar solo la tabla acordada tras comprobar colisiones, enlaces y huellas. |
 | Aprobación parcial | Mover solo lo seleccionado; presentar dependencias adicionales antes de intervenirlas. |
 | Rechazo | Mantener ubicaciones; continuar ajustes compatibles sin imponer otro árbol. |
 | Dos archivos con mismo destino | Detener esos movimientos y pedir una resolución, sin sobrescribir ni renombrar silenciosamente. |
-| Examen usado con manifiesto y snapshot | Conservar el conjunto, versiones, pesos y correspondencias; revisar rutas sin sustituciones globales. |
+| Cuestionario usado con manifiesto y snapshot | Conservar el conjunto, versiones, pesos y correspondencias; revisar rutas sin sustituciones globales. |
 | Curso configurado con AGENTS propio | Respetar v1/v2, consultar conflictos y repetir sin duplicar reglas ni movimientos. |
 
 ## Preguntas, modelos y wiki explicativa (0.10.0)

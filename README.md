@@ -2,19 +2,22 @@
 
 Doce skills para organizar fuentes, crear materiales, evaluar y devolver feedback en
 cualquier asignatura. La fuente común genera paquetes para **ChatGPT Work** y
-**Claude Cowork**. Versión **0.10.0**, bajo [MIT](LICENSE).
+**Claude Cowork**. Versión **0.11.0**, bajo [MIT](LICENSE).
 [Instalación y primer uso](docs/INSTALACION.md) ·
-[Última release publicada: 0.10.0](https://github.com/cjescudero/asistente-docente/releases/tag/v0.10.0) ·
+[Última release publicada: 0.11.0](https://github.com/cjescudero/asistente-docente/releases/tag/v0.11.0) ·
 [Repositorio](https://github.com/cjescudero/asistente-docente).
 
-Las doce skills se agrupan por categoría: actividades, evaluaciones, mapa y
-proyecto docente, junto con bancos y apoyos. Consulta los [nombres y funciones](docs/CATALOGO.md)
-y las [equivalencias de actualización](docs/MIGRACION-0.10.md).
+Las doce skills se agrupan por categoría: actividades, cuestionarios, mapa y
+proyecto docente, junto con apuntes y apoyos visuales. Consulta sus
+[nombres y funciones](docs/CATALOGO.md).
 
 La versión **0.10.0** incorpora cuatro modelos por defecto, bancos
 con principales y variantes, propuesta razonada de cantidad y duración y una
 wiki explicativa. Consulta el
 [ejemplo de variantes](examples/cuestionarios-variantes/README.md).
+
+La versión **0.11.0** añade ayuda contextual durante la conversación y
+organiza los datos técnicos del curso y de cada cuestionario en carpetas propias.
 
 ## Inicio rápido
 
@@ -67,7 +70,7 @@ la carpeta del curso y permite al agente trabajar con ella. Escribe:
 **«Inicia mi proyecto docente».**
 
 El agente pregunta por el contexto, los materiales y las exclusiones que falten;
-separa los originales en `fuentes/` de los trabajos nuevos en `creados/`,
+separa los originales en `fuentes/` de los trabajos nuevos en `materiales_generados/`,
 prepara el mapa y los resultados en carpetas propias, la configuración y una
 guía breve. Conserva tus instrucciones y consulta los conflictos. Comprueba qué
 está disponible y qué falta. Al terminar, te orienta y recomienda crear el mapa
@@ -75,10 +78,9 @@ docente; lo creará cuando se lo pidas. Si ya hay
 materiales, presenta una propuesta antes de reorganizarlos. No necesitas escribir
 comandos.
 
-Este recorrido corresponde a la **0.10.0**. Actualiza el marketplace y comprueba
-la versión instalada: publicar en GitHub no actualiza por sí solo una instalación
-existente. [Guía para el profesor](docs/PROYECTO-DOCENTE.md) ·
-[Actualizar la organización del curso](docs/MIGRACION-0.9.md).
+La organización descrita corresponde a la **0.11.0**. Comprueba la versión
+instalada: publicar en GitHub no actualiza por sí solo una instalación existente.
+[Guía para el profesor](docs/PROYECTO-DOCENTE.md).
 
 <a href="https://github.com/cjescudero/asistente-docente">
   <img src="assets/qr-repositorio.png" alt="Código QR del repositorio de Asistente docente en GitHub" width="288" height="288">
@@ -109,18 +111,17 @@ y su [índice de ejemplo](examples/mapa-docente/mapa-docente/index.md).
 
 ## Puesta en marcha del proyecto docente
 
-`proyecto-docente-inicializacion-adaptacion` prepara la estructura `curso-v2` y guarda
-la selección explícita en `proyecto-docente.json` y prepara `LEEME.md` y
+`proyecto-docente-inicializacion-adaptacion` prepara la estructura `curso-v3` y guarda
+la selección explícita en `_datos_internos_proyecto/proyecto-docente.json`; prepara `LEEME.md` y
 `AGENTS.md`. Conserva las instrucciones existentes y pregunta ante conflictos.
 Establece `espanol-conciso-redaccion` para escribir en español y aclara dónde están
 los contenidos y qué son cuando falte esa información.
 
 Los originales viven en `fuentes/`. Los materiales nuevos se reúnen por tipo en
-`creados/`: materiales, actividades, bancos y exámenes. Cada actividad o examen
+`materiales_generados/`: materiales, actividades, bancos y cuestionarios. Cada actividad o cuestionario
 separa documentos del alumnado y del docente; su estado figura en un registro y
 en su `LEEME.md`, sin mover archivos al revisarlos. Los lotes en `resultados/`
 separan los archivos recibidos de las correcciones y quedan fuera de la wiki.
-Los cursos anteriores conservan su estructura hasta una migración acordada.
 Los lotes de entregas se organizan por actividad y convocatoria en
 `resultados/`. La carpeta `mapa-docente/` queda vacía
 hasta un encargo de creación. Puedes pedir orientación en cualquier momento.
@@ -140,7 +141,7 @@ consulta los índices disponibles y propone siguientes pasos con sus entradas.
   reparto de contenidos y dificultad, modelos PDF y GIFT ofuscado sincronizados.
 - **Corrección:** evidencias por criterio y actualización de una copia de la
   hoja de tarea o del libro de calificaciones, con identificadores explícitos.
-- **Feedback de examen:** hasta tres dificultades prioritarias y recomendaciones
+- **Feedback de cuestionario:** hasta tres dificultades prioritarias y recomendaciones
   desde materiales del estudiante; conserva las notas calculadas por Moodle.
 
 [Actividades](docs/ACTIVIDADES.md) · [Bancos](docs/BANCOS.md) ·
@@ -158,7 +159,7 @@ Al terminar una tarea, el agente propone próximos pasos con ejemplos de petici�
 - **Actividad → evaluación de sus entregas.** Si aún no hay entregas, explica
   cuáles se necesitarán junto con la rúbrica y la hoja de calificaciones.
 - **Banco → modelos impresos → feedback.** Para el último paso necesita el
-  manifiesto del examen y los resultados por pregunta, además de las notas.
+  manifiesto del cuestionario y los resultados por pregunta, además de las notas.
 - **Apoyos:** apuntes y diapositivas visuales individuales a partir de las fuentes.
 
 Las sugerencias usan los registros y archivos pertinentes. Una carpeta vacía
@@ -192,7 +193,7 @@ La organización interna se adapta al contenido. El tipo de material y su acceso
 independientes.
 
 Las páginas usan enlaces Markdown normales, sin dependencia de Notion, Obsidian
-o frontmatter obligatorio. `fuentes.json`, versión 2, registra varias raíces
+o frontmatter obligatorio. el registro `fuentes.json`, versión 2, registra varias raíces
 en `source_roots`, las fuentes y las páginas en `pages`. Las rutas son relativas
 al mapa y a cada raíz. Si no se puede representar una ubicación con rutas
 relativas, como entre unidades distintas en Windows, se comunica la limitación;
@@ -236,11 +237,11 @@ incorpora ese origen de GitHub y después se instala el plugin en la cuenta.
 No basta con copiar una skill aislada: comparte referencias y utilidades con
 el resto del paquete. La instalación depende de las capacidades de la cuenta.
 
-La última [release publicada, 0.10.0](https://github.com/cjescudero/asistente-docente/releases/tag/v0.10.0) ofrece:
+La [release 0.11.0](https://github.com/cjescudero/asistente-docente/releases/tag/v0.11.0) ofrece:
 
-- `asistente-docente-0.10.0-agent-plugins.zip`: Agent Plugins y adaptador Codex.
-- `asistente-docente-0.10.0-claude.zip`: plugin para Claude.
-- `asistente-docente-0.10.0-source.zip`: fuente con catálogos y automatización GitHub.
+- `asistente-docente-0.11.0-agent-plugins.zip`: Agent Plugins y adaptador Codex.
+- `asistente-docente-0.11.0-claude.zip`: plugin para Claude.
+- `asistente-docente-0.11.0-source.zip`: fuente con catálogos y automatización GitHub.
 
 Las versiones anteriores y sus paquetes se conservan.
 
@@ -292,8 +293,8 @@ ejemplo en una carpeta hermana llamada `demo-docente`:
 
 ```sh
 .venv/bin/python scripts/docencia.py validate-bank examples/humanidades/banco.gift
-.venv/bin/python scripts/docencia.py build-exams examples/humanidades/banco.gift --metadata examples/humanidades/metadatos.json --output ../demo-docente/examen --title "Fuentes e interpretación histórica" --models 4 --questions 4 --seed 42
-.venv/bin/python scripts/docencia.py build-feedback ../demo-docente/examen/manifest.json --input examples/resultados-sinteticos.csv --config examples/feedback-config.json --output ../demo-docente/feedback
+.venv/bin/python scripts/docencia.py build-cuestionarios examples/humanidades/banco.gift --metadata examples/humanidades/metadatos.json --output ../demo-docente/cuestionario --title "Fuentes e interpretación histórica" --models 4 --questions 4 --seed 42
+.venv/bin/python scripts/docencia.py build-feedback ../demo-docente/cuestionario/manifest.json --input examples/resultados-sinteticos.csv --config examples/feedback-config.json --output ../demo-docente/feedback
 .venv/bin/python scripts/docencia.py render-markdown examples/apuntes.md --output ../demo-docente/apuntes
 .venv/bin/python scripts/validate_library.py examples/mapa-docente/mapa-docente
 ```
@@ -317,12 +318,12 @@ la CLI comunica los identificadores excluidos.
 `--html-only` permite generar y comprobar el modelo sin navegador. Si se pide
 PDF y falla, los HTML y el manifiesto se conservan y la CLI devuelve código 2;
 no declara éxito de PDF. Código 1 significa entrada o procesamiento inválidos.
-No se sobrescriben resultados de exámenes ni comentarios existentes.
+No se sobrescriben resultados de cuestionarios ni comentarios existentes.
 
 ## Formatos y límites
 
 - GIFT: opción única, múltiple, verdadero/falso, numérica y emparejamiento.
-  Examen impreso: los primeros cuatro tipos. Se exige título/ID único.
+  Cuestionario impreso: los primeros cuatro tipos. Se exige título/ID único.
 - Se rechazan respuesta corta, ensayo, Cloze, preguntas sin ID, texto después
   del bloque de respuestas, formatos por opción y sintaxis ambigua. No es un
   importador universal de todas las variantes Moodle.
@@ -341,8 +342,7 @@ No se sobrescriben resultados de exámenes ni comentarios existentes.
   El validador comprueba inventario, rutas, enlaces y huellas; no ingiere PDF,
   ejecuta notebooks ni certifica la corrección semántica de una síntesis.
   El grafo deriva relaciones de enlaces Markdown reales, no de proximidad visual.
-  Se pueden validar registros anteriores de versión 1; su actualización se hace
-  en una copia del mapa y el grafo requiere versión 2.
+  El registro del mapa usa la versión 2 del contrato para lector y grafo.
 
 [Contratos técnicos](docs/CONTRATOS.md) · [Guía Moodle](docs/MOODLE.md)
 
@@ -361,7 +361,7 @@ y construye paquetes como artefactos; no publica releases ni notas de alumnos.
 Los ZIP excluyen entornos, cachés y datos operativos. `SHA256SUMS` permite
 comprobar su integridad; `contents.json` registra el contenido común.
 
-La versión 0.10.0 se distribuye desde GitHub con su fuente y paquetes. Las
+La versión 0.11.0 se distribuye desde GitHub con su fuente y paquetes. Las
 versiones anteriores se conservan. La subida del código
 no demuestra una instalación real en cada anfitrión.
 La distribución se mantiene en los marketplaces de GitHub; no se solicita

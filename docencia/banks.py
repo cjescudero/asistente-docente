@@ -235,7 +235,8 @@ def load_catalog(catalog_path: str | Path, *, project_root=None, bank_ids=None) 
     discovered_root = find_project(path)
     root = (Path(project_root).expanduser().resolve() if project_root is not None
             else discovered_root or path.parent)
-    config = load_project(root) if (root / "proyecto-docente.json").exists() else None
+    from .project import project_config_path
+    config = load_project(root) if project_config_path(root) is not None else None
     path_base = catalog.get("path_base", "catalog")
     if path_base not in ("catalog", "project"):
         raise ValueError("path_base debe ser 'catalog' o 'project'.")

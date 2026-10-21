@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "structure": "curso-v3",
+  "sources": {
+    "selected": true,
+    "include": [
+      "fuentes/teoria",
+      "fuentes/evaluaciones/cuestionarios"
+    ],
+    "exclude": [
+      "fuentes/evaluaciones/cuestionarios/cuestionario-retirado.md"
+    ]
+  },
+  "map": null,
+  "questionnaire_paths": {
+    "sources": "fuentes/evaluaciones/cuestionarios",
+    "created": "materiales_generados/cuestionarios"
+  }
+}

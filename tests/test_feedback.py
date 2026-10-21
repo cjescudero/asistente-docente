@@ -102,6 +102,18 @@ class FeedbackTests(unittest.TestCase):
         self.assertEqual(result["manifest_sha256"], hashlib.sha256(self.manifest_path.read_bytes()).hexdigest())
         self.assertEqual(result["students"]["with_feedback"], 1)
 
+    def test_feedback_reads_v3_manifest_and_frozen_bank_inside_questionnaire(self):
+        internal = self.root / "materiales_generados/cuestionarios/caso/_datos_internos"
+        (internal / "source").mkdir(parents=True)
+        frozen = internal / "source/bank.gift"
+        frozen.write_bytes(self.bank.read_bytes())
+        self.bank = frozen
+        self.manifest_path = internal / "manifest.json"
+        self.manifest["bank_snapshot"] = "source/bank.gift"
+        report = self.run_feedback()
+        self.assertEqual(report["status"], "ok", report)
+        self.assertIn("Balance de cantidades", self.output_rows(report)[1][6])
+
     def test_absence_clears_feedback_without_interpreting_scores(self):
         self.rows[0][2:4] = ["No presentado", ""]
         result = self.run_feedback()

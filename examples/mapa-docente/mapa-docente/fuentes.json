@@ -53,9 +53,9 @@
     },
     {
       "id": "f004",
-      "title": "Examen histórico y solución",
-      "path": "examen-2024-docente.md",
-      "kind": "examen",
+      "title": "Cuestionario histórico y solución",
+      "path": "cuestionario-2024-docente.md",
+      "kind": "cuestionario",
       "course": "2024-25",
       "currency": "historica",
       "access": "restringido",
@@ -63,7 +63,7 @@
       "reviewed_locators": [
         "Documento completo"
       ],
-      "sha256": "8b82c897ccccc25d38d441c7ecc15e619004db3eeed5bf61419f3800cdedd820",
+      "sha256": "82934a5697446e314e5a15f7f3da3909c1028a747997319939e1d8d3fca6825b",
       "page": "reservado/evaluaciones/f004.md",
       "root": "archivo"
     },
@@ -148,7 +148,7 @@
     },
     {
       "path": "reservado/evaluaciones/f004.md",
-      "title": "Examen histórico y solución",
+      "title": "Cuestionario histórico y solución",
       "kind": "evaluacion",
       "access": "restringido",
       "source_ids": [

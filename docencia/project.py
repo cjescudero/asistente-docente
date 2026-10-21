@@ -12,139 +12,51 @@ import tempfile
 from pathlib import Path, PurePosixPath, PureWindowsPath
 
 CONFIG_NAME = "proyecto-docente.json"
-PROJECT_DIRECTORIES_V1 = (
-    "alumnado/materiales", "alumnado/actividades", "alumnado/conocimientos",
-    "docente/fuentes", "docente/evaluaciones", "docente/soluciones",
-    "docente/rubricas", "docente/borradores", "docente/mapa-docente",
-    "docente/resultados", "docente/resultados/entregas", "archivo",
-)
-PERMANENT_EXCLUSIONS_V1 = (
-    "docente/resultados", "docente/borradores", "docente/mapa-docente",
-)
+INTERNAL_PROJECT_DIR = "_datos_internos_proyecto"
+INTERNAL_MATERIAL_DIR = "_datos_internos"
+CONFIG_V3 = f"{INTERNAL_PROJECT_DIR}/{CONFIG_NAME}"
 IGNORED_FILENAMES = {".gitkeep", ".DS_Store"}
 PLUGIN_ROOT = Path(__file__).resolve().parents[1]
 START_MARKER = "<!-- asistente-docente:proyecto:inicio -->"
 END_MARKER = "<!-- asistente-docente:proyecto:fin -->"
-AGENTS_BLOCK_V1 = f"""{START_MARKER}
-## Proyecto docente
-
-- Consultar `proyecto-docente.json` para conocer la estructura, las fuentes
-  elegidas y sus exclusiones. La selección no declara documentos leídos ni
-  autoriza su publicación. No ampliar las fuentes a carpetas vecinas.
-- Redactar los textos en español con la skill `espanol-conciso-redaccion`, salvo
-  indicación distinta del docente; conservar rigor, terminología y atribuciones.
-- Preparar nuevos materiales en `docente/borradores/`. Llevarlos a `alumnado/`
-  cuando el encargo incluya su entrega, manteniendo una única ubicación por
-  material. Reservar evaluaciones, soluciones y rúbricas en `docente/`.
-- Mantener entregas, calificaciones y feedback en `docente/resultados/`, fuera
-  del corpus de la wiki. Organizar cada lote en
-  `docente/resultados/entregas/<actividad>/<convocatoria>/`, conservando originales,
-  identificación y corrección separados. `alumnado/conocimientos/` contiene aclaraciones útiles,
-  no una copia de la wiki. Incorporar `archivo/` solo si se elige expresamente.
-- Comprobar las entradas que requiere cada encargo; una carpeta vacía no bloquea
-  trabajos que ya tengan contexto o adjuntos suficientes.
-- Respetar estas instrucciones y consultar conflictos antes de modificarlas.
-  Iniciar el proyecto no crea el Mapa docente ni invoca su creación.
-- Al finalizar la puesta en marcha, ofrecer `proyecto-docente-ayuda` y recomendar
-  crear el mapa con las fuentes elegidas, o consultarlo si ya existe. Esperar
-  un encargo del profesor antes de iniciar cualquiera de esas tareas.
-  Si la selección está pendiente, ayudar a concretarla; si se eligió trabajar
-  sin fuentes, respetarlo y ofrecer tareas con adjuntos sin insistir en el mapa.
-{END_MARKER}"""
-LEEME_CONTENT_V1 = """# Mi proyecto docente
-
-Trabaja con el agente en esta carpeta. Las instrucciones están en `AGENTS.md` y
-la selección de fuentes se guarda en `proyecto-docente.json`.
-
-| Carpeta | Uso |
-| --- | --- |
-| `alumnado/materiales/` | Materiales preparados para estudiantes. |
-| `alumnado/actividades/` | Enunciados y actividades para estudiantes. |
-| `alumnado/conocimientos/` | Dudas frecuentes y aclaraciones útiles. |
-| `docente/fuentes/` | Fuentes de referencia elegidas por el profesor. |
-| `docente/evaluaciones/` | Bancos, exámenes y criterios reservados. |
-| `docente/soluciones/` | Soluciones y orientaciones del docente. |
-| `docente/rubricas/` | Rúbricas de evaluación. |
-| `docente/borradores/` | Nuevos materiales todavía en preparación. |
-| `docente/mapa-docente/` | Wiki, lector y grafo cuando se creen. |
-| `docente/resultados/` | Entregas, calificaciones y feedback; fuera de la wiki. |
-| `docente/resultados/entregas/` | Un lote por actividad y convocatoria, con originales, identificación y corrección separados. |
-| `archivo/` | Material apartado; solo se usa si se selecciona expresamente. |
-
-## Qué hacer ahora
-
-Pide **«¿Qué puedo hacer ahora con mi asignatura?»**. El agente consultará la
-configuración y los índices disponibles para orientarte sin leer todo el curso
-ni iniciar tareas por su cuenta.
-
-El primer paso recomendado es **«Crea el mapa docente con las fuentes que he
-elegido»**. Después puedes pedir «Consulta el mapa para localizar materiales de
-este tema», «Muéstrame su grafo» o «Actualiza el mapa con los cambios autorizados».
-Si aún no has elegido fuentes, el agente te ayudará a concretarlas.
-Si has decidido trabajar sin fuentes, puedes usar adjuntos para cada encargo
-sin necesidad de crear el mapa.
-
-| Petición de ejemplo | Qué necesita el agente |
-| --- | --- |
-| «Diseñemos una actividad sobre estos conocimientos» | Materiales, nivel, objetivos y condiciones. El diálogo termina con enunciado, plantillas y rúbrica docente reservada. |
-| «Crea un banco para estos apuntes y esta actividad» | Fuentes actuales; ejemplos anteriores opcionales para calibrar dificultad. |
-| «Prepara dos modelos de examen sobre estos temas» | Bancos, cobertura, título, cantidad de preguntas y dificultad; PDF y GIFT ofuscado para importar manualmente en Moodle. |
-| «Evalúa estas entregas con los criterios de la actividad» | Enunciado, rúbrica o criterios, entregas e identificación explícita, y hoja Moodle para devolver nota y feedback. |
-| «Añade recomendaciones a estas calificaciones» | Detalle por pregunta, manifiesto del examen y hoja Moodle; se conservan las notas y se priorizan hasta tres dificultades. |
-| «Prepara apuntes», «Haz una infografía» o «Aclara este texto» | Fuentes y destinatarios. Infografías o diapositivas visuales individuales, apuntes y español claro inspirado en ASD-STE100. |
-
-Indica las fuentes y el destino cuando el encargo no los deje claros. El agente
-preguntará únicamente por la información que falte. Los bancos se registran en
-`docente/evaluaciones/bancos/` cuando se incorporen al catálogo. Las rúbricas
-completas y soluciones permanecen en `docente/`; el enunciado comunica criterios
-generales. La rúbrica local no configura la calificación avanzada de Moodle.
-
-La puesta en marcha deja la carpeta del mapa vacía. Crear el Mapa docente es un
-encargo posterior y explícito; las fuentes seleccionadas pueden revisarse antes.
-No es necesario duplicar la wiki en las carpetas del alumnado.
-
-Los nombres de las carpetas organizan los contenidos: no configuran permisos.
-Una carpeta sincronizada con OneDrive o SharePoint sigue usando sus permisos y
-su sincronización existentes. Comprueba que el agente haya leído `AGENTS.md`;
-si su aplicación no lo carga, pídele expresamente que lo lea.
-"""
-
-
-# Los proyectos existentes conservan su estructura hasta una migración explícita.
-PROJECT_DIRECTORIES_V2_LEGACY = (
-    "fuentes/teoria", "fuentes/actividades", "fuentes/evaluaciones/examenes",
-    "fuentes/evaluaciones/bancos", "creados/materiales", "creados/actividades",
-    "creados/bancos", "creados/examenes", "mapa-docente", "resultados", "archivo",
-)
-PROJECT_DIRECTORIES = (
+PROJECT_DIRECTORIES_V3 = (
     "fuentes/teoria", "fuentes/actividades", "fuentes/evaluaciones/cuestionarios",
-    "fuentes/evaluaciones/bancos", "creados/materiales", "creados/actividades",
-    "creados/bancos", "creados/cuestionarios", "mapa-docente", "resultados", "archivo",
+    "fuentes/evaluaciones/bancos", "materiales_generados/materiales",
+    "materiales_generados/actividades", "materiales_generados/bancos",
+    "materiales_generados/cuestionarios", "mapa-docente", "resultados", "archivo",
+    INTERNAL_PROJECT_DIR,
 )
-QUESTIONNAIRE_PATHS = {"sources": "fuentes/evaluaciones/cuestionarios",
-                       "created": "creados/cuestionarios"}
-PERMANENT_EXCLUSIONS = (*PERMANENT_EXCLUSIONS_V1, "resultados", "mapa-docente")
+QUESTIONNAIRE_PATHS_V3 = {"sources": "fuentes/evaluaciones/cuestionarios",
+                          "created": "materiales_generados/cuestionarios"}
+PERMANENT_EXCLUSIONS = ("resultados", "mapa-docente", INTERNAL_PROJECT_DIR)
 MATERIAL_RECORD_NAME = "material-docente.json"
-MATERIAL_TYPES = frozenset({"material", "actividad", "banco", "examen", "cuestionario", "apuntes",
+MATERIAL_TYPES = frozenset({"material", "actividad", "banco", "cuestionario", "apuntes",
                             "diapositivas", "infografia"})
 MATERIAL_STATUSES = frozenset({"borrador", "revisado", "listo-para-entregar"})
 CORPUS_MATERIAL_STATUSES = frozenset({"revisado", "listo-para-entregar"})
-AGENTS_BLOCK = f"""{START_MARKER}
+AGENTS_BLOCK_V3 = """<!-- asistente-docente:proyecto:inicio -->
 ## Proyecto docente
 
-- Consultar `proyecto-docente.json` para conocer la estructura, las fuentes
+- Consultar `_datos_internos_proyecto/proyecto-docente.json` para conocer la estructura, las fuentes
   elegidas y sus exclusiones. La selección no declara documentos leídos ni
   autoriza su publicación. No ampliar las fuentes a carpetas vecinas.
+- Ante dudas sobre el uso del plugin, los flujos, archivos o resultados, preguntas
+  de siguientes pasos o posibilidades y al ofrecer orientación, invocar
+  `proyecto-docente-ayuda` como ayuda inline. Revisar el contexto disponible de la
+  conversación y el estado pertinente del curso; no repetir decisiones conocidas.
+  Resolver la duda sin iniciar tareas nuevas ni leer todo el corpus. Una aplicación
+  por respuesta basta; continuar después el encargo ya autorizado.
 - Redactar los textos en español con la skill `espanol-conciso-redaccion`, salvo
   indicación distinta del docente; conservar rigor, terminología y atribuciones.
 - Conservar el material aportado en `fuentes/` y crear las nuevas producciones
-  en `creados/materiales/`, `creados/actividades/`, `creados/bancos/` o
-  `creados/cuestionarios/`, en una carpeta estable por resultado. Separar documentos
+  en `materiales_generados/materiales/`, `materiales_generados/actividades/`, `materiales_generados/bancos/` o
+  `materiales_generados/cuestionarios/`, en una carpeta estable por resultado. Separar documentos
   del alumnado y documentos docentes dentro de cada actividad o evaluación.
-- Registrar cada producción con `material-docente.json` y mostrar su estado
+- Registrar cada producción con `_datos_internos/material-docente.json` y mostrar su estado
   en `LEEME.md`: borrador, revisado o listo-para-entregar. El estado no cambia
   su ubicación. Conservar una única ubicación por material, también cuando
   sirva como entrada de otro encargo. No trasladar originales sin autorización.
+- Excluir `_datos_internos_proyecto/` y todas las carpetas `_datos_internos/` del corpus.
 - Incorporar producciones al corpus solo si se seleccionan expresamente y su
   registro indica revisado o listo-para-entregar. No incorporar borradores,
   producciones sin registro válido, resultados ni el propio mapa. Incorporar
@@ -178,28 +90,29 @@ AGENTS_BLOCK = f"""{START_MARKER}
   Si falta una entrada, explicar cuál y no dar por completada la fase anterior.
   Ofrecer también apuntes y diapositivas visuales individuales o infografías.
   No repetir fases ya acreditadas salvo petición de revisión o actualización.
-{END_MARKER}"""
-LEEME_CONTENT = """# Mi proyecto docente
+<!-- asistente-docente:proyecto:fin -->"""
+LEEME_CONTENT_V3 = """# Mi proyecto docente
 
 Trabaja con el agente en esta carpeta. Las instrucciones están en `AGENTS.md` y
-la selección de fuentes se guarda en `proyecto-docente.json`.
+la selección de fuentes se guarda en `_datos_internos_proyecto/proyecto-docente.json`.
 
 | Carpeta | Uso |
 | --- | --- |
+| `_datos_internos_proyecto/` | Configuración e inventario técnico del curso. |
 | `fuentes/teoria/` | Apuntes, diapositivas y referencias aportados. |
 | `fuentes/actividades/` | Actividades aportadas, actuales o de otros cursos. |
 | `fuentes/evaluaciones/cuestionarios/` | Cuestionarios aportados, identificando curso y vigencia. |
 | `fuentes/evaluaciones/bancos/` | Bancos aportados; se enlazan sin copiarlos. |
-| `creados/materiales/` | Apuntes, infografías y diapositivas visuales creados. |
-| `creados/actividades/` | Una carpeta por actividad con documentos del alumnado y del docente separados. |
-| `creados/bancos/` | Nuevos bancos y el catálogo que enlaza los bancos utilizables. |
-| `creados/cuestionarios/` | Una carpeta por cuestionario, con modelos y archivos docentes separados. |
+| `materiales_generados/materiales/` | Apuntes, infografías y diapositivas visuales creados. |
+| `materiales_generados/actividades/` | Una carpeta por actividad con documentos del alumnado y del docente separados. |
+| `materiales_generados/bancos/` | Nuevos bancos y el catálogo que enlaza los bancos utilizables. |
+| `materiales_generados/cuestionarios/` | Una carpeta por cuestionario, con modelos y archivos docentes separados. |
 | `mapa-docente/` | Wiki, lector y grafo cuando se creen. |
 | `resultados/` | Un lote por actividad y convocatoria: recibidos originales y corrección; siempre fuera de la wiki. |
 | `archivo/` | Material apartado; solo se usa si se selecciona expresamente. |
 
 Los materiales aportados permanecen en `fuentes/`. Cada producción nueva tiene
-una carpeta estable en `creados/`, un registro `material-docente.json` y un
+una carpeta estable en `materiales_generados/`, un registro `_datos_internos/material-docente.json` y un
 `LEEME.md` que muestra su estado: **borrador**, **revisado** o
 **listo para entregar**. Cambiar de estado no mueve los documentos.
 Un documento creado puede alimentar otra tarea sin copiarlo a `fuentes/`.
@@ -207,6 +120,11 @@ Las rúbricas completas y soluciones quedan separadas de los documentos estudian
 Seleccionar un material para la wiki no autoriza su entrega al alumnado.
 
 ## Qué hacer ahora
+
+Puedes preguntar en cualquier momento «¿Qué puedo hacer?», «¿Y ahora?» o
+«¿Para qué sirve este archivo?». El agente utilizará la ayuda contextual del
+plugin, revisando la conversación y el estado pertinente del curso; no necesitas
+conocer nombres de skills ni volver a explicar decisiones ya disponibles.
 
 Pide **«¿Qué puedo hacer ahora con mi asignatura?»**. El agente consultará la
 configuración, los índices y los resultados pertinentes para sugerir el siguiente
@@ -245,6 +163,10 @@ La puesta en marcha deja la carpeta del mapa vacía. La wiki solo incorpora
 materiales seleccionados; las producciones requieren un registro válido y estado
 revisado o listo para entregar. Borradores, resultados y el propio mapa quedan fuera.
 
+El catálogo de bancos se guarda en `materiales_generados/bancos/_datos_internos/`.
+Cada cuestionario conserva selección, manifiesto y bancos congelados en su propia
+carpeta `_datos_internos/`; consulta `LEEME.md` para abrir sus modelos.
+
 Los nombres de las carpetas organizan los contenidos: no configuran permisos.
 Una carpeta sincronizada con OneDrive o SharePoint sigue usando sus permisos y
 su sincronización existentes. Comprueba que el agente haya leído `AGENTS.md`;
@@ -253,19 +175,12 @@ si su aplicación no lo carga, pídele expresamente que lo lea.
 
 
 def project_directories(config: dict) -> tuple[str, ...]:
-    """Directorios de la versión declarada; no infiere ni aplica migraciones."""
-    if config["structure"] == "curso-v1":
-        return PROJECT_DIRECTORIES_V1
-    if "questionnaire_paths" not in config:
-        return PROJECT_DIRECTORIES_V2_LEGACY
-    paths = config["questionnaire_paths"]
-    return tuple(paths["sources"] if name == QUESTIONNAIRE_PATHS["sources"]
-                 else paths["created"] if name == QUESTIONNAIRE_PATHS["created"]
-                 else name for name in PROJECT_DIRECTORIES)
+    """Directorios del proyecto docente actual."""
+    return PROJECT_DIRECTORIES_V3
 
 
 def _permanent_exclusions(config: dict) -> tuple[str, ...]:
-    return PERMANENT_EXCLUSIONS_V1 if config["structure"] == "curso-v1" else PERMANENT_EXCLUSIONS
+    return PERMANENT_EXCLUSIONS
 
 
 def _inside(path: Path, parent: Path) -> bool:
@@ -338,22 +253,10 @@ def _within_relative(path: str, parent: str) -> bool:
 def _validate_config(root: Path, data: dict) -> dict:
     if not isinstance(data, dict) or type(data.get("schema_version")) is not int or data["schema_version"] != 1:
         raise ValueError("schema_version debe ser 1.")
-    if data.get("structure") not in ("curso-v1", "curso-v2"):
-        raise ValueError("structure debe ser 'curso-v1' o 'curso-v2'.")
-    if "questionnaire_paths" in data:
-        paths = data["questionnaire_paths"]
-        if (data["structure"] != "curso-v2" or not isinstance(paths, dict)
-                or set(paths) != {"sources", "created"}):
-            raise ValueError("questionnaire_paths requiere sources y created en curso-v2.")
-        for key, parent in (("sources", "fuentes/evaluaciones/"), ("created", "creados/")):
-            relative = _relative(paths[key], label=f"questionnaire_paths.{key}")
-            if not relative.startswith(parent) or relative == parent.rstrip("/"):
-                raise ValueError(f"questionnaire_paths.{key} debe estar bajo {parent}.")
-            _safe_path(root, relative)
-        if any(_within_relative(paths["created"], reserved) for reserved in ("creados/materiales", "creados/actividades", "creados/bancos")):
-            raise ValueError("questionnaire_paths.created colisiona con otro tipo de material.")
-        if _within_relative(paths["sources"], "fuentes/evaluaciones/bancos"):
-            raise ValueError("questionnaire_paths.sources colisiona con bancos aportados.")
+    if data.get("structure") != "curso-v3":
+        raise ValueError("structure debe ser 'curso-v3'.")
+    if data.get("questionnaire_paths") != QUESTIONNAIRE_PATHS_V3:
+        raise ValueError("curso-v3 requiere las rutas de cuestionarios bajo materiales_generados.")
     sources = data.get("sources")
     if not isinstance(sources, dict) or type(sources.get("selected")) is not bool:
         raise ValueError("sources.selected debe ser true o false.")
@@ -371,8 +274,8 @@ def _validate_config(root: Path, data: dict) -> dict:
             raise ValueError("map debe señalar una carpeta con un index.md real existente.")
     excluded = list(_permanent_exclusions(data)) + ([map_path] if map_path else [])
     for relative in include:
-        if relative == "docente":
-            raise ValueError("No se puede seleccionar docente en bloque; elige carpetas concretas.")
+        if INTERNAL_MATERIAL_DIR in PurePosixPath(relative).parts:
+            raise ValueError(f"La carpeta {relative} está excluida permanentemente del corpus.")
         if any(_within_relative(relative, reserved) for reserved in excluded):
             raise ValueError(f"La carpeta {relative} está excluida permanentemente del corpus.")
         folder = _safe_path(root, relative)
@@ -432,15 +335,15 @@ def enclosing_material_record(root, file, *, config=None) -> tuple[Path, dict] |
     path = Path(file)
     if not path.is_absolute():
         path = root / _relative(str(path), label="material")
-    created = root / "creados"
+    created = root / "materiales_generados"
     if not _inside(path, created) or _has_symlink(root, path):
         return None
     # Los archivos aún inexistentes (p. ej. enlaces) heredan solo su carpeta.
     directory = path if path.is_dir() else path.parent
-    # Un registro global en creados/ o en una categoría no acredita todas las
+    # Un registro global o de categoría no acredita todas las
     # producciones de esa carpeta: cada resultado necesita su propio registro.
     while _inside(directory, created) and len(directory.relative_to(created).parts) >= 2:
-        record = directory / MATERIAL_RECORD_NAME
+        record = directory / INTERNAL_MATERIAL_DIR / MATERIAL_RECORD_NAME
         if record.exists() or record.is_symlink():
             if config is not None:
                 relative = record.relative_to(root).as_posix()
@@ -454,12 +357,23 @@ def enclosing_material_record(root, file, *, config=None) -> tuple[Path, dict] |
 def load_project(root) -> dict:
     """Leer y validar la configuración sin recorrer ni leer las fuentes."""
     path = _root(root)
-    config_file = _safe_path(path, CONFIG_NAME)
+    config_file = project_config_path(path)
+    if config_file is None:
+        raise ValueError(f"Falta {CONFIG_NAME}; inicia el proyecto o indica la raíz correcta.")
     try:
         data = json.loads(config_file.read_text(encoding="utf-8"), object_pairs_hook=_unique_json)
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
         raise ValueError(f"No se puede leer {CONFIG_NAME}: {exc}") from exc
     return _validate_config(path, data)
+
+
+def project_config_path(root: Path) -> Path | None:
+    """Encontrar únicamente la configuración del formato actual."""
+    root = _root(root)
+    if _safe_path(root, CONFIG_NAME).exists():
+        raise ValueError(f"{CONFIG_NAME} en la raíz entra en conflicto con {CONFIG_V3}; aclara su función antes de iniciar el proyecto.")
+    path = _safe_path(root, CONFIG_V3)
+    return path if path.exists() or path.is_symlink() else None
 
 
 def find_project(path) -> Path | None:
@@ -468,8 +382,12 @@ def find_project(path) -> Path | None:
     if candidate.is_file():
         candidate = candidate.parent
     for parent in (candidate, *candidate.parents):
-        control = parent / CONFIG_NAME
-        if control.exists() or control.is_symlink():
+        if parent.name == INTERNAL_PROJECT_DIR:
+            continue
+        if _inside(parent, PLUGIN_ROOT):
+            continue
+        control = project_config_path(parent)
+        if control is not None:
             return parent
     return None
 
@@ -507,6 +425,8 @@ def _source_path_allowed(root, config: dict, file) -> tuple[Path, Path] | None:
             excluded.append(config["map"])
         if any(_within_relative(relative, item) for item in excluded):
             return None
+        if INTERNAL_MATERIAL_DIR in Path(relative).parts:
+            return None
         if any(_within_relative(relative, item) for item in sources["include"]):
             return root, candidate
         return None
@@ -515,17 +435,13 @@ def _source_path_allowed(root, config: dict, file) -> tuple[Path, Path] | None:
 
 
 def source_allowed(root, config: dict, file) -> bool:
-    """Aplicar corpus y estado; solo lee metadatos de producciones seleccionadas.
-
-    Los materiales aportados y los proyectos curso-v1 se comprueban por ruta,
-    sin abrir su contenido. En curso-v2, los documentos bajo creados requieren
-    un registro común válido y revisado, además de selección expresa.
-    """
+    """Aplicar corpus y estado; solo lee metadatos de producciones seleccionadas."""
     paths = _source_path_allowed(root, config, file)
     if paths is None:
         return False
     root, candidate = paths
-    if config["structure"] != "curso-v2" or not _inside(candidate, root / "creados"):
+    created = root / "materiales_generados"
+    if not _inside(candidate, created):
         return True
     if candidate.name == MATERIAL_RECORD_NAME:
         return False
@@ -536,7 +452,7 @@ def source_allowed(root, config: dict, file) -> bool:
         return False
 
 
-def _proposal(content: str, block: str = AGENTS_BLOCK) -> dict | None:
+def _proposal(content: str, block: str = AGENTS_BLOCK_V3) -> dict | None:
     if block in content and content.count(START_MARKER) == content.count(END_MARKER) == 1:
         return None
     starts, ends = content.count(START_MARKER), content.count(END_MARKER)
@@ -583,30 +499,26 @@ def initialize_project(root, *, include=None, exclude=None, dry_run=False) -> di
     selección explícita sin fuentes. ``dry_run`` no crea siquiera la raíz.
     """
     root = _root(root)
+    existing_config = project_config_path(root)
+    config_relative = existing_config.relative_to(root).as_posix() if existing_config else CONFIG_V3
     controls = {}
     for name in (CONFIG_NAME, "AGENTS.md", "LEEME.md"):
-        path = _safe_path(root, name)
+        path = _safe_path(root, config_relative if name == CONFIG_NAME else name)
         if path.exists() and not path.is_file():
             raise ValueError(f"Colisión: {name} existe y no es un archivo.")
         controls[name] = path
     previous = load_project(root) if controls[CONFIG_NAME].exists() else None
     config = copy.deepcopy(previous) if previous is not None else {
-        "schema_version": 1, "structure": "curso-v2",
-        "questionnaire_paths": dict(QUESTIONNAIRE_PATHS),
+        "schema_version": 1, "structure": "curso-v3",
+        "questionnaire_paths": dict(QUESTIONNAIRE_PATHS_V3),
         "sources": {"selected": False, "include": [], "exclude": []}, "map": None,
     }
     directories = [_safe_path(root, name) for name in project_directories(config)]
     for path in directories:
         if path.exists() and not path.is_dir():
             raise ValueError(f"Colisión con un archivo: {path.relative_to(root)}")
-    agents_block = AGENTS_BLOCK_V1 if config["structure"] == "curso-v1" else AGENTS_BLOCK
-    leeme_content = LEEME_CONTENT_V1 if config["structure"] == "curso-v1" else LEEME_CONTENT
-    if config["structure"] == "curso-v2":
-        paths = config.get("questionnaire_paths", {
-            "sources": "fuentes/evaluaciones/examenes", "created": "creados/examenes"})
-        for key, default in QUESTIONNAIRE_PATHS.items():
-            agents_block = agents_block.replace(default + "/", paths[key] + "/")
-            leeme_content = leeme_content.replace(default + "/", paths[key] + "/")
+    agents_block = AGENTS_BLOCK_V3
+    leeme_content = LEEME_CONTENT_V3
     if isinstance(include, (str, bytes)) or isinstance(exclude, (str, bytes)):
         raise ValueError("include y exclude deben ser listas de rutas, no cadenas.")
     if include is not None:
@@ -633,9 +545,9 @@ def initialize_project(root, *, include=None, exclude=None, dry_run=False) -> di
         new_files["LEEME.md"] = leeme_content
     config_content = json.dumps(config, ensure_ascii=False, indent=2) + "\n"
     if previous is None:
-        new_files[CONFIG_NAME] = config_content
+        new_files[config_relative] = config_content
     create += list(new_files)
-    updated = [CONFIG_NAME] if previous is not None and previous != config else []
+    updated = [config_relative] if previous is not None and previous != config else []
     if not dry_run:
         root.mkdir(parents=True, exist_ok=True)
         for path in directories:
@@ -643,7 +555,7 @@ def initialize_project(root, *, include=None, exclude=None, dry_run=False) -> di
         for name, content in new_files.items():
             _write_new(_safe_path(root, name), content)
         if updated:
-            _replace_config(_safe_path(root, CONFIG_NAME), config_content)
+            _replace_config(_safe_path(root, config_relative), config_content)
     return {"status": "dry_run" if dry_run else "pending_approval" if proposals else "ok",
             "root": str(root), "config": config, "created": [] if dry_run else create,
             "would_create": create if dry_run else [], "updated": [] if dry_run else updated,
@@ -723,7 +635,7 @@ def check_project(root) -> dict:
     try:
         root = _root(root)
         report["root"] = str(root)
-        if not (root / CONFIG_NAME).exists() and not (root / CONFIG_NAME).is_symlink():
+        if project_config_path(root) is None:
             report["status"] = "incomplete"
             report["warnings"].append(f"Falta {CONFIG_NAME}; inicia el proyecto o proporciona las entradas del encargo.")
             return report

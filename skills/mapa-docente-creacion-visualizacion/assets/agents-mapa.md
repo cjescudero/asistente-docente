@@ -2,7 +2,7 @@
 ## Contexto docente y consulta de la wiki
 
 Estas reglas rigen las tareas docentes de {{PROYECTO}}, incluidas las realizadas
-mediante skills: preparación de materiales, actividades, exámenes, evaluación,
+mediante skills: preparación de materiales, actividades, cuestionarios, evaluación,
 feedback y explicaciones. Se complementan con las instrucciones del encargo y
 las demás reglas aplicables a este proyecto.
 
@@ -35,7 +35,7 @@ las demás reglas aplicables a este proyecto.
    por sistema. Si el índice es incompleto, hacer búsquedas acotadas en el mapa y
    los orígenes autorizados, indicando esa limitación.
 4. Abrir los originales para citas literales, calificaciones, hechos que sustenten
-   preguntas de examen, contradicciones, cambios de versión o contenido cuyo
+   preguntas de cuestionario, contradicciones, cambios de versión o contenido cuyo
    significado dependa de figuras, tablas o fórmulas. Conservar localizadores
    comprobados: página, diapositiva, sección o celda. Una síntesis orienta la
    consulta; no sustituye la evidencia original en estas decisiones.
@@ -55,7 +55,7 @@ las demás reglas aplicables a este proyecto.
 - Una fuente inventariada no equivale a una fuente leída. Las fuentes pendientes
   o no legibles no respaldan afirmaciones sobre su contenido; una lectura parcial
   solo sustenta lo efectivamente revisado. Comprobar versiones cuando sea necesario
-  y no convertir exámenes o rúbricas históricos en criterios vigentes.
+  y no convertir cuestionarios o rúbricas históricos en criterios vigentes.
 - Separar material para estudiantes y material reservado. Respetar los límites
   de acceso también en las síntesis y nuevos entregables; acceso desconocido no
   equivale a permiso para compartir. Las carpetas y filtros visuales organizan
@@ -79,7 +79,7 @@ las demás reglas aplicables a este proyecto.
 
 Al cerrar un encargo, sugerir de uno a tres pasos pertinentes según índices,
 registros y resultados comprobados: inicio → mapa; actividad → corrección de
-entregas; banco → modelos impresos → feedback del examen. Ofrecer también apuntes
+entregas; banco → modelos impresos → feedback del cuestionario. Ofrecer también apuntes
 y diapositivas visuales individuales cuando ayuden. Si faltan entradas, indicarlas;
 si el resultado ya existe, proponer usarlo, revisarlo o actualizarlo. No iniciar
 un proceso solo por haberlo sugerido ni inferir finalización por una carpeta.

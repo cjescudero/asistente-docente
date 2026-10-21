@@ -1,0 +1,43 @@
+::fuentes-medicion\:\:01-A::[moodle]Calcula la media de 8, 10 y 12 cm. {
+#
+=%100.0%10.0:0.0
+}
+
+::fuentes-medicion\:\:01-B::[moodle]Calcula la media de 18, 20 y 22 cm. {
+#
+=%100.0%20.0:0.0
+}
+
+::fuentes-medicion\:\:01-C::[moodle]Calcula la media de 28, 30 y 32 cm. {
+#
+=%100.0%30.0:0.0
+}
+
+::fuentes-medicion\:\:01-D::[moodle]Calcula la media de 38, 40 y 42 cm. {
+#
+=%100.0%40.0:0.0
+}
+
+::fuentes-medicion\:\:02-A::[moodle]Si un registro de biblioteca anota un préstamo el lunes, ¿qué afirmación permite el documento por sí solo? {
+=El hecho indicado está documentado.
+~Conocemos la intención de quien lo realizó.
+~La misma situación ocurre siempre.
+}
+
+::fuentes-medicion\:\:02-B::[moodle]Si un inventario de museo anota una adquisición en abril, ¿qué afirmación permite el documento por sí solo? {
+=El hecho indicado está documentado.
+~Conocemos la intención de quien lo realizó.
+~La misma situación ocurre siempre.
+}
+
+::fuentes-medicion\:\:02-C::[moodle]Si una lista de asistencia registra una presencia el viernes, ¿qué afirmación permite el documento por sí solo? {
+=El hecho indicado está documentado.
+~Conocemos la intención de quien lo realizó.
+~La misma situación ocurre siempre.
+}
+
+::fuentes-medicion\:\:02-D::[moodle]Si un catálogo de archivo registra una incorporación en junio, ¿qué afirmación permite el documento por sí solo? {
+=El hecho indicado está documentado.
+~Conocemos la intención de quien lo realizó.
+~La misma situación ocurre siempre.
+}

@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "materials": {
+    "experimento": {
+      "path": "materiales_generados/actividades/medir-y-justificar/alumnado/enunciado.md",
+      "title": "Medir y justificar",
+      "access": "estudiante",
+      "sha256": "d823c79c61a28a676c8225d8da2e8c0092d73d066aea7c2f2558fdb89f46f0e3"
+    },
+    "temperatura": {
+      "path": "fuentes/teoria/temperatura.md",
+      "title": "Temperatura y medición",
+      "access": "estudiante",
+      "sha256": "476123ec66b2137631aa5b9c4a2b60fcb7a1f82cc6a74b066ce52e0dc685057d"
+    }
+  },
+  "concepts": {
+    "evidencia-experimental": {
+      "label": "Evidencia experimental",
+      "guidance": "Revisa el encargo y tus datos originales: distingue observación, resolución y causas todavía no probadas.",
+      "references": [
+        {
+          "path": "materiales_generados/actividades/medir-y-justificar/alumnado/enunciado.md",
+          "title": "Medir y justificar",
+          "access": "estudiante"
+        },
+        {
+          "path": "fuentes/teoria/temperatura.md",
+          "title": "Temperatura y medición",
+          "access": "estudiante"
+        }
+      ]
+    }
+  },
+  "questions": {
+    "Q01": {
+      "source_refs": [
+        {
+          "material_id": "experimento",
+          "locators": [
+            "Encargo y Criterios generales"
+          ]
+        },
+        {
+          "material_id": "temperatura",
+          "locators": [
+            "Magnitudes y Medición"
+          ]
+        }
+      ],
+      "concepts": [
+        "evidencia-experimental"
+      ],
+      "objective": "Evidencia experimental",
+      "difficulty": "basica",
+      "guidance": "Revisa el encargo y tus datos originales: distingue observación, resolución y causas todavía no probadas."
+    },
+    "Q02": {
+      "source_refs": [
+        {
+          "material_id": "experimento",
+          "locators": [
+            "Encargo y Criterios generales"
+          ]
+        },
+        {
+          "material_id": "temperatura",
+          "locators": [
+            "Magnitudes y Medición"
+          ]
+        }
+      ],
+      "concepts": [
+        "evidencia-experimental"
+      ],
+      "objective": "Evidencia experimental",
+      "difficulty": "basica",
+      "guidance": "Revisa el encargo y tus datos originales: distingue observación, resolución y causas todavía no probadas."
+    },
+    "Q03": {
+      "source_refs": [
+        {
+          "material_id": "experimento",
+          "locators": [
+            "Encargo y Criterios generales"
+          ]
+        },
+        {
+          "material_id": "temperatura",
+          "locators": [
+            "Magnitudes y Medición"
+          ]
+        }
+      ],
+      "concepts": [
+        "evidencia-experimental"
+      ],
+      "objective": "Evidencia experimental",
+      "difficulty": "intermedia",
+      "guidance": "Revisa el encargo y tus datos originales: distingue observación, resolución y causas todavía no probadas."
+    },
+    "Q04": {
+      "source_refs": [
+        {
+          "material_id": "experimento",
+          "locators": [
+            "Encargo y Criterios generales"
+          ]
+        },
+        {
+          "material_id": "temperatura",
+          "locators": [
+            "Magnitudes y Medición"
+          ]
+        }
+      ],
+      "concepts": [
+        "evidencia-experimental"
+      ],
+      "objective": "Evidencia experimental",
+      "difficulty": "intermedia",
+      "guidance": "Revisa el encargo y tus datos originales: distingue observación, resolución y causas todavía no probadas."
+    }
+  }
+}

@@ -1,10 +1,10 @@
-# Actividades, exámenes y feedback en Moodle
+# Actividades, cuestionarios y feedback en Moodle
 
 El plugin prepara archivos para dos recorridos docentes:
 
 - **Actividades:** enunciado y criterios → entregas descargadas → corrección con
   evidencias → copia de la hoja de calificaciones con nota y feedback.
-- **Exámenes:** bancos GIFT → modelos impresos y manifiesto → cuestionarios
+- **Cuestionarios:** bancos GIFT → modelos impresos y manifiesto → cuestionarios
   ofuscados → puntuación de Moodle → comentarios de mejora.
 
 La importación y su comprobación son manuales. El plugin no conecta con Moodle
@@ -52,19 +52,19 @@ automáticamente en cero. Para grupos, aportar la relación explícita de miembr
 y la regla de nota común o individual. No emparejar por semejanza de nombres.
 Antes de importar, revisar los cambios y los casos pendientes en una muestra.
 
-## Exámenes en papel y cuestionarios ofuscados
+## Cuestionarios en papel y cuestionarios ofuscados
 
 GIFT es un formato de texto para preguntas de Moodle; no es el formato de imagen GIF. Un GIFT ofuscado reduce el contenido visible a números de pregunta y etiquetas de respuesta. El archivo contiene claves y pesos necesarios para corregir: conservarlo como material docente.
 
 ## Preparar y comprobar los modelos
 
 Generar papel, solucionario y GIFT desde la misma selección ordenada mediante
-`build-exams --layout curso-v2` en cursos nuevos. Se puede combinar el [catálogo de bancos](BANCOS.md) por materiales,
+`build-cuestionarios --layout curso-v3` en cursos nuevos. Se puede combinar el [catálogo de bancos](BANCOS.md) por materiales,
 actividades y dificultad tras acordar el reparto. Conservar `manifest.json`,
-los bancos utilizados congelados y sus metadatos en la subcarpeta `docente/`.
-Los documentos imprimibles están en `alumnado/`. La salida anterior se conserva
-cuando no se indica esa opción; no mover sus archivos a mano. Si después se corrige un banco
-de trabajo, no sustituir el snapshot del examen aplicado.
+los bancos utilizados congelados y sus metadatos en la subcarpeta `_datos_internos/`.
+Los documentos imprimibles están en `alumnado/`; no mover sus archivos a mano.
+Si después se corrige un banco
+de trabajo, no sustituir el snapshot del cuestionario aplicado.
 
 Revisar todos los modelos antes de imprimir. La pregunta 1 y la opción A del papel deben corresponder a la pregunta 1 y opción A de Moodle, aunque la correcta sea C. Verdadero/falso se representa como dos opciones de selección única, respetando su posición. Las numéricas conservan campo numérico y tolerancia. Emparejamiento no se usa en el flujo ofuscado de esta versión.
 
@@ -75,7 +75,7 @@ Revisar todos los modelos antes de imprimir. La pregunta 1 y la opción A del pa
 3. Desactivar la mezcla de preguntas y la mezcla de respuestas, tanto en el cuestionario como donde corresponda a las preguntas. Comprobar el comportamiento efectivo; un nombre numerado no impide que Moodle baraje opciones.
 4. Configurar la disponibilidad y los intentos según la decisión del profesor. Durante la evaluación y el periodo en que deba mantenerse reservada, desactivar las opciones de revisión que revelen respuestas, corrección, solución, feedback específico, general o global. No habilitar vistas previas de soluciones para estudiantes.
 5. Probar con vista o cuenta de estudiante cada modelo: numeración, etiquetas, orden, selección única o múltiple, entrada numérica y comportamiento al enviar. La vista docente puede mostrar información que el alumnado no ve.
-6. Entregar el PDF de estudiante de su modelo y utilizar Moodle para que registre las respuestas según el procedimiento del curso. No entregar el solucionario, el manifiesto ni el GIFT como material de examen al alumnado.
+6. Entregar el PDF de estudiante de su modelo y utilizar Moodle para que registre las respuestas según el procedimiento del curso. No entregar el solucionario, el manifiesto ni el GIFT como material de cuestionario al alumnado.
 
 La ofuscación no garantiza por sí sola ausencia de consultas externas. Su función aquí es mantener la correspondencia papel–respuesta y limitar el contenido mostrado en la pantalla.
 
@@ -94,7 +94,7 @@ Usar identificadores institucionales estables como texto y preservar ceros inici
 
 ## Configurar el procesamiento
 
-El JSON de configuración describe los encabezados reales. Este ejemplo sintético corresponde a un examen de dos preguntas con un punto máximo por pregunta:
+El JSON de configuración describe los encabezados reales. Este ejemplo sintético corresponde a un cuestionario de dos preguntas con un punto máximo por pregunta:
 
 ```json
 {

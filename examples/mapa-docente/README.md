@@ -13,7 +13,7 @@ Se usan dos carpetas elegidas para esta demostración: `materiales-docentes/` y
 relativas. Los nombres no se imponen a los proyectos del profesor.
 
 Las siete fuentes comprenden un programa, una presentación, apuntes, una
-práctica, un taller, un examen histórico y una lista pendiente. Hay cinco
+práctica, un taller, un cuestionario histórico y una lista pendiente. Hay cinco
 lecturas completas, una parcial y una pendiente. La consulta de ejemplo está
 [documentada aquí](consulta-ejemplo.md).
 
@@ -41,10 +41,10 @@ No confundir estos filtros con permisos de acceso.
 - Seleccionar un nodo y abrir sus documentos en el lector o en Markdown.
 - En el lector, recorrer índice → concepto → ficha → volver con el navegador.
 - Activar evaluaciones en la vista docente y abrir una ficha reservada.
-- Comprobar que «Examen histórico y solución» no está en el HTML estudiantil,
+- Comprobar que «Cuestionario histórico y solución» no está en el HTML estudiantil,
   ni como título, ruta o nodo oculto. Tampoco aparece la síntesis que depende de él.
 - Cambiar un original en una copia de prueba: debe detectarse su huella distinta.
-- Preguntar por la rúbrica actual: no aplicar los pesos del examen antiguo.
+- Preguntar por la rúbrica actual: no aplicar los pesos del cuestionario antiguo.
 - Preguntar por el apéndice: consultar su original antes de ampliar la respuesta,
   respetando que la lectura registrada del mapa es parcial.
 

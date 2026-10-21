@@ -19,18 +19,24 @@ lo necesario para el encargo: respetar selección y exclusiones, consultar el
 adjuntos suficientes permiten avanzar sin exigir una wiki ni carpetas llenas.
 No incorporar entradas de este encargo al corpus automáticamente.
 
-En `curso-v2`, guardar cada banco nuevo en `creados/bancos/<id>/` y registrarlo
-en `creados/bancos/catalogo.json`. Su `material-docente.json` de tipo `banco`
+Ante dudas sobre el uso, flujo, archivos o resultados del plugin, o preguntas
+sobre siguientes pasos y posibilidades, invocar
+[Proyecto docente: ayuda](../proyecto-docente-ayuda/SKILL.md) antes de responder.
+Transferirle el objetivo, las decisiones conocidas y los resultados de esta tarea;
+tras resolver la duda, retomar el encargo ya autorizado.
+
+En `curso-v3`, guardar cada banco nuevo en `materiales_generados/bancos/<id>/` y registrarlo
+en `materiales_generados/bancos/_datos_internos/catalogo.json`. Sus metadatos y
+`material-docente.json` van en `<id>/_datos_internos/`; el registro de tipo `banco`
 y `LEEME.md` muestran el estado; un borrador permanece en esa carpeta al revisarse.
 El catálogo admite `path_base: "project"` para enlazar bancos aportados en
-`fuentes/evaluaciones/bancos/` y creados, sin copiarlos ni moverlos. Conservar los
-catálogos y rutas de cursos anteriores salvo migración aprobada. El banco y sus
+`fuentes/evaluaciones/bancos/` y creados, sin copiarlos ni moverlos. El banco y sus
 metadatos completos son docentes aunque algunas fuentes sean estudiantiles.
 
 ## Archivos de entrega
 
 Guardar el banco como **archivos normales en su carpeta de trabajo**: `banco.gift`,
-`metadatos.json`, `material-docente.json` y `LEEME.md`, además de actualizar la
+`_datos_internos/metadatos.json`, `_datos_internos/material-docente.json` y `LEEME.md`, además de actualizar la
 entrada del catálogo. Entregar enlaces directos al GIFT y a los metadatos;
 identificar el GIFT como archivo de preguntas para Moodle y los JSON como apoyo
 docente. No crear ni entregar un ZIP por defecto. Comprimir solo si el profesor
@@ -102,6 +108,8 @@ Para crear los modelos impresos y su GIFT ofuscado, continuar con [crear modelos
 
 ## Sugerir el siguiente paso
 
-Aplicar el [cierre contextual de los flujos](../../docs/FLUJOS-DOCENTES.md):
+Invocar [Proyecto docente: ayuda](../proyecto-docente-ayuda/SKILL.md) para preparar
+el [cierre contextual de los flujos](../../docs/FLUJOS-DOCENTES.md), una sola vez
+por respuesta y reutilizando el contexto y las comprobaciones disponibles:
 proponer de uno a tres pasos pertinentes basados en resultados comprobados,
 sin iniciar otra tarea por el mero hecho de sugerirla. Proponer modelos impresos con el banco validado y los demás bancos pertinentes. Si ya existen modelos, ofrecer revisarlos o, con resultados detallados, manifiesto y hoja Moodle, preparar su feedback.

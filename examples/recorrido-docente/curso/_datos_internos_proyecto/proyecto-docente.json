@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "structure": "curso-v3",
+  "sources": {
+    "selected": true,
+    "include": [
+      "fuentes/teoria",
+      "materiales_generados/actividades/medir-y-justificar/alumnado"
+    ],
+    "exclude": []
+  },
+  "map": null,
+  "questionnaire_paths": {
+    "sources": "fuentes/evaluaciones/cuestionarios",
+    "created": "materiales_generados/cuestionarios"
+  }
+}

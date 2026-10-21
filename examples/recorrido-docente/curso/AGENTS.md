@@ -3,19 +3,26 @@
 <!-- asistente-docente:proyecto:inicio -->
 ## Proyecto docente
 
-- Consultar `proyecto-docente.json` para conocer la estructura, las fuentes
+- Consultar `_datos_internos_proyecto/proyecto-docente.json` para conocer la estructura, las fuentes
   elegidas y sus exclusiones. La selección no declara documentos leídos ni
   autoriza su publicación. No ampliar las fuentes a carpetas vecinas.
+- Ante dudas sobre el uso del plugin, los flujos, archivos o resultados, preguntas
+  de siguientes pasos o posibilidades y al ofrecer orientación, invocar
+  `proyecto-docente-ayuda` como ayuda inline. Revisar el contexto disponible de la
+  conversación y el estado pertinente del curso; no repetir decisiones conocidas.
+  Resolver la duda sin iniciar tareas nuevas ni leer todo el corpus. Una aplicación
+  por respuesta basta; continuar después el encargo ya autorizado.
 - Redactar los textos en español con la skill `espanol-conciso-redaccion`, salvo
   indicación distinta del docente; conservar rigor, terminología y atribuciones.
 - Conservar el material aportado en `fuentes/` y crear las nuevas producciones
-  en `creados/materiales/`, `creados/actividades/`, `creados/bancos/` o
-  `creados/cuestionarios/`, en una carpeta estable por resultado. Separar documentos
+  en `materiales_generados/materiales/`, `materiales_generados/actividades/`, `materiales_generados/bancos/` o
+  `materiales_generados/cuestionarios/`, en una carpeta estable por resultado. Separar documentos
   del alumnado y documentos docentes dentro de cada actividad o evaluación.
-- Registrar cada producción con `material-docente.json` y mostrar su estado
+- Registrar cada producción con `_datos_internos/material-docente.json` y mostrar su estado
   en `LEEME.md`: borrador, revisado o listo-para-entregar. El estado no cambia
   su ubicación. Conservar una única ubicación por material, también cuando
   sirva como entrada de otro encargo. No trasladar originales sin autorización.
+- Excluir `_datos_internos_proyecto/` y todas las carpetas `_datos_internos/` del corpus.
 - Incorporar producciones al corpus solo si se seleccionan expresamente y su
   registro indica revisado o listo-para-entregar. No incorporar borradores,
   producciones sin registro válido, resultados ni el propio mapa. Incorporar

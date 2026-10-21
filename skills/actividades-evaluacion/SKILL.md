@@ -19,11 +19,17 @@ lo necesario para el encargo: respetar selección y exclusiones, consultar el
 adjuntos suficientes permiten avanzar sin exigir una wiki ni carpetas llenas.
 No incorporar entradas de este encargo al corpus automáticamente.
 
-En `curso-v2`, organizar el lote en `resultados/<actividad>/<convocatoria>/`,
+Ante dudas sobre el uso, flujo, archivos o resultados del plugin, o preguntas
+sobre siguientes pasos y posibilidades, invocar
+[Proyecto docente: ayuda](../proyecto-docente-ayuda/SKILL.md) antes de responder.
+Transferirle el objetivo, las decisiones conocidas y los resultados de esta tarea;
+tras resolver la duda, retomar el encargo ya autorizado.
+
+
+En `curso-v3`, organizar el lote en `resultados/<actividad>/<convocatoria>/`,
 con `recibidos/` para originales descargados y archivos de identificación y
 `correccion/` para evaluaciones, CSV modificados, auditoría e incidencias.
-Conservar originales intactos y distinguir entrada de salida. Respetar las rutas
-de cursos `curso-v1` y destinos explícitos. Todo el lote queda fuera de la wiki;
+Conservar originales intactos y distinguir entrada de salida. Respetar los destinos explícitos. Todo el lote queda fuera de la wiki;
 esa exclusión no impide la evaluación expresamente solicitada.
 
 ## Preparar la evaluación
@@ -59,6 +65,8 @@ de esta evaluación.
 
 ## Sugerir el siguiente paso
 
-Aplicar el [cierre contextual de los flujos](../../docs/FLUJOS-DOCENTES.md):
+Invocar [Proyecto docente: ayuda](../proyecto-docente-ayuda/SKILL.md) para preparar
+el [cierre contextual de los flujos](../../docs/FLUJOS-DOCENTES.md), una sola vez
+por respuesta y reutilizando el contexto y las comprobaciones disponibles:
 proponer de uno a tres pasos pertinentes basados en resultados comprobados,
 sin iniciar otra tarea por el mero hecho de sugerirla. Priorizar revisar incidencias y preparar la importación manual del CSV ya generado. Si resulta útil, ofrecer una actividad o material de refuerzo basado en dificultades agregadas, sin incorporar datos personales a la wiki.

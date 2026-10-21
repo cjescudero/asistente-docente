@@ -68,7 +68,7 @@ grafo tampoco reescribe `AGENTS.md`. Mostrar una vista no modifica ningún archi
 ## Carpetas elegidas por el profesor
 
 La entrada es **una o varias carpetas identificadas por el usuario**. En cursos
-inicializados, leer la selección y exclusiones de `proyecto-docente.json` según
+inicializados, leer la selección y exclusiones de la configuración (`_datos_internos_proyecto/proyecto-docente.json` en `curso-v3`) según
 el [contrato común](PROYECTO-DOCENTE.md). No hay descubrimiento automático. Una
 selección pendiente requiere aclarar las fuentes antes de crear el mapa; la
 presencia de archivos en el curso no los incorpora al corpus.
@@ -82,7 +82,8 @@ mapa-docente/
   index.md                entrada general para el profesor
   index.html              lector navegable generado desde Markdown
   LEEME.md                alcance, fuentes y convenciones de uso
-  fuentes.json            raíces, fuentes y metadatos de las páginas
+  _datos_internos/
+    fuentes.json          raíces, fuentes y metadatos de las páginas
   contenidos/
     conceptos/
     programa/
@@ -99,7 +100,7 @@ mapa-docente/
   grafo-docente.html
 ```
 
-`fuentes.json` mantiene su formato y registra lo inventariado y leído. La
+El registro `_datos_internos/fuentes.json` de `curso-v3` mantiene su formato y registra lo inventariado y leído. La
 configuración del proyecto selecciona lo permitido: prevalece sobre un registro
 anterior si una fuente se retira o excluye. No reintroducirla por un enlace.
 Identificar páginas dependientes directas e indirectas y revisarlas antes de
@@ -130,7 +131,7 @@ No reemplazarla silenciosamente por una ruta personal absoluta.
 Las páginas son texto Markdown: títulos, párrafos, listas y enlaces comunes
 como `[Media](../conceptos/media.md)` o `[Diapositivas](../../../fuentes/tema-1.pdf)`.
 No usar enlaces dobles de aplicaciones wiki, bloques propietarios ni bases de
-Notion. No exigir YAML en las páginas; los metadatos están en `fuentes.json`.
+Notion. No exigir YAML en las páginas; los metadatos están en el registro `fuentes.json` del mapa.
 Obsidian u otro editor pueden abrirlas, pero no son parte del formato.
 
 El índice ofrece entradas separadas por conceptos, presentaciones, apuntes,
@@ -193,7 +194,7 @@ revisar una wiki esquemática requiere crear o actualizar sus contenidos.
 ## Tipo y acceso son dimensiones distintas
 
 Clasificar cada fuente por **tipo** y por **acceso**. Una presentación puede ser
-reservada; un examen antiguo puede estar autorizado para estudiantes. La fecha
+reservada; un cuestionario antiguo puede estar autorizado para estudiantes. La fecha
 tampoco determina vigencia ni permiso de uso.
 
 Al crear el mapa, el agente pregunta al profesor qué conjuntos de materiales
@@ -232,7 +233,7 @@ los permisos efectivos dependen del sistema donde se almacene o comparta.
 
 ## Inventario, versión 2
 
-`fuentes.json` contiene `schema_version: 2`, `title`, `course`, `source_roots`,
+El registro `fuentes.json` contiene `schema_version: 2`, `title`, `course`, `source_roots`,
 `sources` y `pages`. `course` es texto o `null` cuando se desconoce.
 `source_roots` es un objeto de identificadores estables a rutas relativas:
 
@@ -255,7 +256,7 @@ Cada elemento de `sources` tiene estos campos obligatorios:
 | `root` | Identificador de la raíz elegida dentro de `source_roots`. |
 | `path` | Ruta POSIX relativa a esa raíz, contenida en ella incluso al resolver enlaces simbólicos. |
 | `title` | Título legible. |
-| `kind` | `presentacion`, `apuntes`, `practica`, `taller`, `evaluacion`, `programa` u `otro`; se conservan `diapositivas`, `examen` y `rubrica` por compatibilidad. |
+| `kind` | `presentacion`, `apuntes`, `practica`, `taller`, `cuestionario`, `evaluacion`, `programa` u `otro`; se conservan `diapositivas`, `examen` y `rubrica` por compatibilidad. |
 | `course` | Curso académico declarado por la fuente o profesor, o `null`. |
 | `currency` | `vigente`, `historica` o `desconocida`, con fundamento en la ficha. |
 | `access` | `estudiante`, `docente`, `restringido` o `desconocido`. No inferir autorización para publicar. |
@@ -294,7 +295,7 @@ de acceso, incluso si se ha omitido accidentalmente un enlace en el texto.
    límites. Distinguir qué dice un documento, una inferencia del agente y una
    propuesta nueva. Comprobar que las páginas no sean solo un catálogo de enlaces.
 4. Separar tipos y acceso; mantener versiones históricas identificadas. El
-   criterio de un examen anterior no se convierte en rúbrica vigente.
+   criterio de un cuestionario anterior no se convierte en rúbrica vigente.
 5. Actualizar índice, inventario, incidencias y log. Si cambia una huella,
    revisar la ficha y las síntesis dependientes antes de sustituirla. Preservar
    ediciones docentes y no regenerar páginas ajenas al cambio.
@@ -392,16 +393,6 @@ Se puede reubicar una raíz para una comprobación mediante
 `--source-root curso=/ruta/a/copia` (repetible). No altera el inventario ni repara
 los enlaces Markdown; si se han movido los originales, actualizar también los
 enlaces reales. Una raíz no declarada no se añade a escondidas con ese parámetro.
-
-## Mapas de la versión anterior
-
-La validación sigue admitiendo `schema_version: 1` y `sources_root` para mapas
-anteriores. El grafo requiere la versión 2 y clasificación explícita de páginas.
-Para migrar un mapa existente, preparar una copia de su documentación en el
-espacio del curso, convertir su raíz a `source_roots`, añadir `root` a cada
-fuente y registrar `pages`. Reubicar solo las fichas y corregir sus enlaces;
-conservar los originales y sus hashes. Revisar la nueva copia antes de usarla.
-No hay una conversión automática que invente permisos o vínculos semánticos.
 
 Las [plantillas](../templates/mapa-docente) y el
 [ejemplo sintético completo](../examples/mapa-docente/README.md) muestran el flujo.

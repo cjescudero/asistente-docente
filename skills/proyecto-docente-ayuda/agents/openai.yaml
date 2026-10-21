@@ -1,3 +1,5 @@
 interface:
   display_name: "Proyecto docente: ayuda"
-  short_description: "Orientar sobre próximos pasos según el estado del curso"
+  short_description: "Resolver dudas y siguientes pasos con contexto del curso"
+policy:
+  allow_implicit_invocation: true

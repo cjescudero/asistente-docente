@@ -9,7 +9,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from docencia.banks import serialize_bank, validate_catalog
-from docencia.exams import build_exams
+from docencia.cuestionarios import build_cuestionarios
 from docencia.gift import parse_gift
 from docencia.project import initialize_project
 
@@ -78,7 +78,7 @@ class CatalogTests(unittest.TestCase):
         kwargs = {"models": 3, "questions": 2, "seed": 34, "html_only": True,
                   "catalog_path": self.catalog, "selection_path": self.selection}
         kwargs.update(options)
-        return build_exams(None, self.root / target, **kwargs)
+        return build_cuestionarios(None, self.root / target, **kwargs)
 
     def metadata(self, bid):
         path = self.root / f"{bid}.json"
@@ -172,7 +172,7 @@ class CatalogTests(unittest.TestCase):
     def test_project_catalog_combines_original_and_created_banks_without_moving_them(self):
         original_bytes = {}
         for row, folder in zip(self.catalog_data["banks"],
-                               ("fuentes/evaluaciones/bancos/historia", "creados/bancos/ciencias")):
+                               ("fuentes/evaluaciones/bancos/historia", "materiales_generados/bancos/ciencias")):
             for key in ("gift", "metadata"):
                 source = self.root / row[key]
                 destination = self.root / folder / source.name
@@ -181,7 +181,7 @@ class CatalogTests(unittest.TestCase):
                 row[key] = destination.relative_to(self.root).as_posix()
                 original_bytes[row[key]] = destination.read_bytes()
         self.catalog_data["path_base"] = "project"
-        self.catalog = self.root / "creados/bancos/catalogo.json"
+        self.catalog = self.root / "materiales_generados/bancos/catalogo.json"
         self.save(self.catalog, self.catalog_data)
         self.assertEqual(validate_catalog(self.catalog, project_root=self.root)["questions"], 4)
         manifest = self.build(project_root=self.root)
@@ -211,30 +211,38 @@ class CatalogTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "ruta relativa"):
             validate_catalog(self.catalog, project_root=self.root)
 
-    def test_course_exam_layout_separates_audiences_and_resolves_manifest_paths(self):
-        manifest = self.build(layout="curso-v2")
-        base = self.root / "out"
-        private = base / "docente"
-        self.assertEqual(json.loads((private / "manifest.json").read_text(encoding="utf-8")), manifest)
-        self.assertFalse((base / "manifest.json").exists())
-        self.assertEqual(json.loads((base / "material-docente.json").read_text(encoding="utf-8"))["status"],
-                         "borrador")
-        self.assertEqual(hashlib.sha256((private / manifest["bank_snapshot"]).read_bytes()).hexdigest(),
-                         manifest["bank_sha256"])
-        for model in manifest["models"]:
-            for kind, relative in model["files"].items():
-                file = (private / relative).resolve()
-                self.assertTrue(file.is_file())
-                self.assertTrue(file.is_relative_to((base / ("alumnado" if kind.startswith("student") else "docente")).resolve()))
-        self.assertFalse(list((base / "alumnado").glob("*.json")))
-        self.assertFalse(list((base / "alumnado").glob("*.gift")))
-        with self.assertRaisesRegex(ValueError, "vacía"):
-            self.build(layout="curso-v2")
-
     def test_unknown_exam_layout_does_not_write_outputs(self):
         with self.assertRaisesRegex(ValueError, "layout"):
             self.build(layout="unknown")
         self.assertFalse((self.root / "out").exists())
+
+    def test_v3_questionnaire_keeps_selection_and_snapshots_together(self):
+        base = self.root / "cuestionarios/caso"
+        internal = base / "_datos_internos"
+        internal.mkdir(parents=True)
+        selection = internal / "seleccion.json"
+        selection.write_bytes(self.selection.read_bytes())
+        original = selection.read_bytes()
+        manifest = self.build(target="cuestionarios/caso", layout="curso-v3", selection_path=selection)
+        self.assertEqual(selection.read_bytes(), original)
+        self.assertEqual(manifest["selection_snapshot"], "seleccion.json")
+        self.assertEqual(hashlib.sha256(original).hexdigest(), manifest["selection_sha256"])
+        self.assertTrue((internal / "manifest.json").is_file())
+        self.assertTrue((internal / "source/bank.gift").is_file())
+        self.assertTrue((internal / "material-docente.json").is_file())
+        self.assertTrue((base / "LEEME.md").is_file())
+        guide = (base / "LEEME.md").read_text(encoding="utf-8")
+        self.assertIn("[Selección](_datos_internos/seleccion.json)", guide)
+        self.assertIn("[Modelo A (HTML)](alumnado/modelo-A-student.html)", guide)
+        self.assertFalse((base / "material-docente.json").exists())
+        self.assertEqual(sorted(path.name for path in base.parent.iterdir()), ["caso"])
+        for model in manifest["models"]:
+            for role, relative in model["files"].items():
+                destination = (internal / relative).resolve()
+                self.assertTrue(destination.is_file())
+                self.assertTrue(destination.is_relative_to((base / ("alumnado" if role.startswith("student") else "docente")).resolve()))
+        with self.assertRaisesRegex(ValueError, "vacía"):
+            self.build(target="cuestionarios/caso", layout="curso-v3", selection_path=selection)
 
     def test_same_original_id_in_different_banks_has_distinct_provenance(self):
         manifest = self.build(models=2, questions=4,

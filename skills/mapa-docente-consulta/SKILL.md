@@ -19,12 +19,18 @@ lo necesario para el encargo: respetar selección y exclusiones, consultar el
 adjuntos suficientes permiten avanzar sin exigir una wiki ni carpetas llenas.
 No incorporar entradas de este encargo al corpus automáticamente.
 
+Ante dudas sobre el uso, flujo, archivos o resultados del plugin, o preguntas
+sobre siguientes pasos y posibilidades, invocar
+[Proyecto docente: ayuda](../proyecto-docente-ayuda/SKILL.md) antes de responder.
+Transferirle el objetivo, las decisiones conocidas y los resultados de esta tarea;
+tras resolver la duda, retomar el encargo ya autorizado.
+
 ## Localizar y seleccionar
 
 1. Abrir el mapa indicado por el usuario o ya identificado en el proyecto. Leer primero `index.md`; consultar `LEEME.md` y el [contrato del Mapa docente](../../docs/MAPA-DOCENTE.md) para resolver raíces y convenciones. No buscar automáticamente una biblioteca en carpetas vecinas ni asumir un destino fijo.
-2. Comprobar `proyecto-docente.json` cuando exista y aplicar su selección y exclusiones vigentes, aunque el registro del mapa conserve una fuente anterior. Usar únicamente las carpetas que el usuario haya elegido, una o varias, registradas como raíces. Si se necesita una carpeta adicional, solicitar que se indique; no ampliar el corpus por seguir un enlace que salga del alcance. Las rutas se resuelven respecto al mapa y a la raíz declarada de cada fuente.
-3. Desde `index.md`, seleccionar páginas y fichas pertinentes y seguir recursivamente sus enlaces Markdown normales mientras aporten evidencia al encargo. Resolver cada ruta respecto a la página que la enlaza y mantener las rutas y secciones visitadas para cortar ciclos y evitar relecturas inútiles. Comprobar en `fuentes.json` curso, vigencia, acceso, versión y estado de lectura. Ampliar hasta reunir evidencia suficiente o localizar una laguna concreta, sin abrir todo el corpus ni imponer un número fijo de páginas. Llegar a los originales cuando lo requieran las comprobaciones siguientes.
-4. Si el índice está incompleto, usar búsquedas acotadas dentro de las carpetas autorizadas. Si no existe mapa, indicarlo y consultar directamente fuentes elegidas por el usuario cuando el encargo lo permita. No crear un mapa, migrar una biblioteca antigua ni generar un grafo como efecto secundario de una pregunta.
+2. Comprobar la configuración del curso (`_datos_internos_proyecto/proyecto-docente.json` en `curso-v3`) cuando exista y aplicar su selección y exclusiones vigentes, aunque el registro del mapa conserve una fuente anterior. Usar únicamente las carpetas que el usuario haya elegido, una o varias, registradas como raíces. Si se necesita una carpeta adicional, solicitar que se indique; no ampliar el corpus por seguir un enlace que salga del alcance. Las rutas se resuelven respecto al mapa y a la raíz declarada de cada fuente.
+3. Desde `index.md`, seleccionar páginas y fichas pertinentes y seguir recursivamente sus enlaces Markdown normales mientras aporten evidencia al encargo. Resolver cada ruta respecto a la página que la enlaza y mantener las rutas y secciones visitadas para cortar ciclos y evitar relecturas inútiles. Comprobar en el registro `fuentes.json` (`_datos_internos/fuentes.json` en `curso-v3`) curso, vigencia, acceso, versión y estado de lectura. Ampliar hasta reunir evidencia suficiente o localizar una laguna concreta, sin abrir todo el corpus ni imponer un número fijo de páginas. Llegar a los originales cuando lo requieran las comprobaciones siguientes.
+4. Si el índice está incompleto, usar búsquedas acotadas dentro de las carpetas autorizadas. Si no existe mapa, indicarlo y consultar directamente fuentes elegidas por el usuario cuando el encargo lo permita. No crear un mapa ni generar un grafo como efecto secundario de una pregunta.
 
 ## Verificar la evidencia
 
@@ -53,6 +59,8 @@ Si el usuario pide otro entregable, transferir objetivos, fuentes, localizadores
 
 ## Sugerir el siguiente paso
 
-Aplicar el [cierre contextual de los flujos](../../docs/FLUJOS-DOCENTES.md):
+Invocar [Proyecto docente: ayuda](../proyecto-docente-ayuda/SKILL.md) para preparar
+el [cierre contextual de los flujos](../../docs/FLUJOS-DOCENTES.md), una sola vez
+por respuesta y reutilizando el contexto y las comprobaciones disponibles:
 proponer de uno a tres pasos pertinentes basados en resultados comprobados,
 sin iniciar otra tarea por el mero hecho de sugerirla. Relacionar la respuesta con una actividad, un banco, apuntes o diapositivas visuales individuales solo si aporta un siguiente paso útil; para resultados ya existentes, ofrecer consultarlos, revisarlos o actualizarlos.

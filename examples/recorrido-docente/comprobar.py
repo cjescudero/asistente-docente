@@ -41,29 +41,29 @@ def run_example(destination, *, pdf=False):
     initialized = call("init-project", course)
     assert not initialized["wiki_created"]
     assert not list((course / "mapa-docente").iterdir())
-    activity = course / "creados/actividades/medir-y-justificar"
+    activity = course / "materiales_generados/actividades/medir-y-justificar"
     student_activity = activity / "alumnado"
     rendered = call("render-markdown", student_activity / "enunciado.md",
                     "--output", student_activity / "impresion", "--title", "Medir y justificar",
                     *([] if pdf else ["--html-only"]))
     if rendered["pdf"]:
-        record_path = activity / "docente/actividad.json"
+        record_path = activity / "_datos_internos/actividad.json"
         record = json.loads(record_path.read_text(encoding="utf-8"))
         record["files"]["statement"]["pdf"] = "../alumnado/impresion/enunciado.pdf"
         save(record_path, record)
     original = {p.relative_to(course).as_posix(): p.read_bytes()
                 for p in course.rglob("*") if p.is_file()}
-    catalog = course / "creados/bancos/catalogo.json"
+    catalog = course / "materiales_generados/bancos/_datos_internos/catalogo.json"
     call("validate-catalog", catalog, "--project", course)
-    exams = course / "creados/cuestionarios/fuentes-mediciones-evidencias"
-    args = ["build-exams", "--catalog", catalog, "--selection",
-            course / "creados/bancos/reparto-ejemplo.json", "--project", course,
+    exams = course / "materiales_generados/cuestionarios/fuentes-mediciones-evidencias"
+    args = ["build-cuestionarios", "--catalog", catalog, "--selection",
+            exams / "_datos_internos/seleccion.json", "--project", course,
             "--output", exams, "--title", "Fuentes, mediciones y evidencias",
-            "--models", "3", "--questions", "6", "--seed", "42", "--layout", "curso-v2"]
+            "--models", "3", "--questions", "6", "--seed", "42", "--layout", "curso-v3"]
     if not pdf:
         args.append("--html-only")
     call(*args)
-    manifest_file = exams / "docente/manifest.json"
+    manifest_file = exams / "_datos_internos/manifest.json"
     manifest = json.loads(manifest_file.read_text(encoding="utf-8"))
     batch = course / "resultados/medir-y-justificar/ordinaria"
     for profile, csv_file in (("tarea", "hoja-tarea"), ("libro", "libro")):
@@ -74,7 +74,7 @@ def run_example(destination, *, pdf=False):
 
     exam_batch = course / "resultados/fuentes-mediciones-evidencias/ordinaria"
     (exam_batch / "recibidos").mkdir(parents=True)
-    detailed = exam_batch / "recibidos/detalle-examen.csv"
+    detailed = exam_batch / "recibidos/detalle-cuestionario.csv"
     header = ["Usuario", "Modelo", "Estado"] + [f"P{n:02d}" for n in range(1, 7)]
     with detailed.open("w", encoding="utf-8", newline="") as stream:
         writer = csv.writer(stream)
@@ -87,9 +87,9 @@ def run_example(destination, *, pdf=False):
             scores[science] = "0.5"
             writer.writerow([f"{i:03d}", model["id"], "No presentado" if i == 3 else "Finalizado",
                              *([""] * 6 if i == 3 else scores)])
-    gradebook = exam_batch / "recibidos/libro-examen.csv"
+    gradebook = exam_batch / "recibidos/libro-cuestionario.csv"
     gradebook.write_text(
-        "Usuario;Modelo;Nota examen;Comentario examen;Otra nota\n"
+        "Usuario;Modelo;Nota cuestionario;Comentario cuestionario;Otra nota\n"
         "001;A;3,50;Comentario anterior;8,00\n"
         "002;B;6,25;;9,00\n"
         "003;C;;Comentario que se vaciará;7,00\n", encoding="utf-8")
@@ -100,7 +100,7 @@ def run_example(destination, *, pdf=False):
         "max_scores": {str(n): 1 for n in range(1, 7)},
         "feedback_priority": {"max_concepts": 3, "marked_threshold": 0.5, "min_evidence": 2},
         "gradebook": {"identifier_column": "Usuario", "model_column": "Modelo",
-                      "grade_column": "Nota examen", "feedback_column": "Comentario examen",
+                      "grade_column": "Nota cuestionario", "feedback_column": "Comentario cuestionario",
                       "delimiter": ";"}
     }
     config_file = exam_batch / "correccion/perfil-feedback.json"
@@ -110,7 +110,7 @@ def run_example(destination, *, pdf=False):
     for relative, content in original.items():
         assert (course / relative).read_bytes() == content, f"Original modificado: {relative}"
     summary = {"status": "ok", "models": 3, "questions_per_model": 6,
-               "structure": "curso-v2",
+               "structure": "curso-v3",
                "pdf_requested": pdf, "wiki_created": False,
                "activity_pdf_registered": bool(rendered["pdf"]),
                "originals_preserved": True,

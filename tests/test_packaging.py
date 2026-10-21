@@ -89,7 +89,7 @@ class PackagingTests(unittest.TestCase):
                     self.assertFalse(json.loads(result.stdout)["wiki_created"])
                     self.assertTrue((course / "AGENTS.md").is_file())
                     self.assertTrue((course / "resultados").is_dir())
-                    self.assertTrue((course / "creados/actividades").is_dir())
+                    self.assertTrue((course / "materiales_generados/actividades").is_dir())
                     self.assertEqual(list((course / "mapa-docente").iterdir()), [])
                     connected = subprocess.run(
                         [sys.executable, str(install / "examples/recorrido-docente/comprobar.py"),

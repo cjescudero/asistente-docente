@@ -11,15 +11,15 @@ from pathlib import Path
 from urllib.parse import quote, unquote, urlsplit
 
 if __package__:
-    from .validate_library import _links, validate_library
+    from .validate_library import _links, registry_path, validate_library
 else:
-    from validate_library import _links, validate_library
+    from validate_library import _links, registry_path, validate_library
 
 
 MARKER = "<!-- asistente-docente:generated-graph:v1 -->"
 TEMPLATE = Path(__file__).resolve().parents[1] / "assets" / "graph.html"
 HOUSEKEEPING = {"index.md", "LEEME.md", "incidencias.md", "log.md"}
-KIND_MAP = {"diapositivas": "presentacion", "examen": "evaluacion", "rubrica": "evaluacion"}
+KIND_MAP = {"diapositivas": "presentacion", "cuestionario": "evaluacion", "examen": "evaluacion", "rubrica": "evaluacion"}
 
 
 class GraphError(ValueError):
@@ -42,7 +42,7 @@ def _make_payload(guide, registry, output, audience):
     roots = {key: (guide / relative).resolve() for key, relative in registry["source_roots"].items()}
     nodes, paths, dependencies, blocked = {}, {}, {}, set()
     housekeeping = {(guide / name).resolve() for name in HOUSEKEEPING}
-    protected = housekeeping | {(guide / "fuentes.json").resolve(), TEMPLATE.resolve()}
+    protected = housekeeping | {registry_path(guide).resolve(), TEMPLATE.resolve()}
     for source in registry["sources"]:
         identifier = "source:" + source["id"]
         original = (roots[source["root"]] / source["path"]).resolve()
@@ -149,7 +149,7 @@ def build_graph(guide_dir, output, audience="docente", wiki_output=None):
         validation = validate_library(guide)
         if validation["status"] != "ok":
             raise GraphError("Biblioteca inválida: " + "; ".join(validation["errors"]))
-        registry = json.loads((guide / "fuentes.json").read_text(encoding="utf-8-sig"))
+        registry = json.loads(registry_path(guide).read_text(encoding="utf-8-sig"))
         if not isinstance(registry, dict) or registry.get("schema_version") != 2:
             raise GraphError("El grafo requiere fuentes.json schema_version 2. Migra y revisa el registro antes de generarlo.")
         requested = Path(output).expanduser()

@@ -13,6 +13,12 @@ Usar por defecto [español conciso](../espanol-conciso-redaccion/SKILL.md) en la
 conversación y los documentos, salvo que el profesor indique otro idioma o estilo.
 Respetar citas, identificadores y términos que deban conservarse literalmente.
 
+Ante dudas sobre el uso, flujo, archivos o resultados del plugin, o preguntas
+sobre siguientes pasos y posibilidades, invocar
+[Proyecto docente: ayuda](../proyecto-docente-ayuda/SKILL.md) antes de responder.
+Transferirle el objetivo, las decisiones conocidas y los resultados de esta tarea;
+tras resolver la duda, retomar el encargo ya autorizado.
+
 ## Identificar contexto y fuentes
 
 Leer el [contrato común del proyecto](../../docs/PROYECTO-DOCENTE.md). Identificar
@@ -58,7 +64,7 @@ mostrar una tabla con **origen, destino, contenido identificado, motivo y dudas
 pendientes**, seguida del árbol resultante. Mantener juntos enunciado, plantillas,
 rúbrica y solución, o modelos, manifiesto y bancos congelados; separar dentro del
 conjunto lo estudiantil de lo reservado. No asignar todo lo existente a `fuentes/`,
-lo reciente a `creados/` ni lo dudoso a `archivo/`. Preguntar por las ambigüedades
+lo reciente a `materiales_generados/` ni lo dudoso a `archivo/`. Preguntar por las ambigüedades
 que afecten al destino antes de incluirlas entre los movimientos ejecutables.
 
 Preguntar si el profesor quiere que el agente realice **los movimientos concretos
@@ -77,6 +83,12 @@ correspondencias y bancos congelados de cuestionarios usados; revisar manualment
 registros que la utilidad señale, sin reemplazos globales de texto. Si un cambio
 necesario excede la propuesta aprobada, presentarlo antes de continuar esa parte.
 
+Cuando se inventaríe un curso, guardar el inventario en
+`_datos_internos_proyecto/inventario-inicial.json`, con rutas relativas,
+clasificación y su grado de certeza; no convertir su ausencia en una prueba de
+que el curso esté vacío. Una carpeta con material previo se organiza mediante
+una propuesta concreta; no se presume que proceda de otra versión del plugin.
+
 Tras los movimientos, comparar huellas de archivos trasladados sin edición,
 revisar por separado las modificaciones de rutas acordadas y comprobar enlaces
 y registros. Informar de movimientos realizados, elementos conservados y asuntos
@@ -84,39 +96,34 @@ pendientes. Repetir el inicio no vuelve a mover conjuntos ya organizados.
 
 ## Rutas de cuestionarios
 
-Los cursos nuevos guardan cuestionarios aportados en
-`fuentes/evaluaciones/cuestionarios/` y nuevos en `creados/cuestionarios/`.
-Registrar ambas rutas en `questionnaire_paths` conforme al contrato. Un curso-v2
-anterior sin ese campo conserva sus carpetas `examenes/`; mostrar su cambio en
-la propuesta y actualizar el campo solo tras aprobarla, junto con selecciones,
-enlaces y registros. No cambiar ni crear ramas paralelas al repetir el inicio.
-Conservar también curso-v1 hasta una migración acordada.
+Los cursos guardan cuestionarios aportados en
+`fuentes/evaluaciones/cuestionarios/` y nuevos en `materiales_generados/cuestionarios/`.
+Registrar ambas rutas en `questionnaire_paths` conforme al contrato. No crear
+ramas paralelas al repetir el inicio.
 
 ## Preparar la estructura
 
-Tras esa revisión y los acuerdos necesarios, crear en proyectos nuevos el árbol `curso-v2` del contrato: `fuentes/` para
-materiales aportados; `creados/` para materiales, actividades, bancos y cuestionarios
+Tras esa revisión y los acuerdos necesarios, crear el árbol `curso-v3` del contrato: `fuentes/` para
+materiales aportados; `materiales_generados/` para materiales, actividades, bancos y cuestionarios
 producidos; `mapa-docente/`, `resultados/` y `archivo/`. Guardar
-`proyecto-docente.json` y un `LEEME.md` con la función de las carpetas y peticiones
+`_datos_internos_proyecto/proyecto-docente.json` y un `LEEME.md` con la función de las carpetas y peticiones
 de ejemplo. Dejar `mapa-docente/` vacía y `map: null` hasta que exista un índice.
 Cada lote de resultados tendrá `resultados/<actividad>/<convocatoria>/recibidos/`
 para descargas e identificación y `correccion/` para evaluación, notas y feedback.
 Todo el lote queda fuera del corpus; crear esas subcarpetas cuando haya un lote.
 
-Los materiales creados conservan su ubicación por tipo y un registro
-`material-docente.json` con `schema_version: 1`, `id`, `type` y `status`, además
+Los materiales nuevos conservan su ubicación por tipo y un registro
+`_datos_internos/material-docente.json` con `schema_version: 1`, `id`, `type` y `status`, además
 del estado visible en `LEEME.md`. El estado cambia, la carpeta no. Mantener
 `alumnado/` y `docente/` dentro de actividades y cuestionarios para separar destinatarios.
 Un material creado que se use en otra tarea permanece donde está.
 
-Un curso con `structure: "curso-v1"` conserva sus rutas y selección. Repetir la
-inicialización no lo convierte a v2 ni crea un segundo árbol paralelo. Si se pide
-reorganizar, presentar una propuesta por archivo, colisiones, dependencias y
-enlaces conforme a [Migración a 0.9](../../docs/MIGRACION-0.9.md). Distinguir
-procedencia de los archivos de su antigüedad; no clasificar automáticamente
-carpetas antiguas mezcladas. Aplicar solo la propuesta aprobada, preservar
-instrucciones y no sobrescribir ni duplicar materiales. Seleccionar contenidos
-creados para el mapa requiere una decisión explícita y un registro válido en
+Si se pide reorganizar una carpeta con materiales, presentar una propuesta por
+archivo, colisiones, dependencias y enlaces. Distinguir procedencia de los
+archivos de su antigüedad; no clasificar automáticamente carpetas mezcladas.
+Aplicar solo la propuesta aprobada, preservar instrucciones y no sobrescribir
+ni duplicar materiales. Seleccionar contenidos creados para el mapa requiere
+una decisión explícita y un registro válido en
 estado `revisado` o `listo-para-entregar`; no marcar revisado para forzar su entrada.
 
 Con Python disponible, usar el ayudante `scripts/docencia.py init-project` y su
@@ -178,7 +185,7 @@ instrucciones de carpeta. No crear `CLAUDE.md` por sistema ni modificar reglas
 globales.
 
 Entregar las rutas del proyecto y una explicación breve de qué está listo y qué
-falta. Ofrecer [orientación docente](../proyecto-docente-ayuda/SKILL.md) con ejemplos de
+falta. Invocar la [ayuda contextual](../proyecto-docente-ayuda/SKILL.md) con ejemplos de
 peticiones y recomendar crear el mapa con las fuentes elegidas como siguiente
 paso; si ya existe, recomendar consultarlo. Si falta la selección, orientar
 primero a elegir fuentes. Si el profesor decidió trabajar sin ellas, ofrecer
@@ -189,6 +196,8 @@ tratarla como encargo separado de
 
 ## Sugerir el siguiente paso
 
-Aplicar el [cierre contextual de los flujos](../../docs/FLUJOS-DOCENTES.md):
+Invocar [Proyecto docente: ayuda](../proyecto-docente-ayuda/SKILL.md) para preparar
+el [cierre contextual de los flujos](../../docs/FLUJOS-DOCENTES.md), una sola vez
+por respuesta y reutilizando el contexto y las comprobaciones disponibles:
 proponer de uno a tres pasos pertinentes basados en resultados comprobados,
 sin iniciar otra tarea por el mero hecho de sugerirla. Priorizar la selección de fuentes pendiente o la creación del mapa; si ya hay un mapa válido, ofrecer consultarlo o visualizarlo y escoger el flujo siguiente.

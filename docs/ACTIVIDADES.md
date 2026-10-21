@@ -40,29 +40,31 @@ comprensión y proceso; no prueban la autoría de un texto por sí solas.
 - **Registro `actividad.json`:** vincula los archivos y fuentes de una misma
   versión para preparar después la corrección.
 
-En `curso-v2`, la carpeta estable es `creados/actividades/<id>/`:
+En `curso-v3`, la carpeta estable es `materiales_generados/actividades/<id>/`:
 
 ```text
 analisis-de-fuentes/
 ├── LEEME.md
-├── material-docente.json
 ├── alumnado/
 │   ├── enunciado.md
 │   ├── enunciado.pdf
 │   └── plantilla-informe.md
-└── docente/
-    ├── actividad.json
-    ├── rubrica.md
-    └── guia-correccion.md
+├── docente/
+│   ├── rubrica.md
+│   └── guia-correccion.md
+└── _datos_internos/
+    ├── material-docente.json
+    └── actividad.json
 ```
 
 El registro común es de tipo `actividad`; su estado (`borrador`, `revisado` o
 `listo-para-entregar`) se muestra también en `LEEME.md`. La aprobación no mueve
 archivos y no autoriza una publicación automática. `actividad.json` mantiene
 la procedencia y versión de los archivos utilizados para evaluar, según el
-[contrato del curso](PROYECTO-DOCENTE.md). Los cursos anteriores conservan su
-organización hasta una migración aprobada. Las fuentes originales se enlazan;
+[contrato del curso](PROYECTO-DOCENTE.md). Las fuentes originales se enlazan;
 si esta actividad se usa después para un banco, permanece en su misma carpeta.
+Al ubicar `actividad.json` en `_datos_internos/`, ajustar sus rutas relativas
+según la misma base contractual; no reinterpretarlas desde la raíz del curso.
 
 El registro es docente porque puede revelar rutas de soluciones o rúbricas.
 El enunciado y las plantillas estudiantiles no deben enlazarlo ni incluir

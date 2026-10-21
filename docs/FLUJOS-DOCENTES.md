@@ -5,6 +5,30 @@ utiliza por defecto español claro en las respuestas y los documentos, salvo que
 se haya indicado otro idioma o estilo. Conserva rigor, términos, citas y
 restricciones; esta preferencia no autoriza a traducir textos literales.
 
+## Ayuda inline en cualquier punto
+
+Ante dudas de uso del plugin o del proyecto, preguntas sobre posibilidades,
+archivos, resultados o siguientes pasos, invocar siempre
+[Proyecto docente: ayuda](../skills/proyecto-docente-ayuda/SKILL.md) antes de
+responder. Aplicarla también al preparar la orientación al cierre de cualquier
+skill. No limitarse a ofrecer que el profesor la pida ni exigir que conozca su
+nombre. La propia ayuda no se invoca a sí misma; una aplicación por respuesta
+reúne dudas y sugerencias sin cierres encadenados.
+
+Recuperar el contexto disponible de la conversación: objetivo, decisiones,
+restricciones, resultados y dudas pendientes. Contrastar el estado mínimo útil
+en instrucciones, configuración, índices y registros pertinentes; reutilizar
+comprobaciones vigentes de la misma tarea. No leer todo el corpus ni datos
+estudiantiles para orientar. Si no se conoce la raíz, preguntar por ella solo
+cuando la duda dependa de sus archivos; resolver lo independiente con el contexto.
+No presentar como comprobado el historial o estado al que no se tiene acceso.
+
+Contestar la duda antes de ofrecer opciones. Proponer de una a tres solo cuando
+ayuden, con entradas pendientes y ejemplos ajustados al curso. Una consulta de
+ayuda no cancela el trabajo en curso: continuar el encargo ya autorizado y no
+iniciar tareas nuevas solo por sugerirlas. Las preguntas disciplinares siguen
+los flujos de contenido; esta ayuda trata el uso y la continuidad del proyecto.
+
 ## Recorridos
 
 ```text
@@ -17,7 +41,8 @@ Apuntes y diapositivas visuales individuales: opciones complementarias
 ```
 
 Las flechas expresan opciones de continuidad. No autorizan a ejecutar tareas
-que el profesor no haya pedido. Un encargo que ya incluye varios pasos permite
+que el profesor no haya pedido. Invocar la ayuda de solo lectura para orientar
+forma parte de responder; no equivale a iniciar la tarea sugerida. Un encargo que ya incluye varios pasos permite
 completarlos sin preguntar de nuevo; comunicar después los siguientes pasos
 pendientes, sin repetir sugerencias durante cada suboperación interna. La
 visualización que forma parte de crear el mapa sigue siendo parte de ese encargo.
@@ -50,7 +75,8 @@ condicional. No afirmar ausencia simplemente porque no se haya consultado algo.
 
 ## Cierre de cada encargo
 
-Después de entregar el resultado, proponer de uno a tres pasos pertinentes. Cada
+Después de entregar el resultado, invocar la ayuda contextual para proponer
+de uno a tres pasos pertinentes, sin duplicar la ayuda si ya se aplicó en esa respuesta. Cada
 propuesta debe relacionarse con lo que se acaba de hacer e incluir, si falta, la
 entrada necesaria y una petición breve que el profesor pueda usar. Mantener las
 sugerencias fuera de los documentos que se van a entregar al alumnado. En una
@@ -98,3 +124,17 @@ anfitrión ni garantizan por sí solos el comportamiento de un modelo.
 | Solo una nota global y un PDF antiguo | Explicar que faltan detalle y correspondencia con manifiesto antes del feedback conceptual. |
 | Profesor pide una actividad y después su banco | Completar ambos pasos autorizados; sugerir modelos al final sin pedir repetir el encargo. |
 | Profesor pide gallego y ya hay apuntes | Respetar idioma y ofrecer revisar los apuntes pertinentes; no traducirlos automáticamente a español. |
+
+## Casos de revisión de la ayuda inline
+
+Revisión de instrucciones, no prueba real de activación en un anfitrión:
+
+| Mensaje y contexto | Comportamiento esperado |
+| --- | --- |
+| «¿Y ahora?» tras crear un banco válido | Invocar ayuda, reutilizar el banco y la cobertura conocidos, verificar si hay modelos de esa versión y orientar sin crear otros. |
+| «¿Para qué sirve este JSON?» durante modelos | Invocar ayuda, identificar el archivo concreto en el contexto y explicar su función; no empezar el flujo desde cero. |
+| «¿Qué puedo hacer?» sin raíz identificada | Dar opciones condicionadas según la conversación y pedir raíz solo para comprobar un curso concreto. |
+| Ya se eligió trabajar sin mapa y se pide orientación | Respetar la decisión; no insistir en crear mapa ni repetir la pregunta de fuentes. |
+| Hay carpeta de modelos pero no manifiesto comprobado | Verificar el indicio mínimo y explicar lo desconocido; no afirmar que hay PDF listo. |
+| «No entiendo cómo calculaste esta media» | Mantener el flujo disciplinar de contenido; usar ayuda solo si también hay una duda de uso o continuidad del plugin. |
+| «Explica este archivo y continúa con el modelo que acordamos» | Aplicar ayuda una vez, resolver la duda y continuar el encargo ya autorizado sin pedir repetirlo. |

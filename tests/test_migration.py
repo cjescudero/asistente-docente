@@ -26,21 +26,21 @@ class MigrationTests(unittest.TestCase):
     def test_common_entrypoint_accepts_cli_from_to_format(self):
         from docencia.project import plan_migration as common
         self.file("origen.md")
-        result = common(self.root, [{"from": "origen.md", "to": "docente/fuentes/tema.md"}])
+        result = common(self.root, [{"from": "origen.md", "to": "fuentes/teoria/tema.md"}])
         self.assertEqual(result["status"], "ready")
         self.assertEqual(result["moves"][0]["source"], "origen.md")
 
     def test_move_preview_hashes_source_and_changes_nothing(self):
         source = self.file("viejo/tema.md")
         before = self.snapshot()
-        result = plan_migration(self.root, {"viejo": "docente/fuentes"})
+        result = plan_migration(self.root, {"viejo": "fuentes/teoria"})
         self.assertEqual(result["status"], "ready", result)
         self.assertTrue(result["requires_approval"])
         detail = result["moves"][0]["files"][0]
-        self.assertEqual(detail["destination"], "docente/fuentes/tema.md")
+        self.assertEqual(detail["destination"], "fuentes/teoria/tema.md")
         self.assertEqual(detail["sha256"], hashlib.sha256(source.read_bytes()).hexdigest())
         self.assertEqual(self.snapshot(), before)
-        self.assertFalse((self.root / "docente").exists())
+        self.assertFalse((self.root / "fuentes").exists())
 
     def test_collisions_block_even_identical_contents_and_keep_sources(self):
         self.file("primero/tema.md")
@@ -50,6 +50,25 @@ class MigrationTests(unittest.TestCase):
         self.assertEqual(result["status"], "invalid")
         self.assertIn("Colisión", result["errors"][0])
         self.assertEqual(self.snapshot(), before)
+
+    def test_questionnaire_reorganization_is_only_a_reviewable_proposal(self):
+        snapshot = self.file("cuestionarios-aportados/usado/_datos_internos/source/bank.gift", "::q::Pregunta{=Sí~No}\n")
+        manifest = self.file("cuestionarios-aportados/usado/_datos_internos/manifest.json", '{"bank_snapshot":"source/bank.gift"}\n')
+        self.file("cuestionarios-aportados/usado/_datos_internos/seleccion.json", '{"banks":["b"]}\n')
+        original = self.snapshot()
+        report = plan_migration(self.root, [
+            {"source": "cuestionarios-aportados", "destination": "fuentes/evaluaciones/cuestionarios"},
+            {"source": "cuestionarios-aportados/usado/_datos_internos/seleccion.json", "destination": "fuentes/evaluaciones/cuestionarios/usado/_datos_internos/seleccion.json"},
+        ])
+        self.assertEqual(report["status"], "invalid")
+        self.assertTrue(any("solapados" in error for error in report["errors"]))
+        compatible = plan_migration(self.root, [
+            {"source": "cuestionarios-aportados", "destination": "fuentes/evaluaciones/cuestionarios"},
+        ])
+        self.assertEqual(compatible["status"], "ready", compatible["errors"])
+        self.assertEqual(self.snapshot(), original)
+        self.assertEqual(snapshot.read_bytes(), original["cuestionarios-aportados/usado/_datos_internos/source/bank.gift"][0])
+        self.assertEqual(manifest.read_bytes(), original["cuestionarios-aportados/usado/_datos_internos/manifest.json"][0])
 
     def test_duplicate_and_overlapping_destinations_block(self):
         self.file("a.md")
@@ -148,9 +167,9 @@ class MigrationTests(unittest.TestCase):
 
     def test_metadata_review_tracks_moved_registry_location_and_skips_empty_plan(self):
         self.file("viejo/actividad.json", "{}")
-        result = plan_migration(self.root, {"viejo": "creados/actividades/uno/docente"})
+        result = plan_migration(self.root, {"viejo": "materiales_generados/actividades/uno/docente"})
         self.assertEqual(result["metadata_reviews"][0]["document_after"],
-                         "creados/actividades/uno/docente/actividad.json")
+                         "materiales_generados/actividades/uno/docente/actividad.json")
         self.assertEqual(plan_migration(self.root, {})["metadata_reviews"], [])
 
 

@@ -1,5 +1,28 @@
 # Historial
 
+## 0.11.0 — 2026-10-21
+
+- Nuevos cursos `curso-v3`: materiales nuevos en `materiales_generados/` y
+  configuración e inventario en `_datos_internos_proyecto/`.
+- Cada material usa `_datos_internos/` para sus registros. Los cuestionarios
+  reúnen allí selección, manifiesto, cobertura y bancos congelados, con enlaces
+  a modelos, solucionarios y GIFT en su `LEEME.md`.
+- Catálogos y registros del mapa en carpetas técnicas de su ámbito. El formato
+  de proyecto admitido es `curso-v3`; una configuración en otra ubicación o de
+  otra versión produce un diagnóstico en lugar de leerse como curso vigente.
+- Reorganización guiada y previsualizada de materiales aportados, sin traslados
+  automáticos ni regeneración de cuestionarios utilizados. Se conserva la ayuda inline
+  preparada en 0.10.1.
+- Nombres de archivos y ejemplos del flujo actual normalizados a
+  «cuestionario». La CLI usa `build-cuestionarios`. El módulo Python pasa a
+  `docencia.cuestionarios`.
+
+## 0.10.1 — preparación local
+
+- Ayuda inline mediante `proyecto-docente-ayuda` ante dudas de uso, archivos, resultados, posibilidades y siguientes pasos, también durante otras skills y al orientar al cierre.
+- Recuperar el contexto disponible de la conversación y comprobar el estado pertinente del curso; evitar preguntas repetidas, menús innecesarios y cierres recursivos.
+- Preferencia de invocación implícita explícita e instrucciones de curso generadas para estructuras existentes y nuevas, conservando el procedimiento de conflictos.
+
 ## 0.10.0 — 2026-10-21
 
 - Entrega de bancos como archivos GIFT y metadatos individuales; ZIP opcional.

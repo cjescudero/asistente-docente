@@ -19,11 +19,15 @@ lo necesario para el encargo: respetar selección y exclusiones, consultar el
 adjuntos suficientes permiten avanzar sin exigir una wiki ni carpetas llenas.
 No incorporar entradas de este encargo al corpus automáticamente.
 
-En `curso-v2`, conservar exportaciones e identificación en
+Ante dudas sobre el uso, flujo, archivos o resultados del plugin, o preguntas
+sobre siguientes pasos y posibilidades, invocar
+[Proyecto docente: ayuda](../proyecto-docente-ayuda/SKILL.md) antes de responder.
+Transferirle el objetivo, las decisiones conocidas y los resultados de esta tarea;
+tras resolver la duda, retomar el encargo ya autorizado.
+
+En `curso-v3`, conservar exportaciones e identificación en
 `resultados/<evaluacion>/<convocatoria>/recibidos/`; guardar comentarios, copias
-actualizadas, auditoría e incidencias en `correccion/` del mismo lote. En cursos
-anteriores, respetar las rutas existentes. Todo ese contenido queda fuera de la
-wiki. Esa exclusión no impide el feedback expresamente solicitado.
+actualizadas, auditoría e incidencias en `correccion/` del mismo lote. Todo ese contenido queda fuera de la wiki. Esa exclusión no impide el feedback expresamente solicitado.
 
 ## Entradas y comprobaciones
 
@@ -42,7 +46,7 @@ La configuración JSON debe identificar la columna de estudiante, modelo, estado
 1. Comprobar integridad del manifiesto y correspondencia de los modelos con la exportación. Usar el banco congelado del cuestionario, no el banco actual del curso.
 2. Configurar identificadores como texto, separador y significado de valores vacíos y ausencias. Distinguir cero, respuesta en blanco, no presentado, columna ausente y archivo no legible.
 3. Revisar duplicados, estudiantes en varios modelos, columnas necesarias y valores fuera de escala. Para el libro de calificaciones, cruzar solo por identificadores declarados, conservando su nota original. Registrar incidencias; no elegir silenciosamente una fila ni convertir datos ausentes en errores del estudiante.
-4. Ejecutar `python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-feedback creados/cuestionarios/parcial-01/docente/manifest.json --input resultados/parcial-01/ordinaria/recibidos/resultados.csv --config feedback.json --output resultados/parcial-01/ordinaria/correccion/feedback`. Repetir `--input` para varios archivos. Localizar la raíz instalada en `ASISTENTE_DOCENTE` y resolver las entradas y salidas en el espacio del curso conforme a [uso](../../docs/USO.md).
+4. Ejecutar `python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-feedback materiales_generados/cuestionarios/parcial-01/_datos_internos/manifest.json --input resultados/parcial-01/ordinaria/recibidos/resultados.csv --config feedback.json --output resultados/parcial-01/ordinaria/correccion/feedback`. Repetir `--input` para varios archivos. Localizar la raíz instalada en `ASISTENTE_DOCENTE` y resolver las entradas y salidas en el espacio del curso conforme a [uso](../../docs/USO.md).
 5. Revisar el informe de incidencias antes de usar un CSV. Los datos obligatorios ambiguos o incompletos impiden exportar CSV; resolver la fuente o la configuración y repetir, sin parchear comentarios a ciegas. En modo detallado, una selección individual vacía o no interpretable genera un aviso y conserva el feedback conceptual, sin inventar una respuesta.
 6. Priorizar hasta tres dificultades mediante la proporción de puntos perdidos y la cantidad de evidencias. Por defecto, considerar acusada una dificultad con menos del 50 % de puntuación en un concepto evaluado por al menos dos preguntas; un fallo aislado es un aspecto a revisar. Estos parámetros son configurables: explicar el alcance de la evidencia, sin diagnosticar una causa psicológica.
 7. Comprobar comentarios de acierto total, fallo parcial, blanco, no presentado, evidencia escasa y conceptos sin metadatos. Usar orientaciones de repaso y referencias a materiales accesibles al estudiante; no enlazar soluciones, rúbricas ni cuestionarios reservados.
@@ -56,6 +60,8 @@ La importación final es manual: revisar el identificador, la columna de comenta
 
 ## Sugerir el siguiente paso
 
-Aplicar el [cierre contextual de los flujos](../../docs/FLUJOS-DOCENTES.md):
+Invocar [Proyecto docente: ayuda](../proyecto-docente-ayuda/SKILL.md) para preparar
+el [cierre contextual de los flujos](../../docs/FLUJOS-DOCENTES.md), una sola vez
+por respuesta y reutilizando el contexto y las comprobaciones disponibles:
 proponer de uno a tres pasos pertinentes basados en resultados comprobados,
 sin iniciar otra tarea por el mero hecho de sugerirla. Proponer revisar incidencias y comentarios antes de la importación manual; cuando haya evidencia suficiente, ofrecer apuntes, diapositivas visuales individuales o actividades de refuerzo sin exponer resultados individuales.

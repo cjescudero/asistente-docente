@@ -1,0 +1,804 @@
+{
+  "schema_version": 1,
+  "title": "Fuentes y medición",
+  "seed": 42,
+  "bank_sha256": "2ec724e0d02273448b0708a91f0764e1672241d3f05daa6511e78636da1dbf4e",
+  "bank_snapshot": "source/bank.gift",
+  "metadata": {
+    "schema_version": 1,
+    "materials": {
+      "guia": {
+        "path": "fuentes/teoria/material.md",
+        "title": "Fuentes y medición",
+        "access": "estudiante",
+        "sha256": "6dd1e0b8cbbdbe8d03ff7f60fe2060478eaae7c4dd6126c6315a671926ae5ae4"
+      }
+    },
+    "questions": {
+      "fuentes-medicion::01-A": {
+        "family_id": "fuentes-medicion::01",
+        "variant_id": "A",
+        "concepts": [
+          "media"
+        ],
+        "objective": "Calcular la media de tres observaciones con su unidad.",
+        "difficulty": "basica",
+        "guidance": "Suma las tres observaciones y divide por su número.",
+        "source_refs": [
+          {
+            "material_id": "guia",
+            "locators": [
+              "Media aritmética"
+            ]
+          }
+        ],
+        "source_family_id": "01",
+        "source_bank_id": "fuentes-medicion",
+        "source_question_id": "01-A"
+      },
+      "fuentes-medicion::01-B": {
+        "family_id": "fuentes-medicion::01",
+        "variant_id": "B",
+        "concepts": [
+          "media"
+        ],
+        "objective": "Calcular la media de tres observaciones con su unidad.",
+        "difficulty": "basica",
+        "guidance": "Suma las tres observaciones y divide por su número.",
+        "source_refs": [
+          {
+            "material_id": "guia",
+            "locators": [
+              "Media aritmética"
+            ]
+          }
+        ],
+        "source_family_id": "01",
+        "source_bank_id": "fuentes-medicion",
+        "source_question_id": "01-B"
+      },
+      "fuentes-medicion::01-C": {
+        "family_id": "fuentes-medicion::01",
+        "variant_id": "C",
+        "concepts": [
+          "media"
+        ],
+        "objective": "Calcular la media de tres observaciones con su unidad.",
+        "difficulty": "basica",
+        "guidance": "Suma las tres observaciones y divide por su número.",
+        "source_refs": [
+          {
+            "material_id": "guia",
+            "locators": [
+              "Media aritmética"
+            ]
+          }
+        ],
+        "source_family_id": "01",
+        "source_bank_id": "fuentes-medicion",
+        "source_question_id": "01-C"
+      },
+      "fuentes-medicion::01-D": {
+        "family_id": "fuentes-medicion::01",
+        "variant_id": "D",
+        "concepts": [
+          "media"
+        ],
+        "objective": "Calcular la media de tres observaciones con su unidad.",
+        "difficulty": "basica",
+        "guidance": "Suma las tres observaciones y divide por su número.",
+        "source_refs": [
+          {
+            "material_id": "guia",
+            "locators": [
+              "Media aritmética"
+            ]
+          }
+        ],
+        "source_family_id": "01",
+        "source_bank_id": "fuentes-medicion",
+        "source_question_id": "01-D"
+      },
+      "fuentes-medicion::02-A": {
+        "family_id": "fuentes-medicion::02",
+        "variant_id": "A",
+        "concepts": [
+          "evidencia"
+        ],
+        "objective": "Distinguir un hecho documentado de una inferencia no sustentada.",
+        "difficulty": "basica",
+        "guidance": "Distingue qué registra la fuente y qué afirmaciones adicionales no demuestra.",
+        "source_refs": [
+          {
+            "material_id": "guia",
+            "locators": [
+              "Evidencia e inferencia"
+            ]
+          }
+        ],
+        "source_family_id": "02",
+        "source_bank_id": "fuentes-medicion",
+        "source_question_id": "02-A"
+      },
+      "fuentes-medicion::02-B": {
+        "family_id": "fuentes-medicion::02",
+        "variant_id": "B",
+        "concepts": [
+          "evidencia"
+        ],
+        "objective": "Distinguir un hecho documentado de una inferencia no sustentada.",
+        "difficulty": "basica",
+        "guidance": "Distingue qué registra la fuente y qué afirmaciones adicionales no demuestra.",
+        "source_refs": [
+          {
+            "material_id": "guia",
+            "locators": [
+              "Evidencia e inferencia"
+            ]
+          }
+        ],
+        "source_family_id": "02",
+        "source_bank_id": "fuentes-medicion",
+        "source_question_id": "02-B"
+      },
+      "fuentes-medicion::02-C": {
+        "family_id": "fuentes-medicion::02",
+        "variant_id": "C",
+        "concepts": [
+          "evidencia"
+        ],
+        "objective": "Distinguir un hecho documentado de una inferencia no sustentada.",
+        "difficulty": "basica",
+        "guidance": "Distingue qué registra la fuente y qué afirmaciones adicionales no demuestra.",
+        "source_refs": [
+          {
+            "material_id": "guia",
+            "locators": [
+              "Evidencia e inferencia"
+            ]
+          }
+        ],
+        "source_family_id": "02",
+        "source_bank_id": "fuentes-medicion",
+        "source_question_id": "02-C"
+      },
+      "fuentes-medicion::02-D": {
+        "family_id": "fuentes-medicion::02",
+        "variant_id": "D",
+        "concepts": [
+          "evidencia"
+        ],
+        "objective": "Distinguir un hecho documentado de una inferencia no sustentada.",
+        "difficulty": "basica",
+        "guidance": "Distingue qué registra la fuente y qué afirmaciones adicionales no demuestra.",
+        "source_refs": [
+          {
+            "material_id": "guia",
+            "locators": [
+              "Evidencia e inferencia"
+            ]
+          }
+        ],
+        "source_family_id": "02",
+        "source_bank_id": "fuentes-medicion",
+        "source_question_id": "02-D"
+      }
+    },
+    "concepts": {
+      "media": {
+        "label": "Media aritmética"
+      },
+      "evidencia": {
+        "label": "Evidencia e inferencia"
+      }
+    }
+  },
+  "excluded_question_ids": [],
+  "models": [
+    {
+      "id": "A",
+      "questions": [
+        {
+          "number": 1,
+          "source_id": "fuentes-medicion::01-D",
+          "source_category": "",
+          "concepts": [
+            "media"
+          ],
+          "type": "numerical",
+          "prompt": "Calcula la media de 38, 40 y 42 cm.",
+          "format": "moodle",
+          "source_bank_id": "fuentes-medicion",
+          "source_question_id": "01-D",
+          "source_refs": [
+            {
+              "material_id": "guia",
+              "locators": [
+                "Media aritmética"
+              ]
+            }
+          ],
+          "difficulty": "basica",
+          "objective": "Calcular la media de tres observaciones con su unidad.",
+          "family_id": "fuentes-medicion::01",
+          "source_family_id": "01",
+          "variant_id": "D",
+          "numerical": [
+            {
+              "weight": 100.0,
+              "feedback": "",
+              "value": 40.0,
+              "tolerance": 0.0
+            }
+          ],
+          "quota_label": "Medición"
+        },
+        {
+          "number": 2,
+          "source_id": "fuentes-medicion::02-A",
+          "source_category": "",
+          "concepts": [
+            "evidencia"
+          ],
+          "type": "single",
+          "prompt": "Si un registro de biblioteca anota un préstamo el lunes, ¿qué afirmación permite el documento por sí solo?",
+          "format": "moodle",
+          "source_bank_id": "fuentes-medicion",
+          "source_question_id": "02-A",
+          "source_refs": [
+            {
+              "material_id": "guia",
+              "locators": [
+                "Evidencia e inferencia"
+              ]
+            }
+          ],
+          "difficulty": "basica",
+          "objective": "Distinguir un hecho documentado de una inferencia no sustentada.",
+          "family_id": "fuentes-medicion::02",
+          "source_family_id": "02",
+          "variant_id": "A",
+          "options": [
+            {
+              "label": "A",
+              "text": "El hecho indicado está documentado.",
+              "weight": 100.0,
+              "source_index": 0
+            },
+            {
+              "label": "B",
+              "text": "Conocemos la intención de quien lo realizó.",
+              "weight": 0.0,
+              "source_index": 1
+            },
+            {
+              "label": "C",
+              "text": "La misma situación ocurre siempre.",
+              "weight": 0.0,
+              "source_index": 2
+            }
+          ],
+          "quota_label": "Fuentes"
+        }
+      ],
+      "files": {
+        "student_html": "../alumnado/modelo-A-student.html",
+        "teacher_html": "../docente/modelo-A-teacher.html",
+        "gift": "../docente/modelo-A.gift"
+      },
+      "pdf_status": {
+        "student": "not_requested",
+        "teacher": "not_requested"
+      },
+      "coverage": {
+        "quotas": {
+          "Medición": 1,
+          "Fuentes": 1
+        },
+        "difficulty": {
+          "basica": 2
+        },
+        "concepts": {
+          "media": 1,
+          "evidencia": 1
+        },
+        "materials": {
+          "guia": 2
+        }
+      }
+    },
+    {
+      "id": "B",
+      "questions": [
+        {
+          "number": 1,
+          "source_id": "fuentes-medicion::02-D",
+          "source_category": "",
+          "concepts": [
+            "evidencia"
+          ],
+          "type": "single",
+          "prompt": "Si un catálogo de archivo registra una incorporación en junio, ¿qué afirmación permite el documento por sí solo?",
+          "format": "moodle",
+          "source_bank_id": "fuentes-medicion",
+          "source_question_id": "02-D",
+          "source_refs": [
+            {
+              "material_id": "guia",
+              "locators": [
+                "Evidencia e inferencia"
+              ]
+            }
+          ],
+          "difficulty": "basica",
+          "objective": "Distinguir un hecho documentado de una inferencia no sustentada.",
+          "family_id": "fuentes-medicion::02",
+          "source_family_id": "02",
+          "variant_id": "D",
+          "options": [
+            {
+              "label": "A",
+              "text": "Conocemos la intención de quien lo realizó.",
+              "weight": 0.0,
+              "source_index": 1
+            },
+            {
+              "label": "B",
+              "text": "La misma situación ocurre siempre.",
+              "weight": 0.0,
+              "source_index": 2
+            },
+            {
+              "label": "C",
+              "text": "El hecho indicado está documentado.",
+              "weight": 100.0,
+              "source_index": 0
+            }
+          ],
+          "quota_label": "Fuentes"
+        },
+        {
+          "number": 2,
+          "source_id": "fuentes-medicion::01-C",
+          "source_category": "",
+          "concepts": [
+            "media"
+          ],
+          "type": "numerical",
+          "prompt": "Calcula la media de 28, 30 y 32 cm.",
+          "format": "moodle",
+          "source_bank_id": "fuentes-medicion",
+          "source_question_id": "01-C",
+          "source_refs": [
+            {
+              "material_id": "guia",
+              "locators": [
+                "Media aritmética"
+              ]
+            }
+          ],
+          "difficulty": "basica",
+          "objective": "Calcular la media de tres observaciones con su unidad.",
+          "family_id": "fuentes-medicion::01",
+          "source_family_id": "01",
+          "variant_id": "C",
+          "numerical": [
+            {
+              "weight": 100.0,
+              "feedback": "",
+              "value": 30.0,
+              "tolerance": 0.0
+            }
+          ],
+          "quota_label": "Medición"
+        }
+      ],
+      "files": {
+        "student_html": "../alumnado/modelo-B-student.html",
+        "teacher_html": "../docente/modelo-B-teacher.html",
+        "gift": "../docente/modelo-B.gift"
+      },
+      "pdf_status": {
+        "student": "not_requested",
+        "teacher": "not_requested"
+      },
+      "coverage": {
+        "quotas": {
+          "Fuentes": 1,
+          "Medición": 1
+        },
+        "difficulty": {
+          "basica": 2
+        },
+        "concepts": {
+          "evidencia": 1,
+          "media": 1
+        },
+        "materials": {
+          "guia": 2
+        }
+      }
+    },
+    {
+      "id": "C",
+      "questions": [
+        {
+          "number": 1,
+          "source_id": "fuentes-medicion::01-A",
+          "source_category": "",
+          "concepts": [
+            "media"
+          ],
+          "type": "numerical",
+          "prompt": "Calcula la media de 8, 10 y 12 cm.",
+          "format": "moodle",
+          "source_bank_id": "fuentes-medicion",
+          "source_question_id": "01-A",
+          "source_refs": [
+            {
+              "material_id": "guia",
+              "locators": [
+                "Media aritmética"
+              ]
+            }
+          ],
+          "difficulty": "basica",
+          "objective": "Calcular la media de tres observaciones con su unidad.",
+          "family_id": "fuentes-medicion::01",
+          "source_family_id": "01",
+          "variant_id": "A",
+          "numerical": [
+            {
+              "weight": 100.0,
+              "feedback": "",
+              "value": 10.0,
+              "tolerance": 0.0
+            }
+          ],
+          "quota_label": "Medición"
+        },
+        {
+          "number": 2,
+          "source_id": "fuentes-medicion::02-C",
+          "source_category": "",
+          "concepts": [
+            "evidencia"
+          ],
+          "type": "single",
+          "prompt": "Si una lista de asistencia registra una presencia el viernes, ¿qué afirmación permite el documento por sí solo?",
+          "format": "moodle",
+          "source_bank_id": "fuentes-medicion",
+          "source_question_id": "02-C",
+          "source_refs": [
+            {
+              "material_id": "guia",
+              "locators": [
+                "Evidencia e inferencia"
+              ]
+            }
+          ],
+          "difficulty": "basica",
+          "objective": "Distinguir un hecho documentado de una inferencia no sustentada.",
+          "family_id": "fuentes-medicion::02",
+          "source_family_id": "02",
+          "variant_id": "C",
+          "options": [
+            {
+              "label": "A",
+              "text": "Conocemos la intención de quien lo realizó.",
+              "weight": 0.0,
+              "source_index": 1
+            },
+            {
+              "label": "B",
+              "text": "La misma situación ocurre siempre.",
+              "weight": 0.0,
+              "source_index": 2
+            },
+            {
+              "label": "C",
+              "text": "El hecho indicado está documentado.",
+              "weight": 100.0,
+              "source_index": 0
+            }
+          ],
+          "quota_label": "Fuentes"
+        }
+      ],
+      "files": {
+        "student_html": "../alumnado/modelo-C-student.html",
+        "teacher_html": "../docente/modelo-C-teacher.html",
+        "gift": "../docente/modelo-C.gift"
+      },
+      "pdf_status": {
+        "student": "not_requested",
+        "teacher": "not_requested"
+      },
+      "coverage": {
+        "quotas": {
+          "Medición": 1,
+          "Fuentes": 1
+        },
+        "difficulty": {
+          "basica": 2
+        },
+        "concepts": {
+          "media": 1,
+          "evidencia": 1
+        },
+        "materials": {
+          "guia": 2
+        }
+      }
+    },
+    {
+      "id": "D",
+      "questions": [
+        {
+          "number": 1,
+          "source_id": "fuentes-medicion::02-B",
+          "source_category": "",
+          "concepts": [
+            "evidencia"
+          ],
+          "type": "single",
+          "prompt": "Si un inventario de museo anota una adquisición en abril, ¿qué afirmación permite el documento por sí solo?",
+          "format": "moodle",
+          "source_bank_id": "fuentes-medicion",
+          "source_question_id": "02-B",
+          "source_refs": [
+            {
+              "material_id": "guia",
+              "locators": [
+                "Evidencia e inferencia"
+              ]
+            }
+          ],
+          "difficulty": "basica",
+          "objective": "Distinguir un hecho documentado de una inferencia no sustentada.",
+          "family_id": "fuentes-medicion::02",
+          "source_family_id": "02",
+          "variant_id": "B",
+          "options": [
+            {
+              "label": "A",
+              "text": "Conocemos la intención de quien lo realizó.",
+              "weight": 0.0,
+              "source_index": 1
+            },
+            {
+              "label": "B",
+              "text": "El hecho indicado está documentado.",
+              "weight": 100.0,
+              "source_index": 0
+            },
+            {
+              "label": "C",
+              "text": "La misma situación ocurre siempre.",
+              "weight": 0.0,
+              "source_index": 2
+            }
+          ],
+          "quota_label": "Fuentes"
+        },
+        {
+          "number": 2,
+          "source_id": "fuentes-medicion::01-B",
+          "source_category": "",
+          "concepts": [
+            "media"
+          ],
+          "type": "numerical",
+          "prompt": "Calcula la media de 18, 20 y 22 cm.",
+          "format": "moodle",
+          "source_bank_id": "fuentes-medicion",
+          "source_question_id": "01-B",
+          "source_refs": [
+            {
+              "material_id": "guia",
+              "locators": [
+                "Media aritmética"
+              ]
+            }
+          ],
+          "difficulty": "basica",
+          "objective": "Calcular la media de tres observaciones con su unidad.",
+          "family_id": "fuentes-medicion::01",
+          "source_family_id": "01",
+          "variant_id": "B",
+          "numerical": [
+            {
+              "weight": 100.0,
+              "feedback": "",
+              "value": 20.0,
+              "tolerance": 0.0
+            }
+          ],
+          "quota_label": "Medición"
+        }
+      ],
+      "files": {
+        "student_html": "../alumnado/modelo-D-student.html",
+        "teacher_html": "../docente/modelo-D-teacher.html",
+        "gift": "../docente/modelo-D.gift"
+      },
+      "pdf_status": {
+        "student": "not_requested",
+        "teacher": "not_requested"
+      },
+      "coverage": {
+        "quotas": {
+          "Fuentes": 1,
+          "Medición": 1
+        },
+        "difficulty": {
+          "basica": 2
+        },
+        "concepts": {
+          "evidencia": 1,
+          "media": 1
+        },
+        "materials": {
+          "guia": 2
+        }
+      }
+    }
+  ],
+  "source_banks": [
+    {
+      "id": "fuentes-medicion",
+      "questions": 8,
+      "gift_snapshot": "source/banks/fuentes-medicion.gift",
+      "gift_sha256": "4336a44990cf770d15c09b5f2467888eb17d66da428690d0daa23d7a98f52d1d",
+      "metadata_snapshot": "source/banks/fuentes-medicion.metadata.json",
+      "metadata_sha256": "ebd36bdca78d8d551dc45084c7b600e2aa458d17abb797a24c22f9c25d79ab6c"
+    }
+  ],
+  "catalog_snapshot": "source/catalog.json",
+  "catalog_sha256": "94f92999700f5d14238767f48a4a755b699be0b90d466b0e01d297e8a41860e5",
+  "selection_snapshot": "seleccion.json",
+  "selection_sha256": "336a02955d750092adcc2fd80e26d5531b5d2f4297e6c7b6e527d6e942c46912",
+  "selection_report": {
+    "method": "Cuotas simultáneas, una pregunta por familia en cada modelo y prioridad a familias menos utilizadas, después variantes menos usadas; comparación de cuatro propuestas para reducir solapamientos, sin garantía de óptimo global.",
+    "question_usage": {
+      "fuentes-medicion::01-A": 1,
+      "fuentes-medicion::01-B": 1,
+      "fuentes-medicion::01-C": 1,
+      "fuentes-medicion::01-D": 1,
+      "fuentes-medicion::02-A": 1,
+      "fuentes-medicion::02-B": 1,
+      "fuentes-medicion::02-C": 1,
+      "fuentes-medicion::02-D": 1
+    },
+    "family_usage": [
+      {
+        "kind": "family",
+        "id": "fuentes-medicion::01",
+        "models": 4
+      },
+      {
+        "kind": "family",
+        "id": "fuentes-medicion::02",
+        "models": 4
+      }
+    ],
+    "available_main_questions": 2,
+    "available_question_versions": 8,
+    "pairwise_overlap": [
+      {
+        "models": [
+          "A",
+          "B"
+        ],
+        "shared_questions": 0,
+        "shared_main_questions": 2
+      },
+      {
+        "models": [
+          "A",
+          "C"
+        ],
+        "shared_questions": 0,
+        "shared_main_questions": 2
+      },
+      {
+        "models": [
+          "A",
+          "D"
+        ],
+        "shared_questions": 0,
+        "shared_main_questions": 2
+      },
+      {
+        "models": [
+          "B",
+          "C"
+        ],
+        "shared_questions": 0,
+        "shared_main_questions": 2
+      },
+      {
+        "models": [
+          "B",
+          "D"
+        ],
+        "shared_questions": 0,
+        "shared_main_questions": 2
+      },
+      {
+        "models": [
+          "C",
+          "D"
+        ],
+        "shared_questions": 0,
+        "shared_main_questions": 2
+      }
+    ],
+    "coverage": {
+      "A": {
+        "quotas": {
+          "Medición": 1,
+          "Fuentes": 1
+        },
+        "difficulty": {
+          "basica": 2
+        },
+        "concepts": {
+          "media": 1,
+          "evidencia": 1
+        },
+        "materials": {
+          "guia": 2
+        }
+      },
+      "B": {
+        "quotas": {
+          "Fuentes": 1,
+          "Medición": 1
+        },
+        "difficulty": {
+          "basica": 2
+        },
+        "concepts": {
+          "evidencia": 1,
+          "media": 1
+        },
+        "materials": {
+          "guia": 2
+        }
+      },
+      "C": {
+        "quotas": {
+          "Medición": 1,
+          "Fuentes": 1
+        },
+        "difficulty": {
+          "basica": 2
+        },
+        "concepts": {
+          "media": 1,
+          "evidencia": 1
+        },
+        "materials": {
+          "guia": 2
+        }
+      },
+      "D": {
+        "quotas": {
+          "Fuentes": 1,
+          "Medición": 1
+        },
+        "difficulty": {
+          "basica": 2
+        },
+        "concepts": {
+          "evidencia": 1,
+          "media": 1
+        },
+        "materials": {
+          "guia": 2
+        }
+      }
+    }
+  }
+}

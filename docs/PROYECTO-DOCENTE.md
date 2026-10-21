@@ -7,13 +7,15 @@ escribir comandos ni completar una ficha pedagógica para una petición sencilla
 
 ## Estructura del curso
 
-Los proyectos nuevos utilizan `curso-v2`. Separa la procedencia de los materiales,
+Los proyectos utilizan `curso-v3`. Separa la procedencia de los materiales,
 su tipo y el destinatario; un borrador conserva su ubicación al revisarse.
 
 ```text
 curso/
 ├── AGENTS.md
-├── proyecto-docente.json
+├── _datos_internos_proyecto/
+│   ├── proyecto-docente.json
+│   └── inventario-inicial.json   (solo cuando se prepare)
 ├── LEEME.md
 ├── fuentes/
 │   ├── teoria/
@@ -21,7 +23,7 @@ curso/
 │   └── evaluaciones/
 │       ├── cuestionarios/
 │       └── bancos/
-├── creados/
+├── materiales_generados/
 │   ├── materiales/
 │   ├── actividades/
 │   ├── bancos/
@@ -32,19 +34,41 @@ curso/
 ```
 
 `fuentes/` conserva materiales aportados, vigentes o históricos. Por ejemplo,
-un examen anterior puede estar en `fuentes/evaluaciones/cuestionarios/2025-2026/`.
-`creados/` contiene lo elaborado en este proyecto, también cuando se convierte
+un cuestionario anterior puede estar en `fuentes/evaluaciones/cuestionarios/2025-2026/`.
+`materiales_generados/` contiene lo elaborado en este proyecto, también cuando se convierte
 en entrada de otra tarea: no copiar una actividad nueva a `fuentes/` para crear
 un banco a partir de ella. Los originales enlazados mantienen una única ubicación.
 Un Markdown y su PDF son formatos del mismo material.
 
-Cada actividad se guarda en `creados/actividades/<id>/`, con `alumnado/` para
-enunciado y plantillas y `docente/` para rúbrica completa, guía y `actividad.json`.
-Cada evaluación se guarda en `creados/cuestionarios/<id>/`, con modelos imprimibles
+Cada actividad se guarda en `materiales_generados/actividades/<id>/`, con `alumnado/` para
+enunciado y plantillas, `docente/` para rúbrica completa y guía, y `_datos_internos/actividad.json` para su registro.
+Cada evaluación se guarda en `materiales_generados/cuestionarios/<id>/`, con modelos imprimibles
 estudiantiles y documentos docentes separados. Los bancos están en
-`creados/bancos/<id>/`; los apuntes, imágenes y otras ayudas, en
-`creados/materiales/<id>/`. Separar también allí notas reservadas cuando existan.
+`materiales_generados/bancos/<id>/`; los apuntes, imágenes y otras ayudas, en
+`materiales_generados/materiales/<id>/`. Separar también allí notas reservadas cuando existan.
+El catálogo se guarda en `materiales_generados/bancos/_datos_internos/catalogo.json`.
+Los datos técnicos de cada banco y actividad se guardan en su `_datos_internos/`.
 Los nombres de carpetas organizan contenidos; no conceden ni restringen acceso.
+
+Cada cuestionario nuevo es un conjunto autocontenido:
+
+```text
+materiales_generados/cuestionarios/<id>/
+├── LEEME.md
+├── alumnado/                 modelos imprimibles
+├── docente/                  solucionarios y GIFT de Moodle
+└── _datos_internos/
+    ├── seleccion.json        selección previa, única y congelada
+    ├── material-docente.json
+    ├── manifest.json
+    ├── coverage.json
+    └── source/               bancos y metadatos congelados
+```
+
+La selección puede prepararse antes de generar; el destino no puede contener
+otros resultados. La generación no sobrescribe modelos existentes. `LEEME.md`
+enlaza los archivos de interés del profesor. Una pregunta del banco y su modelo
+se identifican mediante el manifiesto, no por parecido de texto.
 
 Cada lote se crea al recibirlo en
 `resultados/<actividad-o-evaluacion>/<convocatoria>/`, con `recibidos/` para
@@ -57,12 +81,12 @@ de la exportación recibida.
 `archivo/` guarda materiales apartados y solo alimenta el mapa si el profesor lo
 selecciona expresamente. La inicialización deja `mapa-docente/` vacía; recomienda
 crearlo sin invocar esa creación. Solo un mapa real integra su índice en
-`AGENTS.md`. Los cursos `curso-v1` conservan su estructura hasta que se apruebe
-una [migración concreta](MIGRACION-0.9.md); repetir el inicio no los reorganiza.
+`AGENTS.md`. Repetir la inicialización conserva la selección y no reorganiza
+archivos por sí solo.
 
 ## Estado de los materiales creados
 
-Cada conjunto nuevo mantiene en su raíz un `material-docente.json` y un
+Cada conjunto nuevo mantiene `_datos_internos/material-docente.json` y un
 `LEEME.md` con el estado visible. La [plantilla del registro](../templates/material-docente.json)
 es un ejemplo que se adapta al resultado real. Ejemplo:
 
@@ -76,10 +100,10 @@ es un ejemplo que se adapta al resultado real. Ejemplo:
 ```
 
 Los tipos admitidos son `material`, `actividad`, `banco`, `cuestionario`, `apuntes`,
-`diapositivas` e `infografia`. Se conserva `examen` para registros anteriores. `material` permite registrar las ayudas sin una
+`diapositivas` e `infografia`. `material` permite registrar las ayudas sin una
 clasificación más específica. Los estados son
 `borrador`, `revisado` y `listo-para-entregar`. El registro común identifica tipo
-y estado; `actividad.json`, los metadatos del banco y el manifiesto del examen
+y estado; `_datos_internos/actividad.json`, los metadatos del banco y el manifiesto del cuestionario
 conservan sus contratos específicos de procedencia, versión y evaluación.
 
 - `borrador`: contenido en preparación o con comprobaciones pendientes.
@@ -93,24 +117,33 @@ Cambiar el estado de acuerdo con revisiones reales y mantener coherencia con el
 `LEEME.md`. No mover carpetas al aprobar ni marcar como revisado para eludir una
 exclusión. Un cambio sustantivo que invalide la revisión devuelve el material a
 `borrador` y obliga a revisar sus dependencias. Conservar versiones ya utilizadas
-en una evaluación; una versión nueva no modifica los snapshots de un examen.
+en una evaluación; una versión nueva no modifica los snapshots de un cuestionario.
 No exigir este registro a una respuesta breve de conversación ni a originales.
 
 ## Configuración operativa
 
-`proyecto-docente.json` utiliza UTF-8 y rutas relativas dentro de la raíz del
+`_datos_internos_proyecto/proyecto-docente.json` utiliza UTF-8 y rutas relativas dentro de la raíz del
 curso, sin segmentos `..`. Las fuentes externas requieren elegir una raíz de
 curso que las contenga o acordar su integración mediante una propuesta de
 movimientos; no se trasladan originales automáticamente.
+La única configuración operativa admitida está en
+`_datos_internos_proyecto/proyecto-docente.json`. Un archivo con ese nombre en
+la raíz requiere aclarar su función antes de iniciar; no se interpreta como
+configuración del curso. Un JSON aportado como material no se mueve por su
+extensión.
+Si se inventaría un curso con materiales previos, `inventario-inicial.json`
+registra rutas relativas, clasificación y dudas en `_datos_internos_proyecto/`;
+no declara leídos documentos que solo se hayan inspeccionado parcialmente.
+
 La versión del formato es independiente de la versión del plugin. Ejemplo:
 
 ```json
 {
   "schema_version": 1,
-  "structure": "curso-v2",
+  "structure": "curso-v3",
   "questionnaire_paths": {
     "sources": "fuentes/evaluaciones/cuestionarios",
-    "created": "creados/cuestionarios"
+    "created": "materiales_generados/cuestionarios"
   },
   "sources": {
     "selected": true,
@@ -124,19 +157,19 @@ La versión del formato es independiente de la versión del plugin. Ejemplo:
 - `sources.include` contiene carpetas elegidas expresamente. Se incluyen sus
   archivos descendientes, salvo las exclusiones. No seleccionar toda la raíz del
   curso ni una carpeta general que mezcle fuentes y datos personales: elegir
-  las carpetas concretas. En cursos antiguos, tampoco seleccionar `docente/` completo.
+  las carpetas concretas.
 - `sources.exclude` contiene rutas exactas de archivos o carpetas; no admite
   patrones glob. Excluir una carpeta excluye sus descendientes. Resolver también
   enlaces y rutas secundarias contra estas restricciones antes de abrir fuentes.
-- En `curso-v2`, `resultados/` y `mapa-docente/` quedan siempre fuera del corpus.
-  Los documentos de `creados/` requieren selección explícita y un registro común
+- En `curso-v3`, `resultados/`, `mapa-docente/`, `_datos_internos_proyecto/`
+  y todas las carpetas `_datos_internos/` quedan siempre fuera del corpus.
+  Los documentos de `materiales_generados/` requieren selección explícita y un registro común
   válido en estado `revisado` o `listo-para-entregar`. Los borradores y el registro
-  común `material-docente.json` no son fuentes. La selección no cambia el acceso docente
+  común `_datos_internos/material-docente.json` no son fuentes. La selección no cambia el acceso docente
   o estudiantil de cada documento; los bancos y solucionarios siguen reservados.
-- En `curso-v1` siguen excluidos `docente/resultados/`, `docente/borradores/` y
-  `docente/mapa-docente/`. Respetar esas exclusiones sin reintroducir documentos
-  mediante otra raíz o un enlace. Una evaluación puede leer entradas aportadas
-  expresamente para su encargo sin convertirlas en fuentes de la wiki.
+- Respetar las exclusiones sin reintroducir documentos mediante otra raíz o un
+  enlace. Una evaluación puede leer entradas aportadas expresamente para su
+  encargo sin convertirlas en fuentes de la wiki.
 - `sources.selected: false`, con `include` y `exclude` vacíos, indica selección
   aplazada. `selected: true` con listas vacías registra la decisión explícita de
   trabajar sin fuentes por ahora. Ninguno de esos estados selecciona todas las
@@ -147,7 +180,7 @@ La versión del formato es independiente de la versión del plugin. Ejemplo:
   permite registrarla como mapa creado.
 
 La selección autoriza a usar un corpus en encargos que lo necesiten; no declara
-sus documentos leídos ni autoriza su publicación. `fuentes.json` conserva su
+sus documentos leídos ni autoriza su publicación. `_datos_internos/fuentes.json` conserva su
 formato: registra lo inventariado, los estados de lectura y las páginas del
 mapa. No sustituye la selección operativa ni convierte fuentes antiguas en
 fuentes todavía admitidas. La ficha de asignatura es opcional y contiene nivel,
@@ -173,15 +206,15 @@ realmente revisados. Un archivo ilegible conserva su incertidumbre.
 
 Antes de mover, el agente muestra una tabla con **origen, destino, contenido
 identificado, motivo y dudas pendientes**, además del árbol resultante. Los
-destinos de referencia para `curso-v2` son:
+destinos de referencia para `curso-v3` son:
 
 | Contenido identificado | Destino propuesto |
 | --- | --- |
 | Teoría aportada | `fuentes/teoria/` |
 | Actividades aportadas | `fuentes/actividades/` |
-| Exámenes anteriores o de referencia | `fuentes/evaluaciones/cuestionarios/` |
+| Cuestionarios aportados o de referencia | `fuentes/evaluaciones/cuestionarios/` |
 | Bancos aportados | `fuentes/evaluaciones/bancos/` |
-| Material elaborado en el proyecto, con procedencia confirmada | `creados/`, según su tipo |
+| Material elaborado en el proyecto, con procedencia confirmada | `materiales_generados/`, según su tipo |
 | Entregas y exportaciones originales de Moodle | `resultados/<actividad>/<convocatoria>/recibidos/` |
 | Correcciones y feedback producidos | `resultados/<actividad>/<convocatoria>/correccion/` |
 | Mapa existente | Conservar su ubicación o proponer traslado con revisión de enlaces |
@@ -210,9 +243,9 @@ separado los cambios de rutas autorizados. Al terminar, informar de lo movido,
 lo conservado y lo pendiente. `plan-migration` prepara comprobaciones y propuestas;
 no clasifica por nombres ni ejecuta movimientos.
 
-En cursos configurados, conservar `curso-v1` o `curso-v2` y las reglas del profesor
-hasta una migración concreta aprobada. No adaptar instrucciones en conflicto sin
-consultarlo. Una repetición no vuelve a mover archivos ni duplica reglas.
+En cursos configurados, conservar las reglas del profesor y la estructura
+`curso-v3`. No adaptar instrucciones en conflicto sin consultarlo. Una
+repetición no vuelve a mover archivos ni duplica reglas.
 
 ## Recorrido del agente
 
@@ -318,21 +351,36 @@ SharePoint si los archivos están disponibles localmente. El plugin no configura
 sincronización, conectores ni permisos remotos. Copilot Studio queda fuera de
 esta versión.
 
-Para adaptar un curso previo a esta organización, seguir [Migración a 0.9](MIGRACION-0.9.md).
-Los cambios históricos de nombres se conservan en [Migración a 0.7](MIGRACION-0.7.md).
+## Rutas de cuestionarios
 
-## Rutas de cuestionarios y cursos anteriores (0.10.0)
+La configuración declara `questionnaire_paths.sources` como
+`fuentes/evaluaciones/cuestionarios` y `questionnaire_paths.created` como
+`materiales_generados/cuestionarios`. Los originales aportados y las nuevas
+producciones conservan así una ubicación estable. Una ubicación no determina
+por sí sola la vigencia ni el destinatario del contenido.
 
-Los cursos nuevos usan `fuentes/evaluaciones/cuestionarios/` para cuestionarios
-aportados y `creados/cuestionarios/` para los nuevos. La configuración guarda
-estas rutas en `questionnaire_paths.sources` y `questionnaire_paths.created`.
-Se usan rutas relativas bajo `fuentes/evaluaciones/` y `creados/`, respectivamente.
+## Ayuda contextual durante el trabajo
 
-Un curso-v2 anterior sin ese campo conserva `examenes/`: repetir su inicio no
-crea una segunda rama ni mueve originales. Un curso-v1 conserva sus destinos
-anteriores. Cuando el profesor pida adaptar las rutas, mostrar una propuesta
-concreta y, tras su aprobación, actualizar configuración, selecciones, enlaces,
-catálogos y referencias. En curso-v2 registrar los destinos acordados en
-`questionnaire_paths`; en curso-v1 acordar primero la migración de estructura.
-Preservar conjuntos usados, IDs y snapshots. Una ubicación distinta no convierte
-un cuestionario histórico en contenido vigente ni cambia su audiencia.
+Ante dudas sobre el uso del plugin, los flujos, archivos o resultados, preguntas
+sobre posibilidades o siguientes pasos, el agente invoca `proyecto-docente-ayuda`
+como ayuda inline. No hace falta conocer su nombre ni esperar a terminar una
+actividad: puedes preguntar «¿Y ahora?», «¿Qué puedo hacer con lo que tengo?» o
+«¿Para qué sirve este archivo?» dentro de la misma conversación.
+
+La ayuda revisa el contexto disponible de la conversación (objetivos, decisiones,
+preferencias, resultados e incidencias) y comprueba el estado pertinente del curso
+en instrucciones, configuración, índices y registros. Reutiliza comprobaciones
+vigentes y no vuelve a preguntar datos ya conocidos. Si falta acceso o contexto,
+lo indica y pide únicamente lo necesario; no recorre todo el curso para orientar.
+
+Resuelve primero la duda y ofrece opciones cuando correspondan. No ejecuta una
+tarea por sugerirla ni modifica archivos o calificaciones. Si hay un encargo en
+curso, la ayuda no lo cancela: se retoma después. Se aplica una vez por respuesta,
+sin invocarse recursivamente. Las preguntas sobre la materia se atienden con los
+flujos de contenido, conservando la ayuda para dudas sobre su uso o continuidad.
+
+Las plantillas de `AGENTS.md` incorporan esta regla en cursos nuevos y propuestas
+para cursos existentes. Actualizarlos mantiene el procedimiento de conservación
+y consulta de conflictos; instalar el plugin no modifica instrucciones previas.
+La regla solo puede aplicarse cuando el anfitrión carga las instrucciones y la
+skill; las verificaciones locales no certifican una activación real en cada producto.

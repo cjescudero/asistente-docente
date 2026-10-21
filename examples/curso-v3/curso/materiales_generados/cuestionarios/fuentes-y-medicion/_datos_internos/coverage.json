@@ -1,0 +1,143 @@
+{
+  "method": "Cuotas simultáneas, una pregunta por familia en cada modelo y prioridad a familias menos utilizadas, después variantes menos usadas; comparación de cuatro propuestas para reducir solapamientos, sin garantía de óptimo global.",
+  "question_usage": {
+    "fuentes-medicion::01-A": 1,
+    "fuentes-medicion::01-B": 1,
+    "fuentes-medicion::01-C": 1,
+    "fuentes-medicion::01-D": 1,
+    "fuentes-medicion::02-A": 1,
+    "fuentes-medicion::02-B": 1,
+    "fuentes-medicion::02-C": 1,
+    "fuentes-medicion::02-D": 1
+  },
+  "family_usage": [
+    {
+      "kind": "family",
+      "id": "fuentes-medicion::01",
+      "models": 4
+    },
+    {
+      "kind": "family",
+      "id": "fuentes-medicion::02",
+      "models": 4
+    }
+  ],
+  "available_main_questions": 2,
+  "available_question_versions": 8,
+  "pairwise_overlap": [
+    {
+      "models": [
+        "A",
+        "B"
+      ],
+      "shared_questions": 0,
+      "shared_main_questions": 2
+    },
+    {
+      "models": [
+        "A",
+        "C"
+      ],
+      "shared_questions": 0,
+      "shared_main_questions": 2
+    },
+    {
+      "models": [
+        "A",
+        "D"
+      ],
+      "shared_questions": 0,
+      "shared_main_questions": 2
+    },
+    {
+      "models": [
+        "B",
+        "C"
+      ],
+      "shared_questions": 0,
+      "shared_main_questions": 2
+    },
+    {
+      "models": [
+        "B",
+        "D"
+      ],
+      "shared_questions": 0,
+      "shared_main_questions": 2
+    },
+    {
+      "models": [
+        "C",
+        "D"
+      ],
+      "shared_questions": 0,
+      "shared_main_questions": 2
+    }
+  ],
+  "coverage": {
+    "A": {
+      "quotas": {
+        "Medición": 1,
+        "Fuentes": 1
+      },
+      "difficulty": {
+        "basica": 2
+      },
+      "concepts": {
+        "media": 1,
+        "evidencia": 1
+      },
+      "materials": {
+        "guia": 2
+      }
+    },
+    "B": {
+      "quotas": {
+        "Fuentes": 1,
+        "Medición": 1
+      },
+      "difficulty": {
+        "basica": 2
+      },
+      "concepts": {
+        "evidencia": 1,
+        "media": 1
+      },
+      "materials": {
+        "guia": 2
+      }
+    },
+    "C": {
+      "quotas": {
+        "Medición": 1,
+        "Fuentes": 1
+      },
+      "difficulty": {
+        "basica": 2
+      },
+      "concepts": {
+        "media": 1,
+        "evidencia": 1
+      },
+      "materials": {
+        "guia": 2
+      }
+    },
+    "D": {
+      "quotas": {
+        "Fuentes": 1,
+        "Medición": 1
+      },
+      "difficulty": {
+        "basica": 2
+      },
+      "concepts": {
+        "evidencia": 1,
+        "media": 1
+      },
+      "materials": {
+        "guia": 2
+      }
+    }
+  }
+}

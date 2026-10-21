@@ -42,7 +42,7 @@ y repaso allí especificados. El catálogo enlaza GIFT, metadatos y originales
 mediante rutas relativas. Un banco anterior sin estos datos sigue siendo
 legible; no basta para prometer una selección equilibrada por información ausente.
 
-## Examen
+## Cuestionario
 
 El manifiesto contiene `schema_version`, `title`, `seed`, `bank_sha256`,
 `bank_snapshot` (ruta), `metadata` (copia del objeto anterior), `models`.

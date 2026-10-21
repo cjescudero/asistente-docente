@@ -145,8 +145,7 @@ El reparto `alumnado/`, `docente/` y `archivo/`, la exclusión de resultados y
 borradores, y los nombres de skills sin prefijo son decisiones de este proyecto.
 No se atribuyen a las referencias de Karpathy ni a los adjuntos iniciales.
 La configuración complementa el registro del mapa sin modificar su formato.
-Las equivalencias para proyectos anteriores están en
-[Migración a 0.7](MIGRACION-0.7.md).
+El [historial](../CHANGELOG.md) registra las decisiones de versiones publicadas.
 
 ## Formatos y dependencias
 
@@ -177,11 +176,11 @@ Esa revisión documental no equivale a probar importaciones en un servidor real.
 La inspiración ASD-STE100 sigue siendo una adaptación de claridad al español;
 no se presenta como conformidad o certificación de ese estándar en inglés.
 
-## Procedencia y flujos de trabajo (0.9.0)
+## Procedencia y flujos de trabajo
 
-La separación `fuentes/` y `creados/`, el estado visible de los materiales y los
+La separación `fuentes/` y `materiales_generados/`, el estado visible de los materiales y los
 cierres contextuales de las skills responden a la revisión del propietario.
 Se conserva una única ubicación de trabajo y se mantienen las copias congeladas
-requeridas para reproducir los exámenes. Los cursos anteriores no se reorganizan
+requeridas para reproducir los cuestionarios. Los materiales aportados no se reorganizan
 automáticamente. La versión se prepara localmente; publicar y verificar en los
 anfitriones son pasos independientes.

@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "banks": [
+    "fuentes-medicion"
+  ],
+  "quotas": [
+    {
+      "label": "Medición",
+      "count": 1,
+      "concepts": [
+        "media"
+      ]
+    },
+    {
+      "label": "Fuentes",
+      "count": 1,
+      "concepts": [
+        "evidencia"
+      ]
+    }
+  ]
+}

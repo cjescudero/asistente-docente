@@ -30,7 +30,7 @@ class ProjectCliTests(unittest.TestCase):
         self.assertFalse(self.course.exists())
         created = self.run_cli("init-project", self.course)
         self.assertEqual(created.returncode, 0, created.stderr)
-        config = json.loads((self.course / "proyecto-docente.json").read_text(encoding="utf-8"))
+        config = json.loads((self.course / "_datos_internos_proyecto/proyecto-docente.json").read_text(encoding="utf-8"))
         self.assertFalse(config["sources"]["selected"])
         self.assertEqual(list((self.course / "mapa-docente").iterdir()), [])
         repeat = self.run_cli("init-project", self.course)
@@ -80,7 +80,7 @@ class ProjectCliTests(unittest.TestCase):
 
     def test_invalid_configuration_fails_as_json_without_traceback(self):
         self.run_cli("init-project", self.course)
-        (self.course / "proyecto-docente.json").write_text("{invalid", encoding="utf-8")
+        (self.course / "_datos_internos_proyecto/proyecto-docente.json").write_text("{invalid", encoding="utf-8")
         result = self.run_cli("check-project", self.course)
         self.assertEqual(result.returncode, 1)
         self.assertEqual(json.loads(result.stdout)["status"], "invalid")
@@ -110,10 +110,26 @@ class ProjectCliTests(unittest.TestCase):
         check = self.run_cli("check-project", self.course)
         self.assertEqual(check.returncode, 0, check.stderr)
         files = json.loads(check.stdout)["selected_files"]
-        self.assertEqual(files, ["fuentes/evaluaciones/cuestionarios/examen-vigente.md",
+        self.assertEqual(files, ["fuentes/evaluaciones/cuestionarios/cuestionario-vigente.md",
                                  "fuentes/teoria/interpretar-datos.md",
                                  "fuentes/teoria/orientaciones.md"])
         self.assertEqual(list((self.course / "mapa-docente").iterdir()), [])
+
+    def test_v3_course_builds_questionnaire_with_local_selection_from_other_cwd(self):
+        shutil.copytree(ROOT / "examples/curso-v3/curso", self.course)
+        catalog = self.course / "materiales_generados/bancos/_datos_internos/catalogo.json"
+        target = self.course / "materiales_generados/cuestionarios/nuevo"
+        selection = target / "_datos_internos/seleccion.json"
+        selection.parent.mkdir(parents=True)
+        selection.write_bytes((self.course / "materiales_generados/cuestionarios/fuentes-y-medicion/_datos_internos/seleccion.json").read_bytes())
+        result = self.run_cli("build-cuestionarios", "--catalog", catalog, "--selection", selection,
+                              "--project", self.course, "--output", target,
+                              "--layout", "curso-v3", "--questions", "2", "--models", "4", "--html-only")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        data = json.loads(result.stdout)
+        self.assertEqual(Path(data["manifest"]), (target / "_datos_internos/manifest.json").resolve())
+        self.assertTrue((target / "alumnado/modelo-A-student.html").is_file())
+        self.assertFalse((target.parent / "seleccion-nuevo.json").exists())
 
     def test_migration_rejects_destination_inside_another_moving_source(self):
         self.run_cli("init-project", self.course)

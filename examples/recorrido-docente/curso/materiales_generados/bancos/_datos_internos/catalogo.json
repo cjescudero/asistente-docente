@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "path_base": "project",
+  "banks": [
+    {
+      "id": "humanidades",
+      "gift": "fuentes/evaluaciones/bancos/humanidades-2025-2026/banco.gift",
+      "metadata": "fuentes/evaluaciones/bancos/humanidades-2025-2026/metadatos.json"
+    },
+    {
+      "id": "ciencias",
+      "gift": "materiales_generados/bancos/ciencias/banco.gift",
+      "metadata": "materiales_generados/bancos/ciencias/_datos_internos/metadatos.json"
+    },
+    {
+      "id": "experimental",
+      "gift": "materiales_generados/bancos/experimental/banco.gift",
+      "metadata": "materiales_generados/bancos/experimental/_datos_internos/metadatos.json"
+    }
+  ]
+}

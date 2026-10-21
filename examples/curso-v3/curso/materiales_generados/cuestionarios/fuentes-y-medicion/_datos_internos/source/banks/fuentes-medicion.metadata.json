@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "materials": {
+    "guia": {
+      "path": "fuentes/teoria/material.md",
+      "title": "Fuentes y medición",
+      "access": "estudiante",
+      "sha256": "6dd1e0b8cbbdbe8d03ff7f60fe2060478eaae7c4dd6126c6315a671926ae5ae4"
+    }
+  },
+  "concepts": {
+    "media": {
+      "label": "Media aritmética"
+    },
+    "evidencia": {
+      "label": "Evidencia e inferencia"
+    }
+  },
+  "questions": {
+    "01-A": {
+      "family_id": "01",
+      "variant_id": "A",
+      "concepts": [
+        "media"
+      ],
+      "objective": "Calcular la media de tres observaciones con su unidad.",
+      "difficulty": "basica",
+      "guidance": "Suma las tres observaciones y divide por su número.",
+      "source_refs": [
+        {
+          "material_id": "guia",
+          "locators": [
+            "Media aritmética"
+          ]
+        }
+      ]
+    },
+    "01-B": {
+      "family_id": "01",
+      "variant_id": "B",
+      "concepts": [
+        "media"
+      ],
+      "objective": "Calcular la media de tres observaciones con su unidad.",
+      "difficulty": "basica",
+      "guidance": "Suma las tres observaciones y divide por su número.",
+      "source_refs": [
+        {
+          "material_id": "guia",
+          "locators": [
+            "Media aritmética"
+          ]
+        }
+      ]
+    },
+    "01-C": {
+      "family_id": "01",
+      "variant_id": "C",
+      "concepts": [
+        "media"
+      ],
+      "objective": "Calcular la media de tres observaciones con su unidad.",
+      "difficulty": "basica",
+      "guidance": "Suma las tres observaciones y divide por su número.",
+      "source_refs": [
+        {
+          "material_id": "guia",
+          "locators": [
+            "Media aritmética"
+          ]
+        }
+      ]
+    },
+    "01-D": {
+      "family_id": "01",
+      "variant_id": "D",
+      "concepts": [
+        "media"
+      ],
+      "objective": "Calcular la media de tres observaciones con su unidad.",
+      "difficulty": "basica",
+      "guidance": "Suma las tres observaciones y divide por su número.",
+      "source_refs": [
+        {
+          "material_id": "guia",
+          "locators": [
+            "Media aritmética"
+          ]
+        }
+      ]
+    },
+    "02-A": {
+      "family_id": "02",
+      "variant_id": "A",
+      "concepts": [
+        "evidencia"
+      ],
+      "objective": "Distinguir un hecho documentado de una inferencia no sustentada.",
+      "difficulty": "basica",
+      "guidance": "Distingue qué registra la fuente y qué afirmaciones adicionales no demuestra.",
+      "source_refs": [
+        {
+          "material_id": "guia",
+          "locators": [
+            "Evidencia e inferencia"
+          ]
+        }
+      ]
+    },
+    "02-B": {
+      "family_id": "02",
+      "variant_id": "B",
+      "concepts": [
+        "evidencia"
+      ],
+      "objective": "Distinguir un hecho documentado de una inferencia no sustentada.",
+      "difficulty": "basica",
+      "guidance": "Distingue qué registra la fuente y qué afirmaciones adicionales no demuestra.",
+      "source_refs": [
+        {
+          "material_id": "guia",
+          "locators": [
+            "Evidencia e inferencia"
+          ]
+        }
+      ]
+    },
+    "02-C": {
+      "family_id": "02",
+      "variant_id": "C",
+      "concepts": [
+        "evidencia"
+      ],
+      "objective": "Distinguir un hecho documentado de una inferencia no sustentada.",
+      "difficulty": "basica",
+      "guidance": "Distingue qué registra la fuente y qué afirmaciones adicionales no demuestra.",
+      "source_refs": [
+        {
+          "material_id": "guia",
+          "locators": [
+            "Evidencia e inferencia"
+          ]
+        }
+      ]
+    },
+    "02-D": {
+      "family_id": "02",
+      "variant_id": "D",
+      "concepts": [
+        "evidencia"
+      ],
+      "objective": "Distinguir un hecho documentado de una inferencia no sustentada.",
+      "difficulty": "basica",
+      "guidance": "Distingue qué registra la fuente y qué afirmaciones adicionales no demuestra.",
+      "source_refs": [
+        {
+          "material_id": "guia",
+          "locators": [
+            "Evidencia e inferencia"
+          ]
+        }
+      ]
+    }
+  }
+}

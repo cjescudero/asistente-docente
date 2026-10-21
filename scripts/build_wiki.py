@@ -13,9 +13,9 @@ from pathlib import Path
 from urllib.parse import quote, unquote, urlsplit
 
 if __package__:
-    from .validate_library import _inside, validate_library
+    from .validate_library import _inside, registry_path, validate_library
 else:
-    from validate_library import _inside, validate_library
+    from validate_library import _inside, registry_path, validate_library
 
 MARKER = "<!-- asistente-docente:generated-wiki:v1 -->"
 TEMPLATE = Path(__file__).resolve().parents[1] / "assets" / "wiki.html"
@@ -158,7 +158,7 @@ def build_wiki(guide_dir, output=None, graph=None):
         validation = validate_library(guide)
         if validation["status"] != "ok":
             raise WikiError("Mapa inválido: " + "; ".join(validation["errors"]))
-        registry = json.loads((guide / "fuentes.json").read_text(encoding="utf-8-sig"))
+        registry = json.loads(registry_path(guide).read_text(encoding="utf-8-sig"))
         if registry.get("schema_version") != 2:
             raise WikiError("El visor requiere fuentes.json schema_version 2.")
         requested = Path(output).expanduser() if output is not None else guide / "index.html"
@@ -168,7 +168,7 @@ def build_wiki(guide_dir, output=None, graph=None):
         if destination.suffix.lower() != ".html" or not destination.parent.is_dir():
             raise WikiError("La salida debe ser un archivo .html en una carpeta existente.")
         roots = [guide] + [(guide / relative).resolve() for relative in registry["source_roots"].values()]
-        protected = {(guide / "fuentes.json").resolve(), TEMPLATE.resolve(), Path(__file__).resolve()}
+        protected = {registry_path(guide).resolve(), TEMPLATE.resolve(), Path(__file__).resolve()}
         protected.update((guide / registry["source_roots"][source["root"]] / source["path"]).resolve()
                          for source in registry["sources"])
         pages = [{"path": name, "title": title, "kind": "administracion", "access": "docente"}

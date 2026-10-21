@@ -26,7 +26,7 @@ relevantes; no es un trámite obligatorio para cada petición.
 
 Instala el plugin, abre la carpeta del curso y pide **«Inicia mi proyecto docente»**.
 El agente aclara solo los datos que faltan, prepara el árbol uniforme y guarda
-`proyecto-docente.json`, `LEEME.md` y `AGENTS.md`. El contrato de estructura,
+`_datos_internos_proyecto/proyecto-docente.json`, `LEEME.md` y `AGENTS.md`. El contrato de estructura,
 selección y herramientas está en [Proyecto docente](PROYECTO-DOCENTE.md).
 
 Si ya existen materiales, el agente presenta movimientos y enlaces afectados
@@ -58,7 +58,7 @@ archivos necesarios:
 | Materiales o actividad ya definidos | «Crea un banco de preguntas asociado a estos apuntes y a esta actividad». |
 | Bancos disponibles | «Prepara tres modelos de evaluación de estos temas y prácticas». |
 | Entregas descargadas de Moodle | «Corrige este lote con su enunciado y rúbrica y prepara las calificaciones». |
-| Examen ya puntuado | «Añade recomendaciones de mejora a partir del detalle de respuestas y las notas». |
+| Cuestionario ya puntuado | «Añade recomendaciones de mejora a partir del detalle de respuestas y las notas». |
 
 Preguntar qué se puede hacer no inicia esos procesos ni lee todo el corpus.
 Si falta una entrada, el agente la identifica. Se puede realizar una tarea con
@@ -72,13 +72,12 @@ infografías conserva ese alcance; no promete presentaciones editables.
 
 Usar la [ficha Markdown](../templates/ficha-asignatura.md) o su [ejemplo JSON](../templates/ficha-asignatura.json) como contexto. Registrar objetivos, audiencia, fuentes vigentes, criterios y recursos permitidos. No imponer la estructura de una asignatura anterior ni usar cuestionarios reservados como fuente de apuntes sin autorización.
 
-Guardar materiales y resultados fuera del paquete instalado. Los cursos nuevos
-usan `curso-v2`: originales en `fuentes/`, trabajos nuevos por tipo en `creados/`,
+Guardar materiales y resultados fuera del paquete instalado. Los cursos
+usan `curso-v3`: originales en `fuentes/`, trabajos nuevos por tipo en `materiales_generados/`,
 wiki en `mapa-docente/` y lotes en `resultados/<actividad>/<convocatoria>/`, con
 `recibidos/` y `correccion/` separados. Las actividades y cuestionarios reúnen sus
 documentos de alumnado y docente en subcarpetas. Los estados se registran sin
-mover ni duplicar los archivos. Los cursos `curso-v1` conservan sus rutas hasta
-una [migración acordada](MIGRACION-0.9.md).
+mover ni duplicar los archivos.
 
 Al terminar una skill, ofrecer próximos pasos según los resultados existentes,
 sin ejecutar otras tareas ni asumir que una carpeta acredita su finalización.
@@ -158,13 +157,13 @@ cuando están las capacidades necesarias y la validación del corpus y sus
 dependencias pasa. También puede pedirse regenerar solo uno.
 
 El mapa de un curso nuevo está en `mapa-docente/`, con `index.md`,
-`LEEME.md`, `fuentes.json`, `incidencias.md` y `log.md`. Un mapa previo conserva
+`LEEME.md`, `_datos_internos/fuentes.json`, `incidencias.md` y `log.md`. Un mapa previo conserva
 su ruta hasta una migración autorizada. Bajo `contenidos/` se separan conceptos,
 presentaciones, apuntes, prácticas y talleres; bajo `reservado/`, evaluaciones,
 soluciones y criterios reservados. El acceso y el tipo se registran por separado.
 
 Los originales se conservan en sus carpetas. No se mueven ni copian para crear
-el mapa; una copia requiere que se haya pedido. `fuentes.json` usa
+el mapa; una copia requiere que se haya pedido. `_datos_internos/fuentes.json` usa
 `schema_version: 2`: `source_roots` recoge las raíces con rutas relativas al mapa,
 cada fuente indica la raíz a la que pertenece y `pages` registra las páginas y
 sus fuentes. Si las ubicaciones no permiten rutas relativas —por ejemplo,
@@ -181,9 +180,7 @@ resumen. Consultar no cambia páginas ni regenera el grafo. Véanse el [flujo y 
 tiene dos raíces y siete fuentes sintéticas: cinco completas, una parcial y una
 pendiente. No genera apuntes del estudiante automáticamente.
 
-Los registros anteriores de versión 1 siguen siendo validables. Si se pide
-actualizarlos, la migración a versión 2 se prepara en una copia del mapa,
-conservando la versión anterior y los originales; la consulta no migra nada.
+El mapa utiliza el registro de versión 2 para el lector y el grafo.
 
 ## Ejecutar las utilidades
 
@@ -260,13 +257,16 @@ leído o comprendido todo el material.
 Para bancos asociados a varios materiales, validar el catálogo y componer con un
 reparto acordado. El formato del catálogo y de la selección se detalla en
 [Bancos](BANCOS.md):
+Antes del comando, guardar el reparto en
+`materiales_generados/cuestionarios/parcial-01/_datos_internos/seleccion.json`.
+La carpeta del cuestionario no debe contener modelos anteriores.
 
 ```sh
 python "$ASISTENTE_DOCENTE/scripts/docencia.py" validate-catalog \
-  creados/bancos/catalogo.json --project .
-python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-exams \
-  --catalog creados/bancos/catalogo.json --selection reparto.json \
-  --project . --output creados/cuestionarios/parcial-01 --layout curso-v2 --title "Evaluación de fuentes" \
+  materiales_generados/bancos/_datos_internos/catalogo.json --project .
+python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-cuestionarios \
+  --catalog materiales_generados/bancos/_datos_internos/catalogo.json --selection materiales_generados/cuestionarios/parcial-01/_datos_internos/seleccion.json \
+  --project . --output materiales_generados/cuestionarios/parcial-01 --layout curso-v3 --title "Cuestionario de fuentes" \
   --models 4 --questions 5 --seed 42
 ```
 
@@ -274,9 +274,9 @@ También se mantiene la entrada de un único banco:
 
 ```sh
 python "$ASISTENTE_DOCENTE/scripts/docencia.py" validate-bank banco.gift
-python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-exams banco.gift \
-  --metadata metadatos.json --output creados/cuestionarios/parcial-01 --layout curso-v2 \
-  --title "Evaluación de fuentes" --models 4 --questions 5 --seed 42
+python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-cuestionarios banco.gift \
+  --metadata metadatos.json --output materiales_generados/cuestionarios/parcial-01 --layout curso-v3 \
+  --title "Cuestionario de fuentes" --models 4 --questions 5 --seed 42
 ```
 
 `--metadata` es opcional para la entrada de un GIFT anterior. Los nuevos bancos
@@ -286,7 +286,7 @@ equilibrio basado en ellos. No usar la ficha de asignatura como metadatos.
 
 Para cuotas por categoría, añadir `--per-category cuotas.json`, cuyo contenido es un objeto de nombre exacto de categoría a cantidad. Su suma debe coincidir con `--questions`. Por ejemplo, `{"Fuentes": 3, "Argumentación": 2}` solo sirve para un banco con esas categorías exactas.
 
-La salida debe ser una carpeta nueva o vacía. Incluye `manifest.json`, bancos
+En `curso-v3`, la carpeta de salida puede contener solo `_datos_internos/seleccion.json` preparado para ese cuestionario; en otros casos debe ser nueva o vacía. Incluye `manifest.json`, bancos
 congelados y archivos separados por modelo: HTML/PDF de estudiante, HTML/PDF
 docente y GIFT ofuscado. La composición por catálogo conserva la identidad de
 banco y pregunta, y ofrece cobertura, dificultad y reutilización. Los
@@ -310,13 +310,15 @@ En GIFT, escapar además los caracteres especiales del formato antes de guardar 
 ### Feedback de resultados
 
 ```sh
-python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-feedback creados/cuestionarios/parcial-01/docente/manifest.json \
+python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-feedback materiales_generados/cuestionarios/parcial-01/_datos_internos/manifest.json \
   --input resultados/parcial-01/ordinaria/recibidos/resultados.csv \
   --config feedback.json --output resultados/parcial-01/ordinaria/correccion/feedback
 ```
 
-Para cuestionarios anteriores con salida plana, usar su `manifest.json` en la raíz
-del cuestionario, sin moverlo ni regenerar sus snapshots. Repetir `--input` para varios CSV. La configuración debe mapear columnas reales, identificadores, modelo, estado, máximos y valores declarados de ausencia o blanco; véase [Moodle](MOODLE.md). Los mapas pueden variar por modelo. No suponer que todos los CSV usan el mismo separador o escala.
+Repetir `--input` para varios CSV. La configuración debe mapear columnas reales,
+identificadores, modelo, estado, máximos y valores declarados de ausencia o
+blanco; véase [Moodle](MOODLE.md). Los mapas pueden variar por modelo. No suponer
+que todos los CSV usan el mismo separador o escala.
 
 Para añadir comentarios a una copia del libro de calificaciones, aportar esa
 exportación vigente mediante `--gradebook calificaciones.csv` y declarar las

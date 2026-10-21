@@ -17,9 +17,16 @@ lo necesario para el encargo: respetar selección y exclusiones, consultar el
 adjuntos suficientes permiten avanzar sin exigir una wiki ni carpetas llenas.
 No incorporar entradas de este encargo al corpus automáticamente.
 
+Ante dudas sobre el uso, flujo, archivos o resultados del plugin, o preguntas
+sobre siguientes pasos y posibilidades, invocar
+[Proyecto docente: ayuda](../proyecto-docente-ayuda/SKILL.md) antes de responder.
+Transferirle el objetivo, las decisiones conocidas y los resultados de esta tarea;
+tras resolver la duda, retomar el encargo ya autorizado.
+
+
 Al revisar un documento existente, conservar su ubicación y alcance. Para un
-material nuevo en `curso-v2`, usar el destino de su tipo según el contrato común;
-una redacción autónoma va en `creados/materiales/<id>/`. Crear o actualizar el
+material nuevo en `curso-v3`, usar el destino de su tipo según el contrato común;
+una redacción autónoma va en `materiales_generados/materiales/<id>/`. Crear o actualizar el
 registro de material y su estado cuando se entrega un conjunto de archivos,
 sin exigir carpetas ni registros para una corrección breve en la conversación.
 
@@ -96,6 +103,8 @@ La [FAQ del STEMG](https://asd-ste100.org/STE_faq.html) es la referencia sobre e
 
 ## Sugerir el siguiente paso
 
-Aplicar el [cierre contextual de los flujos](../../docs/FLUJOS-DOCENTES.md):
+Invocar [Proyecto docente: ayuda](../proyecto-docente-ayuda/SKILL.md) para preparar
+el [cierre contextual de los flujos](../../docs/FLUJOS-DOCENTES.md), una sola vez
+por respuesta y reutilizando el contexto y las comprobaciones disponibles:
 proponer de uno a tres pasos pertinentes basados en resultados comprobados,
 sin iniciar otra tarea por el mero hecho de sugerirla. Adaptar las sugerencias al documento revisado: continuar el flujo de su actividad, banco, cuestionario o material. En una corrección breve, mantener la sugerencia breve y fuera del texto que el profesor va a reutilizar.

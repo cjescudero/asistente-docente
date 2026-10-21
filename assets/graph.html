@@ -269,7 +269,7 @@
     byId("audience-label").textContent = student ? "Vista del estudiante" : "Uso docente";
     if(student) byId("access-legend").textContent = "Material clasificado para estudiantes. Esta vista no concede permisos sobre los documentos ni autoriza su publicación en Internet.";
     document.title = "Mapa docente · " + title;
-    const aliases = {diapositivas:"presentacion",examen:"evaluacion",rubrica:"evaluacion"};
+    const aliases = {diapositivas:"presentacion",cuestionario:"evaluacion",examen:"evaluacion",rubrica:"evaluacion"};
     const nodes = (Array.isArray(data.nodes) ? data.nodes : []).filter(n => n && typeof n.id === "string").map(n => ({
       ...n, title:typeof n.title === "string" ? n.title : n.id,
       kind:TYPES[n.kind] ? n.kind : aliases[n.kind] || "otro",

@@ -1,7 +1,7 @@
 # Consulta resuelta sobre el ejemplo sintético
 
 Petición: «¿Qué material tengo para preparar una nueva práctica que combine
-medición y justificación? ¿Puedo usar la evaluación del examen anterior?»
+medición y justificación? ¿Puedo usar la evaluación del cuestionario anterior?»
 
 ## Respuesta sustentada
 
@@ -13,10 +13,10 @@ aportan el ejemplo de media y sus límites. Los
 [apuntes, apartados 1–2](materiales-docentes/apuntes-fuentes-2026.md) ayudan a formular
 preguntas sobre contexto y contraste; su apéndice queda fuera de esta revisión.
 
-El [examen 2024-25, Criterio de esta convocatoria](archivo-evaluaciones/examen-2024-docente.md)
+El [cuestionario 2024-25, Criterio de esta convocatoria](archivo-evaluaciones/cuestionario-2024-docente.md)
 reparte ocho puntos al cálculo y dos a la unidad. Son pesos históricos; los
 materiales revisados no establecen que sigan vigentes. Falta la rúbrica del
-encargo actual para asignar notas. El examen tiene acceso restringido al profesor.
+encargo actual para asignar notas. El cuestionario tiene acceso restringido al profesor.
 
 ## Propuesta nueva para continuar
 
@@ -28,5 +28,5 @@ solución, separándola del enunciado del estudiante.
 
 Contexto para ese encargo: nivel y duración por concretar; objetivos O1/O2;
 fuentes actuales f001/f002/f003/f005 y sus localizadores anteriores; sin pesos
-de nota aprobados; no incluir el examen reservado en la entrega al estudiante.
+de nota aprobados; no incluir el cuestionario reservado en la entrega al estudiante.
 No se ha actualizado la biblioteca a partir de esta consulta de demostración.

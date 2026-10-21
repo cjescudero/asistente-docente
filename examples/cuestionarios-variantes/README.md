@@ -21,7 +21,9 @@ Desde la raíz del plugin, guardar resultados fuera de la instalación:
 
 ```sh
 python scripts/docencia.py validate-catalog examples/cuestionarios-variantes/catalogo.json
-python scripts/docencia.py build-exams --catalog examples/cuestionarios-variantes/catalogo.json --selection examples/cuestionarios-variantes/seleccion.json --questions 2 --output ../demo-variantes --title "Fuentes y medición" --layout curso-v2 --html-only
+mkdir -p ../demo-variantes/_datos_internos
+cp examples/cuestionarios-variantes/seleccion.json ../demo-variantes/_datos_internos/seleccion.json
+python scripts/docencia.py build-cuestionarios --catalog examples/cuestionarios-variantes/catalogo.json --selection ../demo-variantes/_datos_internos/seleccion.json --questions 2 --output ../demo-variantes --title "Fuentes y medición" --layout curso-v3 --html-only
 ```
 
 Al omitir `--models`, se crean cuatro modelos. Cada uno contiene una variante de

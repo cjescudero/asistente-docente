@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
-from docencia.project import (CONFIG_NAME, _replace_config, _safe_path, find_project,
+from docencia.project import (CONFIG_NAME, project_config_path, _replace_config, _safe_path, find_project,
                               load_project, source_allowed)
 
 
@@ -15,7 +15,7 @@ def check_map_policy(guide, data, *, source_roots=None, project_root=None,
                      link_extractor=None):
     """Informe de revisión pendiente; nunca altera el mapa ni abre originales.
 
-    Los mapas anteriores sin proyecto-docente.json conservan su comportamiento.
+    Sin configuración de proyecto, la política del curso no se aplica al mapa.
     Se calculan dependencias tanto por source_ids como por enlaces Markdown.
     """
     guide = Path(guide).resolve()
@@ -129,6 +129,6 @@ def register_map(root, map_dir, *, dry_run=False):
         raise ValueError("Mapa no válido: " + "; ".join(report["errors"]))
     config["map"] = relative
     if not dry_run:
-        _replace_config(root / CONFIG_NAME, json.dumps(config, ensure_ascii=False, indent=2) + "\n")
+        _replace_config(project_config_path(root), json.dumps(config, ensure_ascii=False, indent=2) + "\n")
     return {"status": "dry_run" if dry_run else "ok", "map": relative,
             "config": config, "agents_updated": False}

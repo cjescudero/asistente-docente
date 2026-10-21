@@ -14,7 +14,8 @@ ninguno de esos pasos automáticamente.
 - [Instalación para administradores](#instalación-para-administradores): permisos y actualizaciones.
 - [Instalación avanzada](#instalación-avanzada): Codex CLI, Claude Code y Python.
 
-La versión publicada del plugin es **0.10.0**: [descargas y novedades](https://github.com/cjescudero/asistente-docente/releases/tag/v0.10.0).
+La versión publicada del plugin es **0.11.0**: [descargas y novedades](https://github.com/cjescudero/asistente-docente/releases/tag/v0.11.0).
+Incorpora la organización `curso-v3`.
 Comprueba la versión instalada antes de probar las novedades. Preparar archivos
 locales no actualiza el marketplace ni las instalaciones existentes. Después de
 una publicación, sincroniza el catálogo y comprueba la versión mostrada; una
@@ -62,11 +63,11 @@ los conoces. La skill ya implementada:
 
 - Pregunta solo por el contexto, las carpetas, los tipos de material y las
   exclusiones que falten; permite dejar la selección pendiente.
-- En 0.9 prepara `fuentes/`, `creados/`, `mapa-docente/`, `resultados/` y
-  `archivo/`, la configuración
-  `proyecto-docente.json`, una guía `LEEME.md` y las instrucciones `AGENTS.md`.
+- Prepara `fuentes/`, `materiales_generados/`, `mapa-docente/`, `resultados/` y
+  `archivo/`, la configuración en `_datos_internos_proyecto/proyecto-docente.json`,
+  una guía `LEEME.md` y las instrucciones `AGENTS.md`.
 - Respeta las instrucciones previas, pregunta ante conflictos y conserva la
-  preferencia de español claro. Propone una migración antes de mover originales.
+  preferencia de español claro. Propone movimientos concretos antes de trasladar originales.
 - Comprueba las entradas y capacidades disponibles y explica lo pendiente.
   La puesta en marcha deja la carpeta del mapa vacía; recomienda crear la wiki y ofrece orientación, pero no la crea sin encargo.
 
@@ -74,8 +75,7 @@ Comprueba que el agente ha leído `AGENTS.md`; si su aplicación no lo carga,
 pídele que lo lea al comenzar. El plugin no genera `CLAUDE.md` por sistema.
 Una petición sencilla con texto o adjuntos suficientes puede resolverse sin wiki
 ni proyecto completo. Véanse el [contrato del curso](PROYECTO-DOCENTE.md), el
-[ejemplo sintético](../examples/proyecto-docente/README.md) y la
-[migración de estructura](MIGRACION-0.9.md).
+[ejemplo sintético](../examples/proyecto-docente/README.md).
 
 ## Instalación para administradores
 

@@ -11,7 +11,7 @@ La práctica exige tabla y argumentación: [f003, Encargo y Entrega](../../conte
 
 ## Evaluación y posibilidades
 
-El [examen f004](../evaluaciones/f004.md) muestra un precedente de cálculo de medias.
+El [cuestionario f004](../evaluaciones/f004.md) muestra un precedente de cálculo de medias.
 Sus pesos son históricos. Para evaluar la práctica falta rúbrica vigente; no
 transferir esos pesos. Para nuevas preguntas, revisar primero las diapositivas
 originales y delimitar el objetivo O2.

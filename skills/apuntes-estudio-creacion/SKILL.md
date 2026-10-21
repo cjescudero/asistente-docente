@@ -21,11 +21,17 @@ lo necesario para el encargo: respetar selección y exclusiones, consultar el
 adjuntos suficientes permiten avanzar sin exigir una wiki ni carpetas llenas.
 No incorporar entradas de este encargo al corpus automáticamente.
 
-En `curso-v2`, guardar los apuntes en `creados/materiales/<id>/`, con
-`material-docente.json` de tipo `material` y estado visible en `LEEME.md`.
+Ante dudas sobre el uso, flujo, archivos o resultados del plugin, o preguntas
+sobre siguientes pasos y posibilidades, invocar
+[Proyecto docente: ayuda](../proyecto-docente-ayuda/SKILL.md) antes de responder.
+Transferirle el objetivo, las decisiones conocidas y los resultados de esta tarea;
+tras resolver la duda, retomar el encargo ya autorizado.
+
+En `curso-v3`, guardar los apuntes en `materiales_generados/materiales/<id>/`, con
+`_datos_internos/material-docente.json` de tipo `material` y estado visible en `LEEME.md`.
 Separar notas reservadas de los documentos estudiantiles. Mantener la misma
 ubicación cuando los apuntes sirvan después de fuente para otro encargo.
-Respetar destinos explícitos y cursos anteriores según el contrato común.
+Respetar los destinos explícitos acordados dentro del contrato común.
 
 ## Flujo
 
@@ -49,6 +55,8 @@ Para un apoyo visual complementario, consultar [infografías didácticas](../inf
 
 ## Sugerir el siguiente paso
 
-Aplicar el [cierre contextual de los flujos](../../docs/FLUJOS-DOCENTES.md):
+Invocar [Proyecto docente: ayuda](../proyecto-docente-ayuda/SKILL.md) para preparar
+el [cierre contextual de los flujos](../../docs/FLUJOS-DOCENTES.md), una sola vez
+por respuesta y reutilizando el contexto y las comprobaciones disponibles:
 proponer de uno a tres pasos pertinentes basados en resultados comprobados,
 sin iniciar otra tarea por el mero hecho de sugerirla. Ofrecer una actividad, un banco o diapositivas visuales individuales apoyados en los apuntes, comprobando si ya existen resultados relacionados antes de proponer crearlos.
