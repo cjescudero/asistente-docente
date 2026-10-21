@@ -10,14 +10,14 @@
   "sources": [
     {
       "id": "fuentes-vigentes",
-      "path": "../../fuentes/testimonios.md",
+      "path": "../../../../fuentes/teoria/testimonios.md",
       "locator": "Apartados Testimonio A y Testimonio B",
       "role": "current",
       "audience": "estudiante"
     },
     {
       "id": "actividad-anterior",
-      "path": "../../../archivo/actividad-anterior.md",
+      "path": "../../../../archivo/actividad-anterior.md",
       "locator": "Tareas y duración",
       "role": "inspiration",
       "audience": "docente"
@@ -25,22 +25,22 @@
   ],
   "files": {
     "statement": {
-      "path": "estudiante/enunciado.md",
+      "path": "../alumnado/enunciado.md",
       "audience": "estudiante"
     },
     "templates": [
       {
         "id": "ficha-comparacion",
-        "path": "estudiante/ficha-comparacion.md",
+        "path": "../alumnado/ficha-comparacion.md",
         "audience": "estudiante"
       }
     ],
     "rubric": {
-      "path": "docente/rubrica.md",
+      "path": "rubrica.md",
       "audience": "docente"
     },
     "teaching_guide": {
-      "path": "docente/guia-correccion.md",
+      "path": "guia-correccion.md",
       "audience": "docente"
     }
   }

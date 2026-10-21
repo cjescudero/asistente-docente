@@ -1,39 +1,64 @@
 # Catálogo y casos de aceptación
 
-El plugin contiene trece skills. La selección puede ser automática por descripción
+El plugin contiene doce skills. La selección puede ser automática por descripción
 o explícita por nombre. No se necesita un enrutador que cargue todas las
 instrucciones para cada petición. Los siguientes casos son una guía de evaluación del comportamiento
 del agente; las pruebas Python no sustituyen su ejecución en el anfitrión.
 
 | Skill | Petición representativa | Resultado esperado |
 | --- | --- | --- |
-| `iniciar-proyecto-docente` | Poner en marcha un proyecto con material docente. | Estructura de curso, configuración de fuentes, LEEME y AGENTS.md respetado; consulta ante conflictos, español claro, orientación y recomendación del mapa, sin crearlo automáticamente. |
-| `orientar-docente` | ¿Qué puedo hacer ahora con mi asignatura? | Opciones según el estado del curso, ejemplos de peticiones y entradas que faltan; sin leer todo el corpus ni iniciar procesos por su cuenta. |
-| `crear-mapa-docente` | Crear un Mapa docente de dos carpetas elegidas: materiales actuales y archivo de evaluaciones. | Índice, páginas Markdown y fuentes trazables; bloque en AGENTS.md para consultar desde el índice; originales intactos, acceso y lectura explícitos, lector y grafo cuando hay capacidades. |
-| `consultar-mapa-docente` | Localizar material y criterios vigentes para diseñar una práctica y evaluarla. | Respuesta con evidencia original, distinción de histórico/vigente y contexto para el siguiente encargo; sin editar el mapa ni regenerar el grafo. |
-| `visualizar-mapa-docente` | Regenerar el grafo docente y una vista para estudiantes. | HTML autónomos con arrastre, zoom, búsqueda, filtros y panel; la exportación estudiantil excluye datos reservados y sus dependencias transitivas, sin enlaces a archivos. |
-| `preparar-actividades-docentes` | Ayúdame a diseñar un taller de análisis histórico con estas fuentes. | Diálogo sobre conocimientos, materiales, ejemplos previos y uso de IA; enunciado, plantillas y rúbrica docente de la misma versión, con guía cuando corresponda. |
-| `generar-apuntes-estudio` | Preparar apuntes de ecología para primer curso a partir de un capítulo. | Explicación sustentada, símbolos definidos y Markdown/PDF; sin inventar fuentes. |
-| `evaluar-entregas` | Corregir ensayos descargados de Moodle con su enunciado y rúbrica. | Evidencia y puntuación por criterio, CSV de notas y feedback sobre copia, trazabilidad de cambios y casos pendientes; sin sancionar supuesto uso de IA. |
-| `crear-bancos-preguntas` | Crear preguntas de estos apuntes y de una actividad de literatura. | Bancos GIFT, procedencia, localizadores, conceptos, objetivos, dificultad y repaso en catálogo; inspiración histórica diferenciada del contenido vigente. |
-| `preparar-examenes-papel-moodle` | Combinar preguntas de dos temas y una práctica para tres modelos. | Reparto de cobertura acordado, modelos comparables y reproducibles, PDF, solucionarios, GIFT ofuscados, bancos congelados e informe de reutilización. |
-| `generar-feedback-evaluaciones` | Añadir comentarios al libro de calificaciones a partir del detalle del examen. | Hasta tres dificultades sustentadas y recomendaciones accesibles; notas preservadas y bloqueo de correspondencias ambiguas. |
-| `redactar-espanol-claro` | Simplificar una explicación manteniendo todas sus condiciones. | Español natural y preciso, sin resumir ni declarar certificación STE. |
-| `crear-infografias-didacticas` | Crear una diapositiva dibujada sobre una cadena causal. | Imagen revisada si hay generador; diseño y prompt claramente identificados si no lo hay. |
+| `proyecto-docente-inicializacion-adaptacion` | Poner en marcha un proyecto con material docente. | Estructura de curso, configuración de fuentes, LEEME y AGENTS.md respetado; consulta ante conflictos, español claro, orientación y recomendación del mapa, sin crearlo automáticamente. |
+| `proyecto-docente-ayuda` | ¿Qué puedo hacer ahora con mi asignatura? | Opciones según el estado del curso, ejemplos de peticiones y entradas que faltan; sin leer todo el corpus ni iniciar procesos por su cuenta. |
+| `mapa-docente-creacion-visualizacion` | Crear un Mapa docente de dos carpetas elegidas: materiales actuales y archivo de evaluaciones. | Índice, páginas Markdown y fuentes trazables; bloque en AGENTS.md para consultar desde el índice; originales intactos, acceso y lectura explícitos, lector y grafo cuando hay capacidades. |
+| `mapa-docente-consulta` | Localizar material y criterios vigentes para diseñar una práctica y evaluarla. | Respuesta con evidencia original, distinción de histórico/vigente y contexto para el siguiente encargo; sin editar el mapa ni regenerar el grafo. |
+| `mapa-docente-creacion-visualizacion` | Regenerar el grafo docente y una vista para estudiantes. | HTML autónomos con arrastre, zoom, búsqueda, filtros y panel; la exportación estudiantil excluye datos reservados y sus dependencias transitivas, sin enlaces a archivos. |
+| `actividades-preparacion` | Ayúdame a diseñar un taller de análisis histórico con estas fuentes. | Diálogo sobre conocimientos, materiales, ejemplos previos y uso de IA; enunciado, plantillas y rúbrica docente de la misma versión, con guía cuando corresponda. |
+| `apuntes-estudio-creacion` | Preparar apuntes de ecología para primer curso a partir de un capítulo. | Explicación sustentada, símbolos definidos y Markdown/PDF; sin inventar fuentes. |
+| `actividades-evaluacion` | Corregir ensayos descargados de Moodle con su enunciado y rúbrica. | Evidencia y puntuación por criterio, CSV de notas y feedback sobre copia, trazabilidad de cambios y casos pendientes; sin sancionar supuesto uso de IA. |
+| `bancos-preguntas-creacion` | Crear preguntas de estos apuntes y de una actividad de literatura. | Bancos GIFT, procedencia, localizadores, conceptos, objetivos, dificultad y repaso en catálogo; inspiración histórica diferenciada del contenido vigente. |
+| `evaluaciones-preparacion-modelos` | Combinar preguntas de dos temas y una práctica para tres modelos. | Reparto de cobertura acordado, modelos comparables y reproducibles, PDF, solucionarios, GIFT ofuscados, bancos congelados e informe de reutilización. |
+| `evaluaciones-observaciones-alumnado` | Añadir comentarios al libro de calificaciones a partir del detalle del examen. | Hasta tres dificultades sustentadas y recomendaciones accesibles; notas preservadas y bloqueo de correspondencias ambiguas. |
+| `espanol-conciso-redaccion` | Simplificar una explicación manteniendo todas sus condiciones. | Español natural y preciso, sin resumir ni declarar certificación STE. |
+| `infografias-didacticas-creacion` | Crear una diapositiva dibujada sobre una cadena causal. | Imagen revisada si hay generador; diseño y prompt claramente identificados si no lo hay. |
+
+## Nombres visibles
+
+Los identificadores y nombres visibles comienzan por su categoría. La interfaz
+se declara en `agents/openai.yaml`; el orden y su presentación dependen del anfitrión.
+
+| Nombre visible | Identificador |
+| --- | --- |
+| Actividades: evaluación | `actividades-evaluacion` |
+| Actividades: preparación | `actividades-preparacion` |
+| Apuntes estudio: creación | `apuntes-estudio-creacion` |
+| Bancos de preguntas: creación | `bancos-preguntas-creacion` |
+| Español conciso: redacción | `espanol-conciso-redaccion` |
+| Evaluaciones: observaciones para el alumnado | `evaluaciones-observaciones-alumnado` |
+| Evaluaciones: preparación modelos a partir de bancos de preguntas | `evaluaciones-preparacion-modelos` |
+| Infografías didácticas: creación | `infografias-didacticas-creacion` |
+| Mapa docente: consulta | `mapa-docente-consulta` |
+| Mapa docente: creación y visualización | `mapa-docente-creacion-visualizacion` |
+| Proyecto docente: ayuda | `proyecto-docente-ayuda` |
+| Proyecto docente: inicialización y adaptación | `proyecto-docente-inicializacion-adaptacion` |
 
 ## Casos de aceptación de la puesta en marcha
 
-- Proyecto nuevo sin mapa: crear el árbol `curso-v1`, configuración, LEEME y
+- Proyecto nuevo sin mapa: crear el árbol `curso-v2`, configuración, LEEME y
   AGENTS.md con español claro. Preguntar por ubicación, tipos y selección de
   materiales que falten; dejar la carpeta del mapa vacía, recomendar su creación
   y ofrecer orientación. Crear el mapa requiere un encargo del profesor.
+- Curso anterior: conservar su estructura hasta una migración concreta aprobada.
+  Distinguir originales y documentos creados sin inferir procedencia por su carpeta.
+- Cierre: seguir los [flujos docentes](FLUJOS-DOCENTES.md), comprobar indicios
+  de resultados y proponer el siguiente paso pendiente sin ejecutarlo. Ofrecer
+  apuntes y diapositivas visuales individuales; español claro salvo otra preferencia.
 - Proyecto con instrucciones propias: modificar solo lo indicado, conservando
   texto y organización ajenos al encargo. Repetir sin duplicar reglas.
 - Regla existente incompatible con la petición o el estilo predeterminado:
   explicar el conflicto y preguntar; no sobrescribir mientras falta la respuesta.
 - Orígenes y tipos ya indicados: reutilizarlos sin volver a preguntar. Si solo
   falta el tipo de material, pedir únicamente ese dato.
-- Redacción: registrar `redactar-espanol-claro` como opción predeterminada
+- Redacción: registrar `espanol-conciso-redaccion` como opción predeterminada
   del proyecto, sin cambiar su activación global ni inventar su disponibilidad.
 - Proyecto con un bloque de consulta del mapa: conservarlo sin reemplazarlo ni
   regenerar la documentación.
@@ -45,8 +70,8 @@ del agente; las pruebas Python no sustituyen su ejecución en el anfitrión.
 - Migración: informar movimientos, colisiones y enlaces sin aplicar cambios;
   esperar aprobación de la propuesta antes de mover originales.
 
-El [contrato común](PROYECTO-DOCENTE.md) se aplica a las trece skills según las
-entradas necesarias. Las equivalencias de nombres están en [migración](MIGRACION-0.7.md).
+El [contrato común](PROYECTO-DOCENTE.md) se aplica a las doce skills según las
+entradas necesarias. Las equivalencias de nombres están en [migración a 0.9](MIGRACION-0.9.md).
 
 ## Casos de aceptación de orientación, actividades y evaluación
 
@@ -146,3 +171,21 @@ entradas necesarias. Las equivalencias de nombres están en [migración](MIGRACI
 
 Las habilidades de mantenimiento del proyecto original se sustituyen por las
 comprobaciones del paquete; sus alias no duplican skills públicas.
+
+## Revisión de organización y aprobación (0.9.0)
+
+Casos de aceptación para el agente, no un clasificador por nombres ni pruebas
+reales de interfaz. La utilidad de migración prepara propuestas sin aplicarlas.
+
+| Caso | Conducta que debe verificarse |
+| --- | --- |
+| Carpeta vacía | Confirmar que no hay errores de acceso, preparar estructura sin inventariar lecturas ficticias. |
+| Carpeta mezclada con teoría, exámenes y entregas | Inventariar antes de crear; inspeccionar lo necesario, separar resultados y proponer tabla y árbol. |
+| `final-2025.pdf` contiene una actividad vigente | El nombre es pista; preguntar procedencia, estado y audiencia que el contenido no acredite. |
+| Archivo ilegible | Marcar pendiente, pedir aclaración y no incluir su traslado entre los movimientos ejecutables. |
+| Aprobación completa | Aplicar solo la tabla acordada tras comprobar colisiones, enlaces y huellas. |
+| Aprobación parcial | Mover solo lo seleccionado; presentar dependencias adicionales antes de intervenirlas. |
+| Rechazo | Mantener ubicaciones; continuar ajustes compatibles sin imponer otro árbol. |
+| Dos archivos con mismo destino | Detener esos movimientos y pedir una resolución, sin sobrescribir ni renombrar silenciosamente. |
+| Examen usado con manifiesto y snapshot | Conservar el conjunto, versiones, pesos y correspondencias; revisar rutas sin sustituciones globales. |
+| Curso configurado con AGENTS propio | Respetar v1/v2, consultar conflictos y repetir sin duplicar reglas ni movimientos. |

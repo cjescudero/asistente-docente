@@ -47,11 +47,14 @@ class PackagingTests(unittest.TestCase):
                     self.assertIn('.codex-plugin/plugin.json', names)
                 self.assertNotIn("plugin.json" if "-claude.zip" in name else ".claude-plugin/plugin.json", names)
                 self.assertEqual(json.loads(archive.read(expected))["name"], "asistente-docente")
-                self.assertEqual(sum(n.startswith("skills/") and n.endswith("/SKILL.md") for n in names), 13)
-                self.assertIn("skills/iniciar-proyecto-docente/SKILL.md", names)
-                self.assertIn("skills/orientar-docente/SKILL.md", names)
-                self.assertIn("skills/crear-mapa-docente/assets/agents-mapa.md", names)
-                self.assertNotIn("skills/iniciar-proyecto-docente/assets/agents-proyecto.md", names)
+                self.assertEqual(sum(n.startswith("skills/") and n.endswith("/SKILL.md") for n in names), 12)
+                self.assertIn("skills/proyecto-docente-inicializacion-adaptacion/SKILL.md", names)
+                self.assertIn("skills/proyecto-docente-ayuda/SKILL.md", names)
+                self.assertEqual(sum(n.startswith("skills/") and n.endswith("/agents/openai.yaml") for n in names), 12)
+                self.assertIn("skills/mapa-docente-creacion-visualizacion/references/visualizacion.md", names)
+                self.assertFalse(any(n.startswith("skills/visualizar-mapa-docente/") for n in names))
+                self.assertIn("skills/mapa-docente-creacion-visualizacion/assets/agents-mapa.md", names)
+                self.assertNotIn("skills/proyecto-docente-inicializacion-adaptacion/assets/agents-proyecto.md", names)
                 self.assertTrue(all(not n.startswith(("/", "bin/")) and "\\" not in n and ".." not in Path(n).parts for n in names))
                 self.assertFalse(any(".venv" in n or "__pycache__" in n or n.endswith(".zip") for n in names))
                 entries.append({n:archive.read(n) for n in names if Path(n).name != 'plugin.json'})
@@ -85,8 +88,9 @@ class PackagingTests(unittest.TestCase):
                     self.assertEqual(result.returncode, 0, result.stderr)
                     self.assertFalse(json.loads(result.stdout)["wiki_created"])
                     self.assertTrue((course / "AGENTS.md").is_file())
-                    self.assertTrue((course / "docente/resultados/entregas").is_dir())
-                    self.assertEqual(list((course / "docente/mapa-docente").iterdir()), [])
+                    self.assertTrue((course / "resultados").is_dir())
+                    self.assertTrue((course / "creados/actividades").is_dir())
+                    self.assertEqual(list((course / "mapa-docente").iterdir()), [])
                     connected = subprocess.run(
                         [sys.executable, str(install / "examples/recorrido-docente/comprobar.py"),
                          str(base / "recorrido")], cwd=base, capture_output=True,
@@ -128,6 +132,19 @@ class PackagingTests(unittest.TestCase):
                              cwd=self.temp.name, capture_output=True, text=True)
         self.assertEqual(run.returncode, 0, run.stdout + run.stderr)
         self.assertEqual(json.loads(run.stdout), self.hashes)
+
+    def test_skill_interface_drift_and_absence_are_reported(self):
+        interface = self.root / "skills/actividades-evaluacion/agents/openai.yaml"
+        original = interface.read_bytes()
+        try:
+            interface.write_text('interface:\n  display_name: "Otra categoría"\n  short_description: "Breve"\n', encoding="utf-8")
+            errors = validate(self.root)
+            self.assertTrue(any("Nombre visible incorrecto" in e for e in errors))
+            self.assertTrue(any("Descripción corta inválida" in e for e in errors))
+            interface.unlink()
+            self.assertTrue(any("Interfaz ausente" in e for e in validate(self.root)))
+        finally:
+            interface.write_bytes(original)
 
     def test_generated_adapter_drift_and_missing_license_are_reported(self):
         adapter = self.root / '.claude-plugin/plugin.json'

@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "profile": "worksheet",
+  "activity_id": "medir-y-justificar",
+  "attempt_id": "ordinaria",
+  "identifier_column": "Identificador",
+  "grade_column": "Calificación",
+  "feedback_column": "Comentarios de retroalimentación",
+  "grade_max": 10,
+  "decimals": 2,
+  "rounding": "half_up",
+  "advanced_grading": false,
+  "activity_record": "../../../../creados/actividades/medir-y-justificar/docente/actividad.json"
+}

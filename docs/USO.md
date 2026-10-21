@@ -1,6 +1,6 @@
 # Uso de Asistente docente
 
-El plugin reúne trece skills que comparten criterios de claridad y trazabilidad.
+El plugin reúne doce skills que comparten criterios de claridad y trazabilidad.
 Se puede pedir directamente el resultado en lenguaje natural, sin conocer sus
 nombres. Para descubrir el siguiente paso, pregunta **«¿Qué puedo hacer ahora
 con mi asignatura?»**. La ficha del curso ayuda cuando hay decisiones docentes
@@ -8,19 +8,19 @@ relevantes; no es un trámite obligatorio para cada petición.
 
 | Necesidad | Skill |
 | --- | --- |
-| Preparar el curso, elegir fuentes y conciliar sus instrucciones | [Iniciar proyecto docente](../skills/iniciar-proyecto-docente/SKILL.md) |
-| Conocer opciones y entradas necesarias según el estado del curso | [Orientar al docente](../skills/orientar-docente/SKILL.md) |
-| Organizar carpetas elegidas y establecer el mapa como entrada del proyecto | [Crear Mapa docente](../skills/crear-mapa-docente/SKILL.md) |
-| Localizar evidencia en el mapa sin modificarlo | [Consultar Mapa docente](../skills/consultar-mapa-docente/SKILL.md) |
-| Generar o regenerar el lector HTML de la wiki y su grafo | [Visualizar Mapa docente](../skills/visualizar-mapa-docente/SKILL.md) |
-| Diseñar por diálogo enunciados, plantillas y rúbrica docente | [Preparar actividades](../skills/preparar-actividades-docentes/SKILL.md) |
-| Teoría y materiales de estudio | [Generar apuntes](../skills/generar-apuntes-estudio/SKILL.md) |
-| Corregir trabajos y preparar notas y feedback para Moodle | [Evaluar entregas](../skills/evaluar-entregas/SKILL.md) |
-| Bancos asociados a materiales y actividades | [Crear bancos](../skills/crear-bancos-preguntas/SKILL.md) |
-| Combinar bancos en modelos impresos y respuestas ofuscadas | [Preparar exámenes](../skills/preparar-examenes-papel-moodle/SKILL.md) |
-| Resultados y comentarios de mejora | [Generar feedback](../skills/generar-feedback-evaluaciones/SKILL.md) |
-| Claridad, precisión y formato explicativo | [Redactar español claro](../skills/redactar-espanol-claro/SKILL.md) |
-| Imágenes con estilo de boceto didáctico | [Crear infografías](../skills/crear-infografias-didacticas/SKILL.md) |
+| Preparar el curso, elegir fuentes y conciliar sus instrucciones | [Proyecto docente: inicialización y adaptación](../skills/proyecto-docente-inicializacion-adaptacion/SKILL.md) |
+| Conocer opciones y entradas necesarias según el estado del curso | [Proyecto docente: ayuda](../skills/proyecto-docente-ayuda/SKILL.md) |
+| Organizar carpetas elegidas y establecer el mapa como entrada del proyecto | [Mapa docente: creación y visualización](../skills/mapa-docente-creacion-visualizacion/SKILL.md) |
+| Localizar evidencia en el mapa sin modificarlo | [Mapa docente: consulta](../skills/mapa-docente-consulta/SKILL.md) |
+| Generar o regenerar el lector HTML de la wiki y su grafo | [Mapa docente: creación y visualización](../skills/mapa-docente-creacion-visualizacion/SKILL.md) |
+| Diseñar por diálogo enunciados, plantillas y rúbrica docente | [Actividades: preparación](../skills/actividades-preparacion/SKILL.md) |
+| Teoría y materiales de estudio | [Apuntes estudio: creación](../skills/apuntes-estudio-creacion/SKILL.md) |
+| Corregir trabajos y preparar notas y feedback para Moodle | [Actividades: evaluación](../skills/actividades-evaluacion/SKILL.md) |
+| Bancos asociados a materiales y actividades | [Bancos de preguntas: creación](../skills/bancos-preguntas-creacion/SKILL.md) |
+| Combinar bancos en modelos impresos y respuestas ofuscadas | [Evaluaciones: preparación modelos a partir de bancos de preguntas](../skills/evaluaciones-preparacion-modelos/SKILL.md) |
+| Resultados y comentarios de mejora | [Evaluaciones: observaciones para el alumnado](../skills/evaluaciones-observaciones-alumnado/SKILL.md) |
+| Claridad, precisión y formato explicativo | [Español conciso: redacción](../skills/espanol-conciso-redaccion/SKILL.md) |
+| Imágenes con estilo de boceto didáctico | [Infografías didácticas: creación](../skills/infografias-didacticas-creacion/SKILL.md) |
 
 ## Iniciar el proyecto docente
 
@@ -37,7 +37,7 @@ en marcha no duplica reglas ni borra un mapa o una selección previos.
 El profesor elige las carpetas y exclusiones del corpus, o aplaza esa selección.
 La inicialización deja la carpeta del mapa vacía cuando no existe, recomienda
 crearlo y ofrece orientación para continuar. Su creación requiere un encargo del
-profesor. Establece `redactar-espanol-claro` para escribir en español y conserva
+profesor. Establece `espanol-conciso-redaccion` para escribir en español y conserva
 un bloque de consulta de mapa existente.
 
 Comprobar que el anfitrión incorpora `AGENTS.md`. Si no, pedir su lectura
@@ -72,13 +72,19 @@ infografías conserva ese alcance; no promete presentaciones editables.
 
 Usar la [ficha Markdown](../templates/ficha-asignatura.md) o su [ejemplo JSON](../templates/ficha-asignatura.json) como contexto. Registrar objetivos, audiencia, fuentes vigentes, criterios y recursos permitidos. No imponer la estructura de una asignatura anterior ni usar exámenes reservados como fuente de apuntes sin autorización.
 
-Guardar materiales y resultados fuera del paquete instalado. En proyectos
-inicializados, usar el árbol `curso-v1`: borradores en `docente/borradores/`,
-bancos incorporados al catálogo en `docente/evaluaciones/bancos/`, lotes de
-entregas en `docente/resultados/entregas/<actividad>/<convocatoria>/` y material
-destinado a estudiantes en `alumnado/`. La entrega al alumnado debe formar parte
-del encargo; no mantener copias de exportación por sistema. Una tarea con texto
-o adjuntos suficientes no exige crear un proyecto ni llenar carpetas.
+Guardar materiales y resultados fuera del paquete instalado. Los cursos nuevos
+usan `curso-v2`: originales en `fuentes/`, trabajos nuevos por tipo en `creados/`,
+wiki en `mapa-docente/` y lotes en `resultados/<actividad>/<convocatoria>/`, con
+`recibidos/` y `correccion/` separados. Las actividades y exámenes reúnen sus
+documentos de alumnado y docente en subcarpetas. Los estados se registran sin
+mover ni duplicar los archivos. Los cursos `curso-v1` conservan sus rutas hasta
+una [migración acordada](MIGRACION-0.9.md).
+
+Al terminar una skill, ofrecer próximos pasos según los resultados existentes,
+sin ejecutar otras tareas ni asumir que una carpeta acredita su finalización.
+Seguir los [flujos docentes](FLUJOS-DOCENTES.md) y usar español claro por defecto,
+salvo indicación distinta. Una tarea con adjuntos suficientes no exige preparar
+todo el curso ni crear un mapa.
 
 Para materiales escritos, entregar Markdown y PDF por defecto. El Mapa docente usa Markdown navegable, registro JSON, lector `index.html` y grafo HTML; el PDF solo se añade si se pide una copia estática. Un notebook es opcional. Una petición de imagen o vídeo conserva su formato: ni un prompt ni un guion cuentan como archivo final generado. Las infografías requieren una capacidad de imágenes disponible; si falta, esa skill entrega brief y prompt, sin cambiar por defecto a SVG. El grafo del mapa se construye a partir de datos y enlaces, sin generación de imágenes.
 
@@ -124,7 +130,7 @@ No hace falta ejecutar previamente la skill de puesta en marcha.
 
 Al crear o actualizar el mapa, la propia skill integra en el `AGENTS.md` de la
 raíz del proyecto docente el bloque de consulta, siguiendo su
-[plantilla](../skills/crear-mapa-docente/assets/agents-mapa.md). Si esa raíz
+[plantilla](../skills/mapa-docente-creacion-visualizacion/assets/agents-mapa.md). Si esa raíz
 no está identificada, la solicita; no la deduce buscando carpetas ascendentes.
 Conserva las instrucciones previas y actualiza el bloque del mapa una sola vez,
 incluido el que pudiera existir desde la versión 0.5.0. Las rutas al índice y a
@@ -151,7 +157,7 @@ incluye generar su lector `index.html` y su grafo mediante la skill de visualiza
 cuando están las capacidades necesarias y la validación del corpus y sus
 dependencias pasa. También puede pedirse regenerar solo uno.
 
-El mapa de un curso inicializado está en `docente/mapa-docente/`, con `index.md`,
+El mapa de un curso nuevo está en `mapa-docente/`, con `index.md`,
 `LEEME.md`, `fuentes.json`, `incidencias.md` y `log.md`. Un mapa previo conserva
 su ruta hasta una migración autorizada. Bajo `contenidos/` se separan conceptos,
 presentaciones, apuntes, prácticas y talleres; bajo `reservado/`, evaluaciones,
@@ -257,10 +263,10 @@ reparto acordado. El formato del catálogo y de la selección se detalla en
 
 ```sh
 python "$ASISTENTE_DOCENTE/scripts/docencia.py" validate-catalog \
-  docente/evaluaciones/bancos/catalogo.json --project .
+  creados/bancos/catalogo.json --project .
 python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-exams \
-  --catalog docente/evaluaciones/bancos/catalogo.json --selection reparto.json \
-  --project . --output examen --title "Evaluación de fuentes" \
+  --catalog creados/bancos/catalogo.json --selection reparto.json \
+  --project . --output creados/examenes/parcial-01 --layout curso-v2 --title "Evaluación de fuentes" \
   --models 2 --questions 5 --seed 42
 ```
 
@@ -269,7 +275,7 @@ También se mantiene la entrada de un único banco:
 ```sh
 python "$ASISTENTE_DOCENTE/scripts/docencia.py" validate-bank banco.gift
 python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-exams banco.gift \
-  --metadata metadatos.json --output examen \
+  --metadata metadatos.json --output creados/examenes/parcial-01 --layout curso-v2 \
   --title "Evaluación de fuentes" --models 2 --questions 5 --seed 42
 ```
 
@@ -304,11 +310,13 @@ En GIFT, escapar además los caracteres especiales del formato antes de guardar 
 ### Feedback de resultados
 
 ```sh
-python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-feedback examen/manifest.json \
-  --input resultados.csv --config feedback.json --output comentarios
+python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-feedback creados/examenes/parcial-01/docente/manifest.json \
+  --input resultados/parcial-01/ordinaria/recibidos/resultados.csv \
+  --config feedback.json --output resultados/parcial-01/ordinaria/correccion/feedback
 ```
 
-Repetir `--input` para varios CSV. La configuración debe mapear columnas reales, identificadores, modelo, estado, máximos y valores declarados de ausencia o blanco; véase [Moodle](MOODLE.md). Los mapas pueden variar por modelo. No suponer que todos los CSV usan el mismo separador o escala.
+Para exámenes anteriores con salida plana, usar su `manifest.json` en la raíz
+del examen, sin moverlo ni regenerar sus snapshots. Repetir `--input` para varios CSV. La configuración debe mapear columnas reales, identificadores, modelo, estado, máximos y valores declarados de ausencia o blanco; véase [Moodle](MOODLE.md). Los mapas pueden variar por modelo. No suponer que todos los CSV usan el mismo separador o escala.
 
 Para añadir comentarios a una copia del libro de calificaciones, aportar esa
 exportación vigente mediante `--gradebook calificaciones.csv` y declarar las

@@ -1,11 +1,15 @@
 # Asistente docente
 
-Trece skills para organizar fuentes, crear materiales, evaluar y devolver feedback en
+Doce skills para organizar fuentes, crear materiales, evaluar y devolver feedback en
 cualquier asignatura. La fuente común genera paquetes para **ChatGPT Work** y
-**Claude Cowork**. Versión **0.8.0**, bajo [MIT](LICENSE).
+**Claude Cowork**. Versión **0.9.0**, bajo [MIT](LICENSE).
 [Instalación y primer uso](docs/INSTALACION.md) ·
-[Descargar la versión 0.8.0](https://github.com/cjescudero/asistente-docente/releases/tag/v0.8.0) ·
+[Última release publicada: 0.9.0](https://github.com/cjescudero/asistente-docente/releases/tag/v0.9.0) ·
 [Repositorio](https://github.com/cjescudero/asistente-docente).
+
+Las doce skills se agrupan por categoría: actividades, evaluaciones, mapa y
+proyecto docente, junto con bancos y apoyos. Consulta los [nombres y funciones](docs/CATALOGO.md)
+y las [equivalencias de actualización](docs/MIGRACION-0.9.md).
 
 ## Inicio rápido
 
@@ -58,17 +62,18 @@ la carpeta del curso y permite al agente trabajar con ella. Escribe:
 **«Inicia mi proyecto docente».**
 
 El agente pregunta por el contexto, los materiales y las exclusiones que falten;
-prepara las carpetas `alumnado/`, `docente/` y `archivo/`, la configuración y una
+separa los originales en `fuentes/` de los trabajos nuevos en `creados/`,
+prepara el mapa y los resultados en carpetas propias, la configuración y una
 guía breve. Conserva tus instrucciones y consulta los conflictos. Comprueba qué
 está disponible y qué falta. Al terminar, te orienta y recomienda crear el mapa
 docente; lo creará cuando se lo pidas. Si ya hay
 materiales, presenta una propuesta antes de reorganizarlos. No necesitas escribir
 comandos.
 
-Este recorrido corresponde a la **0.8.0**. Si ya tienes el marketplace,
-actualiza su contenido y comprueba la versión instalada. Publicar una versión
+Este recorrido corresponde a la **0.9.0**, preparada localmente. La publicación
+y la actualización del marketplace son pasos posteriores. Publicar una versión
 en GitHub no actualiza por sí solo una instalación existente. [Guía para el profesor](docs/PROYECTO-DOCENTE.md) ·
-[Actualizar a 0.8](docs/MIGRACION-0.8.md).
+[Actualizar la organización del curso](docs/MIGRACION-0.9.md).
 
 <a href="https://github.com/cjescudero/asistente-docente">
   <img src="assets/qr-repositorio.png" alt="Código QR del repositorio de Asistente docente en GitHub" width="288" height="288">
@@ -99,17 +104,20 @@ y su [índice de ejemplo](examples/mapa-docente/mapa-docente/index.md).
 
 ## Puesta en marcha del proyecto docente
 
-`iniciar-proyecto-docente` organiza `alumnado/`, `docente/` y `archivo/`, guarda
+`proyecto-docente-inicializacion-adaptacion` prepara la estructura `curso-v2` y guarda
 la selección explícita en `proyecto-docente.json` y prepara `LEEME.md` y
 `AGENTS.md`. Conserva las instrucciones existentes y pregunta ante conflictos.
-Establece `redactar-espanol-claro` para escribir en español y aclara dónde están
+Establece `espanol-conciso-redaccion` para escribir en español y aclara dónde están
 los contenidos y qué son cuando falte esa información.
 
-Los materiales nuevos se preparan en `docente/borradores/`; las entregas,
-calificaciones y feedback se guardan en `docente/resultados/`, fuera de la wiki.
-`alumnado/conocimientos/` recoge aclaraciones útiles, sin duplicar el mapa.
+Los originales viven en `fuentes/`. Los materiales nuevos se reúnen por tipo en
+`creados/`: materiales, actividades, bancos y exámenes. Cada actividad o examen
+separa documentos del alumnado y del docente; su estado figura en un registro y
+en su `LEEME.md`, sin mover archivos al revisarlos. Los lotes en `resultados/`
+separan los archivos recibidos de las correcciones y quedan fuera de la wiki.
+Los cursos anteriores conservan su estructura hasta una migración acordada.
 Los lotes de entregas se organizan por actividad y convocatoria en
-`docente/resultados/entregas/`. La carpeta `docente/mapa-docente/` queda vacía
+`resultados/`. La carpeta `mapa-docente/` queda vacía
 hasta un encargo de creación. Puedes pedir orientación en cualquier momento.
 La selección de fuentes no autoriza su publicación ni acredita que se hayan leído.
 Consulta el [árbol completo y el contrato](docs/PROYECTO-DOCENTE.md).
@@ -136,6 +144,24 @@ Las importaciones en Moodle son manuales. Las ayudas complementarias son
 infografías y diapositivas visuales individuales, apuntes y español claro inspirado
 en ASD-STE100; no se promete una presentación editable.
 
+## Próximos pasos durante el trabajo
+
+Al terminar una tarea, el agente propone próximos pasos con ejemplos de petición:
+
+- **Inicio → mapa docente → elección del siguiente trabajo.** Si el mapa ya
+  existe, propone consultarlo, visualizarlo o actualizarlo.
+- **Actividad → evaluación de sus entregas.** Si aún no hay entregas, explica
+  cuáles se necesitarán junto con la rúbrica y la hoja de calificaciones.
+- **Banco → modelos impresos → feedback.** Para el último paso necesita el
+  manifiesto del examen y los resultados por pregunta, además de las notas.
+- **Apoyos:** apuntes y diapositivas visuales individuales a partir de las fuentes.
+
+Las sugerencias usan los registros y archivos pertinentes. Una carpeta vacía
+no acredita un resultado; un indicio se verifica antes de proponer repetirlo.
+No se inicia la siguiente tarea automáticamente. Se usa español claro por
+defecto, salvo que el profesor indique otro idioma o estilo.
+[Reglas de orientación](docs/FLUJOS-DOCENTES.md).
+
 ## Mapa docente
 
 Tres skills separadas permiten crear o mantener el mapa, consultarlo sin cambios
@@ -148,11 +174,12 @@ de puesta en marcha. Si no se conoce la raíz del proyecto, se solicita.
 
 El profesor elige explícitamente una o varias carpetas de origen y sus
 exclusiones. El mapa reutiliza la selección guardada; no descubre fuentes ni
-amplía el corpus por seguir enlaces. Resultados, borradores y el propio mapa
-quedan excluidos. Las páginas dependientes de fuentes retiradas requieren revisión. Los originales
+amplía el corpus por seguir enlaces. Resultados y el propio mapa quedan
+excluidos; los materiales creados necesitan selección explícita y estado revisado
+o listo para entregar. Los borradores permanecen fuera. Las páginas dependientes de fuentes retiradas requieren revisión. Los originales
 no se mueven, editan ni copian salvo petición expresa de copia.
 
-En un curso inicializado, el mapa reside en `docente/mapa-docente/`. Un mapa
+En un curso nuevo, el mapa reside en `mapa-docente/`. Un mapa
 previo conserva su ubicación hasta una migración acordada. Dentro del mapa, `contenidos/` organiza
 conceptos, presentaciones, apuntes, prácticas y talleres; `reservado/` separa
 evaluaciones, soluciones y criterios que no deben trasladarse al alumnado.
@@ -204,11 +231,13 @@ incorpora ese origen de GitHub y después se instala el plugin en la cuenta.
 No basta con copiar una skill aislada: comparte referencias y utilidades con
 el resto del paquete. La instalación depende de las capacidades de la cuenta.
 
-La [release 0.8.0](https://github.com/cjescudero/asistente-docente/releases/tag/v0.8.0) ofrece:
+La última [release publicada, 0.9.0](https://github.com/cjescudero/asistente-docente/releases/tag/v0.9.0) ofrece:
 
-- `asistente-docente-0.8.0-agent-plugins.zip`: Agent Plugins y adaptador Codex.
-- `asistente-docente-0.8.0-claude.zip`: plugin para Claude.
-- `asistente-docente-0.8.0-source.zip`: fuente con catálogos y automatización GitHub.
+- `asistente-docente-0.9.0-agent-plugins.zip`: Agent Plugins y adaptador Codex.
+- `asistente-docente-0.9.0-claude.zip`: plugin para Claude.
+- `asistente-docente-0.9.0-source.zip`: fuente con catálogos y automatización GitHub.
+
+Las versiones anteriores y sus paquetes se conservan.
 
 ## Utilidades para agentes y desarrollo
 
@@ -327,7 +356,7 @@ y construye paquetes como artefactos; no publica releases ni notas de alumnos.
 Los ZIP excluyen entornos, cachés y datos operativos. `SHA256SUMS` permite
 comprobar su integridad; `contents.json` registra el contenido común.
 
-La versión 0.8.0 se distribuye desde GitHub con su fuente y paquetes. Las
+La versión 0.9.0 se distribuye desde GitHub con su fuente y paquetes. Las
 versiones anteriores se conservan. La subida del código
 no demuestra una instalación real en cada anfitrión.
 La distribución se mantiene en los marketplaces de GitHub; no se solicita

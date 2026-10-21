@@ -20,6 +20,11 @@ class ProjectMapTests(unittest.TestCase):
         temp = tempfile.TemporaryDirectory()
         self.addCleanup(temp.cleanup)
         self.root = Path(temp.name).resolve() / "curso"
+        # Los mapas de cursos anteriores conservan su configuración y sus rutas.
+        self.root.mkdir()
+        (self.root / "proyecto-docente.json").write_text(json.dumps({
+            "schema_version": 1, "structure": "curso-v1",
+            "sources": {"selected": False, "include": [], "exclude": []}, "map": None}), encoding="utf-8")
         initialize_project(self.root, include=["alumnado/materiales", "docente/evaluaciones"])
         self.guide = self.root / "docente/mapa-docente"
         self.exam = self.root / "docente/evaluaciones/examen.md"
@@ -156,3 +161,37 @@ class ProjectMapTests(unittest.TestCase):
                                 cwd=self.root.parent, capture_output=True, text=True)
         self.assertEqual(result.returncode, 1, result.stderr)
         self.assertEqual(json.loads(result.stdout)["project_policy"]["excluded_source_ids"], ["examen"])
+
+    def test_v2_generated_source_reverted_to_draft_invalidates_transitive_pages(self):
+        folder = self.root / "creados/actividades/lectura"
+        (folder / "alumnado").mkdir(parents=True)
+        statement = folder / "alumnado/enunciado.md"
+        statement.write_text("Enunciado publicado para el curso", encoding="utf-8")
+        record = folder / "material-docente.json"
+        metadata = {"schema_version": 1, "id": "lectura", "type": "actividad", "status": "revisado"}
+        record.write_text(json.dumps(metadata), encoding="utf-8")
+        config = load_project(self.root)
+        config.update(structure="curso-v2")
+        config["sources"]["include"] = ["creados/actividades/lectura/alumnado"]
+        (self.root / "proyecto-docente.json").write_text(json.dumps(config), encoding="utf-8")
+        self.data["source_roots"] = {"teoria": "../../creados/actividades/lectura/alumnado"}
+        self.data["sources"] = self.data["sources"][:1]
+        self.data["pages"] = self.data["pages"][:1]
+        source = self.data["sources"][0]
+        source.update(path="enunciado.md", sha256=hashlib.sha256(statement.read_bytes()).hexdigest())
+        (self.guide / "reservado/examen.md").unlink()
+        (self.guide / "index.md").write_text("[Actividad](contenidos/teoria.md)", encoding="utf-8")
+        self.save()
+        self.assertEqual(validate_library(self.guide)["status"], "ok")
+        metadata["status"] = "borrador"
+        record.write_text(json.dumps(metadata), encoding="utf-8")
+        real_open = Path.open
+        def guarded(path, *args, **kwargs):
+            if path.resolve() == statement:
+                raise AssertionError("El mapa no debe abrir una producción devuelta a borrador.")
+            return real_open(path, *args, **kwargs)
+        with patch.object(Path, "open", guarded):
+            report = validate_library(self.guide)
+        self.assertEqual(report["status"], "invalid")
+        self.assertEqual(report["project_policy"]["excluded_source_ids"], ["teoria"])
+        self.assertEqual(report["project_policy"]["affected_pages"], ["contenidos/teoria.md", "index.md"])

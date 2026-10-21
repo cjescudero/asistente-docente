@@ -15,8 +15,8 @@ locales no equivalen a una importación real.
 
 Descargar las entregas y la hoja de calificaciones correspondientes a la actividad
 y convocatoria. Guardar los originales en
-`docente/resultados/entregas/<actividad>/<convocatoria>/`, separados de los
-archivos de identificación y de los resultados de corrección. El lote queda fuera
+`resultados/<actividad>/<convocatoria>/recibidos/`, con la identificación
+explícita correspondiente. Guardar notas y feedback nuevos en `correccion/`. El lote queda fuera
 de la wiki.
 
 La corrección usa el enunciado aplicado, la rúbrica y la guía o resolución
@@ -59,9 +59,11 @@ GIFT es un formato de texto para preguntas de Moodle; no es el formato de imagen
 ## Preparar y comprobar los modelos
 
 Generar papel, solucionario y GIFT desde la misma selección ordenada mediante
-`build-exams`. Se puede combinar el [catálogo de bancos](BANCOS.md) por materiales,
+`build-exams --layout curso-v2` en cursos nuevos. Se puede combinar el [catálogo de bancos](BANCOS.md) por materiales,
 actividades y dificultad tras acordar el reparto. Conservar `manifest.json`,
-los bancos utilizados congelados y sus metadatos. Si después se corrige un banco
+los bancos utilizados congelados y sus metadatos en la subcarpeta `docente/`.
+Los documentos imprimibles están en `alumnado/`. La salida anterior se conserva
+cuando no se indica esa opción; no mover sus archivos a mano. Si después se corrige un banco
 de trabajo, no sustituir el snapshot del examen aplicado.
 
 Revisar todos los modelos antes de imprimir. La pregunta 1 y la opción A del papel deben corresponder a la pregunta 1 y opción A de Moodle, aunque la correcta sea C. Verdadero/falso se representa como dos opciones de selección única, respetando su posición. Las numéricas conservan campo numérico y tolerancia. Emparejamiento no se usa en el flujo ofuscado de esta versión.

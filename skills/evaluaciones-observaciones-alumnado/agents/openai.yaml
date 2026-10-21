@@ -1,0 +1,3 @@
+interface:
+  display_name: "Evaluaciones: observaciones para el alumnado"
+  short_description: "Preparar observaciones desde respuestas y notas de Moodle"

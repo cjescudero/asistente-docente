@@ -2,11 +2,12 @@
 
 ## Alcance
 
-Este proyecto contiene trece skills docentes y utilidades portables para ChatGPT
+Este proyecto contiene doce skills docentes y utilidades portables para ChatGPT
 Work y Claude Cowork. Por decisión explícita del usuario, carpeta, identificador
 y paquetes se llaman `asistente-docente`, sin prefijo `plugin-`. Las skills
 usan nombres sin prefijo `skill-` desde 0.7.0 por decisión del propietario;
-las equivalencias anteriores se documentan en `docs/MIGRACION-0.7.md`.
+desde 0.9.0 se agrupan por categoría. Las equivalencias están en
+`docs/MIGRACION-0.9.md` y las anteriores en `docs/MIGRACION-0.7.md`.
 
 ## Fuentes y portabilidad
 
@@ -51,20 +52,34 @@ las equivalencias anteriores se documentan en `docs/MIGRACION-0.7.md`.
 
 ## Proyectos docentes
 
-- El contrato compartido es `docs/PROYECTO-DOCENTE.md`: estructura `curso-v1`,
+- El contrato compartido es `docs/PROYECTO-DOCENTE.md`: nuevos cursos `curso-v2`,
   configuración UTF-8 con rutas relativas y selección explícita del corpus.
+  Conservar `curso-v1` hasta una migración concreta aprobada; no deducir la
+  procedencia de los documentos antiguos por su carpeta.
+- Separar originales en `fuentes/` y materiales nuevos en `creados/`, por tipo.
+  Cada actividad o examen reúne documentos de alumnado y docente en subcarpetas.
+  El estado se registra en `material-docente.json` y se muestra en `LEEME.md`;
+  revisar o reutilizar un material no exige moverlo ni duplicarlo.
+- Antes de inicializar o adaptar, inventariar el contenido existente. Los nombres
+  son pistas; comprobar lo necesario y distinguir evidencia y dudas. Mostrar
+  origen, destino, contenido, motivo y dudas, con árbol resultante; aplicar solo
+  movimientos concretos aprobados, comprobar colisiones, enlaces e integridad.
+- La skill del mapa distingue crear/actualizar, regenerar vistas y mostrar vistas
+  existentes. Regenerar vistas conserva páginas y metadatos; mostrar no regenera.
+  Mantener la consulta separada y de solo lectura.
 - La iniciación prepara carpetas, configuración, LEEME e instrucciones. Ofrece
   orientación y recomienda el mapa, sin crearlo ni invocarlo sin encargo.
-  `orientar-docente` consulta configuración e índices y propone tareas sin
+  `proyecto-docente-ayuda` consulta configuración e índices y propone tareas sin
   ejecutarlas. La creación del mapa registra un índice real e integra
   su consulta en el AGENTS.md del curso, preservando las reglas previas.
 - Ante conflictos en instrucciones existentes, preguntar antes de cambiarlas.
   No imponer bloques generados ni modificar instrucciones globales.
-- Respetar exclusiones incluso mediante enlaces. Resultados, borradores y el
-  propio mapa quedan fuera del corpus; el archivo requiere selección explícita.
+- Respetar exclusiones incluso mediante enlaces. Resultados y el propio mapa
+  quedan fuera del corpus; creados requiere selección explícita y un registro
+  revisado o listo para entregar. Los borradores quedan fuera; archivo requiere selección explícita.
   Detectar páginas dependientes de fuentes retiradas antes de reutilizarlas.
-- Organizar lotes en `docente/resultados/entregas/<actividad>/<convocatoria>/`,
-  separando originales, identificación y corrección. Mantener todo ese árbol
+- Organizar lotes nuevos en `resultados/<actividad>/<convocatoria>/`,
+  separando `recibidos/` de `correccion/`. Mantener todo ese árbol
   fuera del corpus, incluso cuando haya enlaces desde materiales elegidos.
 - No sobrescribir ni mover originales sin una propuesta concreta aprobada.
   Mantener una ubicación para cada material; separar soluciones y estudiantes.
@@ -72,6 +87,12 @@ las equivalencias anteriores se documentan en `docs/MIGRACION-0.7.md`.
   permiten tareas sencillas aunque el curso o el mapa aún no estén preparados.
 - Los entornos operativos quedan fuera de los datos del curso y de instalaciones
   de solo lectura. Los nombres de carpetas no gestionan permisos ni sincronización.
+- Al terminar una skill, aplicar `docs/FLUJOS-DOCENTES.md`: sugerir los siguientes
+  pasos según registros y archivos pertinentes, sin ejecutar tareas ni dar por
+  completados resultados por la mera existencia de una carpeta. Respetar los
+  flujos inicio → mapa, actividad → corrección y banco → examen → feedback.
+  Ofrecer apuntes y diapositivas visuales individuales como apoyos. Usar español
+  conciso por defecto, salvo indicación distinta del docente.
 
 ## Comprobaciones
 

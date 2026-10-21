@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "profile": "gradebook",
+  "activity_id": "medir-y-justificar",
+  "attempt_id": "ordinaria",
+  "identifier_column": "Usuario",
+  "grade_column": "Actividad",
+  "feedback_column": "Comentario actividad",
+  "grade_max": 10,
+  "decimals": 2,
+  "rounding": "half_up",
+  "delimiter": ";",
+  "decimal_separator": ",",
+  "activity_record": "../../../../creados/actividades/medir-y-justificar/docente/actividad.json"
+}

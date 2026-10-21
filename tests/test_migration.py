@@ -123,6 +123,36 @@ class MigrationTests(unittest.TestCase):
         self.assertEqual(result["moves"][0]["files"], [])
         self.assertTrue(any("apuntes.md" in warning for warning in result["warnings"]))
 
+    def test_structured_records_are_flagged_for_semantic_review_without_rewrites(self):
+        self.file("antiguo/tema.md")
+        controls = {
+            "proyecto-docente.json": "project",
+            "docente/mapa-docente/fuentes.json": "map",
+            "docente/evaluaciones/bancos/catalogo.json": "catalog",
+            "docente/evaluaciones/bancos/biologia/metadatos.json": "metadata",
+            "docente/borradores/experimento/docente/actividad.json": "activity",
+            "docente/borradores/experimento/material-docente.json": "material",
+            "docente/evaluaciones/parcial/manifest.json": "exam_snapshot",
+        }
+        for path in controls:
+            self.file(path, '{"path":"antiguo/tema.md"}\n')
+        self.file("resultados/privado.json", "{}\n")
+        before = self.snapshot()
+        result = plan_migration(self.root, {"antiguo": "fuentes/teoria"})
+        self.assertEqual(result["status"], "ready")
+        self.assertEqual({item["document"]: item["kind"] for item in result["metadata_reviews"]}, controls)
+        self.assertTrue(all(item["requires_review"] for item in result["metadata_reviews"]))
+        snapshot = next(item for item in result["metadata_reviews"] if item["kind"] == "exam_snapshot")
+        self.assertIn("sin regenerar", snapshot["reason"])
+        self.assertEqual(self.snapshot(), before)
+
+    def test_metadata_review_tracks_moved_registry_location_and_skips_empty_plan(self):
+        self.file("viejo/actividad.json", "{}")
+        result = plan_migration(self.root, {"viejo": "creados/actividades/uno/docente"})
+        self.assertEqual(result["metadata_reviews"][0]["document_after"],
+                         "creados/actividades/uno/docente/actividad.json")
+        self.assertEqual(plan_migration(self.root, {})["metadata_reviews"], [])
+
 
 if __name__ == "__main__":
     unittest.main()

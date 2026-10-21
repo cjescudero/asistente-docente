@@ -8,30 +8,38 @@ No depende de Notion, Obsidian, una base de datos ni un servicio externo.
 
 Crear o actualizar el mapa incluye integrarlo como punto de partida en el
 `AGENTS.md` de la raíz del proyecto docente. No es necesario ejecutar antes
-[iniciar el proyecto docente](../skills/iniciar-proyecto-docente/SKILL.md):
+[iniciar el proyecto docente](../skills/proyecto-docente-inicializacion-adaptacion/SKILL.md):
 esa skill prepara el curso y su selección de fuentes, y recomienda, sin lanzar automáticamente,
 crear el mapa.
 
-## Tres responsabilidades
+## Creación y visualización unificadas; consulta separada
 
-- [Crear el mapa](../skills/crear-mapa-docente/SKILL.md) inventaría las
-  carpetas elegidas, lee, sintetiza, relaciona y mantiene los contenidos. Integra
-  el bloque de consulta en el `AGENTS.md` del proyecto y utiliza la skill visual
-  para generar o actualizar lector y grafo docentes.
-- [Consultar el mapa](../skills/consultar-mapa-docente/SKILL.md) recorre el
-  índice y contrasta evidencias para responder o preparar un encargo. No escribe.
-- [Visualizar el mapa](../skills/visualizar-mapa-docente/SKILL.md) transforma
-  páginas y enlaces existentes en un lector y un grafo interactivos. Puede ejecutarse por separado sin
-  volver a sintetizar el material ni modificar los originales.
+[Mapa docente: creación y visualización](../skills/mapa-docente-creacion-visualizacion/SKILL.md)
+reúne tres recorridos bajo una sola skill:
 
-Se separa la visualización porque su formato, interacción y comprobaciones son
-independientes de la interpretación docente. El profesor puede pedir el mapa
-completo en una sola operación; también puede regenerar únicamente el gráfico.
+- **Crear o actualizar:** inventariar las fuentes elegidas, leer, sintetizar,
+  relacionar y mantener contenidos. Integrar el índice en `AGENTS.md` y generar
+  lector y grafo docentes como cierre del trabajo.
+- **Regenerar vistas:** reconstruir lector, grafo o ambos a partir del mapa
+  existente. No cambiar Markdown, metadatos, configuración ni instrucciones.
+  Si hace falta corregir contenido o revisar fuentes retiradas, pedir ese
+  mantenimiento antes de reconstruir el derivado afectado.
+- **Mostrar:** abrir el lector o grafo existente sin ejecutar generadores.
+  Si falta, ofrecer generarlo; si hay indicios de desactualización, indicarlo y
+  ofrecer actualizarlo. Abrir una vista no declara vigente su contenido.
+
+Las instrucciones técnicas de generación permanecen en una
+[referencia interna](../skills/mapa-docente-creacion-visualizacion/references/visualizacion.md).
+No hay una segunda skill visual ni una invocación recursiva a la misma skill.
+[Mapa docente: consulta](../skills/mapa-docente-consulta/SKILL.md) sigue separada:
+recorre el índice y contrasta evidencias para responder preguntas, sin escribir.
+En todos los recorridos se respetan el corpus elegido y los contenidos reservados;
+mostrar una vista docente no autoriza a compartirla con estudiantes.
 
 ## Punto de partida del proyecto
 
 La skill de creación o actualización usa la
-[plantilla del bloque de consulta](../skills/crear-mapa-docente/assets/agents-mapa.md)
+[plantilla del bloque de consulta](../skills/mapa-docente-creacion-visualizacion/assets/agents-mapa.md)
 para añadir o actualizar en el `AGENTS.md` del proyecto docente la ruta a
 `index.md` y sus orígenes. Debe conocer la raíz del proyecto antes de
 escribir allí; si falta, la solicita sin adivinarla desde las carpetas del mapa.
@@ -54,7 +62,7 @@ sin recorrer toda la documentación para cada tarea.
 
 La consulta no guarda resultados ni cambia páginas por sí sola. El mantenimiento
 del mapa requiere un encargo que lo incluya; regenerar únicamente el lector o el
-grafo tampoco reescribe `AGENTS.md`.
+grafo tampoco reescribe `AGENTS.md`. Mostrar una vista no modifica ningún archivo.
 
 ## Carpetas elegidas por el profesor
 
@@ -64,12 +72,12 @@ el [contrato común](PROYECTO-DOCENTE.md). No hay descubrimiento automático. Un
 selección pendiente requiere aclarar las fuentes antes de crear el mapa; la
 presencia de archivos en el curso no los incorpora al corpus.
 
-El árbol del curso está en ese contrato. La wiki reside en `docente/mapa-docente/`
+El árbol del curso está en ese contrato. La wiki reside en `mapa-docente/`
 en proyectos nuevos; un mapa previo conserva su ruta hasta una migración
 aprobada. Su organización interna es:
 
 ```text
-docente/mapa-docente/
+mapa-docente/
   index.md                entrada general para el profesor
   index.html              lector navegable generado desde Markdown
   LEEME.md                alcance, fuentes y convenciones de uso
@@ -222,7 +230,7 @@ de acceso, incluso si se ha omitido accidentalmente un enlace en el texto.
 6. Integrar el bloque de consulta en el `AGENTS.md` de la raíz conocida del
    proyecto, conservando sus reglas y comprobando las rutas desde ese archivo.
 7. Validar el conjunto y su correspondencia con el corpus. Solo si esa
-   validación pasa, generar el lector y el grafo docentes mediante la skill visual. Si falla la generación, el derivado anterior queda desactualizado y no
+   validación pasa, generar el lector y el grafo docentes siguiendo la referencia interna de generación de vistas. Si falla la generación, el derivado anterior queda desactualizado y no
    debe presentarse como reflejo del estado nuevo. No declarar éxito por tener
    solo el diseño o el código del gráfico.
 
@@ -326,3 +334,18 @@ No hay una conversión automática que invente permisos o vínculos semánticos.
 
 Las [plantillas](../templates/mapa-docente) y el
 [ejemplo sintético completo](../examples/mapa-docente/README.md) muestran el flujo.
+
+## Casos para comprobar los recorridos
+
+| Petición y estado | Resultado esperado |
+| --- | --- |
+| Crear con fuentes elegidas y legibles | Páginas y registro trazables, índice integrado en las instrucciones, lector y grafo generados tras validar. |
+| Regenerar solo el grafo de un mapa válido | Cambia únicamente el HTML del grafo; Markdown, registro, configuración e instrucciones conservan su contenido. |
+| Regenerar con una fuente excluida que aún sostiene una página | Se explica la dependencia y se solicita revisar el mapa; no se modifica esa página ni se presenta un derivado nuevo como vigente. |
+| Mostrar un lector existente | Se abre el archivo, o se facilita su enlace si no hay capacidad de apertura; no se escribe ningún archivo. |
+| Mostrar sin HTML disponible | Se ofrece generarlo desde el mapa, sin ejecutarlo automáticamente. |
+| Pedir a estudiantes una vista docente | No se comparte esa vista; se prepara una vista estudiantil solo mediante un encargo que lo incluya y excluyendo los datos reservados. |
+
+Estos son criterios de aceptación del diálogo. La revisión de instrucciones y
+los tests de los generadores no sustituyen una comprobación real de activación
+y apertura en cada anfitrión.

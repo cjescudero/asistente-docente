@@ -14,12 +14,11 @@ ninguno de esos pasos automáticamente.
 - [Instalación para administradores](#instalación-para-administradores): permisos y actualizaciones.
 - [Instalación avanzada](#instalación-avanzada): Codex CLI, Claude Code y Python.
 
-Esta documentación corresponde a la [versión 0.8.0](https://github.com/cjescudero/asistente-docente/releases/tag/v0.8.0).
-Comprueba la versión instalada antes de probar las novedades. Las versiones
-anteriores se conservan. Si ya incorporaste el marketplace,
-sincroniza su contenido y verifica la versión mostrada por la aplicación antes
-de probar el recorrido de 0.8.0. Una referencia fijada a una revisión anterior
-seguirá usando esa revisión hasta que su administrador la cambie.
+La versión publicada del plugin es **0.9.0**: [descargas y novedades](https://github.com/cjescudero/asistente-docente/releases/tag/v0.9.0).
+Comprueba la versión instalada antes de probar las novedades. Preparar archivos
+locales no actualiza el marketplace ni las instalaciones existentes. Después de
+una publicación, sincroniza el catálogo y comprueba la versión mostrada; una
+referencia fijada a una revisión anterior seguirá usándola hasta que se cambie.
 
 ## Instalación para profesores
 
@@ -63,7 +62,8 @@ los conoces. La skill ya implementada:
 
 - Pregunta solo por el contexto, las carpetas, los tipos de material y las
   exclusiones que falten; permite dejar la selección pendiente.
-- Prepara `alumnado/`, `docente/` y `archivo/`, la configuración
+- En 0.9 prepara `fuentes/`, `creados/`, `mapa-docente/`, `resultados/` y
+  `archivo/`, la configuración
   `proyecto-docente.json`, una guía `LEEME.md` y las instrucciones `AGENTS.md`.
 - Respeta las instrucciones previas, pregunta ante conflictos y conserva la
   preferencia de español claro. Propone una migración antes de mover originales.
@@ -75,7 +75,7 @@ pídele que lo lea al comenzar. El plugin no genera `CLAUDE.md` por sistema.
 Una petición sencilla con texto o adjuntos suficientes puede resolverse sin wiki
 ni proyecto completo. Véanse el [contrato del curso](PROYECTO-DOCENTE.md), el
 [ejemplo sintético](../examples/proyecto-docente/README.md) y la
-[migración desde 0.6](MIGRACION-0.7.md).
+[migración de estructura](MIGRACION-0.9.md).
 
 ## Instalación para administradores
 

@@ -1,7 +1,7 @@
 {
   "name": "asistente-docente",
-  "version": "0.8.0",
-  "description": "Orienta al docente y conecta materiales, actividades, bancos y evaluación para Moodle. Marketplace de GitHub.",
+  "version": "0.9.0",
+  "description": "Organiza fuentes y materiales creados, sugiere próximos pasos y conecta actividades y evaluación para Moodle.",
   "author": {
     "name": "Carlos J. Escudero"
   },

@@ -1,5 +1,73 @@
 # Validación local
 
+## Nombres y organización guiada — 21 de octubre de 2026
+
+Suite local: **368 casos, 366 superados y 2 pruebas PDF omitidas** por ser
+opcionales en esta ejecución. Las pruebas PDF de la preparación anterior se
+conservan como evidencia separada; no se han vuelto a ejecutar para este cambio
+de nombres, instrucciones e interfaz. No se han cambiado los renderizadores.
+
+- Doce skills y doce interfaces `agents/openai.yaml`; comprobación de nombres,
+  frontmatter, descripciones cortas, enlaces locales y adaptadores.
+- Pruebas de paquetes extraídos: recursos funcionales equivalentes, archivos de
+  interfaz presentes, referencia de visualización incluida y antigua skill ausente;
+  reproducción del ZIP y uso desde otra carpeta e instalación de solo lectura.
+- Regresión de inicio vacío, repetición, instrucciones previas, curso-v1,
+  exclusiones, colisiones, enlaces y revisión de registros de migración.
+- Revisión de instrucciones con los casos del catálogo: nombres engañosos,
+  archivos ilegibles, materiales mezclados, aprobación total/parcial/rechazo y
+  conjuntos de examen congelados. Se verificó que cada caso tiene una salida
+  explícita sin movimientos automáticos; no es una ejecución real del diálogo.
+- Revisión de los tres recorridos del mapa: crear actualiza contenidos y vistas;
+  regenerar conserva Markdown/metadatos; mostrar abre sin escribir. Consulta
+  independiente. Las pruebas existentes de los generadores siguen pasando.
+
+Validación pública y registro del mapa de ejemplo correctos. El validador de
+biblioteca no comprueba anclas; los enlaces de las referencias nuevas se revisaron
+por separado. Paquetes locales preparados; publicación, instalación real y orden
+visible en ChatGPT/Claude pendientes. Sin modificaciones a cursos reales, copias
+instaladas o instrucciones generales del workspace.
+
+## Preparación inicial de 0.9.0 — 20 de octubre de 2026
+
+**367 pruebas automatizadas superadas**, incluidas las dos pruebas PDF activadas
+con `RUN_PDF_TESTS=1`. Ejecución local en macOS con Python 3.12.9 y Chromium.
+Este resultado corresponde a la versión local; no acredita una ejecución de
+0.9 en Windows/Linux, una instalación real en anfitriones ni una publicación.
+
+| Comprobación | Resultado |
+| --- | --- |
+| Inicio y compatibilidad | Nuevos cursos `curso-v2`; repetición sin duplicados; `curso-v1` conserva estructura e instrucciones; previsualización y conflictos respetados. |
+| Corpus | Selección explícita y estados por producción; borradores, registros ausentes/inválidos y resultados excluidos; un registro de categoría no acredita todos sus hijos. |
+| Mapa existente | Retirar el estado revisado bloquea el acceso a esa fuente y marca sus dependencias transitivas pendientes antes de reutilizarlas. |
+| Migración | Propuesta sin mover archivos, colisiones y enlaces; inventario `metadata_reviews` de registros que requieren revisión semántica, sin sustituir rutas dentro de snapshots. |
+| Bancos | Catálogos anteriores conservados y `path_base: project` para bancos originales y nuevos sin duplicarlos; rutas fuera de la raíz rechazadas. |
+| Exámenes | `--layout curso-v2` separa alumnado/docente; rutas del manifiesto y snapshots coherentes; salida plana anterior conservada. |
+| Recorrido completo | Tres bancos, tres modelos, dos vías de calificación y feedback; originales intactos y datos estudiantiles fuera del corpus. |
+| Distribución | Pruebas de ambos paquetes extraídos y de solo lectura, reconstrucción reproducible, equivalencia funcional y trece skills válidas. |
+
+El ejemplo completo se ejecutó con PDF real fuera del plugin: seis PDF de
+modelos/solucionarios y uno de actividad. Se comprobó la numeración de preguntas
+en los tres modelos y la separación de archivos. La revisión visual cubrió las
+dos páginas del modelo A estudiantil, la primera del solucionario B y el
+enunciado de la actividad, sin texto cortado ni soluciones en la copia estudiantil.
+
+La revisión independiente de instrucciones examinó una actividad sin entregas,
+un examen con nota global sin detalle y una petición de apuntes en gallego.
+Las sugerencias distinguen indicios de resultados comprobados, señalan entradas
+pendientes, respetan el idioma pedido y no ejecutan pasos adicionales por su
+cuenta. Se corrigieron dos ejemplos de feedback que conservaban la ruta plana
+anterior del manifiesto. Esta revisión es cualitativa; no equivale a conversaciones
+reales verificadas en ChatGPT Work o Claude Cowork.
+
+Validación pública de manifiestos y enlaces, sincronización de adaptadores,
+frontmatter de las trece skills y registro del mapa de ejemplo correctos. No se
+modificaron skills instaladas, cursos reales ni instrucciones generales del
+workspace. La publicación en GitHub y las importaciones Moodle quedan fuera de
+esta entrega local. La release 0.8.0 permanece disponible.
+
+## Historial: validación de 0.8.0
+
 Fecha: 20 de octubre de 2026. Validación local previa a la publicación de **0.8.0**.
 
 ## Resultado de 0.8.0

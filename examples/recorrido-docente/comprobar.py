@@ -15,6 +15,7 @@ PLUGIN = Path(__file__).resolve().parents[2]
 
 
 def save(path, data):
+    path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
@@ -39,38 +40,41 @@ def run_example(destination, *, pdf=False):
 
     initialized = call("init-project", course)
     assert not initialized["wiki_created"]
-    assert not list((course / "docente/mapa-docente").iterdir())
-    activity = course / "alumnado/actividades/medir-y-justificar"
-    rendered = call("render-markdown", activity / "enunciado.md",
-                    "--output", activity / "impresion", "--title", "Medir y justificar",
+    assert not list((course / "mapa-docente").iterdir())
+    activity = course / "creados/actividades/medir-y-justificar"
+    student_activity = activity / "alumnado"
+    rendered = call("render-markdown", student_activity / "enunciado.md",
+                    "--output", student_activity / "impresion", "--title", "Medir y justificar",
                     *([] if pdf else ["--html-only"]))
     if rendered["pdf"]:
-        record_path = course / "docente/evaluaciones/medir-y-justificar/actividad.json"
+        record_path = activity / "docente/actividad.json"
         record = json.loads(record_path.read_text(encoding="utf-8"))
-        record["files"]["statement"]["pdf"] = (
-            "../../../alumnado/actividades/medir-y-justificar/impresion/enunciado.pdf")
+        record["files"]["statement"]["pdf"] = "../alumnado/impresion/enunciado.pdf"
         save(record_path, record)
     original = {p.relative_to(course).as_posix(): p.read_bytes()
                 for p in course.rglob("*") if p.is_file()}
-    catalog = course / "docente/evaluaciones/bancos/catalogo.json"
+    catalog = course / "creados/bancos/catalogo.json"
     call("validate-catalog", catalog, "--project", course)
-    exams = destination / "examen"
+    exams = course / "creados/examenes/fuentes-mediciones-evidencias"
     args = ["build-exams", "--catalog", catalog, "--selection",
-            course / "docente/evaluaciones/reparto.json", "--project", course,
+            course / "creados/bancos/reparto-ejemplo.json", "--project", course,
             "--output", exams, "--title", "Fuentes, mediciones y evidencias",
-            "--models", "3", "--questions", "6", "--seed", "42"]
+            "--models", "3", "--questions", "6", "--seed", "42", "--layout", "curso-v2"]
     if not pdf:
         args.append("--html-only")
     call(*args)
-    manifest = json.loads((exams / "manifest.json").read_text(encoding="utf-8"))
-    batch = course / "docente/resultados/entregas/medir-y-justificar/ordinaria"
+    manifest_file = exams / "docente/manifest.json"
+    manifest = json.loads(manifest_file.read_text(encoding="utf-8"))
+    batch = course / "resultados/medir-y-justificar/ordinaria"
     for profile, csv_file in (("tarea", "hoja-tarea"), ("libro", "libro")):
         call("export-grades", batch / f"correccion/evaluacion-{profile}.json",
-             "--input", batch / f"identificacion/{csv_file}.csv",
-             "--config", batch / f"identificacion/perfil-{profile}.json",
-             "--output", destination / f"correccion-{profile}")
+             "--input", batch / f"recibidos/{csv_file}.csv",
+             "--config", batch / f"correccion/perfil-{profile}.json",
+             "--output", batch / f"correccion/{profile}")
 
-    detailed = destination / "detalle-examen.csv"
+    exam_batch = course / "resultados/fuentes-mediciones-evidencias/ordinaria"
+    (exam_batch / "recibidos").mkdir(parents=True)
+    detailed = exam_batch / "recibidos/detalle-examen.csv"
     header = ["Usuario", "Modelo", "Estado"] + [f"P{n:02d}" for n in range(1, 7)]
     with detailed.open("w", encoding="utf-8", newline="") as stream:
         writer = csv.writer(stream)
@@ -83,7 +87,7 @@ def run_example(destination, *, pdf=False):
             scores[science] = "0.5"
             writer.writerow([f"{i:03d}", model["id"], "No presentado" if i == 3 else "Finalizado",
                              *([""] * 6 if i == 3 else scores)])
-    gradebook = destination / "libro-examen.csv"
+    gradebook = exam_batch / "recibidos/libro-examen.csv"
     gradebook.write_text(
         "Usuario;Modelo;Nota examen;Comentario examen;Otra nota\n"
         "001;A;3,50;Comentario anterior;8,00\n"
@@ -99,17 +103,20 @@ def run_example(destination, *, pdf=False):
                       "grade_column": "Nota examen", "feedback_column": "Comentario examen",
                       "delimiter": ";"}
     }
-    config_file = destination / "perfil-feedback.json"
+    config_file = exam_batch / "correccion/perfil-feedback.json"
     save(config_file, config)
-    call("build-feedback", exams / "manifest.json", "--input", detailed,
-         "--gradebook", gradebook, "--config", config_file, "--output", destination / "feedback")
+    call("build-feedback", manifest_file, "--input", detailed, "--gradebook", gradebook,
+         "--config", config_file, "--output", exam_batch / "correccion/feedback")
     for relative, content in original.items():
         assert (course / relative).read_bytes() == content, f"Original modificado: {relative}"
     summary = {"status": "ok", "models": 3, "questions_per_model": 6,
+               "structure": "curso-v2",
                "pdf_requested": pdf, "wiki_created": False,
                "activity_pdf_registered": bool(rendered["pdf"]),
                "originals_preserved": True,
-               "outputs": ["examen", "correccion-tarea", "correccion-libro", "feedback"]}
+               "outputs": [str(path.relative_to(destination).as_posix()) for path in (
+                   exams, batch / "correccion/tarea", batch / "correccion/libro",
+                   exam_batch / "correccion/feedback")]}
     save(destination / "comprobacion.json", summary)
     return summary
 

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Mapa docente: creación y visualización"
+  short_description: "Crear el mapa, regenerar sus vistas o abrirlas"

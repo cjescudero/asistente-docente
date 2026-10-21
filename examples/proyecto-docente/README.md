@@ -1,4 +1,4 @@
-# Curso inicializado de ejemplo
+# Curso inicializado de ejemplo: fuentes y creaciones separadas
 
 [curso/LEEME.md](curso/LEEME.md) explica la organización. Contiene materiales
 sintéticos sobre interpretación de datos y fuentes, adaptables a humanidades
@@ -8,25 +8,45 @@ Para probarlo, pide al agente que copie **solo la carpeta `curso`** a una
 ubicación de trabajo fuera del plugin, la abra y ejecute «Inicia mi proyecto
 docente». La copia es un ejemplo reutilizable, no una exportación de materiales
 del profesor. Git y los ZIP no conservan carpetas vacías: la iniciación completa
-`docente/mapa-docente/` vacía cuando falte, sin crear wiki, índice, lector ni grafo.
+`mapa-docente/` vacía cuando falte, sin crear wiki, índice, lector ni grafo.
 
-La configuración selecciona `alumnado/materiales/`, `docente/fuentes/` y
-`docente/evaluaciones/`. Excluye `docente/evaluaciones/examen-retirado.md`.
+La configuración `curso-v2` selecciona `fuentes/teoria/` y
+`fuentes/evaluaciones/examenes/`. Excluye
+`fuentes/evaluaciones/examenes/examen-retirado.md`.
 El examen vigente es una fuente reservada, no un documento para el alumnado.
-Actividades, conocimientos, soluciones, rúbricas y archivo no forman parte de
-esta selección; resultados, borradores y mapa están excluidos por diseño.
+La actividad aportada en `fuentes/actividades/` tampoco forma parte de esta
+selección.
+
+`creados/actividades/actividad-pendiente/` reúne un enunciado y una rúbrica en
+preparación, separados por destinatario. Su registro `material-docente.json`
+indica `borrador`; no se puede incorporar al mapa. El material de dudas
+frecuentes en `creados/materiales/` está `revisado`, pero tampoco se utiliza
+en la wiki hasta que se seleccione expresamente. Ambos muestran su estado en
+`LEEME.md`; cambiarlo no implica mover los archivos.
+
+Resultados y mapa quedan siempre fuera del corpus. El archivo requiere
+selección explícita. Los nombres de carpetas no configuran permisos.
 
 Peticiones para comprobar el recorrido:
 
 1. «Comprueba qué fuentes están seleccionadas y qué falta por preparar».
 2. «Revisa la redacción de interpretar-datos.md». Debe poder hacerse sin wiki.
-3. «Propón una actividad a partir de las fuentes elegidas». Su destino inicial
-   será `docente/borradores/`, sin entregar soluciones al alumnado.
-4. En un encargo separado: «Crea el mapa docente con esta selección». Debe
+3. En un encargo separado: «Crea el mapa docente con esta selección». Debe
    mantener el examen vigente reservado y omitir el retirado.
-5. «Excluye el examen vigente y comprueba qué páginas requieren revisión».
+4. «Propón una actividad a partir de las fuentes elegidas». Su destino será
+   `creados/actividades/<identificador>/`, con estado borrador y documentos
+   del alumnado y del docente separados. Al terminar, la sugerencia de evaluar
+   debe explicar que antes hacen falta entregas identificadas y criterios.
+5. «Crea un banco para evaluar estos conocimientos». Después se podrán preparar
+   modelos impresos; el feedback requerirá sus resultados por pregunta.
+6. «Excluye el examen vigente y comprueba qué páginas requieren revisión».
    Si ya se usó en la wiki, debe señalar sus dependencias antes de reutilizarlas.
 
-La [guía de migración](../../docs/MIGRACION-0.7.md) cubre cursos existentes.
+También puedes pedir apuntes o diapositivas visuales individuales. Las sugerencias
+deben reconocer los resultados ya comprobados y no iniciar el siguiente paso
+automáticamente. El idioma predeterminado es español claro.
+
+La [guía del proyecto](../../docs/PROYECTO-DOCENTE.md) cubre la organización y
+el tratamiento de cursos existentes.
 El [registro de comprobaciones](../../docs/VALIDACION.md) distingue pruebas
 automatizadas, evaluación del procedimiento e instalaciones reales.

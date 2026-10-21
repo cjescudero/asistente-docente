@@ -161,10 +161,13 @@ def build_exams(bank_path: str | Path | None, output_dir: str | Path, *, title: 
                 metadata_path: str | Path | None = None, per_category: dict | None = None,
                 html_only: bool = False, catalog_path: str | Path | None = None,
                 selection_path: str | Path | None = None,
-                project_root: str | Path | None = None) -> dict:
-    output = external_output(output_dir)
-    if output.exists() and any(output.iterdir()):
+                project_root: str | Path | None = None, layout: str = "flat") -> dict:
+    base = external_output(output_dir)
+    if layout not in ("flat", "curso-v2"):
+        raise ValueError("layout debe ser 'flat' o 'curso-v2'.")
+    if base.exists() and any(base.iterdir()):
         raise ValueError("La carpeta de examen debe estar vacía; no se sobrescriben modelos.")
+    output = base / "docente" if layout == "curso-v2" else base
     if (type(models) is not int or type(questions) is not int
             or not 1 <= models <= 100 or questions < 1):
         raise ValueError("Usa entre 1 y 100 modelos y al menos una pregunta.")
@@ -235,6 +238,8 @@ def build_exams(bank_path: str | Path | None, output_dir: str | Path, *, title: 
         rendered.append((render_model(model, title, teacher=False),
                          render_model(model, title, teacher=True), gift))
     output.mkdir(parents=True, exist_ok=True)
+    if layout == "curso-v2":
+        (base / "alumnado").mkdir()
     (output / "source").mkdir()
     (output / "source/bank.gift").write_bytes(raw)
     manifest = {"schema_version": 1, "title": title, "seed": seed,
@@ -273,14 +278,16 @@ def build_exams(bank_path: str | Path | None, output_dir: str | Path, *, title: 
     for model, (student, teacher, gift) in zip(built, rendered):
         stem = f"modelo-{model['id']}"
         for role, content in [("student", student), ("teacher", teacher)]:
-            file = output / f"{stem}-{role}.html"
+            role_dir = base / "alumnado" if layout == "curso-v2" and role == "student" else output
+            file = role_dir / f"{stem}-{role}.html"
             file.write_text(content, encoding="utf-8")
-            model["files"][f"{role}_html"] = file.name
+            prefix = "../alumnado/" if role_dir != output else ""
+            model["files"][f"{role}_html"] = prefix + file.name
             pdf = file.with_suffix(".pdf")
             ok, status = (False, "not_requested") if html_only else print_pdf(file, pdf)
             model["pdf_status"][role] = status
             if ok:
-                model["files"][f"{role}_pdf"] = pdf.name
+                model["files"][f"{role}_pdf"] = prefix + pdf.name
         gift_path = output / f"{stem}.gift"
         gift_path.write_text(gift, encoding="utf-8")
         model["files"]["gift"] = gift_path.name
@@ -288,4 +295,20 @@ def build_exams(bank_path: str | Path | None, output_dir: str | Path, *, title: 
     if catalog is not None:
         (output / "coverage.json").write_text(
             json.dumps(manifest["selection_report"], ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    if layout == "curso-v2":
+        record = {"schema_version": 1, "id": base.name, "type": "examen", "status": "borrador"}
+        (base / "material-docente.json").write_text(
+            json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        (base / "LEEME.md").write_text(
+            "# Examen preparado\n\nEstado: **borrador**.\n\n"
+            "Los documentos imprimibles están en `alumnado/`. El manifiesto, los GIFT,\n"
+            "los solucionarios y las copias congeladas de los bancos están en `docente/`.\n"
+            "Revisar modelos y correspondencias antes de utilizarlos. Actualizar el estado\n"
+            "en este documento y en `material-docente.json`, sin mover los archivos.\n\n"
+            "Después de la evaluación, se podrá preparar feedback con el manifiesto,\n"
+            "el detalle por pregunta y la hoja de calificaciones de Moodle. Una nota\n"
+            "global no basta para identificar dificultades conceptuales. Si ya hay\n"
+            "resultados o feedback, comprobar su modelo y convocatoria antes de sugerir\n"
+            "una nueva generación. La siguiente tarea requiere un encargo del docente.\n",
+            encoding="utf-8")
     return manifest

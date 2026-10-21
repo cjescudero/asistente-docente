@@ -55,6 +55,8 @@ def main(argv=None):
     exam.add_argument("--seed", type=int, default=42)
     exam.add_argument("--per-category", type=Path, help="JSON: categoría -> cantidad; suma --questions")
     exam.add_argument("--html-only", action="store_true")
+    exam.add_argument("--layout", choices=("flat", "curso-v2"), default="flat",
+                      help="curso-v2 separa alumnado y docente; flat conserva la salida anterior")
     feedback = commands.add_parser("build-feedback", help="Preparar comentarios CSV sin modificar notas")
     feedback.add_argument("manifest", type=Path)
     feedback.add_argument("--input", action="append", type=Path, required=True)
@@ -122,10 +124,11 @@ def main(argv=None):
                                    questions=args.questions, seed=args.seed, metadata_path=args.metadata,
                                    per_category=quotas, html_only=args.html_only,
                                    catalog_path=args.catalog, selection_path=args.selection,
-                                   project_root=args.project)
+                                   project_root=args.project, layout=args.layout)
             statuses = {m["id"]: m["pdf_status"] for m in manifest["models"]}
             pending = any(str(s).startswith("PDF pendiente") for states in statuses.values() for s in states.values())
-            result = {"status": "pdf_pending" if pending else "ok", "manifest": str(args.output.resolve()/"manifest.json"),
+            manifest_dir = args.output.resolve() / "docente" if args.layout == "curso-v2" else args.output.resolve()
+            result = {"status": "pdf_pending" if pending else "ok", "manifest": str(manifest_dir / "manifest.json"),
                       "excluded_question_ids": manifest["excluded_question_ids"], "pdf_status": statuses}
             status = 2 if pending else 0
         elif args.command == "build-feedback":

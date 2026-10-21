@@ -40,10 +40,29 @@ comprensión y proceso; no prueban la autoría de un texto por sí solas.
 - **Registro `actividad.json`:** vincula los archivos y fuentes de una misma
   versión para preparar después la corrección.
 
-En un curso inicializado, los materiales en preparación se guardan por defecto
-en `docente/borradores/`. La entrega al alumnado requiere un encargo que la incluya.
-Al pasar un archivo a su ubicación definitiva, actualizar su ruta en el registro;
-no mantener dos copias por sistema. Las fuentes originales se enlazan.
+En `curso-v2`, la carpeta estable es `creados/actividades/<id>/`:
+
+```text
+analisis-de-fuentes/
+├── LEEME.md
+├── material-docente.json
+├── alumnado/
+│   ├── enunciado.md
+│   ├── enunciado.pdf
+│   └── plantilla-informe.md
+└── docente/
+    ├── actividad.json
+    ├── rubrica.md
+    └── guia-correccion.md
+```
+
+El registro común es de tipo `actividad`; su estado (`borrador`, `revisado` o
+`listo-para-entregar`) se muestra también en `LEEME.md`. La aprobación no mueve
+archivos y no autoriza una publicación automática. `actividad.json` mantiene
+la procedencia y versión de los archivos utilizados para evaluar, según el
+[contrato del curso](PROYECTO-DOCENTE.md). Los cursos anteriores conservan su
+organización hasta una migración aprobada. Las fuentes originales se enlazan;
+si esta actividad se usa después para un banco, permanece en su misma carpeta.
 
 El registro es docente porque puede revelar rutas de soluciones o rúbricas.
 El enunciado y las plantillas estudiantiles no deben enlazarlo ni incluir
@@ -67,7 +86,9 @@ El registro utiliza UTF-8, `schema_version: 1` y los siguientes campos:
 | `files.rubric` | Rúbrica completa con `path` y `audience: "docente"`. |
 | `files.teaching_guide` | Guía con `path` y `audience: "docente"`, solo cuando exista. |
 
-Todas las rutas se resuelven desde la carpeta del registro. Las fuentes usan
+Todas las rutas se resuelven desde la carpeta del registro; si está en
+`docente/`, el enunciado se enlaza como `../alumnado/enunciado.md`. Las rutas
+del registro son distintas de las rutas del catálogo y de la configuración. Las fuentes usan
 `role: "current"` para el contenido vigente o `"inspiration"` para ejemplos
 históricos. Su `audience` indica `"estudiante"` o `"docente"` según el acceso
 autorizado, independientemente de su vigencia.
@@ -84,9 +105,10 @@ exportación a Moodle tienen su propio [contrato](CALIFICACIONES.md).
 ## Corrección posterior
 
 Cada lote de entregas se organiza en
-`docente/resultados/entregas/<actividad>/<convocatoria>/`, con originales
-descargados, correspondencias explícitas de identificación y resultados de
-corrección separados. Este contenido queda fuera del corpus de la wiki.
+`resultados/<actividad>/<convocatoria>/` en cursos v2, con originales
+descargados y correspondencias explícitas de identificación en `recibidos/`,
+y resultados, CSV modificados e incidencias en `correccion/`. Los lotes de cursos
+v1 conservan sus ubicaciones. Este contenido queda fuera del corpus de la wiki.
 
 La evaluación consulta el enunciado y los criterios de la versión aplicada,
 además de la guía o resolución disponible. Si faltan criterios suficientes,
@@ -116,3 +138,11 @@ revisan antes de una importación manual, conforme a [Moodle](MOODLE.md).
 Estas comprobaciones requieren revisar documentos reales del caso. La existencia
 de los archivos o de una plantilla válida no demuestra por sí sola calidad
 didáctica ni validación en el aula.
+
+## Siguiente paso
+
+Al entregar la actividad, ofrecer corregir sus entregas con esta versión de los
+criterios cuando estén disponibles; indicar entregas e identificación pendientes
+y, para la salida importable, la hoja Moodle y sus columnas. Si ya hay una
+corrección válida, ofrecer revisarla en lugar de repetirla. Aplicar el
+[cierre contextual](FLUJOS-DOCENTES.md) sin iniciar la corrección automáticamente.

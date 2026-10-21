@@ -91,6 +91,73 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(result["status"], "ok")
         json.dumps(result)
 
+    def test_project_catalog_combines_original_and_created_banks_without_moving_them(self):
+        original_bytes = {}
+        for row, folder in zip(self.catalog_data["banks"],
+                               ("fuentes/evaluaciones/bancos/historia", "creados/bancos/ciencias")):
+            for key in ("gift", "metadata"):
+                source = self.root / row[key]
+                destination = self.root / folder / source.name
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                source.rename(destination)
+                row[key] = destination.relative_to(self.root).as_posix()
+                original_bytes[row[key]] = destination.read_bytes()
+        self.catalog_data["path_base"] = "project"
+        self.catalog = self.root / "creados/bancos/catalogo.json"
+        self.save(self.catalog, self.catalog_data)
+        self.assertEqual(validate_catalog(self.catalog, project_root=self.root)["questions"], 4)
+        manifest = self.build(project_root=self.root)
+        self.assertEqual({b["id"] for b in manifest["source_banks"]}, {"historia", "ciencias"})
+        for relative, content in original_bytes.items():
+            self.assertEqual((self.root / relative).read_bytes(), content)
+        self.assertFalse((self.catalog.parent / "historia.gift").exists())
+
+    def test_project_catalog_requires_explicit_root_or_project_config(self):
+        self.catalog_data["path_base"] = "project"
+        self.save(self.catalog, self.catalog_data)
+        with self.assertRaisesRegex(ValueError, "requiere --project"):
+            validate_catalog(self.catalog)
+        self.assertEqual(validate_catalog(self.catalog, project_root=self.root)["status"], "ok")
+        initialize_project(self.root, include=["alumnado", "docente/fuentes"])
+        self.assertEqual(validate_catalog(self.catalog)["status"], "ok")
+
+    def test_project_catalog_rejects_path_escape_and_unknown_base(self):
+        for value in ("unknown", "../", None):
+            self.catalog_data["path_base"] = value
+            self.save(self.catalog, self.catalog_data)
+            with self.subTest(path_base=value), self.assertRaisesRegex(ValueError, "path_base"):
+                validate_catalog(self.catalog, project_root=self.root)
+        self.catalog_data["path_base"] = "project"
+        self.catalog_data["banks"][0]["gift"] = "../historia.gift"
+        self.save(self.catalog, self.catalog_data)
+        with self.assertRaisesRegex(ValueError, "ruta relativa"):
+            validate_catalog(self.catalog, project_root=self.root)
+
+    def test_course_exam_layout_separates_audiences_and_resolves_manifest_paths(self):
+        manifest = self.build(layout="curso-v2")
+        base = self.root / "out"
+        private = base / "docente"
+        self.assertEqual(json.loads((private / "manifest.json").read_text(encoding="utf-8")), manifest)
+        self.assertFalse((base / "manifest.json").exists())
+        self.assertEqual(json.loads((base / "material-docente.json").read_text(encoding="utf-8"))["status"],
+                         "borrador")
+        self.assertEqual(hashlib.sha256((private / manifest["bank_snapshot"]).read_bytes()).hexdigest(),
+                         manifest["bank_sha256"])
+        for model in manifest["models"]:
+            for kind, relative in model["files"].items():
+                file = (private / relative).resolve()
+                self.assertTrue(file.is_file())
+                self.assertTrue(file.is_relative_to((base / ("alumnado" if kind.startswith("student") else "docente")).resolve()))
+        self.assertFalse(list((base / "alumnado").glob("*.json")))
+        self.assertFalse(list((base / "alumnado").glob("*.gift")))
+        with self.assertRaisesRegex(ValueError, "vacía"):
+            self.build(layout="curso-v2")
+
+    def test_unknown_exam_layout_does_not_write_outputs(self):
+        with self.assertRaisesRegex(ValueError, "layout"):
+            self.build(layout="unknown")
+        self.assertFalse((self.root / "out").exists())
+
     def test_same_original_id_in_different_banks_has_distinct_provenance(self):
         manifest = self.build(models=2, questions=4,
                               selection_path=self.selection_for_all())

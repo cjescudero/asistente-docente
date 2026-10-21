@@ -168,9 +168,16 @@ def load_catalog(catalog_path: str | Path, *, project_root=None, bank_ids=None) 
     """
     path = Path(catalog_path).expanduser().resolve()
     catalog, catalog_raw = _json_bytes(path)
+    discovered_root = find_project(path)
     root = (Path(project_root).expanduser().resolve() if project_root is not None
-            else find_project(path) or path.parent)
+            else discovered_root or path.parent)
     config = load_project(root) if (root / "proyecto-docente.json").exists() else None
+    path_base = catalog.get("path_base", "catalog")
+    if path_base not in ("catalog", "project"):
+        raise ValueError("path_base debe ser 'catalog' o 'project'.")
+    if path_base == "project" and project_root is None and discovered_root is None:
+        raise ValueError("path_base project requiere --project o un proyecto-docente.json cercano.")
+    bank_root = root if path_base == "project" else path.parent
     rows = catalog.get("banks")
     if not isinstance(rows, list) or not rows:
         raise ValueError("El catálogo requiere una lista banks no vacía.")
@@ -182,8 +189,8 @@ def load_catalog(catalog_path: str | Path, *, project_root=None, bank_ids=None) 
             raise ValueError(f"Identificador de banco duplicado: {row['id']}.")
         by_id[row["id"]] = row
         for key in ("gift", "metadata"):
-            _relative(path.parent, row.get(key), f"{key} de {row['id']}")
-        gift_path = _relative(path.parent, row["gift"], f"GIFT de {row['id']}")
+            _relative(bank_root, row.get(key), f"{key} de {row['id']}")
+        gift_path = _relative(bank_root, row["gift"], f"GIFT de {row['id']}")
         if gift_path in gift_paths:
             raise ValueError("El catálogo registra el mismo archivo GIFT más de una vez.")
         gift_paths.add(gift_path)
@@ -194,8 +201,8 @@ def load_catalog(catalog_path: str | Path, *, project_root=None, bank_ids=None) 
     merged = {"schema_version": 1, "materials": {}, "questions": {}, "concepts": {}}
     for bid in selected_ids:
         row = by_id[bid]
-        gift_path = _relative(path.parent, row["gift"], f"GIFT de {bid}")
-        metadata_path = _relative(path.parent, row["metadata"], f"Metadatos de {bid}")
+        gift_path = _relative(bank_root, row["gift"], f"GIFT de {bid}")
+        metadata_path = _relative(bank_root, row["metadata"], f"Metadatos de {bid}")
         try:
             raw = gift_path.read_bytes()
             bank = parse_gift(raw.decode("utf-8-sig"))

@@ -10,7 +10,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location(
-    "recorrido_v08", ROOT / "examples/recorrido-docente/comprobar.py")
+    "recorrido_docente", ROOT / "examples/recorrido-docente/comprobar.py")
 example = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(example)
 
@@ -21,7 +21,11 @@ class ConnectedWorkflowTests(unittest.TestCase):
         cls.temp = tempfile.TemporaryDirectory(prefix="docencia-recorrido-")
         cls.destination = Path(cls.temp.name) / "demostración"
         cls.summary = example.run_example(cls.destination)
-        cls.manifest = json.loads((cls.destination / "examen/manifest.json").read_text(encoding="utf-8"))
+        cls.course = cls.destination / "curso"
+        cls.exams = cls.course / "creados/examenes/fuentes-mediciones-evidencias"
+        cls.batch = cls.course / "resultados/medir-y-justificar/ordinaria"
+        cls.exam_batch = cls.course / "resultados/fuentes-mediciones-evidencias/ordinaria"
+        cls.manifest = json.loads((cls.exams / "docente/manifest.json").read_text(encoding="utf-8"))
 
     @classmethod
     def tearDownClass(cls):
@@ -35,7 +39,7 @@ class ConnectedWorkflowTests(unittest.TestCase):
         self.assertTrue(self.summary["originals_preserved"])
         self.assertFalse(self.summary["wiki_created"])
         self.assertFalse(self.summary["activity_pdf_registered"])
-        self.assertTrue((self.destination / "curso/alumnado/actividades/medir-y-justificar/impresion/enunciado.html").is_file())
+        self.assertTrue((self.course / "creados/actividades/medir-y-justificar/alumnado/impresion/enunciado.html").is_file())
         first_ids = set()
         for model in self.manifest["models"]:
             self.assertEqual(model["coverage"]["difficulty"], {"basica": 3, "intermedia": 3})
@@ -49,12 +53,37 @@ class ConnectedWorkflowTests(unittest.TestCase):
         self.assertEqual(len(first_ids), 12)
         self.assertEqual(len(self.manifest["source_banks"]), 3)
 
+    def test_provenance_stable_locations_and_audiences_remain_separate(self):
+        config = json.loads((self.course / "proyecto-docente.json").read_text(encoding="utf-8"))
+        self.assertEqual(config["structure"], "curso-v2")
+        self.assertFalse((self.course / "docente").exists())
+        self.assertFalse((self.course / "alumnado").exists())
+        self.assertEqual(list((self.course / "mapa-docente").iterdir()), [])
+        catalog = json.loads((self.course / "creados/bancos/catalogo.json").read_text(encoding="utf-8"))
+        self.assertEqual(catalog["path_base"], "project")
+        historical = next(bank for bank in catalog["banks"] if bank["id"] == "humanidades")
+        self.assertTrue(historical["gift"].startswith("fuentes/evaluaciones/bancos/"))
+        self.assertTrue((self.course / historical["gift"]).is_file())
+        self.assertFalse((self.course / "creados/bancos/humanidades").exists())
+        for bank in catalog["banks"]:
+            metadata = json.loads((self.course / bank["metadata"]).read_text(encoding="utf-8"))
+            for material in metadata["materials"].values():
+                self.assertTrue((self.course / material["path"]).is_file(), material["path"])
+        student_files = list((self.exams / "alumnado").iterdir())
+        self.assertEqual(len(student_files), 3)
+        self.assertTrue(all(path.suffix == ".html" for path in student_files))
+        self.assertTrue((self.exams / "docente/manifest.json").is_file())
+        self.assertEqual(len(list((self.exams / "docente").glob("*.gift"))), 3)
+        state = json.loads((self.exams / "material-docente.json").read_text(encoding="utf-8"))
+        self.assertEqual(state["status"], "borrador")
+        self.assertIn("borrador", (self.exams / "LEEME.md").read_text(encoding="utf-8"))
+
     def test_activity_exports_preserve_unrelated_cells_and_absence_in_both_profiles(self):
         for profile, delimiter, grade, identifier in (
             ("tarea", ",", "Calificación", "Identificador"),
             ("libro", ";", "Actividad", "Usuario"),
         ):
-            folder = self.destination / f"correccion-{profile}"
+            folder = self.batch / f"correccion/{profile}"
             report = json.loads((folder / "grading-report.json").read_text(encoding="utf-8"))
             self.assertEqual(report["status"], "ok")
             self.assertEqual(report["updated"], 2)
@@ -67,7 +96,7 @@ class ConnectedWorkflowTests(unittest.TestCase):
                 self.assertEqual([r["Otra actividad"] for r in rows], ["8,50", "9,00", "6,50"])
 
     def test_exam_feedback_preserves_authoritative_grade_and_prioritizes_without_reserved_content(self):
-        folder = self.destination / "feedback"
+        folder = self.exam_batch / "correccion/feedback"
         expected = {"A": ("001", "3,50", "8,00"), "B": ("002", "6,25", "9,00"),
                     "C": ("003", "", "7,00")}
         for model, values in expected.items():

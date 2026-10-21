@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "structure": "curso-v1",
+  "structure": "curso-v2",
   "sources": {
     "selected": true,
     "include": [
-      "alumnado/materiales",
-      "alumnado/actividades"
+      "fuentes/teoria",
+      "creados/actividades/medir-y-justificar/alumnado"
     ],
     "exclude": []
   },

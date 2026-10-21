@@ -1,6 +1,19 @@
 # Alcance para distintas materias
 
-Revisión ampliada el 20 de octubre de 2026 para las trece skills de 0.8.0.
+Revisión ampliada el 20 de octubre de 2026 para las doce skills de 0.9.0.
+
+## Organización y continuidad (0.9.0)
+
+Los originales se separan de los materiales creados, sin imponer contenidos de
+una disciplina. Cada actividad reúne sus plantillas y documentos por audiencia;
+los estados permiten distinguir trabajo en preparación y revisado sin cambiar
+de ubicación. Un material creado puede alimentar otro encargo sin duplicarse.
+
+Las skills proponen siguientes pasos según evidencias de resultados y necesidades
+pendientes. Los flujos de actividades y de exámenes son independientes, con
+apuntes y diapositivas visuales individuales como apoyos. El mapa es recomendable
+pero no obligatorio para trabajar con adjuntos suficientes. Español claro es
+el idioma y estilo predeterminado; una preferencia explícita del profesor prevalece.
 
 ## Orientación y evaluación conectadas (0.8.0)
 

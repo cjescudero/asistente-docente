@@ -12,24 +12,33 @@ proponer las preguntas antes de incorporarlas a una evaluación.
 
 ## Archivos y raíces
 
-El catálogo se guarda en `docente/evaluaciones/bancos/catalogo.json`. Los bancos
-en preparación siguen en `docente/borradores/` hasta su incorporación; no se
-duplican los materiales del alumnado ni las fuentes junto al catálogo.
+En cursos v2, cada banco nuevo se guarda en `creados/bancos/<id>/`, con GIFT,
+metadatos, `material-docente.json` de tipo `banco` y estado visible en `LEEME.md`.
+Un borrador conserva ese destino al revisarse. El catálogo está en
+`creados/bancos/catalogo.json` y puede enlazar bancos aportados bajo
+`fuentes/evaluaciones/bancos/` sin copiarlos. La presencia en el catálogo no
+acredita revisión pedagógica ni autoriza entregar el banco con soluciones.
+Los cursos anteriores mantienen sus ubicaciones y contratos.
 
 Los contratos JSON usan UTF-8 y `schema_version: 1`:
 
 | Archivo | Contrato |
 | --- | --- |
-| Catálogo | `banks`: lista de objetos con `id`, `gift` y `metadata`. |
+| Catálogo | `banks`: lista de objetos con `id`, `gift` y `metadata`; `path_base` opcional. |
 | Metadatos de banco | `materials`, `concepts` y `questions`: objetos por identificador. |
 | Selección | `banks`: identificadores elegidos; `quotas`: reparto común a cada modelo. |
 
-`gift` y `metadata` son rutas relativas a la carpeta del catálogo. Las rutas
-de materiales y recomendaciones son relativas a la raíz del curso. La utilidad
-localiza `proyecto-docente.json` en los antecesores del catálogo; `--project`
-permite indicar esa raíz. Para usar archivos fuera de un proyecto inicializado,
-la raíz predeterminada es la carpeta del catálogo. No se admiten rutas absolutas,
-`..`, rutas de Windows con unidad, ni enlaces simbólicos bajo esas raíces.
+`path_base: "project"` permite que `gift` y `metadata` sean relativos a la raíz
+del curso y enlacen bancos de distintas ramas. Es la opción de los catálogos
+nuevos de curso-v2. Si el campo falta o vale `"catalog"`, las rutas siguen siendo
+relativas a la carpeta del catálogo, conservando compatibilidad.
+
+Las rutas de materiales y recomendaciones son relativas a la raíz del curso.
+La utilidad localiza `proyecto-docente.json` en los antecesores del catálogo;
+`--project` permite indicar esa raíz. `path_base: "project"` requiere una raíz
+explícita o descubierta en la configuración. Para un catálogo antiguo fuera de
+un proyecto, la raíz predeterminada sigue siendo su carpeta. No se admiten rutas
+absolutas, `..`, unidades de Windows ni enlaces simbólicos bajo esas raíces.
 Las rutas escritas en JSON usan `/`, también en Windows.
 
 Ejemplo de catálogo:
@@ -37,9 +46,10 @@ Ejemplo de catálogo:
 ```json
 {
   "schema_version": 1,
+  "path_base": "project",
   "banks": [
-    {"id": "historia-fuentes", "gift": "historia.gift", "metadata": "historia.metadata.json"},
-    {"id": "actividad-medicion", "gift": "medicion.gift", "metadata": "medicion.metadata.json"}
+    {"id": "historia-fuentes", "gift": "fuentes/evaluaciones/bancos/historia.gift", "metadata": "fuentes/evaluaciones/bancos/historia.metadata.json"},
+    {"id": "actividad-medicion", "gift": "creados/bancos/medicion/banco.gift", "metadata": "creados/bancos/medicion/metadatos.json"}
   ]
 }
 ```
@@ -92,7 +102,7 @@ preguntas del banco—:
   "schema_version": 1,
   "materials": {
     "carta-historica": {
-      "path": "alumnado/materiales/carta.md",
+      "path": "fuentes/teoria/carta.md",
       "title": "Carta y contexto histórico",
       "access": "estudiante",
       "sha256": "<huella SHA-256 calculada sobre el archivo>"
@@ -105,7 +115,7 @@ preguntas del banco—:
       "references": [
         {
           "title": "Revisar la carta",
-          "path": "alumnado/materiales/carta.md",
+          "path": "fuentes/teoria/carta.md",
           "access": "estudiante"
         }
       ]
@@ -190,12 +200,12 @@ El agente puede ejecutar las utilidades; el profesor no necesita conocer estos
 comandos. Los destinos de resultados deben estar fuera del plugin instalado:
 
 ```sh
-python scripts/docencia.py validate-catalog /curso/docente/evaluaciones/bancos/catalogo.json
+python scripts/docencia.py validate-catalog /curso/creados/bancos/catalogo.json
 python scripts/docencia.py build-exams \
-  --catalog /curso/docente/evaluaciones/bancos/catalogo.json \
-  --selection /curso/docente/evaluaciones/seleccion.json \
+  --catalog /curso/creados/bancos/catalogo.json \
+  --selection /curso/creados/examenes/seleccion.json \
   --title "Evaluación de fuentes y medición" \
-  --questions 5 --models 3 --seed 42 --output /curso/docente/evaluaciones/examen
+  --questions 5 --models 3 --seed 42 --layout curso-v2 --output /curso/creados/examenes/parcial-01
 ```
 
 La entrada antigua de un único GIFT y sus metadatos opcionales sigue disponible.
@@ -210,6 +220,15 @@ banco único, metadatos externos o cuotas antiguas por categoría.
 `validate_catalog(catalog_path, project_root=None)` devuelve un resumen
 serializable con recuentos; las inconsistencias producen `ValueError` y no
 modifican los archivos.
+
+En `--layout curso-v2`, la salida contiene `alumnado/` para modelos HTML/PDF
+sin soluciones y `docente/` para solucionarios, GIFT, `manifest.json`, `source/`
+y `coverage.json`. Las rutas del manifiesto se resuelven desde `docente/`;
+los modelos estudiantiles se enlazan con `../alumnado/`. La raíz del examen
+contiene `material-docente.json` de tipo `examen`, inicialmente `borrador`, y
+`LEEME.md`. Revisar antes de cambiar el estado. Sin esa opción se conserva la
+distribución plana anterior. No reorganizar manualmente archivos después de
+generar el manifiesto.
 
 Las salidas mantienen PDF estudiantil, solucionario separado, HTML y GIFT
 ofuscado. Si falta la capacidad PDF, se conservan fuentes y HTML y se declara
@@ -236,3 +255,11 @@ Estos archivos contienen datos docentes reservados. Solo las salidas identificad
 como estudiantiles se entregan al alumnado. La importación de GIFT no configura
 por sí sola el orden de preguntas y respuestas del cuestionario: consulta
 [la configuración de Moodle](MOODLE.md).
+
+## Continuidad
+
+Después de validar un banco, ofrecer preparar modelos con la cobertura elegida.
+Después de los modelos, orientar a la revisión e importación manual del GIFT;
+tras la evaluación, el feedback requiere detalle por pregunta, manifiesto y hoja
+Moodle. Si esas salidas ya existen para la misma versión, ofrecer utilizarlas,
+revisarlas o actualizarlas según [los flujos docentes](FLUJOS-DOCENTES.md).

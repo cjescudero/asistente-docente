@@ -8,8 +8,9 @@ import unittest
 from unittest.mock import patch
 
 from docencia.project import (
-    AGENTS_BLOCK, CONFIG_NAME, LEEME_CONTENT, PLUGIN_ROOT, PROJECT_DIRECTORIES,
-    check_project, find_project, initialize_project, load_project, source_allowed,
+    AGENTS_BLOCK, AGENTS_BLOCK_V1, CONFIG_NAME, LEEME_CONTENT, LEEME_CONTENT_V1,
+    MATERIAL_RECORD_NAME, MATERIAL_TYPES, PLUGIN_ROOT, PROJECT_DIRECTORIES, PROJECT_DIRECTORIES_V1,
+    check_project, find_project, initialize_project, load_project, source_allowed, validate_material_record,
 )
 
 
@@ -43,17 +44,17 @@ class ProjectTests(unittest.TestCase):
         result = initialize_project(self.root)
         self.assertEqual(result["status"], "ok")
         self.assertEqual(load_project(self.root), {
-            "schema_version": 1, "structure": "curso-v1",
+            "schema_version": 1, "structure": "curso-v2",
             "sources": {"selected": False, "include": [], "exclude": []}, "map": None})
         for relative in PROJECT_DIRECTORIES:
             self.assertTrue((self.root / relative).is_dir())
-        self.assertEqual(list((self.root / "docente/mapa-docente").iterdir()), [])
-        self.assertIn("`redactar-espanol-claro`", (self.root / "AGENTS.md").read_text(encoding="utf-8"))
+        self.assertEqual(list((self.root / "mapa-docente").iterdir()), [])
+        self.assertIn("`espanol-conciso-redaccion`", (self.root / "AGENTS.md").read_text(encoding="utf-8"))
         self.assertEqual(check_project(self.root)["selection_status"], "pending")
 
     def test_second_initialization_is_byte_and_timestamp_identical(self):
-        self.file("docente/fuentes/apuntes.md")
-        initialize_project(self.root, include=["docente/fuentes"])
+        self.file("fuentes/teoria/apuntes.md")
+        initialize_project(self.root, include=["fuentes/teoria"])
         before = self.snapshot()
         result = initialize_project(self.root)
         self.assertEqual(result["created"], [])
@@ -63,7 +64,9 @@ class ProjectTests(unittest.TestCase):
         self.assertEqual(check_project(self.root)["status"], "ok")
 
     def test_previous_course_adds_submissions_without_rewriting_or_selecting_them(self):
-        initialize_project(self.root, include=["alumnado/materiales"])
+        self.file(CONFIG_NAME, json.dumps({"schema_version": 1, "structure": "curso-v1",
+            "sources": {"selected": True, "include": ["alumnado/materiales"], "exclude": []}, "map": None}))
+        initialize_project(self.root)
         (self.root / "docente/resultados/entregas").rmdir()
         agents = self.file("AGENTS.md", "# Reglas previas\nNo propongas un mapa.\n")
         guide = self.file("LEEME.md", "# Guía conservada\n")
@@ -84,7 +87,7 @@ class ProjectTests(unittest.TestCase):
         self.assertEqual(list((self.root / "docente/mapa-docente").iterdir()), [])
 
     def test_dry_run_does_not_create_root(self):
-        result = initialize_project(self.root, include=["docente/fuentes"], dry_run=True)
+        result = initialize_project(self.root, include=["fuentes/teoria"], dry_run=True)
         self.assertEqual(result["status"], "dry_run")
         self.assertFalse(self.root.exists())
         self.assertIn(CONFIG_NAME, result["would_create"])
@@ -102,7 +105,7 @@ class ProjectTests(unittest.TestCase):
         self.assertIn("No traduzcas las citas.", proposals["AGENTS.md"]["proposed_content"])
         self.assertIn(AGENTS_BLOCK, proposals["AGENTS.md"]["proposed_content"])
         self.assertEqual(proposals["LEEME.md"]["proposed_content"], LEEME_CONTENT)
-        self.assertTrue((self.root / "docente/borradores").is_dir())
+        self.assertTrue((self.root / "creados/actividades").is_dir())
 
     def test_existing_managed_block_proposal_preserves_surrounding_content(self):
         altered = AGENTS_BLOCK.replace("conservar rigor", "conservar el rigor")
@@ -112,7 +115,7 @@ class ProjectTests(unittest.TestCase):
         self.assertEqual(result["proposals"][0]["proposed_content"], "Antes\n" + AGENTS_BLOCK + "\nDespués\n")
 
     def test_selection_preserved_unless_explicit_and_empty_is_distinct_from_pending(self):
-        initialize_project(self.root, include=["alumnado/materiales"], exclude=["alumnado/materiales/omitido.md"])
+        initialize_project(self.root, include=["fuentes/teoria"], exclude=["fuentes/teoria/omitido.md"])
         config = load_project(self.root)
         initialize_project(self.root)
         self.assertEqual(load_project(self.root), config)
@@ -130,13 +133,13 @@ class ProjectTests(unittest.TestCase):
 
     def test_map_registration_preserved_and_requires_real_index(self):
         initialize_project(self.root)
-        self.file("docente/mapa-docente/index.md", "# Mapa real\n")
+        self.file("mapa-docente/index.md", "# Mapa real\n")
         config = load_project(self.root)
-        config["map"] = "docente/mapa-docente"
+        config["map"] = "mapa-docente"
         self.save(config)
-        initialize_project(self.root, include=["alumnado/materiales"])
-        self.assertEqual(load_project(self.root)["map"], "docente/mapa-docente")
-        (self.root / "docente/mapa-docente/index.md").unlink()
+        initialize_project(self.root, include=["fuentes/teoria"])
+        self.assertEqual(load_project(self.root)["map"], "mapa-docente")
+        (self.root / "mapa-docente/index.md").unlink()
         self.assertEqual(check_project(self.root)["status"], "invalid")
 
     def test_missing_empty_excluded_and_inaccessible_are_different(self):
@@ -157,26 +160,26 @@ class ProjectTests(unittest.TestCase):
         self.assertEqual(report["status"], "incomplete")
 
     def test_source_selection_never_reads_contents_and_honors_exact_subtrees(self):
-        included = self.file("docente/fuentes/apunte.md")
-        excluded = self.file("docente/fuentes/reservado/examen.md")
+        included = self.file("fuentes/teoria/apunte.md")
+        excluded = self.file("fuentes/teoria/reservado/examen.md")
         outside = self.file("archivo/viejo.md")
-        initialize_project(self.root, include=["docente/fuentes"], exclude=["docente/fuentes/reservado"])
+        initialize_project(self.root, include=["fuentes/teoria"], exclude=["fuentes/teoria/reservado"])
         config = load_project(self.root)
         with patch.object(Path, "read_text", side_effect=AssertionError("No leer")), \
                 patch.object(Path, "read_bytes", side_effect=AssertionError("No leer")):
             self.assertTrue(source_allowed(self.root, config, included))
             self.assertFalse(source_allowed(self.root, config, excluded))
             self.assertFalse(source_allowed(self.root, config, outside))
-        self.assertEqual(check_project(self.root)["selected_files"], ["docente/fuentes/apunte.md"])
+        self.assertEqual(check_project(self.root)["selected_files"], ["fuentes/teoria/apunte.md"])
 
     def test_reserved_exam_can_be_selected_but_results_drafts_and_map_cannot(self):
-        exam = self.file("docente/evaluaciones/examen.md")
-        initialize_project(self.root, include=["docente/evaluaciones"])
+        exam = self.file("fuentes/evaluaciones/examen.md")
+        initialize_project(self.root, include=["fuentes/evaluaciones"])
         self.assertTrue(source_allowed(self.root, load_project(self.root), exam))
-        for forbidden in ("docente", "docente/resultados", "docente/borradores", "docente/mapa-docente"):
+        for forbidden in ("docente", "resultados", "docente/borradores", "mapa-docente"):
             with self.subTest(forbidden=forbidden), self.assertRaises(ValueError):
                 initialize_project(self.root, include=[forbidden])
-        self.assertEqual(load_project(self.root)["sources"]["include"], ["docente/evaluaciones"])
+        self.assertEqual(load_project(self.root)["sources"]["include"], ["fuentes/evaluaciones"])
 
     def test_alternate_map_inside_selected_tree_is_excluded(self):
         self.file("referencias/mapa/index.md")
@@ -188,14 +191,14 @@ class ProjectTests(unittest.TestCase):
         self.assertEqual(check_project(self.root)["selected_files"], ["referencias/apunte.md"])
 
     def test_symlink_cannot_bypass_exclusion_or_escape_selection(self):
-        excluded = self.file("docente/resultados/notas.csv")
+        excluded = self.file("resultados/notas.csv")
         internal = self.file("archivo/no-elegido.md")
-        self.symlink(self.root / "docente/fuentes/notas.csv", excluded)
-        self.symlink(self.root / "docente/fuentes/otro.md", internal)
-        initialize_project(self.root, include=["docente/fuentes"])
+        self.symlink(self.root / "fuentes/teoria/notas.csv", excluded)
+        self.symlink(self.root / "fuentes/teoria/otro.md", internal)
+        initialize_project(self.root, include=["fuentes/teoria"])
         config = load_project(self.root)
-        self.assertFalse(source_allowed(self.root, config, "docente/fuentes/notas.csv"))
-        self.assertFalse(source_allowed(self.root, config, "docente/fuentes/otro.md"))
+        self.assertFalse(source_allowed(self.root, config, "fuentes/teoria/notas.csv"))
+        self.assertFalse(source_allowed(self.root, config, "fuentes/teoria/otro.md"))
         self.assertEqual(check_project(self.root)["selected_files"], [])
 
     def test_controlling_symlinks_rejected_before_any_mutation(self):
@@ -210,18 +213,18 @@ class ProjectTests(unittest.TestCase):
     def test_directory_symlink_rejected_before_writing_outside(self):
         external = Path(self.temporary.name) / "ajeno"
         external.mkdir()
-        self.symlink(self.root / "docente", external)
+        self.symlink(self.root / "fuentes", external)
         with self.assertRaises(ValueError):
             initialize_project(self.root)
         self.assertEqual(list(external.iterdir()), [])
 
     def test_collision_in_ancestor_fails_before_any_creation(self):
-        self.file("docente", "Un archivo existente")
+        self.file("fuentes", "Un archivo existente")
         before = self.snapshot()
         with self.assertRaises(ValueError):
             initialize_project(self.root)
         self.assertEqual(self.snapshot(), before)
-        self.assertFalse((self.root / "alumnado").exists())
+        self.assertFalse((self.root / "creados").exists())
 
     def test_plugin_installation_cannot_become_a_course(self):
         with self.assertRaisesRegex(ValueError, "instalación"):
@@ -249,23 +252,23 @@ class ProjectTests(unittest.TestCase):
 
     def test_find_project_prefers_nearest_and_does_not_hide_invalid_config(self):
         initialize_project(self.root)
-        self.assertEqual(find_project(self.root / "alumnado/materiales"), self.root.resolve())
+        self.assertEqual(find_project(self.root / "fuentes/teoria"), self.root.resolve())
         file = self.file("subcurso/proyecto-docente.json", "No JSON")
         self.assertEqual(find_project(file), file.parent.resolve())
         self.assertEqual(check_project(file.parent)["status"], "invalid")
 
     def test_distribution_placeholders_do_not_count_as_sources(self):
-        self.file("docente/fuentes/.gitkeep", "")
-        self.file("docente/fuentes/.DS_Store", "Metadata")
-        initialize_project(self.root, include=["docente/fuentes"])
+        self.file("fuentes/teoria/.gitkeep", "")
+        self.file("fuentes/teoria/.DS_Store", "Metadata")
+        initialize_project(self.root, include=["fuentes/teoria"])
         report = check_project(self.root)
         self.assertEqual(report["sources"][0]["status"], "empty")
         self.assertEqual(report["selected_files"], [])
-        self.assertFalse(source_allowed(self.root, load_project(self.root), "docente/fuentes/.gitkeep"))
+        self.assertFalse(source_allowed(self.root, load_project(self.root), "fuentes/teoria/.gitkeep"))
 
     def test_diagnostics_do_not_modify_files(self):
-        self.file("docente/fuentes/útil.md")
-        initialize_project(self.root, include=["docente/fuentes"])
+        self.file("fuentes/teoria/útil.md")
+        initialize_project(self.root, include=["fuentes/teoria"])
         before = self.snapshot()
         self.assertEqual(check_project(self.root)["status"], "ok")
         self.assertEqual(self.snapshot(), before)
@@ -274,6 +277,141 @@ class ProjectTests(unittest.TestCase):
         report = check_project(self.root)
         self.assertEqual(report["status"], "incomplete")
         self.assertFalse(self.root.exists())
+
+    def record(self, folder, status="revisado", **overrides):
+        data = {"schema_version": 1, "id": "actividad-sintetica", "type": "actividad", "status": status}
+        data.update(overrides)
+        return self.file(f"{folder}/{MATERIAL_RECORD_NAME}", json.dumps(data, ensure_ascii=False))
+
+    def test_legacy_initialization_keeps_layout_config_and_instructions(self):
+        config = {"schema_version": 1, "structure": "curso-v1",
+                  "sources": {"selected": True, "include": ["docente/fuentes"], "exclude": []}, "map": None}
+        self.file(CONFIG_NAME, json.dumps(config))
+        self.file("AGENTS.md", "# Curso previo\n\n" + AGENTS_BLOCK_V1 + "\n")
+        self.file("LEEME.md", LEEME_CONTENT_V1)
+        self.file("docente/fuentes/teoria.md")
+        initialize_project(self.root)
+        before = self.snapshot()
+        report = initialize_project(self.root)
+        self.assertEqual(report["proposals"], [])
+        self.assertEqual(report["created"], [])
+        self.assertEqual(load_project(self.root), config)
+        self.assertEqual(self.snapshot(), before)
+        self.assertEqual(check_project(self.root)["status"], "ok")
+        self.assertFalse((self.root / "creados").exists())
+        for folder in PROJECT_DIRECTORIES_V1:
+            self.assertTrue((self.root / folder).is_dir())
+
+    def test_new_structure_does_not_create_a_catch_all_drafts_or_audience_root(self):
+        initialize_project(self.root, include=[])
+        self.assertFalse((self.root / "docente").exists())
+        self.assertFalse((self.root / "alumnado").exists())
+        self.assertFalse((self.root / "borradores").exists())
+        self.assertEqual(list((self.root / "mapa-docente").iterdir()), [])
+        self.assertEqual(list((self.root / "resultados").iterdir()), [])
+
+    def test_selected_created_files_require_reviewed_record_without_reading_content(self):
+        folder = "creados/actividades/comentario"
+        statement = self.file(folder + "/alumnado/enunciado.md")
+        initialize_project(self.root, include=[folder + "/alumnado"])
+        config = load_project(self.root)
+        self.assertFalse(source_allowed(self.root, config, statement))
+        for status in ("borrador", "revisado", "listo-para-entregar"):
+            self.record(folder, status=status)
+            real_read = Path.read_text
+            def guarded(path, *args, **kwargs):
+                if path == statement:
+                    raise AssertionError("La comprobación no debe leer el documento")
+                return real_read(path, *args, **kwargs)
+            with self.subTest(status=status), patch.object(Path, "read_text", guarded):
+                self.assertEqual(source_allowed(self.root, config, statement), status != "borrador")
+        self.assertEqual(check_project(self.root)["selected_files"], [folder + "/alumnado/enunciado.md"])
+        self.assertTrue(statement.exists())
+
+    def test_reviewed_record_never_selects_a_created_material_implicitly(self):
+        folder = "creados/actividades/comentario"
+        statement = self.file(folder + "/alumnado/enunciado.md")
+        self.record(folder)
+        initialize_project(self.root, include=["fuentes/teoria"])
+        self.assertFalse(source_allowed(self.root, load_project(self.root), statement))
+        self.assertNotIn(folder + "/alumnado/enunciado.md", check_project(self.root)["selected_files"])
+
+    def test_category_selection_descends_without_admitting_drafts_unknown_or_control_records(self):
+        for name in ("listo", "borrador", "sin-registro"):
+            self.file(f"creados/actividades/{name}/alumnado/enunciado.md")
+        self.record("creados/actividades/listo")
+        self.record("creados/actividades/borrador", status="borrador")
+        initialize_project(self.root, include=["creados/actividades"])
+        self.assertEqual(check_project(self.root)["selected_files"],
+                         ["creados/actividades/listo/alumnado/enunciado.md"])
+
+    def test_nearest_invalid_or_draft_record_cannot_inherit_reviewed_parent(self):
+        folder = "creados/actividades/comentario"
+        statement = self.file(folder + "/anexo/enunciado.md")
+        self.record(folder)
+        initialize_project(self.root, include=[folder])
+        config = load_project(self.root)
+        self.assertTrue(source_allowed(self.root, config, statement))
+        record = self.record(folder + "/anexo", status="borrador")
+        self.assertFalse(source_allowed(self.root, config, statement))
+        record.write_text("{invalid", encoding="utf-8")
+        self.assertFalse(source_allowed(self.root, config, statement))
+
+    def test_global_or_category_record_does_not_accredit_unregistered_outputs(self):
+        statement = self.file("creados/actividades/comentario/alumnado/enunciado.md")
+        initialize_project(self.root, include=["creados/actividades"])
+        config = load_project(self.root)
+        for folder in ("creados", "creados/actividades"):
+            self.record(folder)
+            self.assertFalse(source_allowed(self.root, config, statement))
+        self.assertEqual(check_project(self.root)["selected_files"], [])
+
+    def test_excluded_material_and_record_are_not_read_or_admitted(self):
+        folder = "creados/actividades/comentario"
+        statement = self.file(folder + "/alumnado/enunciado.md")
+        record = self.record(folder)
+        initialize_project(self.root, include=[folder], exclude=[folder + "/alumnado"])
+        config = load_project(self.root)
+        with patch.object(Path, "read_text", side_effect=AssertionError("No leer excluidos")):
+            self.assertFalse(source_allowed(self.root, config, statement))
+        initialize_project(self.root, exclude=[folder + "/" + MATERIAL_RECORD_NAME])
+        config = load_project(self.root)
+        with patch.object(Path, "read_text", side_effect=AssertionError("No leer registro excluido")):
+            self.assertFalse(source_allowed(self.root, config, statement))
+        self.assertTrue(record.exists())
+
+    def test_symbolic_material_record_cannot_grant_corpus_access(self):
+        folder = "creados/actividades/comentario"
+        statement = self.file(folder + "/alumnado/enunciado.md")
+        other = self.record("creados/actividades/otro")
+        self.symlink(self.root / folder / MATERIAL_RECORD_NAME, other)
+        initialize_project(self.root, include=[folder])
+        self.assertFalse(source_allowed(self.root, load_project(self.root), statement))
+
+    def test_material_record_validation_covers_types_and_rejects_ambiguous_states(self):
+        folder = "creados/materiales/apuntes"
+        for material_type in MATERIAL_TYPES:
+            path = self.record(folder, type=material_type)
+            self.assertEqual(validate_material_record(path)["type"], material_type)
+        for changes in ({"schema_version": True}, {"id": " "}, {"type": "otro"},
+                        {"type": []}, {"status": "aprobado"}, {"status": False}):
+            with self.subTest(changes=changes):
+                path = self.record(folder, **changes)
+                with self.assertRaises(ValueError):
+                    validate_material_record(path)
+        path.write_text('{"schema_version":1,"status":"revisado","status":"borrador"}', encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "duplicada"):
+            validate_material_record(path)
+
+    def test_result_inputs_and_correction_outputs_cannot_enter_corpus(self):
+        received = self.file("resultados/actividad/ordinaria/recibidos/notas.csv")
+        corrected = self.file("resultados/actividad/ordinaria/correccion/notas.csv")
+        initialize_project(self.root, include=["fuentes/teoria"])
+        config = load_project(self.root)
+        for path in (received, corrected):
+            self.assertFalse(source_allowed(self.root, config, path))
+        with self.assertRaisesRegex(ValueError, "permanentemente"):
+            initialize_project(self.root, include=["resultados/actividad/ordinaria/recibidos"])
 
 
 if __name__ == "__main__":

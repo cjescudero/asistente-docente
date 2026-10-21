@@ -10,13 +10,13 @@ de IA.
 
 1. Descarga las entregas y el archivo de calificaciones de la misma actividad y
    convocatoria. Conserva los originales en
-   `docente/resultados/entregas/<actividad>/<convocatoria>/originales/`.
+   `resultados/<actividad>/<convocatoria>/recibidos/`.
 2. Pide: «Evalúa estas entregas con el enunciado y la rúbrica de esta actividad».
    El agente identifica los criterios disponibles; si faltan, presenta una
    propuesta antes de calcular notas definitivas.
 3. Revisa las evidencias y puntuaciones por criterio, el feedback y las
-   incidencias. Los resultados de corrección se guardan en una carpeta separada
-   del lote; los identificadores y su correspondencia con las entregas se
+   incidencias. Los resultados de corrección se guardan en `correccion/`, separada de `recibidos/`
+   dentro del lote; los identificadores y su correspondencia con las entregas se
    conservan junto a los originales.
 4. Pide preparar una copia del CSV para Moodle con el perfil correspondiente.
    Comprueba la vista previa de la importación antes de confirmarla.

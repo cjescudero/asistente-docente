@@ -4,6 +4,8 @@ El informe ayuda al agente a presentar un cambio concreto antes de solicitar
 aprobación. Los hashes permiten comprobar que la fuente no cambió entre la
 propuesta y su aplicación. La revisión de enlaces cubre Markdown ordinario;
 PDF, documentos ofimáticos, HTML y enlaces construidos requieren revisión manual.
+Los registros reconocidos se señalan para revisión semántica: no se sustituyen
+rutas sin conocer su base ni se alteran los snapshots de evaluaciones.
 """
 from __future__ import annotations
 
@@ -108,6 +110,49 @@ def _review_links(root: Path, moves: list[dict]) -> tuple[list[dict], list[str]]
     return references, warnings
 
 
+def _review_metadata(root: Path, moves: list[dict]) -> tuple[list[dict], list[str]]:
+    """Inventariar controles afectados potencialmente sin reescribirlos.
+
+    La base de rutas puede ser el curso, el registro, el catálogo o una raíz del
+    mapa. Por eso una coincidencia textual no basta para sugerir una sustitución.
+    Se informa de todos los registros reconocidos cuando hay movimientos;
+    requiere que el agente compruebe las referencias según su contrato.
+    """
+    if not moves:
+        return [], []
+    found, warnings = [], []
+    def failed(exc):
+        warnings.append(str(exc))
+    for directory, names, filenames in os.walk(root, followlinks=False, onerror=failed):
+        names[:] = sorted(name for name in names if name not in SKIP_DIRECTORIES
+                          and not (Path(directory) / name).is_symlink())
+        for name in sorted(filenames):
+            path = Path(directory) / name
+            if path.is_symlink() or path.suffix.lower() != ".json":
+                continue
+            lower = name.lower()
+            if name == CONFIG_NAME:
+                kind, reason = "project", "Revisar structure, sources.include/exclude y map tras la migración aprobada."
+            elif lower == "fuentes.json":
+                kind, reason = "map", "Revisar raíces, rutas, páginas y dependencias del mapa sin declarar lecturas nuevas."
+            elif "catalogo" in lower or "catalog" in lower:
+                kind, reason = "catalog", "Revisar la base de rutas y los enlaces a bancos y metadatos, sin duplicar originales."
+            elif lower in ("actividad.json", "activity.json"):
+                kind, reason = "activity", "Revisar las rutas a fuentes, enunciado, plantillas, rúbrica y guía de corrección."
+            elif lower == "material-docente.json":
+                kind, reason = "material", "Conservar identidad, tipo y estado; comprobar su carpeta estable y el LEEME asociado."
+            elif "manifest" in lower or "manifiesto" in lower:
+                kind, reason = "exam_snapshot", "Preservar el manifiesto y los bancos congelados; comprobar referencias externas sin regenerar el examen."
+            elif "metadatos" in lower or "metadata" in lower or lower.endswith(".meta.json"):
+                kind, reason = "metadata", "Revisar localizadores y referencias a materiales según la base de rutas declarada."
+            else:
+                continue
+            found.append({"document": path.relative_to(root).as_posix(),
+                          "document_after": _after(path, moves, root).relative_to(root).as_posix(),
+                          "kind": kind, "reason": reason, "requires_review": True})
+    return found, warnings
+
+
 def plan_migration(root, moves) -> dict:
     """Proponer movimientos exactos, sin mover ni editar un solo archivo.
 
@@ -120,8 +165,9 @@ def plan_migration(root, moves) -> dict:
     result = {"status": "ready", "root": str(root), "moves": [], "errors": [],
               "warnings": ["Esta propuesta no mueve archivos ni actualiza enlaces.",
                            "Revisión automática limitada a enlaces Markdown ordinarios. Revisar manualmente PDF, documentos ofimáticos, HTML y enlaces construidos.",
-                           "Tras aprobar y aplicar movimientos, actualizar la selección de fuentes y los registros del mapa que dependan de ellos."],
-              "links": [], "requires_approval": True}
+                           "Tras aprobar y aplicar movimientos, revisar configuración, catálogos, registros de actividad y metadatos del mapa; preservar los manifiestos y snapshots de exámenes.",
+                           "metadata_reviews identifica registros para revisión semántica; no determina automáticamente qué campos deben cambiar."],
+              "links": [], "metadata_reviews": [], "requires_approval": True}
     if not root.is_dir():
         raise ValueError("La raíz debe existir para preparar una migración.")
     if isinstance(moves, dict):
@@ -187,5 +233,7 @@ def plan_migration(root, moves) -> dict:
         result["status"] = "invalid"
     else:
         result["links"], warnings = _review_links(root, result["moves"])
+        result["warnings"].extend(warnings)
+        result["metadata_reviews"], warnings = _review_metadata(root, result["moves"])
         result["warnings"].extend(warnings)
     return result

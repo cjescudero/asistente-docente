@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "materials": {
+    "testimonios": {
+      "path": "fuentes/teoria/testimonios.md",
+      "title": "Comparar testimonios",
+      "access": "estudiante",
+      "sha256": "067fcde9d175cab91b23069cb264fb19c0cb32ee0063283276ee54e20cfaf402"
+    }
+  },
+  "concepts": {
+    "critica-fuentes": {
+      "label": "Crítica de fuentes",
+      "guidance": "Repasa Procedencia y Contraste; compara una afirmación con la evidencia que realmente la sostiene.",
+      "references": [
+        {
+          "path": "fuentes/teoria/testimonios.md",
+          "title": "Comparar testimonios",
+          "access": "estudiante"
+        }
+      ]
+    }
+  },
+  "questions": {
+    "Q01": {
+      "source_refs": [
+        {
+          "material_id": "testimonios",
+          "locators": [
+            "Procedencia y Contraste"
+          ]
+        }
+      ],
+      "concepts": [
+        "critica-fuentes"
+      ],
+      "objective": "Crítica de fuentes",
+      "difficulty": "basica",
+      "guidance": "Repasa Procedencia y Contraste; compara una afirmación con la evidencia que realmente la sostiene."
+    },
+    "Q02": {
+      "source_refs": [
+        {
+          "material_id": "testimonios",
+          "locators": [
+            "Procedencia y Contraste"
+          ]
+        }
+      ],
+      "concepts": [
+        "critica-fuentes"
+      ],
+      "objective": "Crítica de fuentes",
+      "difficulty": "basica",
+      "guidance": "Repasa Procedencia y Contraste; compara una afirmación con la evidencia que realmente la sostiene."
+    },
+    "Q03": {
+      "source_refs": [
+        {
+          "material_id": "testimonios",
+          "locators": [
+            "Procedencia y Contraste"
+          ]
+        }
+      ],
+      "concepts": [
+        "critica-fuentes"
+      ],
+      "objective": "Crítica de fuentes",
+      "difficulty": "intermedia",
+      "guidance": "Repasa Procedencia y Contraste; compara una afirmación con la evidencia que realmente la sostiene."
+    },
+    "Q04": {
+      "source_refs": [
+        {
+          "material_id": "testimonios",
+          "locators": [
+            "Procedencia y Contraste"
+          ]
+        }
+      ],
+      "concepts": [
+        "critica-fuentes"
+      ],
+      "objective": "Crítica de fuentes",
+      "difficulty": "intermedia",
+      "guidance": "Repasa Procedencia y Contraste; compara una afirmación con la evidencia que realmente la sostiene."
+    }
+  }
+}

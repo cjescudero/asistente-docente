@@ -32,7 +32,7 @@ class ProjectCliTests(unittest.TestCase):
         self.assertEqual(created.returncode, 0, created.stderr)
         config = json.loads((self.course / "proyecto-docente.json").read_text(encoding="utf-8"))
         self.assertFalse(config["sources"]["selected"])
-        self.assertEqual(list((self.course / "docente/mapa-docente").iterdir()), [])
+        self.assertEqual(list((self.course / "mapa-docente").iterdir()), [])
         repeat = self.run_cli("init-project", self.course)
         self.assertEqual(json.loads(repeat.stdout)["created"], [])
         check = self.run_cli("check-project", self.course)
@@ -68,10 +68,10 @@ class ProjectCliTests(unittest.TestCase):
         self.run_cli("init-project", self.course)
         old = self.course / "antiguo.md"
         old.write_text("Material original", encoding="utf-8")
-        target = self.course / "alumnado/materiales/original.md"
+        target = self.course / "fuentes/teoria/original.md"
         target.write_text("Otro material", encoding="utf-8")
         moves = self.base / "moves.json"
-        moves.write_text(json.dumps([{"from": old.name, "to": "alumnado/materiales/original.md"}]), encoding="utf-8")
+        moves.write_text(json.dumps([{"from": old.name, "to": "fuentes/teoria/original.md"}]), encoding="utf-8")
         result = self.run_cli("plan-migration", self.course, "--moves", moves)
         self.assertEqual(result.returncode, 1, result.stderr)
         self.assertEqual(json.loads(result.stdout)["status"], "invalid")
@@ -110,10 +110,10 @@ class ProjectCliTests(unittest.TestCase):
         check = self.run_cli("check-project", self.course)
         self.assertEqual(check.returncode, 0, check.stderr)
         files = json.loads(check.stdout)["selected_files"]
-        self.assertEqual(files, ["alumnado/materiales/interpretar-datos.md",
-                                 "docente/evaluaciones/examen-vigente.md",
-                                 "docente/fuentes/orientaciones.md"])
-        self.assertEqual(list((self.course / "docente/mapa-docente").iterdir()), [])
+        self.assertEqual(files, ["fuentes/evaluaciones/examenes/examen-vigente.md",
+                                 "fuentes/teoria/interpretar-datos.md",
+                                 "fuentes/teoria/orientaciones.md"])
+        self.assertEqual(list((self.course / "mapa-docente").iterdir()), [])
 
     def test_migration_rejects_destination_inside_another_moving_source(self):
         self.run_cli("init-project", self.course)

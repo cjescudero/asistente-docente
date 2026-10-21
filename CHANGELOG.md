@@ -1,5 +1,32 @@
 # Historial
 
+## 0.9.0 — 2026-10-21
+
+- Doce skills con identificadores y nombres visibles agrupados por categoría,
+  descripciones de interfaz y equivalencias documentadas, sin alias duplicados.
+- Creación y visualización del mapa unificadas: crear o actualizar, regenerar
+  solo vistas, o mostrar las existentes; consulta separada de solo lectura.
+- Inicialización y adaptación con inventario previo, clasificación contrastada,
+  propuesta concreta de movimientos y aprobación completa o parcial; conservar
+  la organización si se rechaza, sin ampliar el corpus automáticamente.
+
+- Nuevos cursos con estructura `curso-v2`: originales en `fuentes/`, trabajos
+  nuevos por tipo en `creados/`, mapa independiente y resultados privados con
+  archivos recibidos y correcciones separados.
+- Estados visibles y registro `material-docente.json`, sin mover materiales al
+  revisarlos o reutilizarlos. La wiki exige selección explícita y estado
+  revisado o listo para incorporar documentos creados.
+- Cierre contextual de las doce skills: inicio → mapa; actividad → corrección;
+  banco → modelos impresos → feedback. Comprobar indicios antes de proponer
+  repetir resultados y explicar las entradas pendientes, sin ejecutar otro flujo.
+- Español claro por defecto y apoyos de apuntes y diapositivas visuales
+  individuales, respetando las preferencias del profesor.
+- Catálogos con rutas relativas al curso para combinar bancos originales y
+  nuevos sin copias; exámenes con separación de alumnado y docente mediante
+  `--layout curso-v2`, conservando la salida anterior.
+- Compatibilidad con `curso-v1`, propuesta de migración sin movimientos
+  automáticos, ejemplos actualizados y paquetes desde una fuente común.
+
 ## 0.8.0 — 2026-10-20
 
 - Salida UTF-8 explícita de la CLI y del ejemplo reproducible, también en

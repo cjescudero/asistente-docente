@@ -1,52 +1,100 @@
 # Proyecto docente: puesta en marcha y contrato común
 
 Instala el plugin, abre la carpeta del curso y pide **«Inicia mi proyecto docente»**.
-El agente prepara el proyecto y explica lo que falta. El profesor no necesita
+También puedes pedir **«Adapta la organización de mi curso»**. El agente revisa
+lo que ya hay, propone los cambios y explica lo que falta. El profesor no necesita
 escribir comandos ni completar una ficha pedagógica para una petición sencilla.
 
 ## Estructura del curso
+
+Los proyectos nuevos utilizan `curso-v2`. Separa la procedencia de los materiales,
+su tipo y el destinatario; un borrador conserva su ubicación al revisarse.
 
 ```text
 curso/
 ├── AGENTS.md
 ├── proyecto-docente.json
 ├── LEEME.md
-├── alumnado/
+├── fuentes/
+│   ├── teoria/
+│   ├── actividades/
+│   └── evaluaciones/
+│       ├── examenes/
+│       └── bancos/
+├── creados/
 │   ├── materiales/
 │   ├── actividades/
-│   └── conocimientos/
-├── docente/
-│   ├── fuentes/
-│   ├── evaluaciones/
-│   ├── soluciones/
-│   ├── rubricas/
-│   ├── borradores/
-│   ├── mapa-docente/
-│   └── resultados/
-│       └── entregas/
+│   ├── bancos/
+│   └── examenes/
+├── mapa-docente/
+├── resultados/
 └── archivo/
 ```
 
-`alumnado/` reúne los materiales destinados a estudiantes. `conocimientos/`
-contiene dudas frecuentes, aclaraciones y otras ayudas; no es una copia de la
-wiki. Las soluciones, rúbricas y evaluaciones reservadas tienen su lugar en
-`docente/`. Los borradores nuevos se preparan en `docente/borradores/`; pasarlos
-a `alumnado/` requiere un encargo que incluya esa entrega. Mantener una ubicación
-para cada material, con sus derivados necesarios, sin copias de exportación por
-sistema. Un archivo Markdown y su PDF son formatos del mismo material.
+`fuentes/` conserva materiales aportados, vigentes o históricos. Por ejemplo,
+un examen anterior puede estar en `fuentes/evaluaciones/examenes/2025-2026/`.
+`creados/` contiene lo elaborado en este proyecto, también cuando se convierte
+en entrada de otra tarea: no copiar una actividad nueva a `fuentes/` para crear
+un banco a partir de ella. Los originales enlazados mantienen una única ubicación.
+Un Markdown y su PDF son formatos del mismo material.
 
-`docente/resultados/` contiene entregas, calificaciones y feedback. No alimenta
-la wiki. Cada lote se guarda en `entregas/<actividad>/<convocatoria>/` con
-`originales/`, `identificacion/` y `correccion/` cuando se recibe. Se conservan
-las descargas y sus identificadores; no se reorganizan lotes previos sin acuerdo.
-`archivo/` guarda materiales apartados del trabajo habitual y solo
-alimenta el mapa si el profesor selecciona explícitamente esa carpeta o una de
-sus subcarpetas. Los nombres de las carpetas organizan contenidos: no conceden
-ni restringen acceso.
+Cada actividad se guarda en `creados/actividades/<id>/`, con `alumnado/` para
+enunciado y plantillas y `docente/` para rúbrica completa, guía y `actividad.json`.
+Cada evaluación se guarda en `creados/examenes/<id>/`, con modelos imprimibles
+estudiantiles y documentos docentes separados. Los bancos están en
+`creados/bancos/<id>/`; los apuntes, imágenes y otras ayudas, en
+`creados/materiales/<id>/`. Separar también allí notas reservadas cuando existan.
+Los nombres de carpetas organizan contenidos; no conceden ni restringen acceso.
 
-La inicialización deja `docente/mapa-docente/` vacía. No crea el índice, el lector,
-el grafo. Recomienda el mapa y ofrece orientación, sin invocar su creación. Cuando el profesor encargue
-crear el mapa, esa skill incorporará el índice real a `AGENTS.md`.
+Cada lote se crea al recibirlo en
+`resultados/<actividad-o-evaluacion>/<convocatoria>/`, con `recibidos/` para
+originales descargados de Moodle y correspondencias de identificación y
+`correccion/` para evaluaciones, CSV modificados, feedback e incidencias.
+Todo `resultados/` queda fuera del corpus de la wiki. Conservar los originales;
+una actualización del CSV es una copia de trabajo necesaria, no una sustitución
+de la exportación recibida.
+
+`archivo/` guarda materiales apartados y solo alimenta el mapa si el profesor lo
+selecciona expresamente. La inicialización deja `mapa-docente/` vacía; recomienda
+crearlo sin invocar esa creación. Solo un mapa real integra su índice en
+`AGENTS.md`. Los cursos `curso-v1` conservan su estructura hasta que se apruebe
+una [migración concreta](MIGRACION-0.9.md); repetir el inicio no los reorganiza.
+
+## Estado de los materiales creados
+
+Cada conjunto nuevo mantiene en su raíz un `material-docente.json` y un
+`LEEME.md` con el estado visible. La [plantilla del registro](../templates/material-docente.json)
+es un ejemplo que se adapta al resultado real. Ejemplo:
+
+```json
+{
+  "schema_version": 1,
+  "id": "analisis-de-fuentes",
+  "type": "actividad",
+  "status": "borrador"
+}
+```
+
+Los tipos admitidos son `material`, `actividad`, `banco`, `examen`, `apuntes`,
+`diapositivas` e `infografia`. `material` permite registrar las ayudas sin una
+clasificación más específica. Los estados son
+`borrador`, `revisado` y `listo-para-entregar`. El registro común identifica tipo
+y estado; `actividad.json`, los metadatos del banco y el manifiesto del examen
+conservan sus contratos específicos de procedencia, versión y evaluación.
+
+- `borrador`: contenido en preparación o con comprobaciones pendientes.
+- `revisado`: se completaron las revisiones pertinentes; anotar su alcance y las
+  capacidades pendientes. No equivale a aprobación del profesor ni a publicación.
+- `listo-para-entregar`: los archivos previstos están preparados para su destino
+  y se ha comprobado la separación del material reservado. No significa que se
+  hayan entregado ni importado en Moodle.
+
+Cambiar el estado de acuerdo con revisiones reales y mantener coherencia con el
+`LEEME.md`. No mover carpetas al aprobar ni marcar como revisado para eludir una
+exclusión. Un cambio sustantivo que invalide la revisión devuelve el material a
+`borrador` y obliga a revisar sus dependencias. Conservar versiones ya utilizadas
+en una evaluación; una versión nueva no modifica los snapshots de un examen.
+No exigir este registro a una respuesta breve de conversación ni a originales.
 
 ## Configuración operativa
 
@@ -59,11 +107,11 @@ La versión del formato es independiente de la versión del plugin. Ejemplo:
 ```json
 {
   "schema_version": 1,
-  "structure": "curso-v1",
+  "structure": "curso-v2",
   "sources": {
     "selected": true,
-    "include": ["docente/fuentes", "alumnado/materiales"],
-    "exclude": ["docente/fuentes/examen-pendiente.pdf"]
+    "include": ["fuentes/teoria", "fuentes/actividades"],
+    "exclude": ["fuentes/actividades/actividad-pendiente.pdf"]
   },
   "map": null
 }
@@ -71,14 +119,20 @@ La versión del formato es independiente de la versión del plugin. Ejemplo:
 
 - `sources.include` contiene carpetas elegidas expresamente. Se incluyen sus
   archivos descendientes, salvo las exclusiones. No seleccionar toda la raíz del
-  curso ni `docente/` completo: elegir las carpetas concretas.
+  curso ni una carpeta general que mezcle fuentes y datos personales: elegir
+  las carpetas concretas. En cursos antiguos, tampoco seleccionar `docente/` completo.
 - `sources.exclude` contiene rutas exactas de archivos o carpetas; no admite
   patrones glob. Excluir una carpeta excluye sus descendientes. Resolver también
   enlaces y rutas secundarias contra estas restricciones antes de abrir fuentes.
-- `docente/resultados/`, `docente/borradores/` y `docente/mapa-docente/` quedan
-  siempre fuera del corpus. No reintroducir su contenido mediante otra raíz o un
-  enlace. Una tarea de evaluación puede leer sus entradas expresamente aportadas
-  sin convertirlas en fuentes de la wiki.
+- En `curso-v2`, `resultados/` y `mapa-docente/` quedan siempre fuera del corpus.
+  Los documentos de `creados/` requieren selección explícita y un registro común
+  válido en estado `revisado` o `listo-para-entregar`. Los borradores y el registro
+  común `material-docente.json` no son fuentes. La selección no cambia el acceso docente
+  o estudiantil de cada documento; los bancos y solucionarios siguen reservados.
+- En `curso-v1` siguen excluidos `docente/resultados/`, `docente/borradores/` y
+  `docente/mapa-docente/`. Respetar esas exclusiones sin reintroducir documentos
+  mediante otra raíz o un enlace. Una evaluación puede leer entradas aportadas
+  expresamente para su encargo sin convertirlas en fuentes de la wiki.
 - `sources.selected: false`, con `include` y `exclude` vacíos, indica selección
   aplazada. `selected: true` con listas vacías registra la decisión explícita de
   trabajar sin fuentes por ahora. Ninguno de esos estados selecciona todas las
@@ -99,20 +153,80 @@ Si una ruta no puede representarse de forma relativa, como entre unidades de
 Windows, explicar la limitación y acordar una ubicación accesible. No mover ni
 copiar originales para resolverla por iniciativa propia.
 
+## Organizar materiales existentes
+
+La revisión precede a la creación de la estructura. El agente distingue una
+carpeta vacía de una carpeta con materiales mezclados o de un curso configurado.
+Lee las instrucciones y configuración existentes e inventaría los archivos
+pertinentes, excluyendo entornos, cachés y componentes ajenos a la docencia.
+La imposibilidad de acceder a un archivo no prueba que no haya contenido.
+
+Nombres, rutas, extensiones y fechas orientan la inspección; no sustituyen la
+lectura necesaria para clasificar. «Examen», «final» o «2025» no prueban acceso,
+vigencia ni procedencia. La propuesta distingue clasificación comprobada,
+provisional y pendiente de aclaración, y limita sus afirmaciones a los fragmentos
+realmente revisados. Un archivo ilegible conserva su incertidumbre.
+
+Antes de mover, el agente muestra una tabla con **origen, destino, contenido
+identificado, motivo y dudas pendientes**, además del árbol resultante. Los
+destinos de referencia para `curso-v2` son:
+
+| Contenido identificado | Destino propuesto |
+| --- | --- |
+| Teoría aportada | `fuentes/teoria/` |
+| Actividades aportadas | `fuentes/actividades/` |
+| Exámenes anteriores o de referencia | `fuentes/evaluaciones/examenes/` |
+| Bancos aportados | `fuentes/evaluaciones/bancos/` |
+| Material elaborado en el proyecto, con procedencia confirmada | `creados/`, según su tipo |
+| Entregas y exportaciones originales de Moodle | `resultados/<actividad>/<convocatoria>/recibidos/` |
+| Correcciones y feedback producidos | `resultados/<actividad>/<convocatoria>/correccion/` |
+| Mapa existente | Conservar su ubicación o proponer traslado con revisión de enlaces |
+
+Son destinos propuestos según evidencia, no reglas automáticas por nombre.
+Mantener juntos enunciado, plantillas, rúbrica y solución, o modelos, manifiesto
+y bancos congelados. Separar dentro de cada conjunto lo destinado al alumnado
+y lo reservado. No convertir todo lo antiguo en fuente ni todo lo reciente en
+material creado; no usar `archivo/` para ocultar dudas de clasificación.
+
+El profesor puede aceptar todos los movimientos mostrados, aprobar una parte,
+corregir destinos o conservar la organización actual. Resolver primero las dudas
+que afecten a los destinos. Si rechaza movimientos, continuar únicamente los
+ajustes compatibles solicitados. No crear un segundo árbol para imponer la
+organización rechazada. La organización y la selección del corpus son decisiones
+separadas: mover un archivo no lo incorpora automáticamente a la wiki.
+
+Antes de aplicar la parte aprobada, comprobar colisiones, dependencias y enlaces;
+no sobrescribir archivos ni decidir nombres alternativos silenciosamente.
+Registrar rutas y huellas para contrastar integridad. Actualizar los enlaces,
+configuración y registros afectados de forma selectiva, revisando sus contratos.
+Los manifiestos y snapshots de exámenes utilizados conservan versiones,
+identificadores, orden, pesos y correspondencias; no regenerarlos con bancos
+actuales. Comprobar huellas de archivos trasladados sin edición y revisar por
+separado los cambios de rutas autorizados. Al terminar, informar de lo movido,
+lo conservado y lo pendiente. `plan-migration` prepara comprobaciones y propuestas;
+no clasifica por nombres ni ejecuta movimientos.
+
+En cursos configurados, conservar `curso-v1` o `curso-v2` y las reglas del profesor
+hasta una migración concreta aprobada. No adaptar instrucciones en conflicto sin
+consultarlo. Una repetición no vuelve a mover archivos ni duplica reglas.
+
 ## Recorrido del agente
 
-1. Identificar la raíz del curso y leer las instrucciones existentes. Preguntar
-   solo por contexto, ubicaciones, tipos de materiales y selección que falten.
-2. Crear la estructura en un proyecto nuevo. Para reorganizar uno existente,
-   presentar correspondencias y movimientos concretos antes de aplicar cambios.
-3. Guardar la selección o su estado pendiente, preparar `LEEME.md` y conciliar
-   `AGENTS.md` dentro del alcance autorizado. Conservar texto ajeno al encargo;
-   preguntar ante reglas incompatibles. Repetir sin duplicar ni sobrescribir.
-4. Incorporar `redactar-espanol-claro` para textos en español. Conservar cualquier
-   bloque de mapa existente y sus rutas; no añadir una entrada ficticia.
-5. Comprobar capacidades y comunicar lo disponible y lo pendiente, sin lanzar
-   otro flujo docente al cerrar la inicialización. Ofrecer `orientar-docente`,
-   recomendar el mapa y esperar a que el profesor formule ese encargo.
+1. Identificar la raíz y leer instrucciones y configuración. **Antes de crear la
+   estructura**, revisar si contiene materiales o un mapa e inventariar lo pertinente.
+2. Preguntar solo por contexto, ubicaciones, tipos, selección y ambigüedades que
+   falten. Si hay materiales, mostrar la propuesta de organización, tabla y árbol;
+   aplicar únicamente los movimientos aprobados tras comprobar sus dependencias.
+3. Preparar la estructura acordada, guardar la selección o su estado pendiente,
+   completar `LEEME.md` y conciliar `AGENTS.md` dentro del alcance autorizado.
+   Conservar texto ajeno; consultar conflictos. Repetir sin duplicar ni sobrescribir.
+4. Usar **Español conciso** por defecto mediante `espanol-conciso-redaccion`, salvo
+   idioma o estilo indicado por el profesor. Conservar rigor, matices, condiciones
+   y atribuciones. Mantener el bloque del mapa y sus rutas, sin entradas ficticias.
+5. Comprobar integridad, rutas y capacidades; comunicar lo realizado y lo pendiente.
+   No lanzar otro flujo al cerrar. Ofrecer entre uno y tres pasos según
+   [los flujos docentes](FLUJOS-DOCENTES.md), recomendar el mapa si falta y
+   comprobar resultados existentes antes de proponer crearlos de nuevo.
 
 Los ayudantes de archivos proponen texto cuando `AGENTS.md` ya existe; el agente
 integra solo lo autorizado. No aceptar un bloque generado como sustitución de las
@@ -155,8 +269,8 @@ instalación del plugin y las rutas del curso; el profesor puede pedir todas est
 operaciones en lenguaje natural:
 
 ```sh
-python scripts/docencia.py init-project RUTA_CURSO --include docente/fuentes --exclude docente/fuentes/borrador.pdf --dry-run
-python scripts/docencia.py init-project RUTA_CURSO --include docente/fuentes
+python scripts/docencia.py init-project RUTA_CURSO --include fuentes/teoria --exclude fuentes/teoria/borrador.pdf --dry-run
+python scripts/docencia.py init-project RUTA_CURSO --include fuentes/teoria
 python scripts/docencia.py init-project RUTA_CURSO
 python scripts/docencia.py init-project RUTA_CURSO --no-sources
 python scripts/docencia.py check-project RUTA_CURSO
@@ -200,4 +314,5 @@ SharePoint si los archivos están disponibles localmente. El plugin no configura
 sincronización, conectores ni permisos remotos. Copilot Studio queda fuera de
 esta versión.
 
-Para adaptar un curso previo, seguir [Migración a 0.7](MIGRACION-0.7.md).
+Para adaptar un curso previo a esta organización, seguir [Migración a 0.9](MIGRACION-0.9.md).
+Los cambios históricos de nombres se conservan en [Migración a 0.7](MIGRACION-0.7.md).

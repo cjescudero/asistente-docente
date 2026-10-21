@@ -28,9 +28,9 @@ desde Personalizar. Una instalación en Codex no sustituye la importación al
 espacio de trabajo de ChatGPT.
 No se necesitan MCP, hooks ni variables exclusivas de un anfitrión.
 
-La versión 0.8.0 prepara trece skills, con nombres sin prefijo, en ambos paquetes:
-`asistente-docente-0.8.0-agent-plugins.zip` y
-`asistente-docente-0.8.0-claude.zip`. El Mapa docente usa páginas Markdown con
+La versión 0.9.0 incluye doce skills, con nombres sin prefijo, en ambos paquetes:
+`asistente-docente-0.9.0-agent-plugins.zip` y
+`asistente-docente-0.9.0-claude.zip`. El Mapa docente usa páginas Markdown con
 enlaces relativos estándar e inventario JSON; no requiere Notion, Obsidian ni
 frontmatter. Su grafo se genera con Python estándar y funciona como HTML autónomo
 sin acceso a la red. La lectura del corpus y la revisión visual requieren las
@@ -58,7 +58,7 @@ originales para resolverla sin una petición que lo autorice.
    Registrar quién realizó la importación, qué roles tienen acceso y cualquier
    limitación. Usar el ZIP solo si el anfitrión ofrece esa opción; no confundir
    esa prueba con una importación del marketplace.
-3. Confirmar nombre, versión 0.8.0 y trece skills; comprobar que los recursos del
+3. Confirmar nombre, versión 0.9.0 y doce skills; comprobar que los recursos del
    paquete son accesibles desde las skills.
 4. Pedir una actividad breve con fuentes sintéticas. Revisar rigor, nivel,
    separación entre enunciado y solución y generación real de Markdown/PDF.
@@ -143,7 +143,7 @@ Licencia MIT y repositorio elegidos por el propietario. Los paquetes incluyen
 los avisos de terceros. Seguir [la guía de publicación](PUBLICACION-GITHUB.md)
 para revisar la fuente, construir artefactos y comprobar las instalaciones
 reales. La preparación local no publica repositorios, marketplaces ni plugins. La
-release 0.6.0 se conserva y la versión 0.8.0 se distribuye desde GitHub con
+release 0.6.0 se conserva y la versión 0.9.0 se distribuye desde GitHub con
 su fuente y paquetes.
 Una nueva release con ZIP y las instalaciones reales se registran por separado
 de la subida del código, la construcción y la validación locales.

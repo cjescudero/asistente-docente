@@ -14,12 +14,8 @@ from urllib.parse import unquote, urlsplit
 from validate_library import _links
 from sync_manifests import generated_files
 
-EXPECTED = {"preparar-actividades-docentes", "generar-apuntes-estudio",
-            "evaluar-entregas", "crear-bancos-preguntas",
-            "preparar-examenes-papel-moodle", "generar-feedback-evaluaciones",
-            "redactar-espanol-claro", "crear-infografias-didacticas",
-            "crear-mapa-docente", "consultar-mapa-docente",
-            "visualizar-mapa-docente", "iniciar-proyecto-docente", "orientar-docente"}
+DISPLAY_NAMES = {'actividades-evaluacion': 'Actividades: evaluación', 'actividades-preparacion': 'Actividades: preparación', 'apuntes-estudio-creacion': 'Apuntes estudio: creación', 'bancos-preguntas-creacion': 'Bancos de preguntas: creación', 'espanol-conciso-redaccion': 'Español conciso: redacción', 'evaluaciones-observaciones-alumnado': 'Evaluaciones: observaciones para el alumnado', 'evaluaciones-preparacion-modelos': 'Evaluaciones: preparación modelos a partir de bancos de preguntas', 'infografias-didacticas-creacion': 'Infografías didácticas: creación', 'mapa-docente-consulta': 'Mapa docente: consulta', 'mapa-docente-creacion-visualizacion': 'Mapa docente: creación y visualización', 'proyecto-docente-ayuda': 'Proyecto docente: ayuda', 'proyecto-docente-inicializacion-adaptacion': 'Proyecto docente: inicialización y adaptación'}
+EXPECTED = set(DISPLAY_NAMES)
 ALLOWED = {"name", "description", "license", "compatibility", "metadata", "allowed-tools"}
 
 
@@ -72,6 +68,17 @@ def validate(root: Path, public: bool = False) -> list[str]:
             continue
         if data.get("name") != path.parent.name or set(data)-ALLOWED:
             errors.append(f"Nombre/campos no portables: {path.parent.name}")
+        ui_path = path.parent / "agents/openai.yaml"
+        try:
+            ui = yaml.safe_load(ui_path.read_text(encoding="utf-8"))
+            interface = ui.get("interface", {}) if isinstance(ui, dict) else {}
+            if interface.get("display_name") != DISPLAY_NAMES.get(path.parent.name):
+                errors.append(f"Nombre visible incorrecto: {path.parent.name}")
+            short = interface.get("short_description")
+            if not isinstance(short, str) or not 25 <= len(short) <= 64:
+                errors.append(f"Descripción corta inválida: {path.parent.name}")
+        except (OSError, yaml.YAMLError, AttributeError):
+            errors.append(f"Interfaz ausente o inválida: {path.parent.name}")
         description = data.get("description")
         if not isinstance(description, str) or not 1 <= len(description) <= 1024:
             errors.append(f"Descripción inválida: {path.parent.name}")
