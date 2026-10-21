@@ -1,5 +1,11 @@
 # Historial
 
+## 0.11.2 — 2026-10-21
+
+- Categorías Moodle por cuestionario y nombre visible Modelo 01, Modelo 02…
+- Categoría y nombre registrados en el manifiesto y explicados en el LEEME.
+- Pesos, tolerancias e identificadores técnicos conservados.
+
 ## 0.11.1 — 2026-10-21
 
 - Al terminar una actividad, ofrecer preparar su carpeta de recepción con el

@@ -143,7 +143,7 @@ Licencia MIT y repositorio elegidos por el propietario. Los paquetes incluyen
 los avisos de terceros. Seguir [la guía de publicación](PUBLICACION-GITHUB.md)
 para revisar la fuente, construir artefactos y comprobar las instalaciones
 reales. La preparación local no publica repositorios, marketplaces ni plugins. La
-release 0.6.0 se conserva y la versión 0.11.1 se distribuye desde GitHub con
+release 0.6.0 se conserva y la versión 0.11.2 se distribuye desde GitHub con
 su fuente y paquetes.
 Una nueva release con ZIP y las instalaciones reales se registran por separado
 de la subida del código, la construcción y la validación locales.

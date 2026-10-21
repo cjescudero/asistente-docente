@@ -75,6 +75,18 @@ principal dentro de un modelo. Comparar tanto familias como variantes en el
 informe; diferencias de letras u orden no equivalen a preguntas distintas.
 No generar nuevas preguntas silenciosamente durante la composición.
 
+## Categorías para importar en Moodle
+
+Usar `$course$/top/RespuestasCuestionariosOffline/<título>/Modelo 01`,
+`Modelo 02`, etc. El título es el nombre del cuestionario, no la materia ni la
+categoría original del banco. Los modelos del PDF y las categorías comparten el
+nombre visible; el manifiesto registra `name`, `moodle_category` e ID técnico.
+Conservar el ID técnico para cruzar resultados; no confundirlo con el nombre visible.
+El GIFT conserva pesos negativos, orden y etiquetas ofuscadas. Mantener títulos
+internos únicos por modelo aunque el enunciado visible sea «Pregunta 01».
+Al importar, usar las categorías especificadas en el archivo y comprobar el árbol
+resultante antes de crear los cuestionarios. No se suben ni publican automáticamente.
+
 ## Diseño del documento imprimible
 
 Usar una cabecera compacta: título a la izquierda, modelo a la derecha y campos

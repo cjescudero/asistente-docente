@@ -156,3 +156,25 @@ Referencias oficiales: [uso de tareas](https://docs.moodle.org/en/Using_Assignme
 [formato GIFT](https://docs.moodle.org/en/GIFT_format),
 [ajustes del cuestionario](https://docs.moodle.org/en/Quiz_settings) e
 [importación de calificaciones](https://docs.moodle.org/en/Grade_import).
+
+## Categorías de los modelos
+
+Cada GIFT incluye, por ejemplo:
+
+```gift
+$CATEGORY: $course$/top/RespuestasCuestionariosOffline/Talleres 5-8/Modelo 01
+```
+
+El título identifica el cuestionario y `Modelo 01`, `Modelo 02`… sus modelos.
+El manifiesto guarda `name` y `moodle_category` en cada modelo, junto a su ID,
+archivos, preguntas originales, opciones, pesos y tolerancias. Los IDs técnicos
+A, B… siguen identificando archivos y cruces de resultados; el nombre visible
+se muestra en el PDF y en la categoría. El LEEME explica ambas correspondencias.
+
+Importar cada GIFT en el banco de preguntas del curso, activando el uso de las
+categorías del archivo cuando Moodle ofrezca esa opción. Comprobar el árbol
+`RespuestasCuestionariosOffline → título → Modelo 01` y el recuento; crear después
+el cuestionario con las preguntas de ese modelo en su orden, sin barajar opciones.
+Importar preguntas no crea ni configura la actividad cuestionario.
+Los títulos GIFT internos conservan el ID de modelo para evitar colisiones; el
+texto visible continúa siendo «Pregunta 01», «Respuesta A», etc.

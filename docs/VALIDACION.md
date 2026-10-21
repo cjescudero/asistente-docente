@@ -1,3 +1,11 @@
+# Categorías Moodle: validación local de 0.11.2
+
+- 389 pruebas sin fallos; dos pruebas PDF opcionales omitidas.
+- Verificada la correspondencia entre categoría GIFT, nombre visible y manifiesto,
+  con conservación de pesos negativos y contenido ofuscado.
+- Paquetes validados desde la fuente común. Importación real en Moodle e
+  instalación en anfitriones no verificadas en esta entrega.
+
 # Cuestionarios: comprobación local de 0.11.1
 
 - Suite: 388 pruebas sin fallos, con dos pruebas PDF opcionales omitidas.

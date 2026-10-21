@@ -65,7 +65,7 @@ def numeric_body(values: list[dict]) -> str:
 
 
 def obfuscated_gift(model: dict) -> str:
-    chunks = [f"$CATEGORY: cuestionario/{model['id']}"]
+    chunks = [f"$CATEGORY: {model.get('moodle_category', 'cuestionario/' + model['id'])}"]
     for q in model["questions"]:
         if q["type"] == "numerical":
             body = numeric_body(q["numerical"])
@@ -88,6 +88,8 @@ def verify_obfuscated(model: dict, text: str):
     if len(parsed) != len(model["questions"]):
         raise ValueError("Error interno: recuento GIFT inconsistente.")
     for source, exported in zip(model["questions"], parsed):
+        if "moodle_category" in model and exported["category"] != model["moodle_category"]:
+            raise ValueError("La categoría Moodle no coincide con el manifiesto.")
         if exported["prompt"] != f"Pregunta {source['number']:02d}":
             raise ValueError("La numeración GIFT no coincide con el modelo.")
         if source["type"] == "numerical":
@@ -107,7 +109,7 @@ def render_model(model: dict, title: str, *, teacher: bool) -> str:
     audience = "SOLUCIONARIO DOCENTE" if teacher else "CUESTIONARIO"
     body = ["<div class='questionnaire'>",
             f"<header class='questionnaire-header'><h1>{html.escape(title)}</h1>"
-            f"<div class='model-id'>Modelo {html.escape(str(model['id']))}</div></header>"]
+            f"<div class='model-id'>{html.escape(model.get('name', 'Modelo ' + str(model['id'])))}</div></header>"]
     if teacher:
         body.append(f"<p class='eyebrow'>{audience}</p>")
     else:
@@ -246,11 +248,15 @@ def build_cuestionarios(bank_path: str | Path | None, output_dir: str | Path, *,
         selections, used = select_models(bank, metadata, selection["selection"], models, rng)
     else:
         selections, used = select_flat_models(bank, metadata, questions, per_category, models, rng)
+    if not title.strip() or any(c in title for c in "\r\n/{}\\"):
+        raise ValueError("El título debe ser un nombre de cuestionario sin saltos de línea ni /, llaves o barras inversas para su categoría Moodle.")
     by_id = {q["id"]: q for q in bank}
     for i in range(models):
         selected = [by_id[qid] for qid, _ in selections[i]]
         model = {"id": model_id(i), "questions": [prepare(q, j+1, rng, metadata)
                  for j, q in enumerate(selected)], "files": {}, "pdf_status": {}}
+        model["name"] = f"Modelo {i + 1:02d}"
+        model["moodle_category"] = f"$course$/top/RespuestasCuestionariosOffline/{title}/{model['name']}"
         if catalog is not None:
             for prepared, (_, quota) in zip(model["questions"], selections[i]):
                 prepared["quota_label"] = selection["selection"]["quotas"][quota]["label"]
@@ -341,7 +347,7 @@ def build_cuestionarios(bank_path: str | Path | None, output_dir: str | Path, *,
                 if "teacher_pdf" in files:
                     items.append(f"[PDF docente](docente/modelo-{name}-teacher.pdf)")
                 items.append(f"[GIFT para Moodle](docente/modelo-{name}.gift)")
-                links.append(f"- **Modelo {name}:** " + " · ".join(items))
+                links.append(f"- **{model['name']} (ID {name}):** " + " · ".join(items) + f". Categoría Moodle: `{model['moodle_category']}`")
             controls = ["[Manifiesto](_datos_internos/manifest.json)"]
             if catalog is not None:
                 controls = ["[Selección](_datos_internos/seleccion.json)", *controls,
