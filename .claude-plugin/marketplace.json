@@ -10,7 +10,7 @@
     {
       "name": "asistente-docente",
       "source": "./",
-      "description": "Organiza fuentes y materiales creados, sugiere próximos pasos y conecta actividades y evaluación para Moodle."
+      "description": "Organiza conocimiento docente, crea actividades y bancos con variantes y prepara cuestionarios y feedback para Moodle."
     }
   ]
 }

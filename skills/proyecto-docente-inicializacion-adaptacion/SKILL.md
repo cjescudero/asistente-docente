@@ -23,7 +23,7 @@ ya exista.
 
 Preguntar solo por lo que falte: contexto del curso, ubicación de materiales,
 tipos de contenido y selección para la futura wiki. Admitir teoría, prácticas,
-talleres, exámenes, soluciones y otros tipos, incluso mezclados en una carpeta.
+talleres, cuestionarios, soluciones y otros tipos, incluso mezclados en una carpeta.
 Reutilizar decisiones explícitas; no recorrer toda la documentación para deducir
 el temario. Identificar carpetas no equivale a haber leído sus documentos.
 
@@ -46,9 +46,9 @@ archivos y carpetas pertinentes; omitir entornos, cachés, control de versiones
 y componentes ajenos a los materiales docentes. No recorrer carpetas vecinas.
 
 Usar nombres, rutas, extensiones y fechas como pistas, contrastándolos con el
-contenido necesario para distinguir teoría, actividades, bancos, exámenes,
+contenido necesario para distinguir teoría, actividades, bancos, cuestionarios,
 soluciones, rúbricas y resultados. No inferir destinatario, vigencia, procedencia
-ni estado de palabras como «examen», «final» o «2025». Indicar para cada conjunto
+ni estado de palabras como «cuestionario», «final» o «2025». Indicar para cada conjunto
 si la clasificación está **comprobada**, es **provisional** o queda **pendiente**,
 y qué fragmentos se inspeccionaron. No declarar lectura completa por una muestra.
 Un documento ilegible queda pendiente; no inventar su contenido o destino.
@@ -73,7 +73,7 @@ ni resolver nombres repetidos silenciosamente. Conservar un inventario de rutas
 y huellas de los originales y conjuntos congelados para verificar integridad.
 Aplicar solo lo aprobado y actualizar las rutas afectadas en configuración,
 registros y enlaces. Preservar versiones, pesos, orden, identificadores,
-correspondencias y bancos congelados de exámenes usados; revisar manualmente los
+correspondencias y bancos congelados de cuestionarios usados; revisar manualmente los
 registros que la utilidad señale, sin reemplazos globales de texto. Si un cambio
 necesario excede la propuesta aprobada, presentarlo antes de continuar esa parte.
 
@@ -82,10 +82,20 @@ revisar por separado las modificaciones de rutas acordadas y comprobar enlaces
 y registros. Informar de movimientos realizados, elementos conservados y asuntos
 pendientes. Repetir el inicio no vuelve a mover conjuntos ya organizados.
 
+## Rutas de cuestionarios
+
+Los cursos nuevos guardan cuestionarios aportados en
+`fuentes/evaluaciones/cuestionarios/` y nuevos en `creados/cuestionarios/`.
+Registrar ambas rutas en `questionnaire_paths` conforme al contrato. Un curso-v2
+anterior sin ese campo conserva sus carpetas `examenes/`; mostrar su cambio en
+la propuesta y actualizar el campo solo tras aprobarla, junto con selecciones,
+enlaces y registros. No cambiar ni crear ramas paralelas al repetir el inicio.
+Conservar también curso-v1 hasta una migración acordada.
+
 ## Preparar la estructura
 
 Tras esa revisión y los acuerdos necesarios, crear en proyectos nuevos el árbol `curso-v2` del contrato: `fuentes/` para
-materiales aportados; `creados/` para materiales, actividades, bancos y exámenes
+materiales aportados; `creados/` para materiales, actividades, bancos y cuestionarios
 producidos; `mapa-docente/`, `resultados/` y `archivo/`. Guardar
 `proyecto-docente.json` y un `LEEME.md` con la función de las carpetas y peticiones
 de ejemplo. Dejar `mapa-docente/` vacía y `map: null` hasta que exista un índice.
@@ -96,7 +106,7 @@ Todo el lote queda fuera del corpus; crear esas subcarpetas cuando haya un lote.
 Los materiales creados conservan su ubicación por tipo y un registro
 `material-docente.json` con `schema_version: 1`, `id`, `type` y `status`, además
 del estado visible en `LEEME.md`. El estado cambia, la carpeta no. Mantener
-`alumnado/` y `docente/` dentro de actividades y exámenes para separar destinatarios.
+`alumnado/` y `docente/` dentro de actividades y cuestionarios para separar destinatarios.
 Un material creado que se use en otra tarea permanece donde está.
 
 Un curso con `structure: "curso-v1"` conserva sus rutas y selección. Repetir la

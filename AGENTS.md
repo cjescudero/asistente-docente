@@ -28,6 +28,20 @@ desde 0.9.0 se agrupan por categoría. Las equivalencias están en
 
 ## Invariantes
 
+- Los cuestionarios parten de cuatro modelos salvo indicación distinta. Proponer
+  cantidad de preguntas principales por cobertura conceptual y explicar el motivo;
+  las variantes no incrementan esa cobertura. Acordar cantidad y estimación de
+  duración ajustable antes de componer modelos. No incluir dos variantes de una
+  misma familia en un modelo; priorizar familias distintas y luego variantes
+  distintas entre modelos, conservando cuotas y trazabilidad.
+- Entregar bancos como GIFT y metadatos individuales, sin ZIP por defecto.
+  En bancos nuevos usar número de principal y letra de variante (`01-A`, `01-B`),
+  con correspondencia en `family_id` y `variant_id`. Mantener IDs de bancos
+  anteriores y snapshots utilizados; la numeración impresa es independiente.
+- El mapa debe explicar el contenido y sus relaciones, condiciones, ejemplos y
+  límites sustentados por lo revisado. El índice facilita navegar; las páginas
+  permiten comprender sin abrir originales salvo para ampliar o verificar.
+
 - Generar papel, GIFT ofuscado y manifiesto desde el mismo modelo ordenado.
 - Conservar pesos y tolerancias; nunca mover la respuesta correcta al principio.
 - Separar soluciones docentes y documentos del estudiante. No trasladar
@@ -54,9 +68,11 @@ desde 0.9.0 se agrupan por categoría. Las equivalencias están en
 
 - El contrato compartido es `docs/PROYECTO-DOCENTE.md`: nuevos cursos `curso-v2`,
   configuración UTF-8 con rutas relativas y selección explícita del corpus.
-  Conservar `curso-v1` hasta una migración concreta aprobada; no deducir la
+  Conservar `curso-v1` y rutas anteriores de `curso-v2` hasta una migración concreta aprobada; no deducir la
   procedencia de los documentos antiguos por su carpeta.
 - Separar originales en `fuentes/` y materiales nuevos en `creados/`, por tipo.
+  Usar `cuestionarios/` en cursos nuevos; respetar `questionnaire_paths` y las
+  rutas `examenes/` anteriores hasta su migración aprobada, sin mover snapshots.
   Cada actividad o examen reúne documentos de alumnado y docente en subcarpetas.
   El estado se registra en `material-docente.json` y se muestra en `LEEME.md`;
   revisar o reutilizar un material no exige moverlo ni duplicarlo.

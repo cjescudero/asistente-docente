@@ -1,4 +1,4 @@
-# Bancos asociados a materiales y exámenes combinados
+# Bancos asociados a materiales y cuestionarios combinados
 
 Un banco nuevo combina un archivo GIFT, metadatos pedagógicos y referencias a
 los materiales que lo sustentan. Cada material conserva su ubicación original.
@@ -19,6 +19,14 @@ Un borrador conserva ese destino al revisarse. El catálogo está en
 `fuentes/evaluaciones/bancos/` sin copiarlos. La presencia en el catálogo no
 acredita revisión pedagógica ni autoriza entregar el banco con soluciones.
 Los cursos anteriores mantienen sus ubicaciones y contratos.
+
+Los bancos se entregan **sin comprimir**, con enlaces directos a `banco.gift` y
+`metadatos.json`, y su guía y registro en la misma carpeta. El GIFT es el archivo
+de preguntas que se usa con Moodle; los JSON documentan procedencia y variantes
+para las utilidades docentes. El ZIP solo es opcional ante petición del profesor
+o una limitación comprobada de entrega, explicada y sin sustituir los archivos
+individuales. Los ZIP de la release distribuyen el plugin, no son el formato
+predeterminado de los bancos.
 
 Los contratos JSON usan UTF-8 y `schema_version: 1`:
 
@@ -122,7 +130,9 @@ preguntas del banco—:
     }
   },
   "questions": {
-    "carta-01": {
+    "01-A": {
+      "family_id": "01",
+      "variant_id": "A",
       "source_refs": [
         {"material_id": "carta-historica", "locators": ["párrafos 2 y 3"]}
       ],
@@ -140,10 +150,68 @@ en varios bancos, sus declaraciones deben coincidir. Ante definiciones distintas
 de un mismo identificador se detiene la composición para resolver la diferencia;
 no se toma silenciosamente la primera ni se pierde su procedencia.
 
+## Preguntas principales y variantes
+
+La skill propone cuántas preguntas **principales** necesita el banco a partir de
+los conceptos, objetivos, relevancia y diversidad de actuaciones de las fuentes.
+Explica ese reparto y permite aumentarlo o reducirlo; informa de las carencias
+si la cantidad elegida no cubre todo. No fija una cantidad universal.
+
+El uso previsto son **cuatro modelos**, salvo otra indicación. Una principal
+puede tener hasta cuatro variantes equivalentes como punto de partida, ajustable
+al número de modelos y a las posibilidades reales del material. Cambiar letras
+o barajar opciones no crea una variante de contenido. Por ejemplo, 8 principales
+con 4 variantes cada una son 32 ítems GIFT, pero 8 familias, no 32 objetivos.
+
+Cada variante conserva un ID GIFT único y añade en su entrada de `questions`:
+
+```json
+{"family_id": "01", "variant_id": "A"}
+```
+
+En bancos nuevos, la principal tiene un número estable y sus variantes se
+identifican con letras mayúsculas. La clave de metadatos y el título GIFT
+combinan ambos, con al menos dos cifras para las principales iniciales:
+
+| Principal | Variante | Título GIFT y clave de metadatos |
+| --- | --- | --- |
+| `01` | `A` | `01-A` |
+| `01` | `B` | `01-B` |
+| `01` | `C` | `01-C` |
+| `01` | `D` | `01-D` |
+| `02` | `A` | `02-A` |
+
+Así, `::01-A::` corresponde a `questions["01-A"]`, con `family_id: "01"` y
+`variant_id: "A"`. Una sola variante usa `A`; después de `Z`, continuar `AA`,
+`AB`… si procede. A partir de 100 principales, usar `100-A` sin modificar IDs
+anteriores. Mantener los identificadores al reordenar y no reutilizar números
+retirados para preguntas distintas. La identidad completa del ítem incluye el
+banco; dos bancos pueden tener su propio `01-A`.
+
+Es una convención de autoría, no una restricción nueva del lector: bancos
+anteriores con otros identificadores siguen funcionando. No renumerarlos ni
+modificar snapshots de cuestionarios usados. Las letras de las variantes no
+indican opciones correctas, respuestas ni asignación fija a modelos A/B/C/D.
+La numeración impresa de cada modelo sigue siendo independiente.
+
+Ambos campos se declaran juntos. La pareja debe ser única dentro del banco;
+las variantes de una familia comparten conceptos, objetivo y dificultad y deben
+ser comparables en demanda cognitiva y duración. La comprobación semántica y la
+verificación de soluciones corresponden al agente y al docente. Un banco sin
+esos campos sigue siendo válido: cada pregunta se considera una principal
+independiente, sin inferir parentescos por sus nombres. En catálogos, las familias
+se identifican también por el banco para evitar colisiones.
+
 ## Selección y equilibrio
 
-Antes de generar modelos, el agente acuerda título, temas o actividades, cantidad
-de preguntas, modelos, tipos y reparto de dificultad. El archivo de selección
+Antes de generar modelos, el agente propone al profesor cantidad de preguntas
+y reparto razonados según los temas o prácticas, las familias y conceptos
+realmente disponibles. Parte de cuatro modelos salvo otra petición. Propone
+una duración aproximada con supuestos de lectura, razonamiento, cálculo y
+revisión; el tiempo de trasladar respuestas a Moodle se indica aparte. No es
+una medición ni una fórmula fija. El profesor puede ajustar cantidad y duración;
+el agente revisa la cobertura antes de componer. Se acuerdan también título,
+tipos y dificultad. El archivo de selección
 recoge el reparto aprobado:
 
 ```json
@@ -183,9 +251,12 @@ factible. Si las preguntas no alcanzan, el mensaje distingue la cuota insuficien
 del conflicto conjunto. El agente propone ajustar el reparto o ampliar bancos;
 la composición nunca inventa nuevas preguntas.
 
-Para cada modelo se minimiza el uso acumulado de sus preguntas y se comparan
-cuatro propuestas para reducir el máximo solapamiento y la concentración de
-coincidencias con modelos anteriores. La semilla reproduce la selección y el
+En cada modelo aparece como máximo una variante de cada principal. Entre
+modelos se priorizan familias menos utilizadas y después variantes menos
+utilizadas, comparando propuestas para reducir el solapamiento. Si el fondo
+permite preguntas principales diferentes para todos, se prefieren; si obliga a
+reutilizar familias, se prefieren variantes distintas y se informa. No rellenar
+con variantes de una familia que ya figura en el mismo modelo. La semilla reproduce la selección y el
 orden de opciones. Es una preferencia reproducible, sin garantía de óptimo
 global de diversidad. Las cuotas pueden obligar a reutilizar preguntas antes
 que otras no elegibles para ese reparto.
@@ -203,9 +274,9 @@ comandos. Los destinos de resultados deben estar fuera del plugin instalado:
 python scripts/docencia.py validate-catalog /curso/creados/bancos/catalogo.json
 python scripts/docencia.py build-exams \
   --catalog /curso/creados/bancos/catalogo.json \
-  --selection /curso/creados/examenes/seleccion.json \
+  --selection /curso/creados/cuestionarios/seleccion.json \
   --title "Evaluación de fuentes y medición" \
-  --questions 5 --models 3 --seed 42 --layout curso-v2 --output /curso/creados/examenes/parcial-01
+  --questions 5 --models 4 --seed 42 --layout curso-v2 --output /curso/creados/cuestionarios/parcial-01
 ```
 
 La entrada antigua de un único GIFT y sus metadatos opcionales sigue disponible.
@@ -225,7 +296,7 @@ En `--layout curso-v2`, la salida contiene `alumnado/` para modelos HTML/PDF
 sin soluciones y `docente/` para solucionarios, GIFT, `manifest.json`, `source/`
 y `coverage.json`. Las rutas del manifiesto se resuelven desde `docente/`;
 los modelos estudiantiles se enlazan con `../alumnado/`. La raíz del examen
-contiene `material-docente.json` de tipo `examen`, inicialmente `borrador`, y
+contiene `material-docente.json` de tipo `cuestionario` (se admite `examen` en registros anteriores), inicialmente `borrador`, y
 `LEEME.md`. Revisar antes de cambiar el estado. Sin esa opción se conserva la
 distribución plana anterior. No reorganizar manualmente archivos después de
 generar el manifiesto.
@@ -263,3 +334,25 @@ Después de los modelos, orientar a la revisión e importación manual del GIFT;
 tras la evaluación, el feedback requiere detalle por pregunta, manifiesto y hoja
 Moodle. Si esas salidas ya existen para la misma versión, ofrecer utilizarlas,
 revisarlas o actualizarlas según [los flujos docentes](FLUJOS-DOCENTES.md).
+
+La CLI conserva el nombre técnico `build-exams` por compatibilidad. `--models`
+vale 4 cuando se omite; `--questions` es obligatorio y refleja la propuesta
+acordada. La API `build_exams` conserva su nombre y la entrada antigua. Las
+variantes y familias quedan registradas en los metadatos y el manifiesto.
+
+## Leer el informe de diversidad
+
+`validate-catalog` informa `main_questions` (familias o preguntas independientes)
+y `questions` (ítems o versiones GIFT). Incluye todos los tipos del catálogo.
+`selection_report` indica `available_main_questions` y
+`available_question_versions` para el fondo imprimible cargado, no únicamente
+los candidatos de una cuota; no interpretar esos totales como cobertura temática
+sin aplicar el reparto solicitado. `family_usage` conserva identidad y uso por
+modelos. En cada par, `shared_main_questions` cuenta principales compartidas y
+`shared_questions` cuenta versiones exactas compartidas.
+
+En un catálogo, `family_id` se identifica como `banco::familia` y
+`source_family_id` conserva el ID original; `variant_id` es local a la familia.
+Las preguntas sin familia tienen identidad independiente y no colisionan con
+una familia que tenga el mismo nombre. El manifiesto conserva estos campos,
+conceptos y procedencia para las observaciones posteriores.

@@ -7,12 +7,12 @@ la selección de fuentes se guarda en `proyecto-docente.json`.
 | --- | --- |
 | `fuentes/teoria/` | Apuntes, diapositivas y referencias aportados. |
 | `fuentes/actividades/` | Actividades aportadas, actuales o de otros cursos. |
-| `fuentes/evaluaciones/examenes/` | Exámenes aportados, identificando curso y vigencia. |
+| `fuentes/evaluaciones/cuestionarios/` | Cuestionarios aportados, identificando curso y vigencia. |
 | `fuentes/evaluaciones/bancos/` | Bancos aportados; se enlazan sin copiarlos. |
 | `creados/materiales/` | Apuntes, infografías y diapositivas visuales creados. |
 | `creados/actividades/` | Una carpeta por actividad con documentos del alumnado y del docente separados. |
 | `creados/bancos/` | Nuevos bancos y el catálogo que enlaza los bancos utilizables. |
-| `creados/examenes/` | Una carpeta por evaluación, con modelos y archivos docentes separados. |
+| `creados/cuestionarios/` | Una carpeta por cuestionario, con modelos y archivos docentes separados. |
 | `mapa-docente/` | Wiki, lector y grafo cuando se creen. |
 | `resultados/` | Un lote por actividad y convocatoria: recibidos originales y corrección; siempre fuera de la wiki. |
 | `archivo/` | Material apartado; solo se usa si se selecciona expresamente. |
@@ -40,9 +40,13 @@ preferido trabajar sin fuentes, puedes usar adjuntos sin necesidad de crear el m
 | Flujo o petición | Entradas para avanzar |
 | --- | --- |
 | «Diseñemos una actividad» → «Evalúa las entregas» | Materiales, conocimientos y condiciones para diseñar; enunciado, criterios, entregas identificadas y hoja Moodle para corregir. |
-| «Crea un banco» → «Prepara modelos impresos» | Materiales y objetivos para el banco; bancos válidos, cobertura, cantidad de preguntas, modelos y dificultad para el examen. |
-| «Prepara modelos» → «Genera feedback de la evaluación» | Resultados detallados por pregunta, manifiesto de los modelos y hoja Moodle; una nota global no permite inferir dificultades conceptuales. |
+| «Crea un banco» → «Prepara modelos impresos» | Materiales y objetivos para el banco; bancos válidos, cobertura, cantidad de preguntas, modelos y dificultad para el cuestionario. |
+| «Prepara modelos» → «Genera observaciones sobre las calificaciones» | Resultados detallados por pregunta, manifiesto de los modelos y hoja Moodle; una nota global no permite inferir dificultades conceptuales. |
 | «Prepara apuntes», «Crea diapositivas visuales» o «Haz una infografía» | Fuentes, propósito y destinatarios; las diapositivas son visuales individuales, no presentaciones editables. |
+
+Para los cuestionarios, el punto de partida son cuatro modelos. El agente
+propondrá cantidad de preguntas y tiempo aproximado según los conceptos y tipos
+de respuesta; puedes ajustar ambas cosas. Las variantes no son conceptos nuevos.
 
 Al finalizar cada tarea, el agente propondrá pasos adecuados a los resultados
 comprobados. Si solo encuentra indicios, los señalará y verificará lo necesario;

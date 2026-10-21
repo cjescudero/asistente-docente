@@ -13,9 +13,9 @@ La fuente de referencia es la carpeta exportada `.agents/skills` del proyecto de
 | `generar-apuntes-estudio-ti` | `apuntes-estudio-creacion` |
 | `crear-apuntes-estudio-ti` | Alias histórico absorbido por la anterior; no se distribuye como skill duplicada |
 | `corregir-taller-ti` | `actividades-evaluacion` |
-| `generar-cuestionarios-ti` | `bancos-preguntas-creacion` y `evaluaciones-preparacion-modelos` |
+| `generar-cuestionarios-ti` | `cuestionarios-bancos-preguntas-creacion` y `cuestionarios-modelos-imprimir-evaluar` |
 | `generar-cuestionarios-ti-talleres-1-4` | Alias histórico absorbido por los flujos de bancos y exámenes |
-| `retroalimentar-cuestionarios-offline-ti` | `evaluaciones-observaciones-alumnado` |
+| `retroalimentar-cuestionarios-offline-ti` | `cuestionarios-observaciones-calificaciones-alumnado` |
 | `sincronizar-documentacion-talleres` | Criterios de coherencia documental y mantenimiento, sin skill docente adicional |
 | `verificacion-cambios-talleres` | Validación técnica y comprobaciones de entrega del nuevo proyecto |
 

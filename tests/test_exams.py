@@ -61,6 +61,85 @@ class ExamTests(unittest.TestCase):
         defaults.update(options)
         return build_exams(self.bank, self.root / output, **defaults)
 
+    def variant_bank(self, families=2, variants=4):
+        gift, entries = [], {}
+        for family in range(families):
+            for variant in range(variants):
+                qid = f"f{family}-v{variant}"
+                gift.append(f"::{qid}::Caso {family}, variante {variant}{{=Correcta~Distractor}}")
+                entries[qid] = {"family_id": f"f{family}", "variant_id": f"v{variant}",
+                                "concepts": ["concepto"], "difficulty": "basica", "objective": "Aplicar"}
+        self.bank.write_text("\n".join(gift), encoding="utf-8")
+        metadata = self.root / "metadata.json"
+        metadata.write_text(json.dumps({"schema_version": 1, "questions": entries,
+                                        "concepts": {"concepto": {"label": "Concepto"}}}), encoding="utf-8")
+        return metadata
+
+    def test_declared_families_require_pedagogical_metadata_even_in_single_bank(self):
+        metadata = self.variant_bank()
+        original = json.loads(metadata.read_text(encoding="utf-8"))
+        for field in ("concepts", "objective", "difficulty"):
+            data = json.loads(json.dumps(original))
+            for info in data["questions"].values():
+                info.pop(field)
+            metadata.write_text(json.dumps(data), encoding="utf-8")
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                self.build(metadata_path=metadata, questions=2)
+        metadata.write_text(json.dumps(original), encoding="utf-8")
+
+    def test_four_default_models_use_distinct_variants_without_repeating_families(self):
+        metadata = self.variant_bank()
+        manifest = build_exams(self.bank, self.root / "default", questions=2,
+                               metadata_path=metadata, html_only=True)
+        self.assertEqual(len(manifest["models"]), 4)
+        versions = {"f0": set(), "f1": set()}
+        for model in manifest["models"]:
+            self.assertEqual({q["family_id"] for q in model["questions"]}, {"f0", "f1"})
+            for q in model["questions"]:
+                versions[q["family_id"]].add(q["variant_id"])
+        self.assertEqual(versions, {"f0": {"v0", "v1", "v2", "v3"},
+                                    "f1": {"v0", "v1", "v2", "v3"}})
+        self.assertTrue(all(pair["shared_questions"] == 0
+                            for pair in manifest["selection_report"]["pairwise_overlap"]))
+        again = build_exams(self.bank, self.root / "again", questions=2,
+                            metadata_path=metadata, html_only=True)
+        self.assertEqual(manifest, again)
+
+    def test_unused_main_questions_are_preferred_over_variants_of_used_families(self):
+        metadata = self.variant_bank(families=8)
+        manifest = self.build(models=4, questions=2, metadata_path=metadata)
+        families = [q["family_id"] for model in manifest["models"] for q in model["questions"]]
+        self.assertEqual(len(set(families)), 8)
+        self.assertTrue(all(pair["shared_main_questions"] == 0
+                            for pair in manifest["selection_report"]["pairwise_overlap"]))
+
+    def test_variant_count_does_not_hide_insufficient_main_questions(self):
+        metadata = self.variant_bank(families=1, variants=4)
+        with self.assertRaisesRegex(ValueError, "preguntas principales/familias"):
+            self.build(models=4, questions=2, metadata_path=metadata)
+        self.assertFalse((self.root / "output").exists())
+
+    def test_legacy_single_bank_checks_family_metadata_and_category_collisions(self):
+        metadata = self.variant_bank(families=1, variants=2)
+        self.bank.write_text("$CATEGORY: A\n::f0-v0::Caso uno{T}\n$CATEGORY: B\n::f0-v1::Caso dos{T}",
+                             encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "preguntas principales/familias"):
+            self.build(questions=2, metadata_path=metadata, per_category={"A": 1, "B": 1})
+        values = json.loads(metadata.read_text(encoding="utf-8"))
+        values["questions"]["f0-v1"]["variant_id"] = "v0"
+        metadata.write_text(json.dumps(values), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "Variante duplicada"):
+            self.build(questions=1, metadata_path=metadata)
+        self.assertFalse((self.root / "output").exists())
+
+    def test_singleton_id_does_not_collide_with_declared_family_id(self):
+        metadata = self.variant_bank(families=1, variants=1)
+        with self.bank.open("a", encoding="utf-8") as stream:
+            stream.write("\n::f0::Una pregunta independiente{T}")
+        manifest = self.build(questions=2, models=1, metadata_path=metadata)
+        self.assertEqual(len(manifest["models"][0]["questions"]), 2)
+        self.assertEqual(manifest["selection_report"]["available_main_questions"], 2)
+
     def test_all_offline_types_and_matching_exclusion_are_explicit(self):
         manifest = self.build()
         self.assertEqual(manifest["excluded_question_ids"], ["geografía"])

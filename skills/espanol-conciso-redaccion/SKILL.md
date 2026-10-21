@@ -98,4 +98,4 @@ La [FAQ del STEMG](https://asd-ste100.org/STE_faq.html) es la referencia sobre e
 
 Aplicar el [cierre contextual de los flujos](../../docs/FLUJOS-DOCENTES.md):
 proponer de uno a tres pasos pertinentes basados en resultados comprobados,
-sin iniciar otra tarea por el mero hecho de sugerirla. Adaptar las sugerencias al documento revisado: continuar el flujo de su actividad, banco, examen o material. En una corrección breve, mantener la sugerencia breve y fuera del texto que el profesor va a reutilizar.
+sin iniciar otra tarea por el mero hecho de sugerirla. Adaptar las sugerencias al documento revisado: continuar el flujo de su actividad, banco, cuestionario o material. En una corrección breve, mantener la sugerencia breve y fuera del texto que el profesor va a reutilizar.

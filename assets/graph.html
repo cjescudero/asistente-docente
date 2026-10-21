@@ -99,6 +99,9 @@
     .node-symbol { fill:white; font-size:12px; text-anchor:middle; dominant-baseline:central; pointer-events:none; }
     .reserved-badge circle { fill:#f7f9f5; stroke:#56695c; stroke-width:1; }
     .reserved-badge path { fill:none; stroke:#415d49; stroke-width:1.35; stroke-linecap:round; stroke-linejoin:round; }
+    .unclassified-badge circle { fill:#fff7e6; stroke:#95733c; stroke-width:1; }
+    .unclassified-badge text { fill:#795b2a; font-size:10px; font-weight:700; text-anchor:middle; dominant-baseline:central; }
+    .access-legend { margin:8px 0 0; font-size:11px; line-height:1.5; color:var(--muted); }
     .controls { position:absolute; left:50%; bottom:24px; transform:translateX(-50%); display:flex; align-items:center; gap:2px;
       padding:5px; border:1px solid var(--line); border-radius:9px; background:white; box-shadow:0 4px 18px #20382c0c; z-index:3; white-space:nowrap; }
     .controls button { height:32px; min-width:32px; border-radius:5px; padding:3px 8px; font-size:12px; }
@@ -208,7 +211,7 @@
           <button id="search-clear" type="button" aria-label="Borrar búsqueda" hidden>×</button></div>
           <span class="sr-only" id="search-hint">La búsqueda filtra el mapa y la lista. Pulsa Enter para seleccionar el primer resultado.</span></div>
         <div class="filters"><details class="filter-section" open><summary>Tipos de contenido</summary><div class="filter-options" id="type-filters"></div><p class="evaluation-note" id="evaluation-note" hidden>Las evaluaciones están ocultas al abrir. Actívalas cuando quieras consultarlas.</p></details>
-          <details class="filter-section"><summary>Acceso</summary><div class="filter-options" id="access-filters"></div></details></div>
+          <details class="filter-section"><summary>Acceso</summary><div class="filter-options" id="access-filters"></div></details><p class="access-legend" id="access-legend">Sin distintivo: para estudiantes. 🔒 Uso docente o restringido. ? Sin clasificar: pendiente de confirmar. Son etiquetas; no bloquean archivos ni autorizan publicarlos.</p></div>
         <div class="list-heading"><h2>Elementos del mapa</h2><span id="list-count"></span></div>
         <ul class="node-list" id="node-list" aria-label="Nodos disponibles"></ul>
       </aside>
@@ -264,6 +267,7 @@
     const title = typeof data.title === "string" ? data.title : "Mapa docente";
     byId("library-title").textContent = title;
     byId("audience-label").textContent = student ? "Vista del estudiante" : "Uso docente";
+    if(student) byId("access-legend").textContent = "Material clasificado para estudiantes. Esta vista no concede permisos sobre los documentos ni autoriza su publicación en Internet.";
     document.title = "Mapa docente · " + title;
     const aliases = {diapositivas:"presentacion",examen:"evaluacion",rubrica:"evaluacion"};
     const nodes = (Array.isArray(data.nodes) ? data.nodes : []).filter(n => n && typeof n.id === "string").map(n => ({
@@ -436,7 +440,11 @@
         const title=svgel("title"); title.textContent=n.title+" · "+TYPES[n.kind].label+" · "+ACCESS[n.access]; group.append(title);
         group.append(svgel("circle",{"class":"halo",r:radius+6}),svgel("circle",{"class":"node-core",r:radius,fill:TYPES[n.kind].color}));
         const symbol=svgel("text",{"class":"node-symbol",x:0,y:-.5}); symbol.textContent=TYPES[n.kind].symbol; group.append(symbol);
-        if (n.access!=="estudiante") {
+        if (n.access==="desconocido") {
+          const badge=svgel("g",{"class":"unclassified-badge",transform:`translate(${radius-2},${-radius+2})`,"aria-hidden":"true"});
+          const mark=svgel("text",{x:0,y:.5});mark.textContent="?";
+          badge.append(svgel("circle",{r:7}),mark);group.append(badge);
+        } else if (n.access!=="estudiante") {
           const badge=svgel("g",{"class":"reserved-badge",transform:`translate(${radius-2},${-radius+2})`,"aria-hidden":"true"});
           badge.append(svgel("circle",{r:7}),svgel("path",{d:"M-3-1H3V4H-3ZM-2-1V-3A2 2 0 0 1 2-3V-1"})); group.append(badge);
         }

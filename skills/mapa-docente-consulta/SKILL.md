@@ -28,8 +28,8 @@ No incorporar entradas de este encargo al corpus automáticamente.
 
 ## Verificar la evidencia
 
-5. Identificar fuentes retiradas y páginas que dependan de ellas directa o indirectamente. No reutilizar esas síntesis antes de su revisión; comunicar la incidencia sin editar el mapa durante esta consulta. Usar las fichas admitidas como orientación, conservando sus límites. Una fuente `pendiente` o `no_legible` no respalda una afirmación sobre su contenido. De una lectura `parcial`, usar solo los localizadores revisados y señalar las limitaciones pertinentes.
-6. Abrir el original para citas literales, calificaciones, creación de preguntas de examen o decisiones que requieran precisión ausente del mapa. Verificar originales ante contradicciones, cambios de versión y explicaciones que dependan de figuras, tablas, ecuaciones o diapositivas. No fabricar citas o números de página a partir de una síntesis.
+5. Identificar fuentes retiradas y páginas que dependan de ellas directa o indirectamente. No reutilizar esas síntesis antes de su revisión; comunicar la incidencia sin editar el mapa durante esta consulta. Usar las explicaciones admitidas para comprender y responder, conservando sus límites; no reducir la wiki a un listado de fuentes ni abrir todos los originales si ya aporta evidencia suficiente. Una fuente `pendiente` o `no_legible` no respalda una afirmación sobre su contenido. De una lectura `parcial`, usar solo los localizadores revisados y señalar las limitaciones pertinentes.
+6. Abrir el original para citas literales, calificaciones, creación de preguntas de cuestionario o decisiones que requieran precisión ausente del mapa. Verificar originales ante contradicciones, cambios de versión y explicaciones que dependan de figuras, tablas, ecuaciones o diapositivas. No fabricar citas o números de página a partir de una síntesis.
 7. Contrastar versiones sin fundir afirmaciones incompatibles. Una rúbrica vigente prevalece sobre una histórica solo cuando su estado está confirmado. Si no se sabe cuál rige, explicar la incertidumbre antes de derivar una decisión.
 8. Separar tipo de material y acceso, y respetar el destino de la respuesta. No revelar soluciones o evaluaciones reservadas en material para estudiantes. Un acceso `desconocido` tampoco autoriza a distribuir. Que un nodo esté oculto por el filtro del grafo docente no cambia los permisos del archivo ni elimina sus datos.
 
@@ -49,7 +49,7 @@ Cuando haya dudas sobre rutas o integridad, usar el [validador de solo lectura](
 
 Crear, ampliar o migrar corresponde a [crear el Mapa docente](../mapa-docente-creacion-visualizacion/SKILL.md). Para generar o actualizar únicamente el HTML, usar [visualizar el Mapa docente](../mapa-docente-creacion-visualizacion/SKILL.md) cuando se solicite. No publicar archivos ni tratar Markdown o el grafo como controles de acceso.
 
-Si el usuario pide otro entregable, transferir objetivos, fuentes, localizadores y límites al flujo adecuado: [apuntes](../apuntes-estudio-creacion/SKILL.md), [actividades](../actividades-preparacion/SKILL.md), [bancos](../bancos-preguntas-creacion/SKILL.md), [exámenes](../evaluaciones-preparacion-modelos/SKILL.md) o [evaluación de entregas](../actividades-evaluacion/SKILL.md). No iniciarlo solo por haber localizado material útil.
+Si el usuario pide otro entregable, transferir objetivos, fuentes, localizadores y límites al flujo adecuado: [apuntes](../apuntes-estudio-creacion/SKILL.md), [actividades](../actividades-preparacion/SKILL.md), [bancos](../cuestionarios-bancos-preguntas-creacion/SKILL.md), [cuestionarios](../cuestionarios-modelos-imprimir-evaluar/SKILL.md) o [evaluación de entregas](../actividades-evaluacion/SKILL.md). No iniciarlo solo por haber localizado material útil.
 
 ## Sugerir el siguiente paso
 

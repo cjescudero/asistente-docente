@@ -36,6 +36,7 @@ def fixture() -> dict:
         ("evaluacion", "Rúbrica reservada", "docente"),
         ("otro", "Notas del profesor", "restringido"),
         ("concepto", "<img src=x onerror=alert(1)>", "estudiante"),
+        ("apuntes", "Material pendiente de confirmar", "desconocido"),
     ]
     nodes = [
         {"id": f"page:{i}", "title": title, "kind": kind, "access": access,
@@ -75,6 +76,16 @@ def check_interactions(page) -> None:
     assert "page:7" not in state(page)["visibleIds"]
     page.locator("#filter-type-evaluacion").check()
     assert "page:7" in state(page)["visibleIds"]
+    assert page.locator('#nodes [data-node-id="page:0"] .reserved-badge').count() == 0
+    assert page.locator('#nodes [data-node-id="page:7"] .reserved-badge').count() == 1
+    assert page.locator('#nodes [data-node-id="page:8"] .reserved-badge').count() == 1
+    pending = page.locator('#nodes [data-node-id="page:10"]')
+    assert pending.locator('.reserved-badge').count() == 0
+    assert pending.locator('.unclassified-badge').text_content() == '?'
+    assert 'pendiente de confirmar' in page.locator('#access-legend').inner_text()
+    page.locator('#node-list [data-node-id="page:10"]').click()
+    assert page.locator('#selected-access').inner_text() == 'Sin clasificar'
+    page.locator('#selection-close').click()
     page.locator("#access-filters").locator("..").locator("summary").click()
     page.locator("#filter-access-restringido").uncheck()
     assert "page:8" not in state(page)["visibleIds"]
@@ -91,7 +102,7 @@ def check_interactions(page) -> None:
     assert page.locator("#empty-state").is_visible()
     assert not state(page)["visibleIds"]
     page.locator("#show-all-button").click()
-    assert len(state(page)["visibleIds"]) == 10
+    assert len(state(page)["visibleIds"]) == 11
 
     item = page.locator('#node-list [data-node-id="page:1"]')
     item.focus()

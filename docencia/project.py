@@ -111,14 +111,21 @@ si su aplicación no lo carga, pídele expresamente que lo lea.
 
 
 # Los proyectos existentes conservan su estructura hasta una migración explícita.
-PROJECT_DIRECTORIES = (
+PROJECT_DIRECTORIES_V2_LEGACY = (
     "fuentes/teoria", "fuentes/actividades", "fuentes/evaluaciones/examenes",
     "fuentes/evaluaciones/bancos", "creados/materiales", "creados/actividades",
     "creados/bancos", "creados/examenes", "mapa-docente", "resultados", "archivo",
 )
+PROJECT_DIRECTORIES = (
+    "fuentes/teoria", "fuentes/actividades", "fuentes/evaluaciones/cuestionarios",
+    "fuentes/evaluaciones/bancos", "creados/materiales", "creados/actividades",
+    "creados/bancos", "creados/cuestionarios", "mapa-docente", "resultados", "archivo",
+)
+QUESTIONNAIRE_PATHS = {"sources": "fuentes/evaluaciones/cuestionarios",
+                       "created": "creados/cuestionarios"}
 PERMANENT_EXCLUSIONS = (*PERMANENT_EXCLUSIONS_V1, "resultados", "mapa-docente")
 MATERIAL_RECORD_NAME = "material-docente.json"
-MATERIAL_TYPES = frozenset({"material", "actividad", "banco", "examen", "apuntes",
+MATERIAL_TYPES = frozenset({"material", "actividad", "banco", "examen", "cuestionario", "apuntes",
                             "diapositivas", "infografia"})
 MATERIAL_STATUSES = frozenset({"borrador", "revisado", "listo-para-entregar"})
 CORPUS_MATERIAL_STATUSES = frozenset({"revisado", "listo-para-entregar"})
@@ -132,7 +139,7 @@ AGENTS_BLOCK = f"""{START_MARKER}
   indicación distinta del docente; conservar rigor, terminología y atribuciones.
 - Conservar el material aportado en `fuentes/` y crear las nuevas producciones
   en `creados/materiales/`, `creados/actividades/`, `creados/bancos/` o
-  `creados/examenes/`, en una carpeta estable por resultado. Separar documentos
+  `creados/cuestionarios/`, en una carpeta estable por resultado. Separar documentos
   del alumnado y documentos docentes dentro de cada actividad o evaluación.
 - Registrar cada producción con `material-docente.json` y mostrar su estado
   en `LEEME.md`: borrador, revisado o listo-para-entregar. El estado no cambia
@@ -158,6 +165,13 @@ AGENTS_BLOCK = f"""{START_MARKER}
   si ya existe y está registrado, ofrecer consultarlo o visualizarlo y elegir
   un flujo. Si la selección está pendiente, ayudar a concretarla; si se eligió
   trabajar sin fuentes, respetarlo y ofrecer tareas con los adjuntos disponibles.
+- Para cuestionarios, usar cuatro modelos salvo otra indicación. Proponer cantidad
+  de preguntas principales según conceptos y objetivos y explicar el reparto;
+  las variantes no cuentan como cobertura adicional. Proponer también duración
+  estimada ajustable. No incluir dos variantes de una principal en el mismo modelo.
+- El mapa explica conceptos y relaciones con evidencia, condiciones, ejemplos y
+  límites; usar originales para profundizar o verificar, sin tratarlos como lectura
+  obligatoria de toda consulta cuando la wiki ya aporta evidencia suficiente.
 - Flujos: actividad → evaluación de entregas cuando existan entregas identificadas
   y criterios; banco → modelos impresos cuando haya preguntas utilizables;
   modelos → feedback cuando haya resultados por pregunta y manifiesto.
@@ -174,12 +188,12 @@ la selección de fuentes se guarda en `proyecto-docente.json`.
 | --- | --- |
 | `fuentes/teoria/` | Apuntes, diapositivas y referencias aportados. |
 | `fuentes/actividades/` | Actividades aportadas, actuales o de otros cursos. |
-| `fuentes/evaluaciones/examenes/` | Exámenes aportados, identificando curso y vigencia. |
+| `fuentes/evaluaciones/cuestionarios/` | Cuestionarios aportados, identificando curso y vigencia. |
 | `fuentes/evaluaciones/bancos/` | Bancos aportados; se enlazan sin copiarlos. |
 | `creados/materiales/` | Apuntes, infografías y diapositivas visuales creados. |
 | `creados/actividades/` | Una carpeta por actividad con documentos del alumnado y del docente separados. |
 | `creados/bancos/` | Nuevos bancos y el catálogo que enlaza los bancos utilizables. |
-| `creados/examenes/` | Una carpeta por evaluación, con modelos y archivos docentes separados. |
+| `creados/cuestionarios/` | Una carpeta por cuestionario, con modelos y archivos docentes separados. |
 | `mapa-docente/` | Wiki, lector y grafo cuando se creen. |
 | `resultados/` | Un lote por actividad y convocatoria: recibidos originales y corrección; siempre fuera de la wiki. |
 | `archivo/` | Material apartado; solo se usa si se selecciona expresamente. |
@@ -207,9 +221,13 @@ preferido trabajar sin fuentes, puedes usar adjuntos sin necesidad de crear el m
 | Flujo o petición | Entradas para avanzar |
 | --- | --- |
 | «Diseñemos una actividad» → «Evalúa las entregas» | Materiales, conocimientos y condiciones para diseñar; enunciado, criterios, entregas identificadas y hoja Moodle para corregir. |
-| «Crea un banco» → «Prepara modelos impresos» | Materiales y objetivos para el banco; bancos válidos, cobertura, cantidad de preguntas, modelos y dificultad para el examen. |
-| «Prepara modelos» → «Genera feedback de la evaluación» | Resultados detallados por pregunta, manifiesto de los modelos y hoja Moodle; una nota global no permite inferir dificultades conceptuales. |
+| «Crea un banco» → «Prepara modelos impresos» | Materiales y objetivos para el banco; bancos válidos, cobertura, cantidad de preguntas, modelos y dificultad para el cuestionario. |
+| «Prepara modelos» → «Genera observaciones sobre las calificaciones» | Resultados detallados por pregunta, manifiesto de los modelos y hoja Moodle; una nota global no permite inferir dificultades conceptuales. |
 | «Prepara apuntes», «Crea diapositivas visuales» o «Haz una infografía» | Fuentes, propósito y destinatarios; las diapositivas son visuales individuales, no presentaciones editables. |
+
+Para los cuestionarios, el punto de partida son cuatro modelos. El agente
+propondrá cantidad de preguntas y tiempo aproximado según los conceptos y tipos
+de respuesta; puedes ajustar ambas cosas. Las variantes no son conceptos nuevos.
 
 Al finalizar cada tarea, el agente propondrá pasos adecuados a los resultados
 comprobados. Si solo encuentra indicios, los señalará y verificará lo necesario;
@@ -236,7 +254,14 @@ si su aplicación no lo carga, pídele expresamente que lo lea.
 
 def project_directories(config: dict) -> tuple[str, ...]:
     """Directorios de la versión declarada; no infiere ni aplica migraciones."""
-    return PROJECT_DIRECTORIES_V1 if config["structure"] == "curso-v1" else PROJECT_DIRECTORIES
+    if config["structure"] == "curso-v1":
+        return PROJECT_DIRECTORIES_V1
+    if "questionnaire_paths" not in config:
+        return PROJECT_DIRECTORIES_V2_LEGACY
+    paths = config["questionnaire_paths"]
+    return tuple(paths["sources"] if name == QUESTIONNAIRE_PATHS["sources"]
+                 else paths["created"] if name == QUESTIONNAIRE_PATHS["created"]
+                 else name for name in PROJECT_DIRECTORIES)
 
 
 def _permanent_exclusions(config: dict) -> tuple[str, ...]:
@@ -315,6 +340,20 @@ def _validate_config(root: Path, data: dict) -> dict:
         raise ValueError("schema_version debe ser 1.")
     if data.get("structure") not in ("curso-v1", "curso-v2"):
         raise ValueError("structure debe ser 'curso-v1' o 'curso-v2'.")
+    if "questionnaire_paths" in data:
+        paths = data["questionnaire_paths"]
+        if (data["structure"] != "curso-v2" or not isinstance(paths, dict)
+                or set(paths) != {"sources", "created"}):
+            raise ValueError("questionnaire_paths requiere sources y created en curso-v2.")
+        for key, parent in (("sources", "fuentes/evaluaciones/"), ("created", "creados/")):
+            relative = _relative(paths[key], label=f"questionnaire_paths.{key}")
+            if not relative.startswith(parent) or relative == parent.rstrip("/"):
+                raise ValueError(f"questionnaire_paths.{key} debe estar bajo {parent}.")
+            _safe_path(root, relative)
+        if any(_within_relative(paths["created"], reserved) for reserved in ("creados/materiales", "creados/actividades", "creados/bancos")):
+            raise ValueError("questionnaire_paths.created colisiona con otro tipo de material.")
+        if _within_relative(paths["sources"], "fuentes/evaluaciones/bancos"):
+            raise ValueError("questionnaire_paths.sources colisiona con bancos aportados.")
     sources = data.get("sources")
     if not isinstance(sources, dict) or type(sources.get("selected")) is not bool:
         raise ValueError("sources.selected debe ser true o false.")
@@ -553,6 +592,7 @@ def initialize_project(root, *, include=None, exclude=None, dry_run=False) -> di
     previous = load_project(root) if controls[CONFIG_NAME].exists() else None
     config = copy.deepcopy(previous) if previous is not None else {
         "schema_version": 1, "structure": "curso-v2",
+        "questionnaire_paths": dict(QUESTIONNAIRE_PATHS),
         "sources": {"selected": False, "include": [], "exclude": []}, "map": None,
     }
     directories = [_safe_path(root, name) for name in project_directories(config)]
@@ -561,6 +601,12 @@ def initialize_project(root, *, include=None, exclude=None, dry_run=False) -> di
             raise ValueError(f"Colisión con un archivo: {path.relative_to(root)}")
     agents_block = AGENTS_BLOCK_V1 if config["structure"] == "curso-v1" else AGENTS_BLOCK
     leeme_content = LEEME_CONTENT_V1 if config["structure"] == "curso-v1" else LEEME_CONTENT
+    if config["structure"] == "curso-v2":
+        paths = config.get("questionnaire_paths", {
+            "sources": "fuentes/evaluaciones/examenes", "created": "creados/examenes"})
+        for key, default in QUESTIONNAIRE_PATHS.items():
+            agents_block = agents_block.replace(default + "/", paths[key] + "/")
+            leeme_content = leeme_content.replace(default + "/", paths[key] + "/")
     if isinstance(include, (str, bytes)) or isinstance(exclude, (str, bytes)):
         raise ValueError("include y exclude deben ser listas de rutas, no cadenas.")
     if include is not None:

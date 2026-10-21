@@ -82,6 +82,69 @@ def _material_path(root, config, material, label):
     return path
 
 
+def validate_variants(metadata: dict, bank: list[dict]):
+    """Validar familias declaradas sin exigir variantes a bancos anteriores.
+
+    Una familia reúne variantes equivalentes, no preguntas independientes sobre
+    el mismo concepto. La equivalencia semántica todavía requiere revisión docente.
+    """
+    families = {}
+    entries = metadata.get("questions", {})
+    for question in bank:
+        qid = question["id"]
+        info = entries.get(qid, {})
+        if not isinstance(info, dict):
+            raise ValueError(f"Metadatos no válidos para {qid}.")
+        present = {field for field in ("family_id", "variant_id") if field in info}
+        if not present:
+            continue
+        if len(present) != 2:
+            raise ValueError(f"{qid}: family_id y variant_id deben declararse juntos.")
+        family = _text(info["family_id"], f"family_id de {qid}")
+        variant = _text(info["variant_id"], f"variant_id de {qid}")
+        concepts = _strings(info.get("concepts"), f"Conceptos de {qid}")
+        objective = _text(info.get("objective"), f"Objetivo de {qid}")
+        if not isinstance(info.get("difficulty"), str) or info["difficulty"] not in DIFFICULTIES:
+            raise ValueError(f"Dificultad no válida en {qid}.")
+        signature = (frozenset(concepts), objective, info["difficulty"])
+        variants, expected = families.setdefault(family, (set(), signature))
+        if variant in variants:
+            raise ValueError(f"Variante duplicada {variant} en familia {family}.")
+        if signature != expected:
+            raise ValueError(f"Familia {family}: las variantes deben compartir conceptos, objetivo y dificultad.")
+        variants.add(variant)
+
+
+def family_key(qid, info):
+    # Distinguish a declared family from a standalone question with the same name.
+    return ("family", info["family_id"]) if "family_id" in info else ("question", qid)
+
+
+def selection_diversity(built, metadata, used):
+    """Informe serializable con identidad de familia inequívoca y reutilización."""
+    entries = metadata.get("questions", {})
+    ids_per_model = [{q["source_id"] for q in model["questions"]} for model in built]
+    families_per_model = [{family_key(qid, entries.get(qid, {})) for qid in ids}
+                          for ids in ids_per_model]
+    usage = Counter(key for values in families_per_model for key in values)
+    return {
+        "method": "Cuotas simultáneas, una pregunta por familia en cada modelo y prioridad a familias "
+                  "menos utilizadas, después variantes menos usadas; comparación de cuatro propuestas "
+                  "para reducir solapamientos, sin garantía de óptimo global.",
+        "question_usage": used,
+        "family_usage": [{"kind": kind, "id": identifier, "models": count}
+                         for (kind, identifier), count in sorted(usage.items())],
+        "available_main_questions": len({family_key(qid, entries.get(qid, {})) for qid in used}),
+        "available_question_versions": len(used),
+        "pairwise_overlap": [
+            {"models": [built[a]["id"], built[b]["id"]],
+             "shared_questions": len(ids_per_model[a] & ids_per_model[b]),
+             "shared_main_questions": len(families_per_model[a] & families_per_model[b])}
+            for a in range(len(built)) for b in range(a + 1, len(built))
+        ],
+    }
+
+
 def _check_metadata(metadata: dict, bank: list[dict], root: Path, config: dict | None):
     materials = metadata.get("materials")
     entries, concepts = metadata.get("questions"), metadata.get("concepts")
@@ -151,6 +214,7 @@ def _check_metadata(metadata: dict, bank: list[dict], root: Path, config: dict |
             seen.add(ref["material_id"])
             _strings(ref.get("locators"), f"Localizadores de {qid}")
         check_references(entry, f"pregunta {qid}")
+    validate_variants(metadata, bank)
     for mid, path in checked_paths.items():
         try:
             raw = path.read_bytes()
@@ -221,9 +285,12 @@ def load_catalog(catalog_path: str | Path, *, project_root=None, bank_ids=None) 
             original_id = question["id"]
             source_id = f"{bid}::{original_id}"
             combined.append({**question, "id": source_id})
+            info = copy.deepcopy(metadata["questions"][original_id])
+            if "family_id" in info:
+                info["source_family_id"] = info["family_id"]
+                info["family_id"] = f"{bid}::{info['family_id']}"
             merged["questions"][source_id] = {
-                **copy.deepcopy(metadata["questions"][original_id]),
-                "source_bank_id": bid, "source_question_id": original_id,
+                **info, "source_bank_id": bid, "source_question_id": original_id,
             }
         originals.append({"id": bid, "gift": row["gift"], "metadata": row["metadata"],
                           "gift_bytes": raw, "metadata_bytes": metadata_raw,
@@ -245,6 +312,8 @@ def validate_catalog(catalog_path: str | Path, *, project_root=None) -> dict:
     return {"status": "ok", "schema_version": 1,
             "banks": [{"id": b["id"], "questions": b["questions"]} for b in loaded["banks"]],
             "questions": len(loaded["bank"]),
+            "main_questions": len({family_key(q["id"], loaded["metadata"]["questions"][q["id"]])
+                                   for q in loaded["bank"]}),
             "materials": len(loaded["metadata"]["materials"]),
             "concepts": len(loaded["metadata"]["concepts"]),
             "diagnostics": []}
@@ -289,13 +358,17 @@ def _eligible(question, info, quota):
                 {ref["material_id"] for ref in info["source_refs"]} & set(quota["material_ids"]))))
 
 
-def _matching(slots, candidates, usage, rng):
+def _matching(slots, candidates, usage, rng, families=None, family_usage=None):
     """Minimum-cost complete matching; reverse edges handle overlapping quotas."""
     ids = sorted({qid for values in candidates for qid in values})
     n_slots = len(slots)
-    source, sink = 0, n_slots + len(ids) + 1
+    families = families or {qid: ("question", qid) for qid in ids}
+    family_usage = family_usage or Counter()
+    family_ids = sorted({families[qid] for qid in ids})
+    source, sink = 0, n_slots + len(ids) + len(family_ids) + 1
     graph = [[] for _ in range(sink + 1)]
     positions = {qid: n_slots + 1 + i for i, qid in enumerate(ids)}
+    family_positions = {key: n_slots + len(ids) + 1 + i for i, key in enumerate(family_ids)}
 
     def edge(start, end, capacity, cost):
         forward = [end, len(graph[end]), capacity, cost]
@@ -308,12 +381,17 @@ def _matching(slots, candidates, usage, rng):
     tie = {qid: index for index, qid in enumerate(ranks)}
     # Any unit of global reuse outweighs the sum of all random tie-breaks.
     priority = (len(ids) + 1) * (n_slots + 1)
+    family_priority = (max(usage.values(), default=0) + 1) * (n_slots + 1) * priority
     for index, quota_index in enumerate(slots):
         node = index + 1
         edge(source, node, 1, 0)
         for qid in candidates[quota_index]:
-            edge(node, positions[qid], 1, usage[qid] * priority + tie[qid])
-    for node in positions.values():
+            cost = (family_usage[families[qid]] * family_priority
+                    + usage[qid] * priority + tie[qid])
+            edge(node, positions[qid], 1, cost)
+    for qid, node in positions.items():
+        edge(node, family_positions[families[qid]], 1, 0)
+    for node in family_positions.values():
         edge(node, sink, 1, 0)
     potential = [0] * len(graph)
     for _ in slots:
@@ -334,7 +412,7 @@ def _matching(slots, candidates, usage, rng):
                     previous[target] = (node, index)
                     heapq.heappush(queue, (new, target))
         if previous[sink] is None:
-            raise ValueError("Fondo insuficiente para cumplir simultáneamente las cuotas sin repetir preguntas; "
+            raise ValueError("Fondo insuficiente para cumplir simultáneamente las cuotas sin repetir preguntas principales/familias; "
                              "revisar su solapamiento o ampliar los bancos.")
         for node, cost in enumerate(distance):
             if cost < float("inf"):
@@ -366,21 +444,45 @@ def select_models(bank, metadata, selection, models, rng):
             raise ValueError(f"Fondo insuficiente en {quota['label']}: {len(pool)} preguntas compatibles "
                              f"para {quota['count']} solicitadas.")
     slots = [index for index, quota in enumerate(quotas) for _ in range(quota["count"])]
+    return _choose_models(bank, metadata, candidates, slots, models, rng)
+
+
+def select_flat_models(bank, metadata, questions, per_category, models, rng):
+    """Mantener banco único y cuotas por categoría sin repetir familias."""
+    pools = per_category or {None: questions}
+    candidates, slots = [], []
+    for index, (category, count) in enumerate(pools.items()):
+        candidates.append([q["id"] for q in bank if q["type"] in PRINT_TYPES
+                           and (category is None or q["category"] == category)])
+        slots.extend([index] * count)
+    return _choose_models(bank, metadata, candidates, slots, models, rng)
+
+
+def _choose_models(bank, metadata, candidates, slots, models, rng):
+    entries = metadata.get("questions", {})
     used = {q["id"]: 0 for q in bank if q["type"] in PRINT_TYPES}
-    previous, built = [], []
+    families = {qid: family_key(qid, entries.get(qid, {})) for qid in used}
+    family_usage = Counter()
+    previous, previous_families, built = [], [], []
     for _ in range(models):
-        proposals = [_matching(slots, candidates, used, rng) for _ in range(4)]
+        proposals = [_matching(slots, candidates, used, rng, families, family_usage) for _ in range(4)]
 
         def preference(proposal):
             chosen = {qid for qid, _ in proposal}
+            chosen_families = {families[qid] for qid in chosen}
             overlaps = [len(chosen & seen) for seen in previous]
-            return (sum(used[qid] for qid in chosen), max(overlaps, default=0),
-                    sum(value * value for value in overlaps))
+            family_overlaps = [len(chosen_families & seen) for seen in previous_families]
+            return (sum(family_usage[key] for key in chosen_families),
+                    sum(used[qid] for qid in chosen), max(family_overlaps, default=0),
+                    sum(value * value for value in family_overlaps),
+                    max(overlaps, default=0), sum(value * value for value in overlaps))
 
         chosen = min(proposals, key=preference)
         for qid, _ in chosen:
             used[qid] += 1
+            family_usage[families[qid]] += 1
         previous.append({qid for qid, _ in chosen})
+        previous_families.append({families[qid] for qid, _ in chosen})
         rng.shuffle(chosen)
         built.append(chosen)
     return built, used

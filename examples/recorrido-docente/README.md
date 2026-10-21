@@ -91,7 +91,7 @@ La carpeta resultante incluye:
 | --- | --- |
 | `curso/fuentes/` | Materiales aportados conservados; el banco histórico continúa en su ubicación. |
 | `curso/creados/actividades/medir-y-justificar/` | Actividad con archivos estudiantiles y docentes separados, y estado visible. |
-| `curso/creados/examenes/fuentes-mediciones-evidencias/` | Modelos HTML/PDF en `alumnado/`; GIFT, manifiesto, bancos congelados e informe de cobertura en `docente/`. El examen recién generado queda en estado borrador. |
+| `curso/creados/cuestionarios/fuentes-mediciones-evidencias/` | Modelos HTML/PDF en `alumnado/`; GIFT, manifiesto, bancos congelados e informe de cobertura en `docente/`. El examen recién generado queda en estado borrador. |
 | `curso/resultados/medir-y-justificar/ordinaria/recibidos/` | Entrega grupal, identificación y hojas Moodle originales. |
 | `curso/resultados/medir-y-justificar/ordinaria/correccion/` | Evaluaciones y perfiles; `tarea/` y `libro/` contienen las copias para Moodle con su auditoría. |
 | `curso/resultados/fuentes-mediciones-evidencias/ordinaria/recibidos/` | Detalle sintético por pregunta y libro de calificaciones originales. |

@@ -84,6 +84,84 @@ class CatalogTests(unittest.TestCase):
         path = self.root / f"{bid}.json"
         return path, json.loads(path.read_text(encoding="utf-8"))
 
+    def assign_family(self, bid, *, family="principal", variants=None):
+        path, metadata = self.metadata(bid)
+        for index, (qid, info) in enumerate(metadata["questions"].items()):
+            info.update(family_id=family, variant_id=(variants or ["v1", "v2"])[index])
+        self.save(path, metadata)
+        return path, metadata
+
+    def test_catalog_families_are_namespaced_and_preserve_source_identity(self):
+        for bid in ("historia", "ciencias"):
+            self.assign_family(bid)
+        result = validate_catalog(self.catalog)
+        self.assertEqual((result["main_questions"], result["questions"]), (2, 4))
+        manifest = self.build(models=2)
+        for model in manifest["models"]:
+            self.assertEqual({q["family_id"] for q in model["questions"]},
+                             {"historia::principal", "ciencias::principal"})
+            self.assertTrue(all(q["source_family_id"] == "principal" for q in model["questions"]))
+            self.assertTrue(all(q["variant_id"] in {"v1", "v2"} for q in model["questions"]))
+        report = manifest["selection_report"]
+        self.assertEqual(report["pairwise_overlap"][0]["shared_questions"], 0)
+        self.assertEqual(report["pairwise_overlap"][0]["shared_main_questions"], 2)
+        self.assertEqual(report["available_main_questions"], 2)
+        self.assertEqual(report["available_question_versions"], 4)
+
+    def test_catalog_variant_ids_must_be_unique_and_have_both_fields(self):
+        path, original = self.assign_family("historia")
+        cases = []
+        duplicate = copy.deepcopy(original)
+        duplicate["questions"]["historia-2"]["variant_id"] = "v1"
+        cases.append(duplicate)
+        missing = copy.deepcopy(original)
+        del missing["questions"]["historia-2"]["variant_id"]
+        cases.append(missing)
+        empty = copy.deepcopy(original)
+        empty["questions"]["historia-2"]["family_id"] = " "
+        cases.append(empty)
+        for index, metadata in enumerate(cases):
+            self.save(path, metadata)
+            with self.subTest(index=index), self.assertRaises(ValueError):
+                validate_catalog(self.catalog)
+
+    def test_catalog_rejects_different_concepts_objective_or_difficulty_in_family(self):
+        path, original = self.assign_family("historia")
+        for field, changed in (("concepts", ["medicion"]), ("objective", "Otro objetivo"),
+                               ("difficulty", "avanzada")):
+            metadata = copy.deepcopy(original)
+            metadata["questions"]["historia-2"][field] = changed
+            self.save(path, metadata)
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError, "compartir conceptos"):
+                validate_catalog(self.catalog)
+
+    def test_family_capacity_blocks_overlapping_quotas_before_output(self):
+        self.assign_family("historia")
+        self.select([{"label": "A", "count": 1, "concepts": ["evidencia"]},
+                     {"label": "B", "count": 1, "concepts": ["evidencia"]}], banks=["historia"])
+        with self.assertRaisesRegex(ValueError, "preguntas principales/familias"):
+            self.build(models=1)
+        self.assertFalse((self.root / "out").exists())
+
+    def test_family_matching_can_reroute_an_overlapping_material_quota(self):
+        # Two variants of one family can fit different quotas; only one may be used.
+        self.add_bank("variantes", "::v1::Caso uno{T}\n::v2::Caso dos{T}\n::independiente::Caso tres{T}")
+        path, metadata = self.metadata("variantes")
+        for index, qid in enumerate(("v1", "v2")):
+            metadata["questions"][qid].update(family_id="f1", variant_id=f"v{index + 1}")
+            metadata["questions"][qid]["source_refs"].append(
+                {"material_id": "experimento", "locators": ["registro"]})
+        self.save(path, metadata)
+        self.select([{"label": "Amplia", "count": 1, "material_ids": ["texto"]},
+                     {"label": "Estrecha", "count": 1, "material_ids": ["experimento"]}],
+                    banks=["variantes"])
+        manifest = self.build(models=4)
+        for model in manifest["models"]:
+            wide = next(q for q in model["questions"] if q["quota_label"] == "Amplia")
+            narrow = next(q for q in model["questions"] if q["quota_label"] == "Estrecha")
+            self.assertEqual(wide["source_question_id"], "independiente")
+            self.assertEqual(narrow["family_id"], "variantes::f1")
+
     def test_catalog_validates_sources_and_reports_serializable_counts(self):
         result = validate_catalog(self.catalog)
         self.assertEqual(result["questions"], 4)

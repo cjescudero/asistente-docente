@@ -1,0 +1,3 @@
+interface:
+  display_name: "Cuestionarios: creación de bancos de preguntas"
+  short_description: "Crear bancos con preguntas principales y sus variantes"

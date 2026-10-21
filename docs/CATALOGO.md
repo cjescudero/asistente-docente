@@ -15,9 +15,9 @@ del agente; las pruebas Python no sustituyen su ejecución en el anfitrión.
 | `actividades-preparacion` | Ayúdame a diseñar un taller de análisis histórico con estas fuentes. | Diálogo sobre conocimientos, materiales, ejemplos previos y uso de IA; enunciado, plantillas y rúbrica docente de la misma versión, con guía cuando corresponda. |
 | `apuntes-estudio-creacion` | Preparar apuntes de ecología para primer curso a partir de un capítulo. | Explicación sustentada, símbolos definidos y Markdown/PDF; sin inventar fuentes. |
 | `actividades-evaluacion` | Corregir ensayos descargados de Moodle con su enunciado y rúbrica. | Evidencia y puntuación por criterio, CSV de notas y feedback sobre copia, trazabilidad de cambios y casos pendientes; sin sancionar supuesto uso de IA. |
-| `bancos-preguntas-creacion` | Crear preguntas de estos apuntes y de una actividad de literatura. | Bancos GIFT, procedencia, localizadores, conceptos, objetivos, dificultad y repaso en catálogo; inspiración histórica diferenciada del contenido vigente. |
-| `evaluaciones-preparacion-modelos` | Combinar preguntas de dos temas y una práctica para tres modelos. | Reparto de cobertura acordado, modelos comparables y reproducibles, PDF, solucionarios, GIFT ofuscados, bancos congelados e informe de reutilización. |
-| `evaluaciones-observaciones-alumnado` | Añadir comentarios al libro de calificaciones a partir del detalle del examen. | Hasta tres dificultades sustentadas y recomendaciones accesibles; notas preservadas y bloqueo de correspondencias ambiguas. |
+| `cuestionarios-bancos-preguntas-creacion` | Crear preguntas de estos apuntes y de una actividad de literatura. | Bancos GIFT, procedencia, localizadores, conceptos, objetivos, dificultad y repaso en catálogo; inspiración histórica diferenciada del contenido vigente. |
+| `cuestionarios-modelos-imprimir-evaluar` | Combinar preguntas de dos temas y una práctica para tres modelos. | Reparto de cobertura acordado, modelos comparables y reproducibles, PDF, solucionarios, GIFT ofuscados, bancos congelados e informe de reutilización. |
+| `cuestionarios-observaciones-calificaciones-alumnado` | Añadir comentarios al libro de calificaciones a partir del detalle del examen. | Hasta tres dificultades sustentadas y recomendaciones accesibles; notas preservadas y bloqueo de correspondencias ambiguas. |
 | `espanol-conciso-redaccion` | Simplificar una explicación manteniendo todas sus condiciones. | Español natural y preciso, sin resumir ni declarar certificación STE. |
 | `infografias-didacticas-creacion` | Crear una diapositiva dibujada sobre una cadena causal. | Imagen revisada si hay generador; diseño y prompt claramente identificados si no lo hay. |
 
@@ -31,10 +31,10 @@ se declara en `agents/openai.yaml`; el orden y su presentación dependen del anf
 | Actividades: evaluación | `actividades-evaluacion` |
 | Actividades: preparación | `actividades-preparacion` |
 | Apuntes estudio: creación | `apuntes-estudio-creacion` |
-| Bancos de preguntas: creación | `bancos-preguntas-creacion` |
+| Cuestionarios: creación de bancos de preguntas | `cuestionarios-bancos-preguntas-creacion` |
 | Español conciso: redacción | `espanol-conciso-redaccion` |
-| Evaluaciones: observaciones para el alumnado | `evaluaciones-observaciones-alumnado` |
-| Evaluaciones: preparación modelos a partir de bancos de preguntas | `evaluaciones-preparacion-modelos` |
+| Cuestionarios: observaciones sobre calificaciones para el alumnado | `cuestionarios-observaciones-calificaciones-alumnado` |
+| Cuestionarios: creación de modelos para imprimir y evaluar | `cuestionarios-modelos-imprimir-evaluar` |
 | Infografías didácticas: creación | `infografias-didacticas-creacion` |
 | Mapa docente: consulta | `mapa-docente-consulta` |
 | Mapa docente: creación y visualización | `mapa-docente-creacion-visualizacion` |
@@ -71,7 +71,7 @@ se declara en `agents/openai.yaml`; el orden y su presentación dependen del anf
   esperar aprobación de la propuesta antes de mover originales.
 
 El [contrato común](PROYECTO-DOCENTE.md) se aplica a las doce skills según las
-entradas necesarias. Las equivalencias de nombres están en [migración a 0.9](MIGRACION-0.9.md).
+entradas necesarias. Las equivalencias están en [migración a 0.10](MIGRACION-0.10.md) y [migración a 0.9](MIGRACION-0.9.md).
 
 ## Casos de aceptación de orientación, actividades y evaluación
 
@@ -189,3 +189,22 @@ reales de interfaz. La utilidad de migración prepara propuestas sin aplicarlas.
 | Dos archivos con mismo destino | Detener esos movimientos y pedir una resolución, sin sobrescribir ni renombrar silenciosamente. |
 | Examen usado con manifiesto y snapshot | Conservar el conjunto, versiones, pesos y correspondencias; revisar rutas sin sustituciones globales. |
 | Curso configurado con AGENTS propio | Respetar v1/v2, consultar conflictos y repetir sin duplicar reglas ni movimientos. |
+
+## Preguntas, modelos y wiki explicativa (0.10.0)
+
+- Banco: proponer cantidad de principales según conceptos y objetivos, explicar
+  el reparto, ofrecer cuatro variantes equivalentes como punto de partida y
+  distinguir principales de ítems GIFT. Si el profesor cambia la cantidad,
+  ajustar cobertura y señalar lagunas sin inventar contenidos.
+- Modelos: cuatro por defecto; propuesta razonada de preguntas y duración
+  estimada, ajustable a la duración disponible. No iniciar la generación con
+  cinco preguntas silenciosamente ni contar variantes como conceptos nuevos.
+- Diversidad: con familias suficientes, principales distintas entre modelos;
+  con familias escasas, variantes distintas y reutilización documentada. Nunca
+  dos variantes de la misma principal dentro de un modelo.
+- Wiki: el lector puede explicar qué es la media, cómo se aplica, qué información
+  pierde y sus límites a partir de la página del ejemplo. Solo abre el original
+  para profundizar o verificar; no se declara cubierta la incertidumbre formal.
+- Consulta: se conserva solo lectura y no convierte una explicación docente con
+  fuentes reservadas en apuntes del alumnado ni reescribe una wiki esquemática
+  al mostrar su HTML.

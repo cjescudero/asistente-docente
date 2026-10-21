@@ -22,7 +22,7 @@ class ConnectedWorkflowTests(unittest.TestCase):
         cls.destination = Path(cls.temp.name) / "demostración"
         cls.summary = example.run_example(cls.destination)
         cls.course = cls.destination / "curso"
-        cls.exams = cls.course / "creados/examenes/fuentes-mediciones-evidencias"
+        cls.exams = cls.course / "creados/cuestionarios/fuentes-mediciones-evidencias"
         cls.batch = cls.course / "resultados/medir-y-justificar/ordinaria"
         cls.exam_batch = cls.course / "resultados/fuentes-mediciones-evidencias/ordinaria"
         cls.manifest = json.loads((cls.exams / "docente/manifest.json").read_text(encoding="utf-8"))

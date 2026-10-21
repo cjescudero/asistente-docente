@@ -1,7 +1,7 @@
 {
   "name": "asistente-docente",
-  "version": "0.9.0",
-  "description": "Organiza fuentes y materiales creados, sugiere próximos pasos y conecta actividades y evaluación para Moodle.",
+  "version": "0.10.0",
+  "description": "Organiza conocimiento docente, crea actividades y bancos con variantes y prepara cuestionarios y feedback para Moodle.",
   "author": {
     "name": "Carlos J. Escudero"
   },
@@ -20,7 +20,7 @@
   "interface": {
     "displayName": "Asistente docente",
     "shortDescription": "Materiales docentes",
-    "longDescription": "Se distribuye desde GitHub mediante un marketplace personalizado. Tras instalarlo, abre la carpeta del curso y pide «Inicia mi proyecto docente». Separa las fuentes aportadas de los materiales creados y sugiere próximos pasos según los resultados existentes: mapa docente, actividades y corrección, bancos, modelos impresos y feedback para Moodle. Incluye apuntes, diapositivas visuales individuales y español claro por defecto. Las siguientes tareas requieren un encargo y las importaciones en Moodle son manuales.",
+    "longDescription": "Se distribuye desde GitHub mediante un marketplace personalizado. Tras instalarlo, abre la carpeta del curso y pide «Inicia mi proyecto docente». Separa las fuentes aportadas de los materiales creados y sugiere próximos pasos según los resultados existentes: wiki explicativa y mapa docente, actividades y corrección, bancos con variantes, cuatro modelos de cuestionario por defecto y observaciones sobre calificaciones para Moodle. Incluye apuntes, diapositivas visuales individuales y español claro por defecto. Las siguientes tareas requieren un encargo y las importaciones en Moodle son manuales.",
     "developerName": "Carlos J. Escudero",
     "defaultPrompt": [
       "Inicia mi proyecto docente en esta carpeta y oriéntame sobre qué puedo hacer después.",

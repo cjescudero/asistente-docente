@@ -1,6 +1,6 @@
 ---
 name: actividades-evaluacion
-description: Evaluar actividades, trabajos, informes o notebooks descargados de Moodle con su enunciado, rúbrica y resolución disponibles; generar puntuaciones justificadas y feedback en una copia de la hoja Moodle. No usar para crear materiales, procesar exámenes ofuscados ni atribuir uso de IA sin pruebas.
+description: Evaluar actividades, trabajos, informes o notebooks descargados de Moodle con su enunciado, rúbrica y resolución disponibles; generar puntuaciones justificadas y feedback en una copia de la hoja Moodle. No usar para crear materiales, procesar cuestionarios ofuscados ni atribuir uso de IA sin pruebas.
 ---
 
 # Actividades: evaluación
@@ -53,7 +53,7 @@ Si no existe rúbrica suficiente, proponer criterios antes de asignar calificaci
 Entregar una tabla de evaluación por criterio o el formato pedido, comentarios individuales y un resumen de dificultades del grupo sin exponer datos innecesarios. Distinguir notas calculadas, casos pendientes y comprobaciones no realizadas. Para informes extensos, entregar Markdown y PDF cuando el entorno permita verificarlo.
 
 Para feedback de cuestionarios ya puntuados con un manifiesto, usar
-[generar feedback](../evaluaciones-observaciones-alumnado/SKILL.md). Esa tarea conserva
+[generar feedback](../cuestionarios-observaciones-calificaciones-alumnado/SKILL.md). Esa tarea conserva
 las notas existentes; la corrección de entregas usa las puntuaciones justificadas
 de esta evaluación.
 

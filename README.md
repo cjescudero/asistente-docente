@@ -2,14 +2,19 @@
 
 Doce skills para organizar fuentes, crear materiales, evaluar y devolver feedback en
 cualquier asignatura. La fuente común genera paquetes para **ChatGPT Work** y
-**Claude Cowork**. Versión **0.9.0**, bajo [MIT](LICENSE).
+**Claude Cowork**. Versión **0.10.0**, bajo [MIT](LICENSE).
 [Instalación y primer uso](docs/INSTALACION.md) ·
-[Última release publicada: 0.9.0](https://github.com/cjescudero/asistente-docente/releases/tag/v0.9.0) ·
+[Última release publicada: 0.10.0](https://github.com/cjescudero/asistente-docente/releases/tag/v0.10.0) ·
 [Repositorio](https://github.com/cjescudero/asistente-docente).
 
 Las doce skills se agrupan por categoría: actividades, evaluaciones, mapa y
 proyecto docente, junto con bancos y apoyos. Consulta los [nombres y funciones](docs/CATALOGO.md)
-y las [equivalencias de actualización](docs/MIGRACION-0.9.md).
+y las [equivalencias de actualización](docs/MIGRACION-0.10.md).
+
+La versión **0.10.0** incorpora cuatro modelos por defecto, bancos
+con principales y variantes, propuesta razonada de cantidad y duración y una
+wiki explicativa. Consulta el
+[ejemplo de variantes](examples/cuestionarios-variantes/README.md).
 
 ## Inicio rápido
 
@@ -70,9 +75,9 @@ docente; lo creará cuando se lo pidas. Si ya hay
 materiales, presenta una propuesta antes de reorganizarlos. No necesitas escribir
 comandos.
 
-Este recorrido corresponde a la **0.9.0**, preparada localmente. La publicación
-y la actualización del marketplace son pasos posteriores. Publicar una versión
-en GitHub no actualiza por sí solo una instalación existente. [Guía para el profesor](docs/PROYECTO-DOCENTE.md) ·
+Este recorrido corresponde a la **0.10.0**. Actualiza el marketplace y comprueba
+la versión instalada: publicar en GitHub no actualiza por sí solo una instalación
+existente. [Guía para el profesor](docs/PROYECTO-DOCENTE.md) ·
 [Actualizar la organización del curso](docs/MIGRACION-0.9.md).
 
 <a href="https://github.com/cjescudero/asistente-docente">
@@ -131,7 +136,7 @@ consulta los índices disponibles y propone siguientes pasos con sus entradas.
 
 - **Actividades:** diálogo sobre conocimientos, fuentes y condiciones de IA;
   enunciado, plantillas pertinentes y rúbrica completa reservada al docente.
-- **Bancos y exámenes:** preguntas vinculadas a materiales o actividades,
+- **Cuestionarios:** preguntas vinculadas a materiales o actividades,
   reparto de contenidos y dificultad, modelos PDF y GIFT ofuscado sincronizados.
 - **Corrección:** evidencias por criterio y actualización de una copia de la
   hoja de tarea o del libro de calificaciones, con identificadores explícitos.
@@ -231,11 +236,11 @@ incorpora ese origen de GitHub y después se instala el plugin en la cuenta.
 No basta con copiar una skill aislada: comparte referencias y utilidades con
 el resto del paquete. La instalación depende de las capacidades de la cuenta.
 
-La última [release publicada, 0.9.0](https://github.com/cjescudero/asistente-docente/releases/tag/v0.9.0) ofrece:
+La última [release publicada, 0.10.0](https://github.com/cjescudero/asistente-docente/releases/tag/v0.10.0) ofrece:
 
-- `asistente-docente-0.9.0-agent-plugins.zip`: Agent Plugins y adaptador Codex.
-- `asistente-docente-0.9.0-claude.zip`: plugin para Claude.
-- `asistente-docente-0.9.0-source.zip`: fuente con catálogos y automatización GitHub.
+- `asistente-docente-0.10.0-agent-plugins.zip`: Agent Plugins y adaptador Codex.
+- `asistente-docente-0.10.0-claude.zip`: plugin para Claude.
+- `asistente-docente-0.10.0-source.zip`: fuente con catálogos y automatización GitHub.
 
 Las versiones anteriores y sus paquetes se conservan.
 
@@ -287,7 +292,7 @@ ejemplo en una carpeta hermana llamada `demo-docente`:
 
 ```sh
 .venv/bin/python scripts/docencia.py validate-bank examples/humanidades/banco.gift
-.venv/bin/python scripts/docencia.py build-exams examples/humanidades/banco.gift --metadata examples/humanidades/metadatos.json --output ../demo-docente/examen --title "Fuentes e interpretación histórica" --models 2 --questions 4 --seed 42
+.venv/bin/python scripts/docencia.py build-exams examples/humanidades/banco.gift --metadata examples/humanidades/metadatos.json --output ../demo-docente/examen --title "Fuentes e interpretación histórica" --models 4 --questions 4 --seed 42
 .venv/bin/python scripts/docencia.py build-feedback ../demo-docente/examen/manifest.json --input examples/resultados-sinteticos.csv --config examples/feedback-config.json --output ../demo-docente/feedback
 .venv/bin/python scripts/docencia.py render-markdown examples/apuntes.md --output ../demo-docente/apuntes
 .venv/bin/python scripts/validate_library.py examples/mapa-docente/mapa-docente
@@ -356,7 +361,7 @@ y construye paquetes como artefactos; no publica releases ni notas de alumnos.
 Los ZIP excluyen entornos, cachés y datos operativos. `SHA256SUMS` permite
 comprobar su integridad; `contents.json` registra el contenido común.
 
-La versión 0.9.0 se distribuye desde GitHub con su fuente y paquetes. Las
+La versión 0.10.0 se distribuye desde GitHub con su fuente y paquetes. Las
 versiones anteriores se conservan. La subida del código
 no demuestra una instalación real en cada anfitrión.
 La distribución se mantiene en los marketplaces de GitHub; no se solicita

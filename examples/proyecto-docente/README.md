@@ -11,8 +11,8 @@ del profesor. Git y los ZIP no conservan carpetas vacías: la iniciación comple
 `mapa-docente/` vacía cuando falte, sin crear wiki, índice, lector ni grafo.
 
 La configuración `curso-v2` selecciona `fuentes/teoria/` y
-`fuentes/evaluaciones/examenes/`. Excluye
-`fuentes/evaluaciones/examenes/examen-retirado.md`.
+`fuentes/evaluaciones/cuestionarios/`. Excluye
+`fuentes/evaluaciones/cuestionarios/examen-retirado.md`.
 El examen vigente es una fuente reservada, no un documento para el alumnado.
 La actividad aportada en `fuentes/actividades/` tampoco forma parte de esta
 selección.

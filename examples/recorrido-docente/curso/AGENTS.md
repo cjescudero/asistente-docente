@@ -10,7 +10,7 @@
   indicación distinta del docente; conservar rigor, terminología y atribuciones.
 - Conservar el material aportado en `fuentes/` y crear las nuevas producciones
   en `creados/materiales/`, `creados/actividades/`, `creados/bancos/` o
-  `creados/examenes/`, en una carpeta estable por resultado. Separar documentos
+  `creados/cuestionarios/`, en una carpeta estable por resultado. Separar documentos
   del alumnado y documentos docentes dentro de cada actividad o evaluación.
 - Registrar cada producción con `material-docente.json` y mostrar su estado
   en `LEEME.md`: borrador, revisado o listo-para-entregar. El estado no cambia
@@ -36,6 +36,13 @@
   si ya existe y está registrado, ofrecer consultarlo o visualizarlo y elegir
   un flujo. Si la selección está pendiente, ayudar a concretarla; si se eligió
   trabajar sin fuentes, respetarlo y ofrecer tareas con los adjuntos disponibles.
+- Para cuestionarios, usar cuatro modelos salvo otra indicación. Proponer cantidad
+  de preguntas principales según conceptos y objetivos y explicar el reparto;
+  las variantes no cuentan como cobertura adicional. Proponer también duración
+  estimada ajustable. No incluir dos variantes de una principal en el mismo modelo.
+- El mapa explica conceptos y relaciones con evidencia, condiciones, ejemplos y
+  límites; usar originales para profundizar o verificar, sin tratarlos como lectura
+  obligatoria de toda consulta cuando la wiki ya aporta evidencia suficiente.
 - Flujos: actividad → evaluación de entregas cuando existan entregas identificadas
   y criterios; banco → modelos impresos cuando haya preguntas utilizables;
   modelos → feedback cuando haya resultados por pregunta y manifiesto.

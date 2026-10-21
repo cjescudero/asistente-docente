@@ -1,4 +1,4 @@
-"""Selección reproducible y salidas de examen desde un único modelo ordenado."""
+"""Selección reproducible y salidas de cuestionario desde un único modelo ordenado."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ import random
 from pathlib import Path
 
 from .banks import (coverage_report, load_catalog, load_selection, select_models,
-                    serialize_bank)
+                    select_flat_models, selection_diversity, serialize_bank, validate_variants)
 from .gift import parse_gift
 from .render import document, external_output, fragment, print_pdf
 
@@ -35,7 +35,8 @@ def prepare(question: dict, number: int, rng: random.Random, metadata: dict) -> 
               "source_category": question["category"], "concepts": info.get("concepts", []),
               "type": question["type"], "prompt": question["prompt"],
               "format": question["format"]}
-    for field in ("source_bank_id", "source_question_id", "source_refs", "difficulty", "objective"):
+    for field in ("source_bank_id", "source_question_id", "source_refs", "difficulty", "objective",
+                  "family_id", "source_family_id", "variant_id"):
         if field in info:
             result[field] = info[field]
     if question["type"] == "numerical":
@@ -64,7 +65,7 @@ def numeric_body(values: list[dict]) -> str:
 
 
 def obfuscated_gift(model: dict) -> str:
-    chunks = [f"$CATEGORY: examen/{model['id']}"]
+    chunks = [f"$CATEGORY: cuestionario/{model['id']}"]
     for q in model["questions"]:
         if q["type"] == "numerical":
             body = numeric_body(q["numerical"])
@@ -151,13 +152,14 @@ def validate_metadata(metadata: dict, bank: list[dict]):
             raise ValueError(f"Metadatos no válidos para {qid}.")
         if any(not isinstance(x, str) or x not in concepts for x in entry.get("concepts", [])):
             raise ValueError(f"Concepto no declarado en {qid}.")
+    validate_variants(metadata, bank)
     for key, concept in concepts.items():
         if not isinstance(concept, dict) or not isinstance(concept.get("label", key), str):
             raise ValueError(f"Concepto no válido: {key}.")
 
 
-def build_exams(bank_path: str | Path | None, output_dir: str | Path, *, title: str = "Evaluación",
-                models: int = 2, questions: int = 5, seed: int = 42,
+def build_exams(bank_path: str | Path | None, output_dir: str | Path, *, title: str = "Cuestionario",
+                models: int = 4, questions: int = 5, seed: int = 42,
                 metadata_path: str | Path | None = None, per_category: dict | None = None,
                 html_only: bool = False, catalog_path: str | Path | None = None,
                 selection_path: str | Path | None = None,
@@ -166,7 +168,7 @@ def build_exams(bank_path: str | Path | None, output_dir: str | Path, *, title: 
     if layout not in ("flat", "curso-v2"):
         raise ValueError("layout debe ser 'flat' o 'curso-v2'.")
     if base.exists() and any(base.iterdir()):
-        raise ValueError("La carpeta de examen debe estar vacía; no se sobrescriben modelos.")
+        raise ValueError("La carpeta de cuestionario debe estar vacía; no se sobrescriben modelos.")
     output = base / "docente" if layout == "curso-v2" else base
     if (type(models) is not int or type(questions) is not int
             or not 1 <= models <= 100 or questions < 1):
@@ -203,29 +205,17 @@ def build_exams(bank_path: str | Path | None, output_dir: str | Path, *, title: 
             if sum(q["category"] == category for q in available) < count:
                 raise ValueError(f"Banco insuficiente en categoría {category}.")
     rng = random.Random(seed)
-    used = {q["id"]: 0 for q in available}
     built = []
-    selections = None
     if catalog is not None:
         selections, used = select_models(bank, metadata, selection["selection"], models, rng)
-        by_id = {q["id"]: q for q in bank}
+    else:
+        selections, used = select_flat_models(bank, metadata, questions, per_category, models, rng)
+    by_id = {q["id"]: q for q in bank}
     for i in range(models):
-        if selections is not None:
-            selected = [by_id[qid] for qid, _ in selections[i]]
-        else:
-            selected = []
-            pools = per_category or {None: questions}
-            for category, count in pools.items():
-                candidates = [q for q in available if category is None or q["category"] == category]
-                rng.shuffle(candidates)
-                candidates.sort(key=lambda q: used[q["id"]])
-                selected.extend(candidates[:count])
-            for q in selected:
-                used[q["id"]] += 1
-            rng.shuffle(selected)
+        selected = [by_id[qid] for qid, _ in selections[i]]
         model = {"id": model_id(i), "questions": [prepare(q, j+1, rng, metadata)
                  for j, q in enumerate(selected)], "files": {}, "pdf_status": {}}
-        if selections is not None:
+        if catalog is not None:
             for prepared, (_, quota) in zip(model["questions"], selections[i]):
                 prepared["quota_label"] = selection["selection"]["quotas"][quota]["label"]
             model["coverage"] = coverage_report(selections[i], metadata, selection["selection"]["quotas"])
@@ -263,18 +253,9 @@ def build_exams(bank_path: str | Path | None, output_dir: str | Path, *, title: 
             (output / snapshot).write_bytes(content)
             manifest[f"{kind}_snapshot"] = snapshot
             manifest[f"{kind}_sha256"] = hashlib.sha256(content).hexdigest()
-        ids_per_model = [{q["source_id"] for q in model["questions"]} for model in built]
-        manifest["selection_report"] = {
-            "method": "Cuotas simultáneas con coste de reutilización y comparación de cuatro propuestas "
-                      "por modelo para reducir solapamientos; sin garantía de óptimo global.",
-            "question_usage": used,
-            "pairwise_overlap": [
-                {"models": [built[a]["id"], built[b]["id"]],
-                 "shared_questions": len(ids_per_model[a] & ids_per_model[b])}
-                for a in range(models) for b in range(a + 1, models)
-            ],
-            "coverage": {model["id"]: model["coverage"] for model in built},
-        }
+    manifest["selection_report"] = selection_diversity(built, metadata, used)
+    if catalog is not None:
+        manifest["selection_report"]["coverage"] = {model["id"]: model["coverage"] for model in built}
     for model, (student, teacher, gift) in zip(built, rendered):
         stem = f"modelo-{model['id']}"
         for role, content in [("student", student), ("teacher", teacher)]:
@@ -296,11 +277,11 @@ def build_exams(bank_path: str | Path | None, output_dir: str | Path, *, title: 
         (output / "coverage.json").write_text(
             json.dumps(manifest["selection_report"], ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     if layout == "curso-v2":
-        record = {"schema_version": 1, "id": base.name, "type": "examen", "status": "borrador"}
+        record = {"schema_version": 1, "id": base.name, "type": "cuestionario", "status": "borrador"}
         (base / "material-docente.json").write_text(
             json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         (base / "LEEME.md").write_text(
-            "# Examen preparado\n\nEstado: **borrador**.\n\n"
+            "# Cuestionario preparado\n\nEstado: **borrador**.\n\n"
             "Los documentos imprimibles están en `alumnado/`. El manifiesto, los GIFT,\n"
             "los solucionarios y las copias congeladas de los bancos están en `docente/`.\n"
             "Revisar modelos y correspondencias antes de utilizarlos. Actualizar el estado\n"

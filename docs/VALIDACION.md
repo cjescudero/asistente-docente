@@ -1,5 +1,48 @@
 # Validación local
 
+## Preparación de 0.10.0 — 21 de octubre de 2026
+
+**381 pruebas automatizadas superadas**, con las dos pruebas PDF activadas,
+en macOS con Python 3.12 y Chromium. La primera ejecución aislada no pudo iniciar
+Chromium; se repitió con acceso al navegador local y la suite completa pasó.
+Esta preparación no constituye una publicación ni una instalación comprobada
+en ChatGPT Work, Claude Cowork o Moodle.
+
+- Entrega de bancos: ejemplo con ocho IDs `01-A` a `02-D`, metadatos
+  concordantes y cuatro modelos compuestos sin archivos ZIP. El compresor del
+  repositorio corresponde a releases del plugin; la entrega individual del banco
+  se indica expresamente en la skill.
+- Variantes: campos en pareja, identidades únicas, conceptos/objetivo/dificultad,
+  namespaces por banco, compatibilidad sin familias y familias frente a IDs
+  independientes coincidentes. Manifest y snapshots conservan procedencia.
+- Selección: cuatro modelos por defecto, una variante por principal dentro de
+  cada modelo, principales distintas cuando existen suficientes, versiones
+  distintas al reutilizar familias, semilla reproducible y cuotas solapadas.
+  Fondo insuficiente falla antes de escribir; no se inventan preguntas.
+- Proyecto: cursos nuevos usan `cuestionarios/`; curso-v2 anterior conserva las
+  rutas previas sin ramas paralelas, registros usados intactos y rutas configuradas
+  validadas frente a escapes y colisiones con otros tipos. Curso-v1 compatible.
+- Ejemplo ejecutado: dos principales, cuatro variantes por principal y cuatro
+  modelos de dos preguntas; ninguna versión compartida entre modelos, dos
+  principales comunes correctamente indicadas. HTML de estudiante, solucionario,
+  GIFT y manifiesto generados; PDF comprobado en la suite separada.
+- Grafo: filtros, búsqueda, teclado, enlaces, arrastre, zoom, vista estudiantil,
+  leyenda de destinatarios y símbolo pendiente comprobados en Chromium; también
+  reorganización de nodos visibles, móvil y prueba con 600 nodos.
+- Lector HTML: navegación, anclas, historial, enlaces profundos, búsqueda, filtros,
+  vista móvil y ausencia de cargas de red verificados en Chromium.
+- Wiki: explicaciones revisadas con fuentes sintéticas, acceso y lectura parcial
+  respetados; registro y HTML actualizados. Revisión cualitativa de cantidad,
+  duración y diálogo documentada en el catálogo; no equivale a un diálogo real
+  probado en cada anfitrión.
+
+La validación pública, las doce skills y sus interfaces, el registro del mapa y
+la equivalencia de paquetes se comprueban desde la fuente común. Las pruebas de
+paquetes cubren extracción, instalación de solo lectura y reproducción de ZIP.
+Las comprobaciones remotas y la publicación son posteriores a esta preparación;
+su resultado se registra en las [notas de la release 0.10.0](https://github.com/cjescudero/asistente-docente/releases/tag/v0.10.0).
+
+
 ## Nombres y organización guiada — 21 de octubre de 2026
 
 Suite local: **368 casos, 366 superados y 2 pruebas PDF omitidas** por ser

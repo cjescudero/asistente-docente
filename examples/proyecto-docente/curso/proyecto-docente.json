@@ -5,11 +5,15 @@
     "selected": true,
     "include": [
       "fuentes/teoria",
-      "fuentes/evaluaciones/examenes"
+      "fuentes/evaluaciones/cuestionarios"
     ],
     "exclude": [
-      "fuentes/evaluaciones/examenes/examen-retirado.md"
+      "fuentes/evaluaciones/cuestionarios/examen-retirado.md"
     ]
   },
-  "map": null
+  "map": null,
+  "questionnaire_paths": {
+    "sources": "fuentes/evaluaciones/cuestionarios",
+    "created": "creados/cuestionarios"
+  }
 }

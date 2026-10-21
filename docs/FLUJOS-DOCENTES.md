@@ -39,7 +39,7 @@ entregas personales solo para orientar.
 | Mapa existente | Índice registrado y accesible; consultar incidencias y registro para saber si necesita actualización. |
 | Actividad preparada | Registro de actividad con versión y archivos asociados existentes; estado común coherente con el alcance. |
 | Banco utilizable | Entrada del catálogo, GIFT y metadatos localizados; validación y revisión suficientes para lo que se propone. |
-| Modelos preparados | Manifiesto del examen, modelos y snapshots correspondientes; un HTML no acredita PDF disponible. |
+| Modelos preparados | Manifiesto del cuestionario, modelos y snapshots correspondientes; un HTML no acredita PDF disponible. |
 | Lote recibido | Lote e identificación explícitos; no darlo por corregido porque exista `correccion/`. |
 | Corrección o feedback generado | Informe de ejecución e incidencias, archivos resultantes y correspondencia con actividad, convocatoria o manifiesto. Un CSV no prueba importación en Moodle. |
 

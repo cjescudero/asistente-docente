@@ -110,7 +110,7 @@ class ProjectCliTests(unittest.TestCase):
         check = self.run_cli("check-project", self.course)
         self.assertEqual(check.returncode, 0, check.stderr)
         files = json.loads(check.stdout)["selected_files"]
-        self.assertEqual(files, ["fuentes/evaluaciones/examenes/examen-vigente.md",
+        self.assertEqual(files, ["fuentes/evaluaciones/cuestionarios/examen-vigente.md",
                                  "fuentes/teoria/interpretar-datos.md",
                                  "fuentes/teoria/orientaciones.md"])
         self.assertEqual(list((self.course / "mapa-docente").iterdir()), [])

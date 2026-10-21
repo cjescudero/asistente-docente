@@ -9,5 +9,9 @@
     ],
     "exclude": []
   },
-  "map": null
+  "map": null,
+  "questionnaire_paths": {
+    "sources": "fuentes/evaluaciones/cuestionarios",
+    "created": "creados/cuestionarios"
+  }
 }

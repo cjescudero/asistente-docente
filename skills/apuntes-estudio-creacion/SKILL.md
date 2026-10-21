@@ -29,7 +29,7 @@ Respetar destinos explícitos y cursos anteriores según el contrato común.
 
 ## Flujo
 
-1. Delimitar tema, audiencia y fuentes. Leer los materiales necesarios completos y, si existen, apuntes de la misma serie para conservar notación y continuidad. Priorizar fuentes vigentes autorizadas frente a bancos o exámenes anteriores.
+1. Delimitar tema, audiencia y fuentes. Leer los materiales necesarios completos y, si existen, apuntes de la misma serie para conservar notación y continuidad. Priorizar fuentes vigentes autorizadas frente a bancos o cuestionarios anteriores.
 2. Extraer conceptos, definiciones, relaciones, supuestos, fórmulas y controversias pertinentes. Distinguir conocimientos de la materia, ejemplos y opiniones atribuidas.
 3. Organizar la explicación desde una idea central: propósito del tema, desarrollo por conceptos y relaciones con conocimientos previos. Añadir un glosario solo si reduce una dificultad real.
 4. Respetar el idioma del encargo o del curso. Para textos en español, aplicar [español conciso](../espanol-conciso-redaccion/SKILL.md). Explicar nuevos símbolos y condiciones de validez; conservar el rigor adecuado al lector. Un apunte de filosofía puede necesitar argumentos y objeciones; uno de química, modelos, unidades y límites.

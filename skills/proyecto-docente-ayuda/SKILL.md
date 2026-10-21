@@ -21,7 +21,7 @@ Respetar citas, identificadores y términos que deban conservarse literalmente.
    y ofrecer una orientación general con la información de la conversación.
 2. Revisar solo los índices y registros necesarios: índice del mapa registrado,
    catálogo en `creados/bancos/`, registros `material-docente.json` y actividades,
-   manifiestos de exámenes y nombres de lotes en `resultados/`. Respetar las rutas
+   manifiestos de cuestionarios y nombres de lotes en `resultados/`. Respetar las rutas
    guardadas en cursos anteriores. Leer cabeceras o informes de ejecución solo
    cuando hagan falta para verificar un indicio. No leer entregas ni calificaciones
    para dar una orientación inicial. La mera presencia de archivos no demuestra
@@ -42,7 +42,7 @@ profesor, qué entradas faltan y una petición que pueda usar.
 | Sin mapa comprobado | Recomendar «Crea el mapa docente con estas fuentes». Si la selección está pendiente, pedir las carpetas antes de proponer un corpus concreto. No crear el mapa al orientar. |
 | Con mapa | «Consulta el mapa para localizar materiales de este tema», «Muéstrame el mapa» o «Actualízalo con estas fuentes autorizadas». Un índice existente no acredita que sus fuentes estén al día. |
 | Con materiales | «Diseñemos una actividad para evaluar estos conocimientos» o «Crea bancos vinculados a estos materiales». Preguntar solo por objetivos, contexto o antecedentes que falten. |
-| Con bancos validados | «Prepara dos modelos de examen sobre estos temas». Se necesitan título, cobertura, cantidades, tipos y dificultad; revisar la procedencia antes de prometer equilibrio. |
+| Con bancos validados | «Prepara dos modelos de cuestionario sobre estos temas». Se necesitan título, cobertura, cantidades, tipos y dificultad; revisar la procedencia antes de prometer equilibrio. |
 | Con lote identificado | «Evalúa este lote con los criterios de la actividad». Requiere enunciado y entregables, rúbrica o criterios suficientes, entregas e identificación explícita. Para devolver notas, también una hoja Moodle y sus columnas. |
 | Con detalle de resultados comprobado | «Añade feedback a estas calificaciones». Requiere detalle por pregunta, manifiesto y hoja Moodle. Una nota global no permite deducir dificultades conceptuales. |
 
@@ -70,7 +70,7 @@ confirmación redundante. Reutilizar sus respuestas en el diálogo posterior.
 
 Explicar solo los límites que afecten a la opción elegida: rúbrica completa y
 soluciones reservadas al docente; evaluación basada en evidencias; importación
-manual de archivos en Moodle; notas del examen conservadas al añadir feedback.
+manual de archivos en Moodle; notas del cuestionario conservadas al añadir feedback.
 Los nombres `docente/` y `alumnado/` organizan contenidos, no controlan accesos.
 
 ## Sugerir el siguiente paso

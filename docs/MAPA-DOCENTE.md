@@ -1,7 +1,8 @@
 # Mapa docente
 
-El mapa docente es una guía enlazada del material de una asignatura para el
-profesor y los agentes. Une páginas Markdown estándar y un índice de fuentes.
+El mapa docente es una wiki explicativa del conocimiento de una asignatura para
+el profesor y los agentes. Une páginas Markdown autoexplicativas, relaciones
+entre conceptos y un índice de fuentes trazables.
 El lector `index.html` renderiza esa wiki y el grafo HTML representa sus relaciones;
 ambos son derivados regenerables de los Markdown.
 No depende de Notion, Obsidian, una base de datos ni un servicio externo.
@@ -143,11 +144,79 @@ no demuestra por sí solo una relación causal o un prerrequisito: si se quiere
 expresar esa relación, explicarla con fuentes en la página. No se infiere una
 arista por compartir palabras, una carpeta o proximidad visual.
 
+## Contenido autoexplicativo
+
+El índice orienta; las páginas de concepto o tema explican. La wiki debe permitir
+entender lo esencial del material y continuar un encargo sin abrir cada original.
+Una página que solo enumera diapositivas, enlaces o frases como «esta fuente
+explica X» sigue siendo un índice de documentos, no una síntesis suficiente.
+Las fichas documentales conservan su función de inventario, alcance y lectura;
+se complementan con páginas que desarrollan el conocimiento común.
+
+Según el contenido realmente revisado, una explicación útil incluye:
+
+- Definiciones y contexto: qué significa el concepto, sus términos y símbolos,
+  y qué cuestión permite abordar.
+- Relaciones y condiciones: cómo se conecta con otros conceptos, qué supuestos
+  necesita y cuándo no se puede aplicar. Un vínculo de navegación no acredita
+  causalidad ni un prerrequisito.
+- Desarrollo: razonamiento, procedimiento o argumento suficiente para seguir
+  la explicación. Conservar fórmulas, unidades, condiciones y matices relevantes.
+- Ejemplos sustentados: mostrar un caso o cálculo cuando aclare el material;
+  indicar si procede de la fuente o es una elaboración didáctica derivada.
+- Límites y desacuerdos: qué queda fuera del alcance, qué no se ha leído y qué
+  fuentes discrepan, sin inventar una conclusión que elimine la incertidumbre.
+- Trazabilidad: enlaces y localizadores junto a las afirmaciones relevantes,
+  que permitan ampliar o verificar sin fragmentar la lectura en continuas remisiones.
+
+No es una plantilla obligatoria para cada página ni una cuota de palabras. Elegir
+la profundidad según el contenido, evitando tanto una transcripción extensa como
+una descripción vacía. La lectura parcial permite explicar lo revisado y obliga
+a identificar el resto; un archivo inventariado o ilegible no acredita contenido.
+Las síntesis basadas en fuentes retiradas o cambiadas deben revisarse antes de
+usarse como conocimiento vigente.
+
+La prueba de calidad es que una persona o un agente pueda explicar el concepto,
+sus relaciones y límites desde las páginas pertinentes. Los originales sirven
+para profundizar o contrastar citas literales, gráficos, datos, enunciados y
+criterios que requieran verificación. Si la wiki ya contiene evidencia suficiente
+y actual para una consulta, no es necesario releer todo el material. Si falta
+evidencia, declarar la laguna y consultar solo las fuentes autorizadas necesarias.
+
+Esta wiki sigue siendo una herramienta docente, con páginas compartibles y
+reservadas. Un desarrollo parecido a unos apuntes no autoriza entregar la wiki
+al alumnado ni incorporar respuestas o criterios reservados a páginas públicas.
+La creación de apuntes estudiantiles mantiene su encargo, audiencia y revisión
+propios. Los modos de abrir o regenerar HTML no amplían estas explicaciones:
+revisar una wiki esquemática requiere crear o actualizar sus contenidos.
+
 ## Tipo y acceso son dimensiones distintas
 
 Clasificar cada fuente por **tipo** y por **acceso**. Una presentación puede ser
 reservada; un examen antiguo puede estar autorizado para estudiantes. La fecha
 tampoco determina vigencia ni permiso de uso.
+
+Al crear el mapa, el agente pregunta al profesor qué conjuntos de materiales
+pueden ver los estudiantes y cuáles quedan para uso docente o restringido.
+Reutiliza indicaciones explícitas y pregunta solo por lo pendiente o contradictorio.
+Puede acordarse una regla para un conjunto con excepciones, sin revisar permisos
+archivo por archivo. «Público para el alumnado» significa compartible con ese
+grupo; no autoriza publicación en Internet ni entrega del mapa docente completo.
+
+Las decisiones se guardan en `access` de las fuentes y páginas de `fuentes.json`,
+con un resumen de alcance y excepciones en `LEEME.md` e `index.md`. Si falta una
+decisión, usar `desconocido`, no `docente` por defecto. No clasificar por nombre,
+fecha o carpeta sin evidencia; una actualización conserva decisiones confirmadas.
+
+El grafo muestra una leyenda de destinatarios:
+
+- Sin distintivo: **Para estudiantes** (`estudiante`).
+- Candado: **Uso docente** (`docente`) o **Restringido** (`restringido`);
+  el panel del nodo distingue ambos.
+- «?»: **Sin clasificar** (`desconocido`), pendiente de confirmar con el profesor.
+
+La leyenda también debe explicarse en el índice del mapa. Estos símbolos no
+bloquean archivos ni acreditan lectura; los pendientes no entran en la vista estudiantil.
 
 - `contenidos/` agrupa páginas declaradas para estudiantes por tipo de material.
 - `reservado/` guarda contenido docente, restringido o de acceso desconocido:
@@ -220,8 +289,10 @@ de acceso, incluso si se ha omitido accidentalmente un enlace en el texto.
 2. Revisar fuentes prioritarias, incluidos gráficos, tablas o fórmulas que
    cambien su interpretación. No ejecutar macros ni celdas de notebooks al leer.
    Si falta un lector, registrar el límite y continuar con material accesible.
-3. Crear fichas y páginas conceptuales con fuentes y localizadores. Distinguir
-   qué dice un documento, una inferencia del agente y una propuesta nueva.
+3. Crear fichas y páginas conceptuales autoexplicativas, con fuentes y
+   localizadores: definiciones, desarrollo, relaciones, ejemplos pertinentes y
+   límites. Distinguir qué dice un documento, una inferencia del agente y una
+   propuesta nueva. Comprobar que las páginas no sean solo un catálogo de enlaces.
 4. Separar tipos y acceso; mantener versiones históricas identificadas. El
    criterio de un examen anterior no se convierte en rúbrica vigente.
 5. Actualizar índice, inventario, incidencias y log. Si cambia una huella,

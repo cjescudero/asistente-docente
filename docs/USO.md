@@ -16,9 +16,9 @@ relevantes; no es un trámite obligatorio para cada petición.
 | Diseñar por diálogo enunciados, plantillas y rúbrica docente | [Actividades: preparación](../skills/actividades-preparacion/SKILL.md) |
 | Teoría y materiales de estudio | [Apuntes estudio: creación](../skills/apuntes-estudio-creacion/SKILL.md) |
 | Corregir trabajos y preparar notas y feedback para Moodle | [Actividades: evaluación](../skills/actividades-evaluacion/SKILL.md) |
-| Bancos asociados a materiales y actividades | [Bancos de preguntas: creación](../skills/bancos-preguntas-creacion/SKILL.md) |
-| Combinar bancos en modelos impresos y respuestas ofuscadas | [Evaluaciones: preparación modelos a partir de bancos de preguntas](../skills/evaluaciones-preparacion-modelos/SKILL.md) |
-| Resultados y comentarios de mejora | [Evaluaciones: observaciones para el alumnado](../skills/evaluaciones-observaciones-alumnado/SKILL.md) |
+| Bancos asociados a materiales y actividades | [Cuestionarios: creación de bancos de preguntas](../skills/cuestionarios-bancos-preguntas-creacion/SKILL.md) |
+| Combinar bancos en modelos impresos y respuestas ofuscadas | [Cuestionarios: creación de modelos para imprimir y evaluar](../skills/cuestionarios-modelos-imprimir-evaluar/SKILL.md) |
+| Resultados y comentarios de mejora | [Cuestionarios: observaciones sobre calificaciones para el alumnado](../skills/cuestionarios-observaciones-calificaciones-alumnado/SKILL.md) |
 | Claridad, precisión y formato explicativo | [Español conciso: redacción](../skills/espanol-conciso-redaccion/SKILL.md) |
 | Imágenes con estilo de boceto didáctico | [Infografías didácticas: creación](../skills/infografias-didacticas-creacion/SKILL.md) |
 
@@ -70,12 +70,12 @@ infografías conserva ese alcance; no promete presentaciones editables.
 
 ## Trabajar con un curso
 
-Usar la [ficha Markdown](../templates/ficha-asignatura.md) o su [ejemplo JSON](../templates/ficha-asignatura.json) como contexto. Registrar objetivos, audiencia, fuentes vigentes, criterios y recursos permitidos. No imponer la estructura de una asignatura anterior ni usar exámenes reservados como fuente de apuntes sin autorización.
+Usar la [ficha Markdown](../templates/ficha-asignatura.md) o su [ejemplo JSON](../templates/ficha-asignatura.json) como contexto. Registrar objetivos, audiencia, fuentes vigentes, criterios y recursos permitidos. No imponer la estructura de una asignatura anterior ni usar cuestionarios reservados como fuente de apuntes sin autorización.
 
 Guardar materiales y resultados fuera del paquete instalado. Los cursos nuevos
 usan `curso-v2`: originales en `fuentes/`, trabajos nuevos por tipo en `creados/`,
 wiki en `mapa-docente/` y lotes en `resultados/<actividad>/<convocatoria>/`, con
-`recibidos/` y `correccion/` separados. Las actividades y exámenes reúnen sus
+`recibidos/` y `correccion/` separados. Las actividades y cuestionarios reúnen sus
 documentos de alumnado y docente en subcarpetas. Los estados se registran sin
 mover ni duplicar los archivos. Los cursos `curso-v1` conservan sus rutas hasta
 una [migración acordada](MIGRACION-0.9.md).
@@ -101,7 +101,7 @@ criterios generales; la rúbrica completa permanece reservada. El registro
 
 Los bancos se vinculan a diapositivas, apuntes, ejercicios o actividades concretos.
 Sus metadatos permiten combinar preguntas según contenido y dificultad. Los
-exámenes antiguos pueden servir para calibrar estilo y nivel sin convertirlos
+cuestionarios antiguos pueden servir para calibrar estilo y nivel sin convertirlos
 en temario vigente. La composición de modelos presenta antes un reparto y
 declara insuficiencias; no inventa preguntas para rellenarlas. Véase
 [Bancos y composición de modelos](BANCOS.md).
@@ -113,7 +113,7 @@ La utilidad prepara una copia de la hoja de tarea o del libro de calificaciones
 con notas justificadas y feedback; conserva los casos pendientes y la trazabilidad
 de cambios. Véase [Calificaciones de actividades](CALIFICACIONES.md).
 
-El feedback de exámenes parte de puntuaciones por pregunta y del manifiesto.
+El feedback de cuestionarios parte de puntuaciones por pregunta y del manifiesto.
 Prioriza hasta tres dificultades y recomendaciones de mejora, conservando las
 notas de Moodle. La nota global por sí sola no permite saber qué conceptos
 fallaron. Ambos recorridos terminan en archivos revisables para importación manual.
@@ -121,7 +121,7 @@ fallaron. Ambos recorridos terminan en archivos revisables para importación man
 ## Crear y consultar el Mapa docente
 
 Pedir «Crea un Mapa docente con estas dos carpetas, separando el curso actual de
-los exámenes anteriores» activa la creación. El profesor debe elegir las carpetas:
+los cuestionarios anteriores» activa la creación. El profesor debe elegir las carpetas:
 puede haber una o varias, pero ninguna se presupone o descubre automáticamente.
 La selección guardada y sus exclusiones se reutilizan; no hay que confirmarlas
 en cada consulta. Una fuente retirada o excluida no puede reintroducirse por un
@@ -174,7 +174,7 @@ compatible; no copiar archivos como solución automática.
 Después se puede pedir «¿Qué fuentes sustentan una nueva práctica sobre este
 tema?» o «Localiza los criterios vigentes para evaluar este trabajo». La consulta
 prepara evidencia para la skill de actividades, bancos o evaluación. No toma los
-pesos de un examen antiguo como rúbrica actual ni sustituye las fuentes por el
+pesos de un cuestionario antiguo como rúbrica actual ni sustituye las fuentes por el
 resumen. Consultar no cambia páginas ni regenera el grafo. Véanse el [flujo y contrato](MAPA-DOCENTE.md), las
 [plantillas](../templates/mapa-docente) y el
 [índice del ejemplo](../examples/mapa-docente/mapa-docente/index.md). El ejemplo
@@ -266,8 +266,8 @@ python "$ASISTENTE_DOCENTE/scripts/docencia.py" validate-catalog \
   creados/bancos/catalogo.json --project .
 python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-exams \
   --catalog creados/bancos/catalogo.json --selection reparto.json \
-  --project . --output creados/examenes/parcial-01 --layout curso-v2 --title "Evaluación de fuentes" \
-  --models 2 --questions 5 --seed 42
+  --project . --output creados/cuestionarios/parcial-01 --layout curso-v2 --title "Evaluación de fuentes" \
+  --models 4 --questions 5 --seed 42
 ```
 
 También se mantiene la entrada de un único banco:
@@ -275,8 +275,8 @@ También se mantiene la entrada de un único banco:
 ```sh
 python "$ASISTENTE_DOCENTE/scripts/docencia.py" validate-bank banco.gift
 python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-exams banco.gift \
-  --metadata metadatos.json --output creados/examenes/parcial-01 --layout curso-v2 \
-  --title "Evaluación de fuentes" --models 2 --questions 5 --seed 42
+  --metadata metadatos.json --output creados/cuestionarios/parcial-01 --layout curso-v2 \
+  --title "Evaluación de fuentes" --models 4 --questions 5 --seed 42
 ```
 
 `--metadata` es opcional para la entrada de un GIFT anterior. Los nuevos bancos
@@ -294,7 +294,7 @@ identificadores y rutas están en el manifiesto. Guardar el conjunto completo.
 
 El banco puede contener emparejamiento, pero este tipo queda fuera del flujo ofuscado de v1. Revisar la lista de identificadores excluidos y confirmar que la selección sigue cumpliendo el objetivo. No interpretar una exclusión como pregunta aplicada.
 
-`--html-only` conserva una salida HTML sin intentar PDF. Si se intentó PDF y falta una capacidad o falla una fórmula, revisar `pdf_status`: el HTML conservado no sustituye el PDF pendiente. El estado de error debe resolverse antes de imprimir un examen.
+`--html-only` conserva una salida HTML sin intentar PDF. Si se intentó PDF y falta una capacidad o falla una fórmula, revisar `pdf_status`: el HTML conservado no sustituye el PDF pendiente. El estado de error debe resolverse antes de imprimir un cuestionario.
 
 ### Material escrito y fórmulas
 
@@ -310,13 +310,13 @@ En GIFT, escapar además los caracteres especiales del formato antes de guardar 
 ### Feedback de resultados
 
 ```sh
-python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-feedback creados/examenes/parcial-01/docente/manifest.json \
+python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-feedback creados/cuestionarios/parcial-01/docente/manifest.json \
   --input resultados/parcial-01/ordinaria/recibidos/resultados.csv \
   --config feedback.json --output resultados/parcial-01/ordinaria/correccion/feedback
 ```
 
-Para exámenes anteriores con salida plana, usar su `manifest.json` en la raíz
-del examen, sin moverlo ni regenerar sus snapshots. Repetir `--input` para varios CSV. La configuración debe mapear columnas reales, identificadores, modelo, estado, máximos y valores declarados de ausencia o blanco; véase [Moodle](MOODLE.md). Los mapas pueden variar por modelo. No suponer que todos los CSV usan el mismo separador o escala.
+Para cuestionarios anteriores con salida plana, usar su `manifest.json` en la raíz
+del cuestionario, sin moverlo ni regenerar sus snapshots. Repetir `--input` para varios CSV. La configuración debe mapear columnas reales, identificadores, modelo, estado, máximos y valores declarados de ausencia o blanco; véase [Moodle](MOODLE.md). Los mapas pueden variar por modelo. No suponer que todos los CSV usan el mismo separador o escala.
 
 Para añadir comentarios a una copia del libro de calificaciones, aportar esa
 exportación vigente mediante `--gradebook calificaciones.csv` y declarar las
@@ -350,6 +350,6 @@ comprobar el método configurado en Moodle conforme a [la guía](MOODLE.md).
 
 ## Verificar y entregar
 
-Comprobar el estado devuelto y el informe de incidencias, abrir los archivos finales y contrastar una muestra con las fuentes. Para exámenes, revisar todos los modelos y la correspondencia de numeración y opciones con el manifiesto. Para feedback, revisar casos de acierto, fallo, crédito parcial, blanco y ausencia.
+Comprobar el estado devuelto y el informe de incidencias, abrir los archivos finales y contrastar una muestra con las fuentes. Para cuestionarios, revisar todos los modelos y la correspondencia de numeración y opciones con el manifiesto. Para feedback, revisar casos de acierto, fallo, crédito parcial, blanco y ausencia.
 
 Las comprobaciones locales de formato y PDF no acreditan instalación real en ChatGPT Work o Claude Cowork, ni importación real en Moodle. Registrar esas pruebas por separado y no anunciar una operación externa que no se haya realizado. La instalación del plugin no publica materiales ni importa calificaciones.

@@ -19,20 +19,20 @@ curso/
 │   ├── teoria/
 │   ├── actividades/
 │   └── evaluaciones/
-│       ├── examenes/
+│       ├── cuestionarios/
 │       └── bancos/
 ├── creados/
 │   ├── materiales/
 │   ├── actividades/
 │   ├── bancos/
-│   └── examenes/
+│   └── cuestionarios/
 ├── mapa-docente/
 ├── resultados/
 └── archivo/
 ```
 
 `fuentes/` conserva materiales aportados, vigentes o históricos. Por ejemplo,
-un examen anterior puede estar en `fuentes/evaluaciones/examenes/2025-2026/`.
+un examen anterior puede estar en `fuentes/evaluaciones/cuestionarios/2025-2026/`.
 `creados/` contiene lo elaborado en este proyecto, también cuando se convierte
 en entrada de otra tarea: no copiar una actividad nueva a `fuentes/` para crear
 un banco a partir de ella. Los originales enlazados mantienen una única ubicación.
@@ -40,7 +40,7 @@ Un Markdown y su PDF son formatos del mismo material.
 
 Cada actividad se guarda en `creados/actividades/<id>/`, con `alumnado/` para
 enunciado y plantillas y `docente/` para rúbrica completa, guía y `actividad.json`.
-Cada evaluación se guarda en `creados/examenes/<id>/`, con modelos imprimibles
+Cada evaluación se guarda en `creados/cuestionarios/<id>/`, con modelos imprimibles
 estudiantiles y documentos docentes separados. Los bancos están en
 `creados/bancos/<id>/`; los apuntes, imágenes y otras ayudas, en
 `creados/materiales/<id>/`. Separar también allí notas reservadas cuando existan.
@@ -75,8 +75,8 @@ es un ejemplo que se adapta al resultado real. Ejemplo:
 }
 ```
 
-Los tipos admitidos son `material`, `actividad`, `banco`, `examen`, `apuntes`,
-`diapositivas` e `infografia`. `material` permite registrar las ayudas sin una
+Los tipos admitidos son `material`, `actividad`, `banco`, `cuestionario`, `apuntes`,
+`diapositivas` e `infografia`. Se conserva `examen` para registros anteriores. `material` permite registrar las ayudas sin una
 clasificación más específica. Los estados son
 `borrador`, `revisado` y `listo-para-entregar`. El registro común identifica tipo
 y estado; `actividad.json`, los metadatos del banco y el manifiesto del examen
@@ -108,6 +108,10 @@ La versión del formato es independiente de la versión del plugin. Ejemplo:
 {
   "schema_version": 1,
   "structure": "curso-v2",
+  "questionnaire_paths": {
+    "sources": "fuentes/evaluaciones/cuestionarios",
+    "created": "creados/cuestionarios"
+  },
   "sources": {
     "selected": true,
     "include": ["fuentes/teoria", "fuentes/actividades"],
@@ -175,7 +179,7 @@ destinos de referencia para `curso-v2` son:
 | --- | --- |
 | Teoría aportada | `fuentes/teoria/` |
 | Actividades aportadas | `fuentes/actividades/` |
-| Exámenes anteriores o de referencia | `fuentes/evaluaciones/examenes/` |
+| Exámenes anteriores o de referencia | `fuentes/evaluaciones/cuestionarios/` |
 | Bancos aportados | `fuentes/evaluaciones/bancos/` |
 | Material elaborado en el proyecto, con procedencia confirmada | `creados/`, según su tipo |
 | Entregas y exportaciones originales de Moodle | `resultados/<actividad>/<convocatoria>/recibidos/` |
@@ -316,3 +320,19 @@ esta versión.
 
 Para adaptar un curso previo a esta organización, seguir [Migración a 0.9](MIGRACION-0.9.md).
 Los cambios históricos de nombres se conservan en [Migración a 0.7](MIGRACION-0.7.md).
+
+## Rutas de cuestionarios y cursos anteriores (0.10.0)
+
+Los cursos nuevos usan `fuentes/evaluaciones/cuestionarios/` para cuestionarios
+aportados y `creados/cuestionarios/` para los nuevos. La configuración guarda
+estas rutas en `questionnaire_paths.sources` y `questionnaire_paths.created`.
+Se usan rutas relativas bajo `fuentes/evaluaciones/` y `creados/`, respectivamente.
+
+Un curso-v2 anterior sin ese campo conserva `examenes/`: repetir su inicio no
+crea una segunda rama ni mueve originales. Un curso-v1 conserva sus destinos
+anteriores. Cuando el profesor pida adaptar las rutas, mostrar una propuesta
+concreta y, tras su aprobación, actualizar configuración, selecciones, enlaces,
+catálogos y referencias. En curso-v2 registrar los destinos acordados en
+`questionnaire_paths`; en curso-v1 acordar primero la migración de estructura.
+Preservar conjuntos usados, IDs y snapshots. Una ubicación distinta no convierte
+un cuestionario histórico en contenido vigente ni cambia su audiencia.

@@ -55,7 +55,7 @@ def run_example(destination, *, pdf=False):
                 for p in course.rglob("*") if p.is_file()}
     catalog = course / "creados/bancos/catalogo.json"
     call("validate-catalog", catalog, "--project", course)
-    exams = course / "creados/examenes/fuentes-mediciones-evidencias"
+    exams = course / "creados/cuestionarios/fuentes-mediciones-evidencias"
     args = ["build-exams", "--catalog", catalog, "--selection",
             course / "creados/bancos/reparto-ejemplo.json", "--project", course,
             "--output", exams, "--title", "Fuentes, mediciones y evidencias",

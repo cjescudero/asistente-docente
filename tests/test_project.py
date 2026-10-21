@@ -45,6 +45,7 @@ class ProjectTests(unittest.TestCase):
         self.assertEqual(result["status"], "ok")
         self.assertEqual(load_project(self.root), {
             "schema_version": 1, "structure": "curso-v2",
+            "questionnaire_paths": {"sources": "fuentes/evaluaciones/cuestionarios", "created": "creados/cuestionarios"},
             "sources": {"selected": False, "include": [], "exclude": []}, "map": None})
         for relative in PROJECT_DIRECTORIES:
             self.assertTrue((self.root / relative).is_dir())
@@ -412,6 +413,37 @@ class ProjectTests(unittest.TestCase):
             self.assertFalse(source_allowed(self.root, config, path))
         with self.assertRaisesRegex(ValueError, "permanentemente"):
             initialize_project(self.root, include=["resultados/actividad/ordinaria/recibidos"])
+
+
+    def test_legacy_v2_preserves_old_paths_without_parallel_directories(self):
+        initialize_project(self.root)
+        data = load_project(self.root)
+        del data["questionnaire_paths"]
+        self.save(data)
+        import shutil
+        shutil.rmtree(self.root / "creados/cuestionarios")
+        shutil.rmtree(self.root / "fuentes/evaluaciones/cuestionarios")
+        historical = self.file("creados/examenes/usado/docente/manifest.json", '{"snapshot": "intacto"}')
+        before = historical.read_bytes()
+        initialize_project(self.root)
+        self.assertTrue((self.root / "fuentes/evaluaciones/examenes").is_dir())
+        self.assertFalse((self.root / "creados/cuestionarios").exists())
+        self.assertFalse((self.root / "fuentes/evaluaciones/cuestionarios").exists())
+        self.assertNotIn("questionnaire_paths", load_project(self.root))
+        self.assertEqual(historical.read_bytes(), before)
+
+    def test_questionnaire_paths_reject_escape_and_type_collisions(self):
+        initialize_project(self.root)
+        original = load_project(self.root)
+        for field, value in (("created", "../externo"), ("created", "creados/bancos/copia"),
+                             ("sources", "resultados/personas"), ("sources", "fuentes/evaluaciones/bancos/copia")):
+            with self.subTest(field=field, value=value):
+                data = json.loads(json.dumps(original))
+                data["questionnaire_paths"][field] = value
+                self.save(data)
+                with self.assertRaises(ValueError):
+                    load_project(self.root)
+        self.save(original)
 
 
 if __name__ == "__main__":

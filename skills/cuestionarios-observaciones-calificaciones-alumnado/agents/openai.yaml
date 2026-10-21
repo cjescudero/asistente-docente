@@ -1,0 +1,3 @@
+interface:
+  display_name: "Cuestionarios: observaciones sobre calificaciones para el alumnado"
+  short_description: "Preparar observaciones desde respuestas y calificaciones"

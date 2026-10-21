@@ -1,5 +1,17 @@
 # Historial
 
+## 0.10.0 — 2026-10-21
+
+- Entrega de bancos como archivos GIFT y metadatos individuales; ZIP opcional.
+  Identificadores nuevos por principal y variante: `01-A`, `01-B`, `02-A`…
+  Los IDs y snapshots anteriores se conservan.
+
+- Tres skills agrupadas bajo Cuestionarios y carpetas `cuestionarios/` para cursos nuevos; rutas anteriores y registros `examen` conservados.
+- Cuatro modelos por defecto, propuesta razonada de cantidad y duración y bancos con preguntas principales y variantes identificadas.
+- Selección sin dos variantes de una misma principal por modelo y preferencia por familias distintas entre modelos.
+- Wiki explicativa con conceptos, relaciones, condiciones, ejemplos y límites trazables; índice como navegación, originales para profundizar y verificar.
+- Leyenda de destinatarios del grafo y distintivo para materiales pendientes de clasificar.
+
 ## 0.9.0 — 2026-10-21
 
 - Doce skills con identificadores y nombres visibles agrupados por categoría,

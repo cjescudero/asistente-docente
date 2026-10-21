@@ -4,12 +4,18 @@
 
 Separar preguntas con una línea en blanco, usar títulos `::identificador::` únicos y categorías `$CATEGORY:` explícitas. Usar UTF-8. Escapar los caracteres de control GIFT cuando sean texto literal; no hacer sustituciones globales sobre un banco ya escapado. La utilidad `validate-bank` detecta los errores de formato que admite el parser del plugin y rechaza entradas incompatibles; no equivale a una importación real en Moodle.
 
+Para bancos nuevos, los títulos siguen número de principal y letra de variante:
+`::01-A::`, `::01-B::`, `::02-A::`… Se corresponden con `family_id: "01"`,
+`variant_id: "A"` y la clave `"01-A"` en los metadatos. No modificar IDs de
+bancos anteriores ni de cuestionarios utilizados por esta convención.
+Las letras de variante son independientes de las opciones de respuesta.
+
 Ejemplo sintético de selección única:
 
 ```gift
 $CATEGORY: Métodos de investigación/Fuentes
 
-::fuentes-001::¿Qué actuación ayuda a valorar el contexto de una fuente histórica? {
+::01-A::¿Qué actuación ayuda a valorar el contexto de una fuente histórica? {
 ~Contar únicamente sus palabras.
 =Identificar quién la produjo, cuándo y con qué propósito.
 ~Suponer que todos sus testimonios son neutrales.

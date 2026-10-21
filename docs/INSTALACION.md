@@ -14,7 +14,7 @@ ninguno de esos pasos automáticamente.
 - [Instalación para administradores](#instalación-para-administradores): permisos y actualizaciones.
 - [Instalación avanzada](#instalación-avanzada): Codex CLI, Claude Code y Python.
 
-La versión publicada del plugin es **0.9.0**: [descargas y novedades](https://github.com/cjescudero/asistente-docente/releases/tag/v0.9.0).
+La versión publicada del plugin es **0.10.0**: [descargas y novedades](https://github.com/cjescudero/asistente-docente/releases/tag/v0.10.0).
 Comprueba la versión instalada antes de probar las novedades. Preparar archivos
 locales no actualiza el marketplace ni las instalaciones existentes. Después de
 una publicación, sincroniza el catálogo y comprueba la versión mostrada; una
