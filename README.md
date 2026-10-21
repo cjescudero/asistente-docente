@@ -4,6 +4,7 @@ Doce skills para organizar fuentes, crear materiales, evaluar y devolver feedbac
 cualquier asignatura. La fuente común genera paquetes para **ChatGPT Work** y
 **Claude Cowork**, bajo [MIT](LICENSE).
 [Instalación y primer uso](docs/INSTALACION.md) ·
+[Esquemas de los procesos](docs/ESQUEMAS-PROCESOS.md) ·
 [Descargas y novedades](https://github.com/cjescudero/asistente-docente/releases) ·
 [Repositorio](https://github.com/cjescudero/asistente-docente).
 

@@ -1,5 +1,8 @@
 # Continuidad entre tareas docentes
 
+Consulta la [guía visual de los procesos](ESQUEMAS-PROCESOS.md) para ver entradas,
+revisiones, resultados y pasos manuales de Moodle en cada recorrido.
+
 El profesor puede conversar sin conocer los nombres de las skills. El agente
 utiliza por defecto español claro en las respuestas y los documentos, salvo que
 se haya indicado otro idioma o estilo. Conserva rigor, términos, citas y
