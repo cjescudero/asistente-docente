@@ -1,5 +1,22 @@
 # Historial
 
+## 0.11.1 — 2026-10-21
+
+- Al terminar una actividad, ofrecer preparar su carpeta de recepción con el
+  mismo identificador, separando trabajos recibidos, hoja Moodle y corrección.
+- LEEME reutilizable con enlaces a los criterios, entradas necesarias y petición
+  de evaluación; reutilización de lotes existentes sin sobrescrituras.
+- Aclarar el uso de CSV frente a Excel y el encargo conjunto de corrección,
+  calificaciones y feedback. El profesor no tiene que preparar JSON.
+- Ejemplo completo de recepción y revisión de referencias antiguas en las
+  instrucciones de actividades y calificaciones.
+
+### Presentación y puntuaciones de cuestionarios
+
+- Cabecera compacta, identificación en dos columnas y opciones con círculos o cuadrados.
+- Criterios predeterminados compartidos por bancos y modelos; pesos negativos GIFT conservados.
+- Comprobaciones técnicas de Moodle reservadas al docente.
+
 ## 0.11.0 — 2026-10-21
 
 - Nuevos cursos `curso-v3`: materiales nuevos en `materiales_generados/` y

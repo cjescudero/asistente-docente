@@ -142,6 +142,12 @@ consulta los índices disponibles y propone siguientes pasos con sus entradas.
 
 [Actividades](docs/ACTIVIDADES.md) · [Bancos](docs/BANCOS.md) ·
 [Calificaciones](docs/CALIFICACIONES.md) · [Recorrido de ejemplo](examples/recorrido-docente/README.md).
+Al terminar una actividad, el agente ofrece preparar su carpeta de recepción
+con el mismo nombre bajo `resultados/`. Allí colocarás los trabajos en
+`recibidos/entregas/` y el CSV original de Moodle en `recibidos/`. Al pedir la
+corrección, consulta el enunciado y la rúbrica de la actividad y entrega una copia
+con notas y feedback en `correccion/`. Cada lote incluye un LEEME con los pasos.
+La utilidad usa CSV; un libro Excel necesita una conversión verificada.
 Las importaciones en Moodle son manuales. Las ayudas complementarias son
 infografías y diapositivas visuales individuales, apuntes y español claro inspirado
 en ASD-STE100; no se promete una presentación editable.

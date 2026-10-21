@@ -27,8 +27,13 @@ tras resolver la duda, retomar el encargo ya autorizado.
 
 
 En `curso-v3`, organizar el lote en `resultados/<actividad>/<convocatoria>/`,
-con `recibidos/` para originales descargados y archivos de identificación y
-`correccion/` para evaluaciones, CSV modificados, auditoría e incidencias.
+con el mismo identificador y nombre de carpeta que la actividad. Guardar los
+trabajos en `recibidos/entregas/`, la hoja Moodle original en `recibidos/` y las
+correspondencias explícitas, cuando sean necesarias, en `recibidos/identificacion/`.
+`correccion/` contiene evaluaciones, CSV modificados, auditoría e incidencias.
+Reutilizar el lote preparado y su LEEME; si falta, prepararlo dentro del encargo
+de evaluación según [Recepción y corrección](../../docs/ACTIVIDADES.md#recepción-y-corrección).
+La convocatoria distingue entrega ordinaria, recuperación u otros lotes acordados.
 Conservar originales intactos y distinguir entrada de salida. Respetar los destinos explícitos. Todo el lote queda fuera de la wiki;
 esa exclusión no impide la evaluación expresamente solicitada.
 
@@ -42,6 +47,18 @@ por parecido de nombres. Para grupos, requerir la correspondencia grupo–miembr
 y la regla docente para repartir la calificación. Examinar solo el lote solicitado.
 
 Si no existe rúbrica suficiente, proponer criterios antes de asignar calificaciones definitivas. Se puede avanzar con un análisis cualitativo explícitamente provisional. Usar la [referencia de evaluación](references/evaluacion.md) para extracción, evidencias y casos ambiguos.
+
+## Hoja Moodle y formato de entrada
+
+La utilidad de exportación admite CSV, no `.xlsx` directamente. Pedir el CSV
+original de la tarea o del libro según la vía elegida. Si solo existe Excel,
+conservarlo y comprobar si puede obtenerse el CSV de Moodle; una conversión con
+herramientas disponibles debe conservar identificadores como texto, filas,
+columnas, ceros iniciales y notas, documentando y revisando la correspondencia.
+No cambiar de vía Moodle por comodidad de formato. Si faltan hoja o identificadores,
+explicar lo pendiente; el análisis cualitativo puede continuar, pero no la
+exportación de notas. Un encargo que incluye calificar y preparar feedback
+permite generar la copia importable sin exigir una segunda petición.
 
 ## Flujo
 

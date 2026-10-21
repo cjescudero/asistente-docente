@@ -104,14 +104,36 @@ def verify_obfuscated(model: dict, text: str):
 
 
 def render_model(model: dict, title: str, *, teacher: bool) -> str:
-    audience = "SOLUCIONARIO DOCENTE" if teacher else "CUESTIONARIO · ESTUDIANTE"
-    body = [f"<div class='eyebrow'>{audience}</div><h1>{html.escape(title)}</h1>",
-            f"<div class='meta'>Modelo {model['id']} · {len(model['questions'])} preguntas</div>"]
-    if not teacher:
-        body.append("<p class='identity'>Nombre: __________________________________ Fecha: ______________</p>")
+    audience = "SOLUCIONARIO DOCENTE" if teacher else "CUESTIONARIO"
+    body = ["<div class='questionnaire'>",
+            f"<header class='questionnaire-header'><h1>{html.escape(title)}</h1>"
+            f"<div class='model-id'>Modelo {html.escape(str(model['id']))}</div></header>"]
+    if teacher:
+        body.append(f"<p class='eyebrow'>{audience}</p>")
+    else:
+        body.append("<div class='identity-grid'><div>APELLIDOS Y NOMBRE<span></span></div>"
+                    "<div>EMAIL<span></span></div></div>")
+        body.append(f"<aside class='instructions'>{len(model['questions'])} preguntas. "
+                    "Marque sus respuestas en papel y traslade la misma opción o valor a Moodle. "
+                    "Círculo: una respuesta; cuadrado: varias respuestas. "
+                    "Las respuestas en blanco valen 0. Los créditos corresponden a una pregunta de 1 punto.</aside>")
     for q in model["questions"]:
-        body.append(f"<section class='question'><h2>Pregunta {q['number']:02d}</h2>")
+        kind = {"single": "UNA RESPUESTA", "multiple": "VARIAS RESPUESTAS", "truefalse": "VERDADERO/FALSO", "numerical": "NUMÉRICA"}[q["type"]]
+        body.append(f"<section class='question'><div class='question-heading'><h2>Pregunta {q['number']:02d}</h2><span>{kind}</span></div>")
         body.append(fragment(q["prompt"], q["format"]))
+        if not teacher:
+            if q["type"] == "numerical":
+                credits = sorted({a.get("weight", 100) / 100 for a in q["numerical"]})
+                instruction = "Escriba un valor numérico. Crédito aceptado: " + ", ".join(number(x) for x in credits) + "; fuera de los valores admitidos: 0."
+            else:
+                positive = sorted({o["weight"] / 100 for o in q["options"] if o["weight"] > 0})
+                other = sorted({o["weight"] / 100 for o in q["options"] if o["weight"] <= 0})
+                instruction = ("Marque las opciones que correspondan. Se suman los créditos de las opciones marcadas. "
+                               if q["type"] == "multiple" else "Marque una sola opción. ")
+                instruction += "Crédito por acierto: " + ", ".join(number(x) for x in positive)
+                instruction += "; por error: " + ", ".join(number(x) for x in other) + "."
+
+            body.append("<p class='scoring'>" + html.escape(instruction) + "</p>")
         if q["type"] == "numerical":
             body.append("<p class='numeric'>Respuesta: __________________________</p>")
             if teacher:
@@ -122,17 +144,17 @@ def render_model(model: dict, title: str, *, teacher: bool) -> str:
                     answers.append(f"{value}; crédito: {number(answer.get('weight',100))}%")
                 body.append(f"<p class='answer'>{'<br>'.join(html.escape(x) for x in answers)}</p>")
         else:
-            if q["type"] == "multiple":
-                body.append("<p><em>Seleccione todas las opciones que correspondan.</em></p>")
-            body.append("<ul class='options'>")
+            shape = "square" if q["type"] == "multiple" else "circle"
+            body.append(f"<ul class='options {shape}'>")
             for option in q["options"]:
-                body.append(f"<li><span class='label'>{option['label']}.</span> "
+                body.append(f"<li><span class='label'>{option['label']}</span> "
                             + fragment(option["text"], q["format"]) + "</li>")
             body.append("</ul>")
             if teacher:
                 weights = "; ".join(f"{o['label']}: {number(o['weight'])}%" for o in q["options"])
                 body.append(f"<p class='answer'>Crédito: {html.escape(weights)}</p>")
         body.append("</section>")
+    body.append("</div>")
     content = "".join(body)
     return document(title, content, math="\\(" in content or "\\[" in content)
 

@@ -1,6 +1,6 @@
 {
   "name": "asistente-docente",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "description": "Organiza conocimiento docente, crea actividades y bancos con variantes y prepara cuestionarios y feedback para Moodle.",
   "author": {
     "name": "Carlos J. Escudero"

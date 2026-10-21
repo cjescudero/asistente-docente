@@ -239,7 +239,7 @@ class ExamTests(unittest.TestCase):
                 start = paper.index(f"Pregunta {q['number']:02d}</h2>")
                 end = paper.index("</section>", start)
                 fragment = paper[start:end]
-                label_positions = [fragment.index(f"{o['label']}.</span>") for o in q["options"]]
+                label_positions = [fragment.index(f"{o['label']}</span>") for o in q["options"]]
                 self.assertEqual(label_positions, sorted(label_positions))
 
     def test_obfuscation_excludes_enunciados_original_options_and_feedback(self):

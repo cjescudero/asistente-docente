@@ -89,6 +89,7 @@ profesor, qué entradas faltan y una petición que pueda usar.
 | Con mapa | «Consulta el mapa para localizar materiales de este tema», «Muéstrame el mapa» o «Actualízalo con estas fuentes autorizadas». Un índice existente no acredita que sus fuentes estén al día. |
 | Con materiales | «Diseñemos una actividad para evaluar estos conocimientos» o «Crea bancos vinculados a estos materiales». Preguntar solo por objetivos, contexto o antecedentes que falten. |
 | Con bancos validados | «Prepara modelos de cuestionario sobre estos temas». Por defecto serán cuatro, salvo una cantidad ya indicada. Se necesitan título, cobertura, cantidades, tipos y dificultad; revisar la procedencia antes de prometer equilibrio. |
+| Con actividad y sin entregas | Ofrecer «Prepara la carpeta para recibir las entregas de esta actividad». Explicar `resultados/<actividad>/<convocatoria>/`, trabajos en `recibidos/entregas/`, CSV Moodle en `recibidos/` y salidas en `correccion/`. Si la recepción ya existe, mostrarla y sus entradas pendientes, sin recrearla. |
 | Con lote identificado | «Evalúa este lote con los criterios de la actividad». Requiere enunciado y entregables, rúbrica o criterios suficientes, entregas e identificación explícita. Para devolver notas, también una hoja Moodle y sus columnas. |
 | Con detalle de resultados comprobado | «Añade feedback a estas calificaciones». Requiere detalle por pregunta, manifiesto y hoja Moodle. Una nota global no permite deducir dificultades conceptuales. |
 

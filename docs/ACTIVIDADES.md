@@ -89,7 +89,7 @@ El registro utiliza UTF-8, `schema_version: 1` y los siguientes campos:
 | `files.teaching_guide` | Guía con `path` y `audience: "docente"`, solo cuando exista. |
 
 Todas las rutas se resuelven desde la carpeta del registro; si está en
-`docente/`, el enunciado se enlaza como `../alumnado/enunciado.md`. Las rutas
+`_datos_internos/`, el enunciado se enlaza como `../alumnado/enunciado.md`. Las rutas
 del registro son distintas de las rutas del catálogo y de la configuración. Las fuentes usan
 `role: "current"` para el contenido vigente o `"inspiration"` para ejemplos
 históricos. Su `audience` indica `"estudiante"` o `"docente"` según el acceso
@@ -104,13 +104,50 @@ Es un contrato documental: la revisión comprueba rutas, versiones, separación
 de audiencias y coherencia pedagógica. La calificación estructurada y la
 exportación a Moodle tienen su propio [contrato](CALIFICACIONES.md).
 
-## Corrección posterior
+## Recepción y corrección
 
-Cada lote de entregas se organiza en
-`resultados/<actividad>/<convocatoria>/` en cursos v2, con originales
-descargados y correspondencias explícitas de identificación en `recibidos/`,
-y resultados, CSV modificados e incidencias en `correccion/`. Los lotes de cursos
-v1 conservan sus ubicaciones. Este contenido queda fuera del corpus de la wiki.
+Al terminar la actividad, el agente ofrece preparar su carpeta de recepción.
+Al aceptar, crea el siguiente árbol, con el mismo nombre de carpeta e identificador
+que la actividad. Reutiliza la convocatoria conocida; si no se ha concretado
+y no hay ambigüedad, usa `ordinaria` e indica ese destino. Ante una diferencia entre el identificador registrado y el
+nombre de la carpeta, aclara la correspondencia antes de crear el lote.
+
+```text
+resultados/analisis-de-fuentes/
+└── ordinaria/
+    ├── LEEME.md
+    ├── recibidos/
+    │   ├── entregas/                    trabajos descargados de Moodle
+    │   └── calificaciones-originales.csv  hoja original, cuando se aporte
+    └── correccion/                     notas, comentarios e incidencias
+```
+
+El CSV del árbol representa el archivo que aportará el profesor, no un archivo
+vacío que deba generar el agente. Conservar su nombre original al descargarlo.
+Si hacen falta correspondencias grupo–miembros o entrega–participante, guardarlas
+en `recibidos/identificacion/`. No atribuir identidades por parecido de nombres.
+
+Adaptar la [plantilla de recepción](../templates/recepcion-actividad.md) como
+`LEEME.md` del lote: actividad, convocatoria, estado comprobado, enlaces relativos
+al enunciado, rúbrica y guía disponibles, dónde colocar cada entrada y petición
+para evaluar. El LEEME docente de la actividad enlaza a su lote. No copiar los
+criterios ni añadir estos enlaces a documentos estudiantiles. Si el lote existe,
+conservar sus archivos, integrar solo información necesaria y mostrar qué falta;
+no duplicar carpetas, reglas o enlaces ni sobrescribir descargas o correcciones.
+La estructura vacía significa «pendiente de entregas», no «recibido» ni «evaluado».
+
+El profesor coloca las entregas y el CSV de la misma actividad y convocatoria en
+`recibidos/` y pide: «Evalúa estas entregas y prepara la hoja de Moodle con notas
+y feedback». El agente consulta los criterios, comprueba identificadores y
+columnas, corrige y produce una copia importable en `correccion/`, junto con la
+evaluación por criterio y las incidencias. Un encargo completo no exige pedir la
+exportación una segunda vez. El profesor revisa el resultado y lo importa en Moodle.
+
+La utilidad trabaja con CSV, aunque pueda abrirse en Excel. Un `.xlsx` necesita
+conversión verificada o una nueva descarga CSV; no se admite directamente.
+Los JSON de evaluación, perfil de columnas y auditoría son preparados por el
+agente y no tiene que rellenarlos el profesor. Todo el lote queda fuera del
+corpus de la wiki. Los originales se conservan intactos.
 
 La evaluación consulta el enunciado y los criterios de la versión aplicada,
 además de la guía o resolución disponible. Si faltan criterios suficientes,
@@ -143,8 +180,8 @@ didáctica ni validación en el aula.
 
 ## Siguiente paso
 
-Al entregar la actividad, ofrecer corregir sus entregas con esta versión de los
-criterios cuando estén disponibles; indicar entregas e identificación pendientes
+Al entregar la actividad, ofrecer preparar la carpeta de recepción si falta y
+corregir sus entregas con estos criterios cuando estén disponibles; indicar entregas e identificación pendientes
 y, para la salida importable, la hoja Moodle y sus columnas. Si ya hay una
 corrección válida, ofrecer revisarla en lugar de repetirla. Aplicar el
 [cierre contextual](FLUJOS-DOCENTES.md) sin iniciar la corrección automáticamente.

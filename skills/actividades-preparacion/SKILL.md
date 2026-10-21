@@ -1,6 +1,6 @@
 ---
 name: actividades-preparacion
-description: Diseñar mediante diálogo actividades, prácticas, talleres, casos y experimentos de cualquier disciplina, apoyados en materiales y evidencias de aprendizaje, con enunciado, plantillas y rúbrica docente. Usar también para notebooks cuando procedan. No usar para apuntes teóricos, bancos de preguntas ni corrección de entregas.
+description: Diseñar mediante diálogo actividades, prácticas, talleres, casos y experimentos de cualquier disciplina, apoyados en materiales y evidencias de aprendizaje, con enunciado, plantillas y rúbrica docente. Usar también para preparar la carpeta de recepción de una actividad y para notebooks cuando procedan. No usar para apuntes teóricos, bancos de preguntas ni corrección de entregas.
 ---
 
 # Actividades: preparación
@@ -26,8 +26,8 @@ Transferirle el objetivo, las decisiones conocidas y los resultados de esta tare
 tras resolver la duda, retomar el encargo ya autorizado.
 
 En `curso-v3`, guardar cada actividad en `materiales_generados/actividades/<id>/`, con
-`alumnado/` para enunciado y plantillas y `docente/` para rúbrica, guía y
-`_datos_internos/actividad.json`. Mantener `_datos_internos/material-docente.json` y `LEEME.md` con el estado
+`alumnado/` para enunciado y plantillas, `docente/` para rúbrica y guía, y
+`_datos_internos/actividad.json` para el registro. Mantener `_datos_internos/material-docente.json` y `LEEME.md` con el estado
 visible en la raíz de la actividad. Un borrador conserva su ubicación al revisarse.
 Respetar los destinos explícitos acordados dentro del contrato común.
 
@@ -63,10 +63,30 @@ Consultar la [guía de actividades](references/actividades.md) y el [registro de
 
 Para apuntes autónomos, usar [generar apuntes](../apuntes-estudio-creacion/SKILL.md). Para corregir respuestas ya entregadas, usar [evaluar entregas](../actividades-evaluacion/SKILL.md).
 
+## Preparar la recepción de entregas
+
+Al terminar una actividad, ofrecer «¿Preparo la carpeta para recibir las entregas
+y la hoja de calificaciones de Moodle?». Si el encargo ya incluye prepararla,
+hacerlo sin volver a pedir autorización. La oferta por sí sola no crea carpetas.
+
+Cuando se acepte, seguir [Recepción y corrección](../../docs/ACTIVIDADES.md#recepción-y-corrección):
+reutilizar el identificador estable y el mismo nombre de carpeta de la actividad;
+aclarar diferencias entre ambos antes de crear otro lote. Reutilizar la convocatoria
+conocida; si falta y no hay ambigüedad, usar `ordinaria` e indicarlo. Preguntar
+si existen lotes o datos que impidan elegir sin riesgo de mezclar entregas. Crear `resultados/<actividad>/<convocatoria>/recibidos/entregas/`,
+`correccion/` y un `LEEME.md` del lote adaptado desde la
+[plantilla de recepción](../../templates/recepcion-actividad.md).
+
+Enlazar desde el LEEME los documentos docentes reales, sin copiarlos, y desde
+el LEEME docente de la actividad enlazar el lote. Conservar archivos existentes;
+si el lote ya está preparado, mostrar sus rutas y entradas pendientes en lugar
+de repetirlo. No crear entregas o CSV vacíos como si fueran descargas reales.
+Preparar carpetas no inicia la corrección ni acredita que se hayan recibido trabajos.
+
 ## Sugerir el siguiente paso
 
 Invocar [Proyecto docente: ayuda](../proyecto-docente-ayuda/SKILL.md) para preparar
 el [cierre contextual de los flujos](../../docs/FLUJOS-DOCENTES.md), una sola vez
 por respuesta y reutilizando el contexto y las comprobaciones disponibles:
 proponer de uno a tres pasos pertinentes basados en resultados comprobados,
-sin iniciar otra tarea por el mero hecho de sugerirla. Proponer evaluar esta versión de la actividad cuando haya entregas identificadas. Si todavía no las hay, indicar que se necesitan entregas, criterios y hoja Moodle para devolver notas; también puede proponerse un banco asociado a la actividad.
+sin iniciar otra tarea por el mero hecho de sugerirla. Proponer evaluar esta versión de la actividad cuando haya entregas identificadas. Si todavía no las hay, ofrecer preparar su carpeta de recepción si no existe y explicar dónde colocar las entregas y el CSV de Moodle; también puede proponerse un banco asociado a la actividad.

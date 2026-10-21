@@ -104,6 +104,11 @@ vigente se documenta en `docs/PROYECTO-DOCENTE.md`.
 - Organizar lotes nuevos en `resultados/<actividad>/<convocatoria>/`,
   separando `recibidos/` de `correccion/`. Mantener todo ese árbol
   fuera del corpus, incluso cuando haya enlaces desde materiales elegidos.
+  Al terminar una actividad, ofrecer preparar su recepción con el mismo ID y
+  nombre de carpeta: `recibidos/entregas/`, hoja Moodle en `recibidos/`,
+  `correccion/` y LEEME con enlaces a criterios. Crear al aceptar o si ya está
+  incluido en el encargo; reutilizar lotes existentes sin sobrescribir archivos.
+  La exportación de notas usa CSV; no presentar `.xlsx` como entrada directa.
 - No sobrescribir ni mover originales sin una propuesta concreta aprobada.
   Mantener una ubicación para cada material; separar soluciones y estudiantes.
 - Comprobar solo las entradas necesarias para el encargo. Adjuntos suficientes

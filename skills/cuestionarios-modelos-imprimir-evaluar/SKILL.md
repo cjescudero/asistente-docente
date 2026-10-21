@@ -11,6 +11,20 @@ Usar por defecto [español conciso](../espanol-conciso-redaccion/SKILL.md) en la
 conversación y los documentos, salvo que el profesor indique otro idioma o estilo.
 Respetar citas, identificadores y términos que deban conservarse literalmente.
 
+## Puntuaciones e instrucciones
+
+Aplicar el [criterio de puntuación predeterminado](../../docs/PUNTUACION-CUESTIONARIOS.md):
+opción única +1/−0,5; múltiple +1/N por correcta y −1/L por incorrecta;
+verdadero/falso y numéricas +1/0; emparejamiento proporcional por pares.
+Blancos: 0. Respetar indicaciones distintas del profesor y comprobar pesos
+explícitos de bancos aportados antes de adaptarlos. Verificar las limitaciones de
+Moodle descritas en la referencia: sí admite pesos negativos en GIFT; distinguir
+la deducción por opción del mínimo efectivo de la nota total de la pregunta.
+Conservar los pesos acordados y comprobar el comportamiento antes del uso. En el papel, separar la cabecera y explicar el tipo y la puntuación
+real de cada pregunta, sin soluciones ni una instrucción universal de opción única.
+Las advertencias técnicas y decisiones pendientes de Moodle son solo docentes;
+no imprimirlas como instrucciones del alumnado.
+
 ## Contexto del proyecto
 
 Aplicar el [contrato común del proyecto](../../docs/PROYECTO-DOCENTE.md) solo en
@@ -60,6 +74,19 @@ variante distinta y equivalente. Nunca incluir dos variantes de la misma
 principal dentro de un modelo. Comparar tanto familias como variantes en el
 informe; diferencias de letras u orden no equivalen a preguntas distintas.
 No generar nuevas preguntas silenciosamente durante la composición.
+
+## Diseño del documento imprimible
+
+Usar una cabecera compacta: título a la izquierda, modelo a la derecha y campos
+para apellidos y nombre y email en dos columnas. Separar las instrucciones con
+una línea fina. Tipografía sans serif legible, contraste apto para impresión en
+blanco y negro y espaciado regular. En cada pregunta, mostrar número a la izquierda
+y tipo a la derecha; rodear las letras con círculos para respuesta única o
+verdadero/falso y cuadrados para múltiple. En numéricas, dejar espacio de escritura.
+Mantener pregunta y opciones juntas cuando quepan en una página. Inspirarse en la
+composición, sin copiar contenidos ni incorporar archivos privados al plugin.
+Antes de entregar, revisar visualmente el PDF, los pesos reales y las instrucciones
+acordadas; resolver con el docente cualquier mínimo de puntuación pendiente.
 
 ## Flujo
 

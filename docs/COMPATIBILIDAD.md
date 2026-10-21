@@ -28,9 +28,9 @@ desde Personalizar. Una instalación en Codex no sustituye la importación al
 espacio de trabajo de ChatGPT.
 No se necesitan MCP, hooks ni variables exclusivas de un anfitrión.
 
-La versión 0.11.0 incluye doce skills, con nombres sin prefijo, en ambos paquetes:
-`asistente-docente-0.11.0-agent-plugins.zip` y
-`asistente-docente-0.11.0-claude.zip`. El Mapa docente usa páginas Markdown con
+La preparación local 0.11.1 incluye doce skills, con nombres sin prefijo, en ambos paquetes:
+`asistente-docente-0.11.1-agent-plugins.zip` y
+`asistente-docente-0.11.1-claude.zip`. El Mapa docente usa páginas Markdown con
 enlaces relativos estándar e inventario JSON; no requiere Notion, Obsidian ni
 frontmatter. Su grafo se genera con Python estándar y funciona como HTML autónomo
 sin acceso a la red. La lectura del corpus y la revisión visual requieren las
@@ -143,7 +143,7 @@ Licencia MIT y repositorio elegidos por el propietario. Los paquetes incluyen
 los avisos de terceros. Seguir [la guía de publicación](PUBLICACION-GITHUB.md)
 para revisar la fuente, construir artefactos y comprobar las instalaciones
 reales. La preparación local no publica repositorios, marketplaces ni plugins. La
-release 0.6.0 se conserva y la versión 0.11.0 se distribuye desde GitHub con
+release 0.6.0 se conserva y la versión 0.11.1 se distribuye desde GitHub con
 su fuente y paquetes.
 Una nueva release con ZIP y las instalaciones reales se registran por separado
 de la subida del código, la construcción y la validación locales.

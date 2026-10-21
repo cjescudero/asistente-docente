@@ -34,7 +34,7 @@ los flujos de contenido; esta ayuda trata el uso y la continuidad del proyecto.
 ```text
 Iniciar el curso → Crear el mapa → Consultar o visualizar → Elegir un recorrido
 
-Actividad → Evaluar entregas → Revisar notas y comentarios para Moodle
+Actividad → Preparar recepción → Recibir entregas y CSV → Evaluar → Revisar notas y comentarios para Moodle
 Banco de preguntas → Modelos impresos y GIFT → Feedback de la evaluación
 
 Apuntes y diapositivas visuales individuales: opciones complementarias
@@ -65,6 +65,7 @@ entregas personales solo para orientar.
 | Actividad preparada | Registro de actividad con versión y archivos asociados existentes; estado común coherente con el alcance. |
 | Banco utilizable | Entrada del catálogo, GIFT y metadatos localizados; validación y revisión suficientes para lo que se propone. |
 | Modelos preparados | Manifiesto del cuestionario, modelos y snapshots correspondientes; un HTML no acredita PDF disponible. |
+| Recepción preparada | LEEME del lote y carpetas `recibidos/entregas/` y `correccion/`; no acredita trabajos recibidos. |
 | Lote recibido | Lote e identificación explícitos; no darlo por corregido porque exista `correccion/`. |
 | Corrección o feedback generado | Informe de ejecución e incidencias, archivos resultantes y correspondencia con actividad, convocatoria o manifiesto. Un CSV no prueba importación en Moodle. |
 
@@ -86,9 +87,12 @@ corrección breve, basta una frase final; no añadir un menú completo.
   recomendar crear el mapa. Con mapa válido, ofrecer consultarlo o visualizarlo.
 - **Tras crear, consultar o visualizar el mapa:** ofrecer la actividad o el banco
   pertinente; apuntes y diapositivas visuales individuales son otras opciones.
-- **Tras una actividad:** «Cuando tengas las entregas, evalúalas con esta versión
-  del enunciado y la rúbrica». Si ya hay un lote identificado, ofrecer corregirlo.
-  Para notas importables se necesitan también la hoja Moodle y sus columnas.
+- **Tras una actividad:** ofrecer preparar `resultados/<actividad>/<convocatoria>/`
+  con el mismo identificador, subcarpeta para entregas y LEEME desde la
+  [plantilla](../templates/recepcion-actividad.md). Si ya está preparado, mostrar
+  dónde colocar trabajos y CSV; si ya hay un lote recibido e identificado,
+  ofrecer corregirlo con su enunciado y rúbrica. No repetir la oferta aceptada.
+  Para notas importables hacen falta también el CSV Moodle y sus columnas.
 - **Tras un banco:** ofrecer modelos impresos, indicando los datos que falten:
   título, cobertura, número de preguntas y modelos, tipos y dificultad.
 - **Tras los modelos:** ofrecer revisar la impresión y configuración Moodle.
@@ -118,7 +122,11 @@ anfitrión ni garantizan por sí solos el comportamiento de un modelo.
 | Situación | Cierre esperado |
 | --- | --- |
 | Curso nuevo, fuentes elegidas, mapa vacío | Recomendar crear el mapa; no afirmar que ya existe ni ejecutarlo automáticamente. |
-| Mapa registrado y actividad completa, sin entregas | Ofrecer consultar el mapa o preparar la evaluación cuando haya entregas; explicar las entradas pendientes. |
+| Actividad completa, recepción sin preparar | Ofrecer preparar el lote; crearlo solo si se acepta o ya forma parte del encargo. |
+| Recepción preparada y vacía | Mostrar rutas para entregas y CSV, sin afirmar recepción ni corrección y sin recrear el lote. |
+| Profesor acepta preparar recepción | Reutilizar ID y convocatoria; crear carpetas y LEEME con enlaces reales, sin CSV ficticios. |
+| Lote recibido con hoja Excel | Conservar original; explicar que la utilidad usa CSV y resolver la conversión o descarga antes de exportar. |
+| Corrección y CSV pedidos juntos | Ejecutar ambos pasos cuando existan las entradas; no exigir otro encargo para exportar. |
 | `correccion/` existe pero está vacía | No dar por corregido el lote; verificar el informe mínimo o decir que la corrección no está comprobada. |
 | Banco válido y modelos de la misma versión presentes | Ofrecer revisar esos modelos; con resultados detallados, manifiesto y hoja, ofrecer feedback. |
 | Solo una nota global y un PDF antiguo | Explicar que faltan detalle y correspondencia con manifiesto antes del feedback conceptual. |

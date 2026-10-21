@@ -70,10 +70,16 @@ otros resultados. La generación no sobrescribe modelos existentes. `LEEME.md`
 enlaza los archivos de interés del profesor. Una pregunta del banco y su modelo
 se identifican mediante el manifiesto, no por parecido de texto.
 
-Cada lote se crea al recibirlo en
+Cada lote puede prepararse al terminar la actividad, si el profesor acepta la
+oferta, o al recibir las entregas dentro de un encargo de evaluación. Se organiza en
 `resultados/<actividad-o-evaluacion>/<convocatoria>/`, con `recibidos/` para
 originales descargados de Moodle y correspondencias de identificación y
 `correccion/` para evaluaciones, CSV modificados, feedback e incidencias.
+Para actividades, reutilizar su identificador y nombre de carpeta; los trabajos
+van en `recibidos/entregas/` y la hoja Moodle original en `recibidos/`. Un LEEME
+del lote explica entradas, enlaces a criterios y pasos de evaluación, según
+[Recepción y corrección](ACTIVIDADES.md#recepción-y-corrección). No crear CSV ficticios
+ni confundir carpetas preparadas con entregas recibidas.
 Todo `resultados/` queda fuera del corpus de la wiki. Conservar los originales;
 una actualización del CSV es una copia de trabajo necesaria, no una sustitución
 de la exportación recibida.

@@ -20,6 +20,22 @@ h1 { font-size:24pt; line-height:1.2; margin:8px 0 12px; }
 h2 { font-size:14pt; margin:24px 0 8px; }
 .eyebrow { font-size:9pt; letter-spacing:1.6px; color:#476069; }
 .meta { font-size:10pt; border-bottom:2px solid #244c57; padding:0 0 12px; }
+ .questionnaire { font:10.5pt/1.35 Arial,sans-serif; }
+.questionnaire-header { display:flex; align-items:baseline; justify-content:space-between; gap:20px; }
+.questionnaire-header h1 { font-size:19pt; margin:0 0 12px; }
+.model-id { font-weight:bold; white-space:nowrap; color:#244c57; }
+.identity-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; font-size:9pt; font-weight:bold; color:#244c57; }
+.identity-grid span { display:block; height:25px; border-bottom:1px solid #476069; }
+.instructions { border-bottom:1px solid #244c57; padding:9px 0 11px; margin-bottom:18px; font-size:9pt; color:#3f4e54; }
+.scoring { font:8.5pt/1.35 Arial,sans-serif; color:#3f4e54; margin:6px 0; }
+.question-heading { display:flex; justify-content:space-between; align-items:baseline; gap:12px; color:#244c57; }
+.question-heading span { font: bold 8pt Arial,sans-serif; letter-spacing:.3px; }
+.questionnaire .options { padding:0; }
+.questionnaire .options li { display:flex; gap:8px; align-items:baseline; margin:4px 0; }
+.questionnaire .options li p { margin:0; }
+.questionnaire .label { border:1px solid #244c57; width:18px; min-width:18px; height:18px; text-align:center; font: bold 9pt/16px Arial,sans-serif; color:#244c57; }
+.circle .label { border-radius:50%; }
+.square .label { border-radius:2px; }
 .identity { margin:18px 0 24px; color:#3f4e54; }
 .question { break-inside:avoid; margin:20px 0; }
 .question h2 { font-size:11.5pt; margin:0 0 6px; }
