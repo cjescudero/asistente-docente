@@ -56,6 +56,15 @@ class ProjectTests(unittest.TestCase):
         self.assertIn("`espanol-conciso-redaccion`", (self.root / "AGENTS.md").read_text(encoding="utf-8"))
         self.assertEqual(check_project(self.root)["selection_status"], "pending")
 
+    def test_generated_instructions_include_parallel_work_and_model_consent(self):
+        initialize_project(self.root)
+        text = (self.root / "AGENTS.md").read_text(encoding="utf-8")
+        self.assertIn("Usar subagentes cuando el anfitrión lo permita", text)
+        self.assertIn("solo él consolida la hoja Moodle", text)
+        self.assertIn("Esperar una", text)
+        self.assertIn("el silencio no autoriza el cambio", text)
+        self.assertIn("Sin autorización, conservar el modelo actual o heredado", text)
+
     def test_second_initialization_is_byte_and_timestamp_identical(self):
         self.file("fuentes/teoria/apuntes.md")
         initialize_project(self.root, include=["fuentes/teoria"])

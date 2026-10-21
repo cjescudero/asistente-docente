@@ -5,6 +5,39 @@ También puedes pedir **«Adapta la organización de mi curso»**. El agente rev
 lo que ya hay, propone los cambios y explica lo que falta. El profesor no necesita
 escribir comandos ni completar una ficha pedagógica para una petición sencilla.
 
+## Trabajo paralelo y elección de modelos
+
+El `AGENTS.md` generado incorpora esta política local del curso:
+
+- Usar subagentes cuando el anfitrión lo permita y haya subtareas independientes
+  cuya paralelización aporte una ventaja: por ejemplo, evaluar entregas distintas
+  o preparar feedback de estudiantes distintos. No fragmentar tareas pequeñas
+  ni delegar dependencias que todavía no estén resueltas.
+- El agente principal fija criterios comunes y asigna a cada subagente un alcance,
+  entradas mínimas, salida propia y comprobaciones. Evitar que varios agentes
+  escriban el mismo archivo o reciban datos de otros estudiantes sin necesidad.
+  El principal integra y revisa evidencias, cálculos, coherencia de criterios e
+  identificadores; solo él consolida la hoja Moodle. Mantener revisión docente.
+- Si una subtarea permite un modelo más sencillo y potencialmente más económico,
+  preguntar al docente antes de cambiarlo: indicar tarea, modelo disponible,
+  motivo y límites. No prometer ahorro ni precios no comprobados. Esperar una
+  respuesta explícita; el silencio no autoriza el cambio. Reutilizar una elección
+  ya autorizada para el mismo alcance y no preguntar por cada estudiante.
+  Sin autorización, conservar el modelo actual o heredado. Solo ofrecer modelos
+  que el anfitrión permita seleccionar; si no permite subagentes o elegir modelo,
+  explicar la limitación y continuar con las capacidades disponibles, sin simularlo.
+
+La inicialización propone incorporar estas reglas a un archivo existente, sin
+sobrescribir sus instrucciones ni resolver conflictos automáticamente. Esta
+política no configura modelos ni crea subagentes durante la puesta en marcha.
+
+Ejemplo de consulta: «Puedo repartir el feedback de este lote entre subagentes.
+Para redactar los borradores, el modelo disponible X parece suficiente porque
+los criterios y las evidencias ya están fijados. ¿Quieres usarlo para este lote
+o mantener el modelo actual? Revisaré el conjunto antes de consolidar el CSV».
+Sustituir X por una opción realmente disponible; no usar un modelo menos capaz
+para resolver por defecto criterios ambiguos o evidencias contradictorias.
+
 ## Estructura del curso
 
 Los proyectos utilizan `curso-v3`. Separa la procedencia de los materiales,

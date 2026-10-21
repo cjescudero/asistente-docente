@@ -1,5 +1,12 @@
 # Historial
 
+## 0.11.4 — 2026-10-21
+
+- Instrucciones de curso para usar subagentes en subtareas independientes cuando el anfitrión lo permita.
+- Revisión e integración centralizadas, con consolidación única de la hoja Moodle.
+- Elección explícita del docente antes de usar un modelo más sencillo; autorización reutilizable por lote.
+- Conservación de instrucciones previas y ejemplos actualizados.
+
 ## 0.11.3 — 2026-10-21
 
 - Presentación para profesorado en `.zenodo.json`, con recorridos, alcance y enlaces.

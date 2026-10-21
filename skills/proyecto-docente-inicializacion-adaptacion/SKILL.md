@@ -162,6 +162,15 @@ global de [la skill de redacción](../espanol-conciso-redaccion/SKILL.md). Si no
 disponible, explicar la limitación y aplicar claridad y precisión sin afirmar
 que se ha ejecutado.
 
+Incorporar también la [política de trabajo paralelo y elección de modelos](../../docs/PROYECTO-DOCENTE.md#trabajo-paralelo-y-elección-de-modelos)
+al `AGENTS.md`, tanto al usar la utilidad como al prepararlo con herramientas de
+archivos. Usar subagentes para trabajo independiente cuando sea posible y útil;
+el agente principal conserva criterios comunes, revisión e integración. Antes de
+usar un modelo más sencillo, ofrecer una opción disponible y pedir elección
+explícita para el lote o alcance, sin prometer ahorros no comprobados. Respetar
+la elección vigente, la disponibilidad del anfitrión y los conflictos con reglas
+previas. La inicialización escribe la política; no lanza tareas de evaluación.
+
 Conservar el bloque de consulta de un mapa existente y sus enlaces. No añadir
 una política de consulta a un índice inexistente. La carpeta prevista en la
 estructura no acredita que el mapa esté creado; solo su creación o actualización
