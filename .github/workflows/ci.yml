@@ -19,7 +19,8 @@ jobs:
       - run: python scripts/sync_manifests.py --check
       - run: python scripts/validate_plugin.py --public
   pdf-and-package:
-    runs-on: ubuntu-latest
+    # Playwright 1.60 incluye dependencias de Chromium para Ubuntu 24.04.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
