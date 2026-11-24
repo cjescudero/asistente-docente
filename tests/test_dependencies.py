@@ -27,7 +27,7 @@ class GeneratedDependenciesTests(unittest.TestCase):
         self.bank = self.file(self.internal + "/metadatos.json", json.dumps({
             "schema_version": 1, "materials": {"t": {"path": "Mis temarios/Tema.md"}},
             "concepts": {"c": {"references": [{"path": "Mis temarios/Tema.md"}]}}, "questions": {}}))
-        self.snapshot = self.file("Trabajo/Quiz/_datos_internos/source/metadatos.json", self.bank.read_text())
+        self.snapshot = self.file("Trabajo/Quiz/_datos_internos/source/metadatos.json", self.bank.read_text(encoding="utf-8"))
         self.file("Trabajo/Quiz/_datos_internos/manifest.json", "{}")
         self.graded = self.file("Lotes/grupo/respuesta.md", "Privado")
         self.catalog = self.file("Trabajo/Bancos/_datos_internos/catalogo.json", json.dumps({
@@ -52,14 +52,14 @@ class GeneratedDependenciesTests(unittest.TestCase):
         changes = reconcile(self.root)["moves"]
         result = dependencies.refresh_dependencies(self.root, changes)
         self.assertEqual(3, len(result["repaired"]))
-        self.assertIn("Historia%20y%20cultura.md#uno", self.handout.read_text())
+        self.assertIn("Historia%20y%20cultura.md#uno", self.handout.read_text(encoding="utf-8"))
         self.assertEqual("../../../Mis temarios/Historia y cultura.md",
-                         json.loads(self.activity.read_text())["sources"][0]["path"])
+                         json.loads(self.activity.read_text(encoding="utf-8"))["sources"][0]["path"])
         self.assertEqual("Mis temarios/Historia y cultura.md",
-                         json.loads(self.bank.read_text())["concepts"]["c"]["references"][0]["path"])
+                         json.loads(self.bank.read_text(encoding="utf-8"))["concepts"]["c"]["references"][0]["path"])
         self.assertEqual("Mis temarios/Tema.md",
-                         json.loads(self.snapshot.read_text())["materials"]["t"]["path"])
-        self.assertEqual("Privado", self.graded.read_text())
+                         json.loads(self.snapshot.read_text(encoding="utf-8"))["materials"]["t"]["path"])
+        self.assertEqual("Privado", self.graded.read_text(encoding="utf-8"))
         self.assertEqual(old, self.source.with_name("Historia y cultura.md").read_bytes())
         rows = read_catalog(self.root)["materials"]
         self.assertEqual(1, rows[self.ids["Trabajo/Unidad/guia.md"]]["content_version"])
@@ -77,10 +77,10 @@ class GeneratedDependenciesTests(unittest.TestCase):
         report = dependencies.refresh_dependencies(self.root, changes)
         self.assertEqual("ok", report["status"])
         unit = self.root / "Trabajo/2026/U"
-        self.assertIn("../../../Mis%20temarios/Tema.md", (unit / "guia.md").read_text())
-        self.assertEqual("../guia.md", json.loads((unit / "_datos_internos/actividad.json").read_text())
+        self.assertIn("../../../Mis%20temarios/Tema.md", (unit / "guia.md").read_text(encoding="utf-8"))
+        self.assertEqual("../guia.md", json.loads((unit / "_datos_internos/actividad.json").read_text(encoding="utf-8"))
                          ["files"]["statement"]["path"])
-        bank = json.loads(self.catalog.read_text())["banks"][0]
+        bank = json.loads(self.catalog.read_text(encoding="utf-8"))["banks"][0]
         self.assertEqual("Trabajo/2026/U/banco.gift", bank["gift"])
         self.assertEqual("Trabajo/2026/U/_datos_internos/metadatos.json", bank["metadata"])
         self.assertEqual([], dependencies.refresh_dependencies(self.root, changes)["repaired"])
@@ -101,8 +101,8 @@ class GeneratedDependenciesTests(unittest.TestCase):
         result = dependencies.refresh_dependencies(self.root)
         self.assertEqual("ok", result["status"])
         self.assertNotIn("dependency_write", read_catalog(self.root))
-        self.assertIn("Nuevo.md", self.handout.read_text())
-        self.assertEqual("Mis temarios/Nuevo.md", json.loads(self.bank.read_text())["materials"]["t"]["path"])
+        self.assertIn("Nuevo.md", self.handout.read_text(encoding="utf-8"))
+        self.assertEqual("Mis temarios/Nuevo.md", json.loads(self.bank.read_text(encoding="utf-8"))["materials"]["t"]["path"])
 
     def test_unbound_documents_with_reused_old_path_require_review(self):
         with transaction(self.root) as tx:
@@ -113,4 +113,4 @@ class GeneratedDependenciesTests(unittest.TestCase):
         result = dependencies.refresh_dependencies(self.root, changes)
         self.assertTrue(result["needs_review"])
         self.assertEqual([], result["repaired"])
-        self.assertIn("Tema.md", self.handout.read_text())
+        self.assertIn("Tema.md", self.handout.read_text(encoding="utf-8"))

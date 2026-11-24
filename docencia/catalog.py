@@ -204,15 +204,19 @@ def refresh_stat(record, path):
 
 
 def _digest(path):
+    initial_path = path.lstat()
     with path.open("rb") as f:
         st = os.fstat(f.fileno())
-        if not stat.S_ISREG(st.st_mode):
+        if not stat.S_ISREG(initial_path.st_mode) or not stat.S_ISREG(st.st_mode):
             raise ValueError("El material no es un archivo regular.")
         h = hashlib.sha256()
         while chunk := f.read(1024 * 1024):
             h.update(chunk)
-        observed = _stat_fields(path.lstat())
-        if observed != _stat_fields(st):
+        # En Windows lstat y fstat pueden expresar las fechas con distinta precisión.
+        # Comparar cada observación con la misma API y comprobar la identidad por separado.
+        if (not os.path.samestat(initial_path, st)
+                or _stat_fields(path.lstat()) != _stat_fields(initial_path)
+                or _stat_fields(os.fstat(f.fileno())) != _stat_fields(st)):
             raise ValueError(f"El archivo cambió durante la lectura: {path.name}")
     return h.hexdigest()
 

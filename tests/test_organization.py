@@ -58,7 +58,7 @@ class OrganizationTests(unittest.TestCase):
         self.assertTrue((self.root / b).exists())
         self.file(sb, "Imprescindible")
         self.assertEqual("needs_review", self.apply(plan, ["op-2"])["status"])
-        self.assertEqual("Imprescindible", (self.root / sb).read_text())
+        self.assertEqual("Imprescindible", (self.root / sb).read_text(encoding="utf-8"))
         new_b = self.sources + "/Otros/Cronica.md"
         self.assertEqual(["op-2"], self.apply(plan, ["op-2"], changes={"op-2": new_b})["applied"])
         rows = read_catalog(self.root)["materials"]
@@ -80,7 +80,7 @@ class OrganizationTests(unittest.TestCase):
             rename(source, destination)
         with mock.patch.object(organization, "_rename_new", side_effect=occupy):
             self.assertEqual("needs_review", self.apply(plan)["status"])
-        self.assertEqual("Ajeno", (self.root / new).read_text())
+        self.assertEqual("Ajeno", (self.root / new).read_text(encoding="utf-8"))
         self.assertTrue((self.root / old).is_file())
         self.assertEqual("ok", self.apply(plan, changes={"op-1": self.sources + "/Alternativa.md"})["status"])
 
@@ -153,7 +153,7 @@ class OrganizationTests(unittest.TestCase):
         self.assertEqual("unchanged", self.proposal((ids[old], new), mode="promote")["status"])
         self.apply(plan)
         history = self.root / "Gestión del proyecto" / "historial_operaciones.jsonl"
-        events = [event["kind"] for line in history.read_text().splitlines()
+        events = [event["kind"] for line in history.read_text(encoding="utf-8").splitlines()
                   for event in json.loads(line)["operations"]]
         self.assertEqual(1, events.count("promote"))
         self.assertEqual(1, events.count("move_intent"))

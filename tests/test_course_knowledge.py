@@ -58,8 +58,8 @@ class CourseKnowledgeTests(unittest.TestCase):
         self.assertEqual(report["repaired_links_to"], ["guia"])
         self.assertEqual(report["changed_sources"], [])
         self.assertEqual(self.registry["sources"][0]["sha256"], self.digest)
-        self.assertIn("Nueva%20gu%C3%ADa.md#inicio", (self.guide / "reservado/ficha.md").read_text())
-        self.assertIn("Nueva%20gu%C3%ADa.md", reader.read_text())
+        self.assertIn("Nueva%20gu%C3%ADa.md#inicio", (self.guide / "reservado/ficha.md").read_text(encoding="utf-8"))
+        self.assertIn("Nueva%20gu%C3%ADa.md", reader.read_text(encoding="utf-8"))
         self.assertEqual(validate_library(self.guide)["status"], "ok")
         self.assertEqual(read_catalog(self.course)["wiki"]["sources"]["guia"]["content_version"], 1)
         self.assertEqual(refresh_knowledge(self.course)["repaired_links_to"], [])
@@ -109,7 +109,7 @@ class CourseKnowledgeTests(unittest.TestCase):
         apply_organization(self.course, plan["plan_id"], accepted="all")
         report = refresh_knowledge(self.course)
         self.assertEqual(report["new_sources"], [mid])
-        self.assertEqual(json.loads(self.file.read_text())["sources"], self.registry["sources"])
+        self.assertEqual(json.loads(self.file.read_text(encoding="utf-8"))["sources"], self.registry["sources"])
         self.assertFalse(any("confidencial" in str(r["path"]) for r in read_catalog(self.course)["materials"].values()))
 
     def test_examples_of_links_remain_literal(self):
