@@ -189,9 +189,15 @@ def render_markdown(source: str | Path, output: str | Path, *, title: str | None
     course = output_project(source)
     role = "generated"
     if course:
-        config = load_project(course)
-        if any(source.is_relative_to(course / r) for r in config.get("spaces", {}).get("submissions", [])):
-            role = "submissions"
+        from .spaces import under
+        spaces = load_project(course).get("spaces", {})
+        relative = source.relative_to(course).as_posix()
+        for private_role in ("submissions", "notes"):
+            if any(under(relative, folder) for folder in spaces.get(private_role, [])):
+                role = private_role
+                break
+        if role == "generated" and spaces.get("notes") and source.stat().st_nlink > 1:
+            raise ValueError("El documento comparte su identidad con otro archivo y no puede exportarse.")
     output = external_output(course_output(output, role, inputs=(source,)))
     text = source.read_text(encoding="utf-8")
     rendered = fragment(text, "markdown")

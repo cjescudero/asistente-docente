@@ -17,7 +17,7 @@ Aplicar el [contrato común del proyecto](../../docs/PROYECTO-DOCENTE.md) solo e
 lo necesario para el encargo: respetar selección y exclusiones, consultar el
 índice del mapa existente y comprobar las entradas requeridas. Un texto o
 adjuntos suficientes permiten avanzar sin exigir una wiki ni carpetas llenas.
-No incorporar entradas de este encargo al corpus automáticamente.
+Mantener las notas de trabajo del profesor fuera de la consulta, incluso si una página enlaza su carpeta. No incorporar entradas de este encargo al corpus automáticamente.
 
 Ante dudas sobre el uso, flujo, archivos o resultados del plugin, o preguntas
 sobre siguientes pasos y posibilidades, invocar

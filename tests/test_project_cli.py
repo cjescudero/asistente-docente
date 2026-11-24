@@ -55,6 +55,26 @@ class ProjectCliTests(unittest.TestCase):
         self.assertIn("francés", proposal["proposed_content"])
         self.assertIn("conflictos", proposal["reason"])
 
+    def test_optional_notes_flag_creates_default_or_reuses_chosen_folder(self):
+        for flag, name in (([], "Notas del curso"), (["Cuaderno personal"], "Cuaderno personal")):
+            with self.subTest(name=name):
+                course = self.base / ("Curso " + name)
+                folder = course / name
+                if flag:
+                    folder.mkdir(parents=True)
+                    (folder / "idea.md").write_text("Borrador", encoding="utf-8")
+                initial = self.run_cli("init-project", course, "--notes", *flag, "--dry-run")
+                self.assertEqual(initial.returncode, 0, initial.stderr)
+                self.assertFalse((course / "AGENTS.md").exists())
+                result = self.run_cli("init-project", course, "--notes", *flag)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(json.loads(result.stdout)["config"]["spaces"]["notes"], [name])
+                self.assertTrue(folder.is_dir())
+                self.assertIn(name, (course / "AGENTS.md").read_text(encoding="utf-8"))
+                if flag:
+                    self.assertFalse((course / "Notas del curso").exists())
+                    self.assertEqual((folder / "idea.md").read_text(encoding="utf-8"), "Borrador")
+
     def test_doctor_keeps_capabilities_and_adds_separate_project_diagnostics(self):
         self.run_cli("init-project", self.course)
         report = self.run_cli("doctor", "--project", self.course)

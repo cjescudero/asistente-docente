@@ -80,7 +80,7 @@ vigente se documenta en `docs/PROYECTO-DOCENTE.md`.
   su consulta en el AGENTS.md del curso, preservando las reglas previas.
 - Ante conflictos en instrucciones existentes, preguntar antes de cambiarlas.
   No imponer bloques generados ni modificar instrucciones globales.
-- Consultar únicamente las fuentes seleccionadas. Mantener entregas y gestión fuera del corpus, incluso a través de enlaces. Los materiales generados entran al conocimiento tras una consolidación expresa y dentro de las raíces seleccionadas.
+- Consultar únicamente las fuentes seleccionadas. Mantener entregas, gestión y el espacio editorial opcional de notas fuera del corpus, incluso a través de enlaces. Habilitar las notas a petición del docente y respetar la audiencia acordada al consolidar una nota concreta. Los materiales generados entran al conocimiento tras una consolidación expresa y dentro de las raíces seleccionadas.
 - Organizar los lotes en la raíz de entregas acordada, por actividad y convocatoria, con originales en `recibidos/` y hojas derivadas en `correccion/`. Ofrecer preparar la recepción al terminar una actividad. La utilidad Moodle usa CSV.
 - No sobrescribir ni mover originales sin una propuesta concreta aprobada.
   Mantener una ubicación para cada material; separar soluciones y estudiantes.

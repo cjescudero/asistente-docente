@@ -34,6 +34,31 @@ class ConfiguredOutputTests(unittest.TestCase):
                 render_markdown(self.private, self.root / path, html_only=True)
             self.assertFalse((self.root / path).exists())
 
+    def test_rendered_teacher_note_stays_in_its_editorial_space(self):
+        initialize_course(self.root, notes="Cuaderno")
+        note = self.root / "Cuaderno/debate.md"
+        note.write_text("# Idea sintética", encoding="utf-8")
+        for destination in ("Temas/copia", "Producción/alumnado", "Recepción/copia"):
+            with self.assertRaises(ValueError):
+                render_markdown(note, self.root / destination, html_only=True)
+            self.assertFalse((self.root / destination).exists())
+        result = render_markdown(note, note.parent, html_only=True)
+        self.assertTrue(Path(result["html"]).is_file())
+
+    def test_render_does_not_export_a_second_name_of_a_private_note(self):
+        initialize_course(self.root, notes="Cuaderno")
+        note = self.root / "Cuaderno/privada.md"
+        note.write_text("Borrador", encoding="utf-8")
+        alias = self.root / "Temas/documento.md"
+        try:
+            alias.hardlink_to(note)
+        except OSError:
+            self.skipTest("Este volumen no admite enlaces físicos.")
+        output = self.root / "Producción/salida"
+        with self.assertRaises(ValueError):
+            render_markdown(alias, output, html_only=True)
+        self.assertFalse(output.exists())
+
     def test_new_files_follow_custom_spaces_and_course_boundary(self):
         output = self.root / "Producción/materiales/unidad-1"
         self.assertEqual(course_output(output, "generated"), output)

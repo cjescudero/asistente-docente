@@ -9,30 +9,42 @@ from urllib.parse import unquote, urlsplit
 
 from docencia.project import (CONFIG_NAME, project_config_path, _replace_config, _safe_path, find_project,
                               load_project, source_allowed)
+from .spaces import under
+
+
+def map_course(guide, project_root=None):
+    """Resolver el curso antes de abrir cualquier registro o página del mapa."""
+    project = Path(project_root).resolve() if project_root else find_project(guide)
+    if project is None:
+        return None, None
+    relative = guide.relative_to(project).as_posix()
+    config = load_project(project)
+    for name in config.get("spaces", {}).get("notes", []):
+        if relative == "." or under(relative, name) or under(name, relative):
+            raise ValueError("El mapa debe quedar separado de las notas del curso.")
+    return project, config
 
 
 def check_map_policy(guide, data, *, source_roots=None, project_root=None,
-                     link_extractor=None):
+                     link_extractor=None, course=None):
     """Informe de revisión pendiente; nunca altera el mapa ni abre originales.
 
     Sin configuración de proyecto, la política del curso no se aplica al mapa.
     Se calculan dependencias tanto por source_ids como por enlaces Markdown.
     """
     guide = Path(guide).resolve()
-    project = Path(project_root).resolve() if project_root else find_project(guide)
     result = {"status": "not_applicable", "errors": [], "excluded_source_ids": [],
               "affected_pages": []}
-    if project is None:
-        return result
-    result.update(status="ok", project=str(project))
     errors = result["errors"]
     try:
-        config = load_project(project)
-        guide.relative_to(project)
+        project, config = map_course(guide, project_root) if course is None else course
     except (ValueError, OSError) as exc:
         errors.append(f"Configuración del proyecto: {exc}")
         result["status"] = "invalid"
         return result
+    if project is None:
+        return result
+    result.update(status="ok", project=str(project))
     if not config["sources"]["selected"]:
         errors.append("La selección de fuentes está pendiente; elegir el corpus antes de reutilizar el mapa.")
     if link_extractor is None:
@@ -42,6 +54,14 @@ def check_map_policy(guide, data, *, source_roots=None, project_root=None,
         "principal": data.get("sources_root")}
     roots = roots if isinstance(roots, dict) else {}
     overrides = source_roots or {}
+    notes = config.get("spaces", {}).get("notes", [])
+    if notes:
+        for root_id, root_path in roots.items():
+            if isinstance(root_path, str):
+                base = (Path(overrides[root_id]).expanduser() if root_id in overrides else guide / root_path).resolve()
+                if base.is_relative_to(project) and any(under(base.relative_to(project).as_posix(), folder)
+                                                        for folder in notes):
+                    errors.append(f"La raíz de fuentes {root_id} pertenece a las notas del curso.")
     rows = {}
     if config["structure"] == "curso-v4":
         from .spaces import corpus_policy
@@ -79,8 +99,8 @@ def check_map_policy(guide, data, *, source_roots=None, project_root=None,
     dependencies = {}
     for path in guide.rglob("*.md"):
         name = path.relative_to(guide).as_posix()
-        if not path.resolve().is_relative_to(guide):
-            errors.append(f"Página fuera del mapa: {name}")
+        if not path.resolve().is_relative_to(guide) or (notes and path.stat().st_nlink > 1):
+            errors.append(f"Página fuera del mapa o con una identidad compartida: {name}")
             affected.add(name)
             continue
         dependencies[name] = set()

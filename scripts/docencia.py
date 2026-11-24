@@ -30,7 +30,10 @@ def main(argv=None):
     exclusions.add_argument("--no-exclusions", action="store_true", help="Retirar expresamente todas las exclusiones opcionales")
     exclusions.add_argument("--exclude", action="append", help="Archivo o subcarpeta relativa; sin patrones")
     project.add_argument("--dry-run", action="store_true")
-    project.add_argument("--spaces", type=Path, help="JSON con raíces de sources, generated y submissions")
+    project.add_argument("--spaces", type=Path, help="JSON con raíces de sources, generated, submissions y notes opcional")
+    from docencia.project import DEFAULT_NOTES_DIR
+    project.add_argument("--notes", nargs="?", const=DEFAULT_NOTES_DIR, metavar="CARPETA",
+                         help="Asignar una carpeta de notas del profesor (por defecto «Notas del curso»)")
     project.add_argument("--adopt-v3", action="store_true", help="Aplicar una adopción previamente aceptada")
     from docencia.catalog_cli import add_commands, dispatch, read_json
     add_commands(commands)
@@ -101,7 +104,7 @@ def main(argv=None):
         status = 0
         if args.command == "init-project":
             from docencia.project import initialize_course
-            result = initialize_course(args.root, spaces=read_json(args.spaces) if args.spaces else None,
+            result = initialize_course(args.root, spaces=read_json(args.spaces) if args.spaces else None, notes=args.notes,
                                        adopt_v3=args.adopt_v3, include=[] if args.no_sources else args.include,
                                         exclude=[] if args.no_exclusions else args.exclude, dry_run=args.dry_run)
             status = 2 if result["status"] == "pending_approval" else 0

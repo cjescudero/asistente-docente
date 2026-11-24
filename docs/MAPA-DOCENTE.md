@@ -107,7 +107,7 @@ Identificar páginas dependientes directas e indirectas y revisarlas antes de
 reutilizarlas. Una consulta informa sin escribir; el mantenimiento autorizado
 corrige el mapa. Solo generar lector o grafo tras superar la validación.
 
-El catálogo del curso relaciona el identificador de cada fuente de la wiki con su UUID y su versión. Al actualizar, `catalog-sync` devuelve las incorporaciones y las páginas que necesitan revisión. El agente lee las nuevas versiones, actualiza las síntesis afectadas y registra el mapa revisado con `register-map`. Las vistas existentes pueden regenerarse tras reparar enlaces por traslado. La wiki utiliza las fuentes consolidadas que pertenezcan a la selección. Entregas, materiales generados pendientes de consolidación y datos de gestión quedan fuera de su corpus. Clasificar una fuente o seleccionarla no concede
+El catálogo del curso relaciona el identificador de cada fuente de la wiki con su UUID y su versión. Al actualizar, `catalog-sync` devuelve las incorporaciones y las páginas que necesitan revisión. El agente lee las nuevas versiones, actualiza las síntesis afectadas y registra el mapa revisado con `register-map`. Las vistas existentes pueden regenerarse tras reparar enlaces por traslado. La wiki utiliza las fuentes consolidadas que pertenezcan a la selección. Las entregas, las notas de trabajo del profesor, los materiales generados pendientes de consolidación y los datos de gestión quedan fuera de su corpus. Clasificar una fuente o seleccionarla no concede
 permiso de difusión. Registrar la carpeta del mapa en la configuración únicamente
 cuando exista su `index.md`; una carpeta vacía no es una wiki.
 

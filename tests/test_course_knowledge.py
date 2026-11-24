@@ -112,6 +112,44 @@ class CourseKnowledgeTests(unittest.TestCase):
         self.assertEqual(json.loads(self.file.read_text(encoding="utf-8"))["sources"], self.registry["sources"])
         self.assertFalse(any("confidencial" in str(r["path"]) for r in read_catalog(self.course)["materials"].values()))
 
+    def test_notes_stay_out_of_existing_map_student_graph_and_reader(self):
+        from scripts.build_wiki import build_wiki
+        initialize_course(self.course, notes="Cuaderno")
+        note = self.course / "Cuaderno/idea.md"
+        note.write_text("BORRADOR_DOCENTE_SINTETICO", encoding="utf-8")
+        graph = self.guide / "alumnado.html"
+        build_graph(self.guide, graph, audience="estudiante")
+        original_graph = graph.read_bytes()
+        self.assertNotIn(b"BORRADOR_DOCENTE_SINTETICO", original_graph)
+        self.assertEqual(refresh_knowledge(self.course)["new_sources"], [])
+        reader = self.guide / "lector.html"
+        build_wiki(self.guide, reader)
+        self.assertNotIn("BORRADOR_DOCENTE_SINTETICO", reader.read_text(encoding="utf-8"))
+        (self.guide / "index.md").write_text("[Idea](../../Cuaderno/idea.md)", encoding="utf-8")
+        original_open = Path.open
+
+        def guard(path, *args, **kwargs):
+            if path.resolve().is_relative_to(note.parent):
+                raise AssertionError("Se ha abierto un archivo del cuaderno.")
+            return original_open(path, *args, **kwargs)
+
+        with patch.object(Path, "open", guard):
+            report = validate_library(self.guide)
+            self.assertIn("index.md", report["project_policy"]["affected_pages"])
+            with self.assertRaises(ValueError):
+                build_graph(self.guide, graph, audience="estudiante")
+            self.assertEqual(graph.read_bytes(), original_graph)
+            self.assertEqual(validate_library(note.parent)["status"], "invalid")
+            (self.guide / "index.md").write_text("# Índice", encoding="utf-8")
+            self.registry["source_roots"]["notas"] = "../../Cuaderno"
+            self.file.write_text(json.dumps(self.registry), encoding="utf-8")
+            self.assertEqual(validate_library(self.guide)["status"], "invalid")
+            self.registry["sources"][0].update(root="notas", path="idea.md", access="estudiante")
+            self.file.write_text(json.dumps(self.registry), encoding="utf-8")
+            self.assertIn("guia", validate_library(self.guide)["project_policy"]["excluded_source_ids"])
+            with self.assertRaises(ValueError):
+                build_wiki(self.guide, reader)
+
     def test_examples_of_links_remain_literal(self):
         content = "[A](old.md)\n\n`[A](old.md)`\n\n~~~\n[A](old.md)\n~~~\n"
         page = self.course

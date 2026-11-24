@@ -83,6 +83,8 @@ profesor, qué entradas faltan y una petición que pueda usar.
 | Estado observado | Orientación y ejemplo |
 | --- | --- |
 | Curso sin preparar | «Inicia mi proyecto docente». Se elegirán raíz, fuentes y exclusiones, respetando archivos e instrucciones. |
+| El profesor pregunta dónde guardar sus ideas | Consultar la asignación del espacio de notas. Si existe, indicar su ruta. Si falta, sugerir «Añade Notas del curso» o «Usa mi carpeta Cuaderno docente para mis borradores». Las notas son editables por el profesor y quedan fuera del mapa y de las vistas del alumnado. |
+| El profesor quiere ordenar ideas | Proponer una agrupación por asunto o por uso, por ejemplo ideas de clase, ideas de cuestionario y planificación. Ofrecerla en la conversación. Crear carpetas, mover notas o incorporar una nota como referencia requiere el encargo correspondiente. |
 | Sin mapa comprobado | Recomendar «Crea el mapa docente con estas fuentes». Si la selección está pendiente, pedir las carpetas antes de proponer un corpus concreto. No crear el mapa al orientar. |
 | Con mapa | «Consulta el mapa para localizar materiales de este tema», «Muéstrame el mapa» o «Actualízalo con estas fuentes autorizadas». Un índice existente no acredita que sus fuentes estén al día. |
 | Con materiales | «Diseñemos una actividad para evaluar estos conocimientos» o «Crea bancos vinculados a estos materiales». Preguntar solo por objetivos, contexto o antecedentes que falten. |

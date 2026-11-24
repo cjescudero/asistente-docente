@@ -58,6 +58,73 @@ class CourseSpacesTests(unittest.TestCase):
         self.assertEqual(source.read_text(encoding="utf-8"), "Apuntes")
         self.assertFalse((self.root / "Material de la asignatura").exists())
 
+    def test_notes_reuse_preserves_existing_course_selection_and_teacher_files(self):
+        roles = {"sources": ["Lecturas"], "generated": ["Taller"], "submissions": ["Trabajos"]}
+        initialize_course(self.root, spaces=roles, include=["Lecturas"])
+        agents = self.root / "AGENTS.md"
+        agents.write_text(agents.read_text(encoding="utf-8") + "\nRegla del profesor.\n", encoding="utf-8")
+        before = agents.read_bytes()
+        config_before = (self.root / CONFIG_V4).read_bytes()
+        notes = self.root / "Mi planificación"
+        notes.mkdir()
+        idea = notes / "debate.md"
+        idea.write_text("Pregunta en preparación", encoding="utf-8")
+        initialize_course(self.root)
+        self.assertEqual((self.root / CONFIG_V4).read_bytes(), config_before)
+        self.assertEqual(load_project(self.root)["spaces"], roles)
+        with self.assertRaises(ValueError):
+            resolve_space(self.root, "notes")
+        preview = initialize_course(self.root, notes=notes.name, dry_run=True)
+        self.assertEqual(preview["would_update"], [CONFIG_V4])
+        self.assertEqual((self.root / CONFIG_V4).read_bytes(), config_before)
+        result = initialize_course(self.root, notes=notes.name)
+        config = load_project(self.root)
+        self.assertEqual(config["spaces"], {**roles, "notes": [notes.name]})
+        self.assertEqual(config["sources"]["include"], ["Lecturas"])
+        self.assertEqual(agents.read_bytes(), before)
+        proposed = result["proposals"][0]["proposed_content"]
+        self.assertIn("Regla del profesor.", proposed)
+        self.assertIn(notes.name, proposed)
+        # Aceptación del bloque acordado en este curso de prueba.
+        agents.write_text(proposed, encoding="utf-8")
+        repeat = initialize_course(self.root, notes=notes.name)
+        self.assertEqual((repeat["status"], repeat["created"], repeat["updated"]), ("ok", [], []))
+        self.assertEqual(resolve_space(self.root, "notes"), notes)
+        self.assertEqual(idea.read_text(encoding="utf-8"), "Pregunta en preparación")
+        self.assertEqual(initialize_course(self.root, spaces=roles)["config"]["spaces"], config["spaces"])
+
+    def test_notes_must_be_independent_and_cannot_be_selected_as_corpus(self):
+        for folder in ("Material de la asignatura/Notas", "Material generado por IA", "entregas", "Gestión del proyecto"):
+            with self.subTest(folder=folder), self.assertRaises(ValueError):
+                initialize_course(self.root, notes=folder)
+            self.assertFalse(self.root.exists())
+        with self.assertRaises(ValueError):
+            initialize_course(self.root, notes="Cuaderno", include=["Cuaderno"])
+        self.assertFalse(self.root.exists())
+
+    def test_only_the_individually_incorporated_note_enters_the_catalog(self):
+        from docencia.catalog import read_catalog
+        roles = {**DEFAULT_SPACES, "notes": ["Ideas", "Planificación"]}
+        source = "Material de la asignatura"
+        initialize_course(self.root, spaces=roles, include=[source])
+        idea = self.root / "Ideas/actividad.md"
+        idea.write_text("Actividad sintética aprobada", encoding="utf-8")
+        private = self.root / "Planificación/otra-idea.md"
+        private.write_text("Idea reservada", encoding="utf-8")
+        with self.assertRaises(ValueError):
+            reconcile(self.root, scope="Ideas")
+        reconcile(self.root)
+        self.assertFalse(source_allowed(self.root, load_project(self.root), idea))
+        self.assertEqual(check_project(self.root)["selected_files"], [])
+        self.assertFalse(any("Ideas" in r["path"] or "Planificación" in r["path"]
+                             for r in read_catalog(self.root)["materials"].values()))
+        # El docente elige esta nota concreta y la incorpora a una raíz seleccionada.
+        idea.rename(self.root / source / idea.name)
+        reconcile(self.root)
+        self.assertEqual(check_project(self.root)["selected_files"], [f"{source}/{idea.name}"])
+        self.assertFalse(source_allowed(self.root, load_project(self.root), private))
+        self.assertTrue(private.is_file())
+
     def test_reject_overlapping_reserved_and_unsafe_spaces_before_writing(self):
         for invalid in ("Material de la asignatura/Privado", "Entregas", "Entregas/Estudiantes",
                         "Gestión del proyecto", "../Externo", ".agents", "Carpeta/_datos_internos"):

@@ -38,8 +38,9 @@ def defaults():
 def validate_config(root, data):
     result = copy.deepcopy(data)
     spaces = result.get("spaces")
-    if not isinstance(spaces, dict) or set(spaces) != set(p.DEFAULT_SPACES):
-        raise ValueError("spaces requiere sources, generated y submissions.")
+    required = set(p.DEFAULT_SPACES)
+    if not isinstance(spaces, dict) or not required <= spaces.keys() <= required | {"notes"}:
+        raise ValueError("spaces requiere sources, generated y submissions; notes es opcional.")
     roots = []
     for role, values in spaces.items():
         paths = p._paths(values, role)
@@ -88,8 +89,9 @@ def validate_config(root, data):
         m = p._relative(result["map"])
         # Solo los mapas ya existentes procedentes de v3 pueden quedar fuera del espacio generado.
         legacy_map = result.get("adopted_from") == p.CONFIG_V3 and m == result.get("adopted_map")
-        if reserved(m) or any(under(m, r) or under(r, m) for r in spaces["sources"] + spaces["submissions"]):
-            raise ValueError("La wiki no puede solaparse con las fuentes o Entregas.")
+        outside_map = spaces["sources"] + spaces["submissions"] + spaces.get("notes", [])
+        if reserved(m) or any(under(m, r) or under(r, m) for r in outside_map):
+            raise ValueError("La wiki no puede solaparse con las fuentes, las entregas ni las notas del curso.")
         if not legacy_map and not any(p._within_relative(m, r) and m != r for r in spaces["generated"]):
             raise ValueError("La wiki debe ubicarse dentro del espacio generado.")
         if not p._safe_path(root, m + "/index.md").is_file():
@@ -298,8 +300,8 @@ def resolve_space(root, role, destination=None, *, config=None):
     """Elegir un destino concreto en los espacios asignados al papel solicitado."""
     root = p._root(root)
     config = p.load_project(root) if config is None else config
-    if config.get("structure") != "curso-v4" or role not in p.DEFAULT_SPACES:
-        raise ValueError("Se requiere un espacio válido de curso-v4.")
+    if config.get("structure") != "curso-v4" or role not in config["spaces"]:
+        raise ValueError(f"El espacio solicitado debe estar asignado en curso-v4: {role}.")
     choices = config["spaces"][role]
     if destination is None:
         if len(choices) != 1:
@@ -318,6 +320,13 @@ def instructions(config):
     lines = [p.START_MARKER, marker, "## Proyecto docente", ""]
     for role, label in roles.items():
         lines.append(f"- {label}: " + ", ".join(f"`{path}/`" for path in config["spaces"][role]) + ".")
+    if "notes" in config["spaces"]:
+        paths = ", ".join(f"`{path}/`" for path in config["spaces"]["notes"])
+        lines.extend([f"- Notas del curso: {paths}.",
+                      "", "Guardar aquí las ideas y la planificación que el docente desee editar. "
+                      "Mantener estas notas fuera del catálogo docente, el mapa y las vistas del alumnado. "
+                      "Incorporar una nota concreta como referencia solo por encargo expreso, acordando "
+                      "su destino y audiencia. La carpeta conserva sus permisos de almacenamiento."])
     lines.extend(["", """Respetar las carpetas y las decisiones del docente. Consultar en Gestión del proyecto la selección de fuentes, el catálogo y las incidencias cuando existan. Clasificar unidades lógicas con IDs estables, conservar las agrupaciones y dar prioridad a las confirmaciones del docente. Mantener separados ubicación, procedencia, acceso y estado.
 
 Mantener la estructura actual por defecto. Presentar las carpetas y operaciones propuestas antes de una reorganización física y aplicar solo las aceptadas. Promover material generado a referencia oficial únicamente por decisión expresa. Comprobar identidades y versiones al comenzar un trabajo que dependa del inventario. Reparar enlaces tras un movimiento y actualizar solo los contenidos derivados afectados por cambios de fuente.
@@ -360,7 +369,7 @@ def _pending(root, reason, **detail):
             "wiki_created": False, "warnings": []}
 
 
-def initialize(root, *, spaces, include, exclude, dry_run, adopt_v3):
+def initialize(root, *, spaces, notes, include, exclude, dry_run, adopt_v3):
     root = p._root(root)
     control = p.project_config_path(root)
     previous = p.load_project(root) if control or p._implicit_v4(root) else None
@@ -373,9 +382,20 @@ def initialize(root, *, spaces, include, exclude, dry_run, adopt_v3):
                         spaces=config["spaces"], sources=config["sources"],
                         review=config["adoption_review"], map=config["map"])
     if spaces is not None:
-        config["spaces"] = spaces
+        if not isinstance(spaces, dict):
+            raise ValueError("spaces debe ser un objeto con las carpetas asignadas.")
+        assigned = copy.deepcopy(spaces)
+        if "notes" in config["spaces"]:
+            assigned.setdefault("notes", config["spaces"]["notes"])
+        config["spaces"] = assigned
+    if notes is not None:
+        relative = p._relative(notes, label="notes")
+        assigned_notes = p._paths(config["spaces"].get("notes", []), "notes")
+        if relative not in assigned_notes:
+            assigned_notes.append(relative)
+        config["spaces"]["notes"] = assigned_notes
     if previous is None and root.is_dir() and spaces is None:
-        allowed = {i for values in p.DEFAULT_SPACES.values() for i in values}
+        allowed = {i for values in config["spaces"].values() for i in values}
         allowed.update({"AGENTS.md", "LEEME.md", *p.IGNORED_FILENAMES})
         # Mostrar nombres de primer nivel. El agente clasifica después, con el docente.
         entries = sorted(item.name for item in root.iterdir() if item.name not in allowed and not reserved(item.name))

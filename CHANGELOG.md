@@ -1,5 +1,11 @@
 # Historial
 
+## 0.13.0 — 2026-11-24
+
+- Nuevo espacio opcional «Notas del curso» para las ideas y la planificación del profesor. Se puede habilitar al iniciar un curso o después, con una carpeta nueva o existente y el nombre elegido.
+- Las notas quedan fuera del catálogo de materiales, del Mapa docente y de las vistas del alumnado. Incorporar una nota como referencia requiere elegir el documento, su destino y su audiencia.
+- La inicialización y la ayuda explican dónde guardar los borradores y cómo proponer agrupaciones. Los cursos con tres espacios conservan su configuración.
+
 ## 0.12.0 — 2026-11-24
 
 - Espacios asignables para fuentes, producción y entregas. La organización física del docente se conserva por defecto.

@@ -103,6 +103,8 @@ y su [índice de ejemplo](examples/mapa-docente/mapa-docente/index.md).
 
 Puedes empezar con tus carpetas de siempre. Por ejemplo, asigna «Temas» y «Laboratorio» al material de referencia, «Producción» al material generado y «Trabajos recibidos» a las entregas. El agente clasifica las unidades en el catálogo. Una práctica puede conservar juntos el guion, los datos y el cuaderno, aunque cada documento tenga una función distinta.
 
+Para tus ideas de clase, posibles preguntas y notas de planificación, puedes pedir **«Añade un espacio para mis notas del curso»**. El agente puede reutilizar tu carpeta de borradores o crear `Notas del curso/`. Puedes editarla directamente. Queda fuera del mapa y de las vistas del alumnado. [Cómo incorporar una nota como referencia](docs/PROYECTO-DOCENTE.md#guardar-ideas-y-borradores-del-profesor).
+
 Para reorganizar, pide una propuesta y elige qué movimientos aceptar. Para convertir un borrador de IA en referencia de la asignatura, pide que lo incorpore a la carpeta elegida. El catálogo conserva su procedencia. Los trabajos y calificaciones se usan en su proceso de evaluación y quedan fuera de la wiki.
 
 [Guía de organización](docs/PROYECTO-DOCENTE.md) · [Curso de ejemplo](examples/curso-v4/README.md).

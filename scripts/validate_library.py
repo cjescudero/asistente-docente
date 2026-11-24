@@ -143,7 +143,11 @@ def validate_library(guide_dir, sources_root=None, source_roots=None, project_ro
         guide = Path(guide_dir).expanduser().resolve()
         if not guide.is_dir():
             raise ValueError("GUIDE_DIR no es una carpeta existente.")
+        from docencia.project_map import map_course
+        course = map_course(guide, project_root)
         registry = registry_path(guide)
+        if course[1] and course[1].get("spaces", {}).get("notes") and registry.stat().st_nlink > 1:
+            raise ValueError("El registro del mapa comparte su identidad con otro archivo.")
         data = json.loads(registry.read_text(encoding="utf-8-sig"))
         if not isinstance(data, dict):
             raise ValueError("fuentes.json debe contener un objeto JSON.")
@@ -171,7 +175,7 @@ def validate_library(guide_dir, sources_root=None, source_roots=None, project_ro
     from docencia.project_map import check_map_policy
     try:
         policy = check_map_policy(guide, data, source_roots=overrides,
-                                  project_root=project_root, link_extractor=_links)
+                                  course=course, link_extractor=_links)
     except (OSError, ValueError, TypeError, RuntimeError) as exc:
         errors.append(f"No se pudo comprobar la selección del curso: {exc}")
         return result

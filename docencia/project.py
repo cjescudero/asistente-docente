@@ -20,6 +20,7 @@ CONFIG_V4 = f"{MANAGEMENT_DIR}/{CONFIG_NAME}"
 COURSE_MARKER = "<!-- asistente-docente:curso-v4 -->"
 DEFAULT_SPACES = {"sources": ["Material de la asignatura"], "generated": ["Material generado por IA"],
                   "submissions": ["Entregas"]}
+DEFAULT_NOTES_DIR = "Notas del curso"
 IGNORED_FILENAMES = {".gitkeep", ".DS_Store"}
 PLUGIN_ROOT = Path(__file__).resolve().parents[1]
 START_MARKER = "<!-- asistente-docente:proyecto:inicio -->"
@@ -205,7 +206,7 @@ def project_directories(config: dict) -> tuple[str, ...]:
 
 def _permanent_exclusions(config: dict) -> tuple[str, ...]:
     if config["structure"] == "curso-v4":
-        return (*config["spaces"]["submissions"], *config["spaces"]["generated"],
+        return (*config["spaces"]["submissions"], *config["spaces"].get("notes", []), *config["spaces"]["generated"],
                 MANAGEMENT_DIR, INTERNAL_PROJECT_DIR, ".agents")
     return PERMANENT_EXCLUSIONS
 
@@ -750,8 +751,8 @@ def plan_migration(root, moves) -> dict:
     return prepare(root, moves)
 
 
-def initialize_course(root, *, spaces=None, include=None, exclude=None, dry_run=False, adopt_v3=False):
+def initialize_course(root, *, spaces=None, notes=None, include=None, exclude=None, dry_run=False, adopt_v3=False):
     """Preparar o adoptar un curso v4. Ver initialize_project para el contrato v3."""
     from .spaces import initialize
-    return initialize(root, spaces=spaces, include=include, exclude=exclude,
+    return initialize(root, spaces=spaces, notes=notes, include=include, exclude=exclude,
                       dry_run=dry_run, adopt_v3=adopt_v3)
