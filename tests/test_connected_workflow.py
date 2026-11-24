@@ -58,7 +58,7 @@ class ConnectedWorkflowTests(unittest.TestCase):
         self.assertEqual(config["structure"], "curso-v3")
         self.assertFalse((self.course / "docente").exists())
         self.assertFalse((self.course / "alumnado").exists())
-        self.assertEqual(list((self.course / "mapa-docente").iterdir()), [])
+        self.assertFalse((self.course / "mapa-docente/index.md").exists())
         catalog = json.loads((self.course / "materiales_generados/bancos/_datos_internos/catalogo.json").read_text(encoding="utf-8"))
         self.assertEqual(catalog["path_base"], "project")
         historical = next(bank for bank in catalog["banks"] if bank["id"] == "humanidades")

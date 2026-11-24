@@ -129,7 +129,7 @@ es una decisión del propietario, no una instrucción atribuida a Karpathy.
 
 Por indicación del propietario del 6 de octubre de 2026, la inicialización
 modifica solo lo indicado en un AGENTS.md existente y pregunta ante conflictos.
-Establece español claro por defecto para el proyecto y aclara ubicación y tipos
+Respeta el estilo que solicite el docente y aclara ubicación y tipos
 de materiales cuando se desconocen. Esto actualiza la restricción de preguntas
 sobre orígenes de 0.5.1; se mantiene la separación respecto a crear el mapa.
 

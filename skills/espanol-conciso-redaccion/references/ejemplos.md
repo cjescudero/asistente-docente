@@ -49,3 +49,11 @@ No convertirlo en «El tratamiento reduce el crecimiento» ni eliminar el límit
 «Selecciona el archivo. Pulsa Importar. Espera a que termine. Comprueba que el número de registros coincide con el original».
 
 Conservar los nombres reales de los controles. No añadir mensajes de éxito ni soluciones a errores si no están documentados.
+
+## Conservar una cita al simplificar una instrucción
+
+Original: El protocolo señala «se repetirá la medición» en el supuesto de que la desviación resulte superior al 5 %, con la salvedad de los casos en los que conste una excepción autorizada por escrito.
+
+En español simplificado: Según el protocolo, si la desviación supera el 5 %, «se repetirá la medición», salvo que haya una excepción autorizada por escrito.
+
+La condición y su excepción caben en la misma frase. Se mantienen el umbral estricto, la cita literal y su atribución.

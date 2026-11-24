@@ -30,9 +30,10 @@ class ProjectCliTests(unittest.TestCase):
         self.assertFalse(self.course.exists())
         created = self.run_cli("init-project", self.course)
         self.assertEqual(created.returncode, 0, created.stderr)
-        config = json.loads((self.course / "_datos_internos_proyecto/proyecto-docente.json").read_text(encoding="utf-8"))
+        config = json.loads(created.stdout)["config"]
         self.assertFalse(config["sources"]["selected"])
-        self.assertEqual(list((self.course / "mapa-docente").iterdir()), [])
+        self.assertFalse((self.course / "Gestión del proyecto").exists())
+        self.assertEqual(list((self.course / "Material generado por IA").iterdir()), [])
         repeat = self.run_cli("init-project", self.course)
         self.assertEqual(json.loads(repeat.stdout)["created"], [])
         check = self.run_cli("check-project", self.course)
@@ -68,10 +69,10 @@ class ProjectCliTests(unittest.TestCase):
         self.run_cli("init-project", self.course)
         old = self.course / "antiguo.md"
         old.write_text("Material original", encoding="utf-8")
-        target = self.course / "fuentes/teoria/original.md"
+        target = self.course / "Material de la asignatura/original.md"
         target.write_text("Otro material", encoding="utf-8")
         moves = self.base / "moves.json"
-        moves.write_text(json.dumps([{"from": old.name, "to": "fuentes/teoria/original.md"}]), encoding="utf-8")
+        moves.write_text(json.dumps([{"from": old.name, "to": "Material de la asignatura/original.md"}]), encoding="utf-8")
         result = self.run_cli("plan-migration", self.course, "--moves", moves)
         self.assertEqual(result.returncode, 1, result.stderr)
         self.assertEqual(json.loads(result.stdout)["status"], "invalid")
@@ -79,8 +80,8 @@ class ProjectCliTests(unittest.TestCase):
         self.assertEqual(target.read_text(encoding="utf-8"), "Otro material")
 
     def test_invalid_configuration_fails_as_json_without_traceback(self):
-        self.run_cli("init-project", self.course)
-        (self.course / "_datos_internos_proyecto/proyecto-docente.json").write_text("{invalid", encoding="utf-8")
+        self.run_cli("init-project", self.course, "--no-sources")
+        (self.course / "Gestión del proyecto/proyecto-docente.json").write_text("{invalid", encoding="utf-8")
         result = self.run_cli("check-project", self.course)
         self.assertEqual(result.returncode, 1)
         self.assertEqual(json.loads(result.stdout)["status"], "invalid")
@@ -106,14 +107,17 @@ class ProjectCliTests(unittest.TestCase):
     def test_distributed_example_has_explicit_selection_and_no_wiki(self):
         shutil.copytree(ROOT / "examples/proyecto-docente/curso", self.course)
         result = self.run_cli("init-project", self.course)
-        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.returncode, 2, result.stderr)
+        self.assertIn("adopción", json.loads(result.stdout)["proposals"][0]["reason"])
+        self.assertFalse((self.course / "Gestión del proyecto").exists())
         check = self.run_cli("check-project", self.course)
-        self.assertEqual(check.returncode, 0, check.stderr)
+        self.assertEqual(check.returncode, 2, check.stderr)
+        self.assertIn("mapa-docente", json.loads(check.stdout)["missing_directories"])
         files = json.loads(check.stdout)["selected_files"]
         self.assertEqual(files, ["fuentes/evaluaciones/cuestionarios/cuestionario-vigente.md",
                                  "fuentes/teoria/interpretar-datos.md",
                                  "fuentes/teoria/orientaciones.md"])
-        self.assertEqual(list((self.course / "mapa-docente").iterdir()), [])
+        self.assertFalse((self.course / "mapa-docente/index.md").exists())
 
     def test_v3_course_builds_questionnaire_with_local_selection_from_other_cwd(self):
         shutil.copytree(ROOT / "examples/curso-v3/curso", self.course)

@@ -10,11 +10,8 @@ las demás reglas aplicables a este proyecto.
 - Entrada: {{ENTRADA_MAPA}}
 - Orígenes autorizados: {{ORIGENES}}
 
-- Por defecto, redactar y conversar en español claro con `espanol-conciso-redaccion`
-  cuando esté disponible, salvo idioma o estilo indicado por el profesor.
-- Conservar la ubicación de los materiales creados cuando se usen como fuentes.
-  Incorporarlos al mapa requiere selección explícita y estado revisado o listo;
-  no incorporar borradores ni resultados de estudiantes.
+- Resolver los espacios, la selección y las exclusiones vigentes del curso. Una producción de IA entra en la wiki tras su consolidación expresa y dentro del corpus acordado. Mantener las entregas y correcciones fuera del mapa.
+- Comprobar las versiones del catálogo y las páginas pendientes antes de reutilizar una síntesis. Reparar las referencias al mover archivos y actualizar las páginas dependientes cuando cambie el contenido.
 
 ### Recuperar contexto antes de trabajar
 

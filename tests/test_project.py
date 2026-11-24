@@ -53,7 +53,7 @@ class ProjectTests(unittest.TestCase):
         for relative in PROJECT_DIRECTORIES_V3:
             self.assertTrue((self.root / relative).is_dir())
         self.assertEqual(list((self.root / "mapa-docente").iterdir()), [])
-        self.assertIn("`espanol-conciso-redaccion`", (self.root / "AGENTS.md").read_text(encoding="utf-8"))
+        self.assertIn("`espanol-conciso-redaccion` solo a petición del docente", (self.root / "AGENTS.md").read_text(encoding="utf-8"))
         self.assertEqual(check_project(self.root)["selection_status"], "pending")
 
     def test_generated_instructions_include_parallel_work_and_model_consent(self):
@@ -111,7 +111,7 @@ class ProjectTests(unittest.TestCase):
         self.assertTrue((self.root / "materiales_generados/actividades").is_dir())
 
     def test_existing_managed_block_proposal_preserves_surrounding_content(self):
-        altered = AGENTS_BLOCK_V3.replace("conservar rigor", "conservar el rigor")
+        altered = AGENTS_BLOCK_V3.replace("solo a petición del docente", "por defecto")
         agents = self.file("AGENTS.md", "Antes\n" + altered + "\nDespués\n")
         result = initialize_project(self.root)
         self.assertEqual(agents.read_text(encoding="utf-8"), "Antes\n" + altered + "\nDespués\n")

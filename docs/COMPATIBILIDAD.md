@@ -41,7 +41,7 @@ su consulta posterior es local y no necesita Python, servidor ni conexión.
 La preparación normal de utilidades usa la caché del usuario; el entorno
 `.venv` de `--dev` se reserva para desarrollo del plugin.
 
-La estructura del curso y el contrato de `_datos_internos_proyecto/proyecto-docente.json` están en
+La estructura del curso y el contrato de `Gestión del proyecto/proyecto-docente.json` están en
 [Proyecto docente](PROYECTO-DOCENTE.md). Cada carpeta fuente debe haber sido
 elegida por el usuario y respetar las exclusiones vigentes. El registro versión 2
 admite varias raíces relativas y clasifica por separado las páginas, sus fuentes
@@ -82,9 +82,9 @@ originales para resolverla sin una petición que lo autorice.
     no autorizadas, páginas que dependan de ellas directa o indirectamente y
     enlaces salientes a archivos. El filtro docente no basta para esta prueba.
 11. En un proyecto de prueba externo al plugin, pedir «Inicia mi proyecto docente».
-    Comprobar estructura, `proyecto-docente.json`, `LEEME.md`, `AGENTS.md` preservado
-    y pregunta ante conflictos. Verificar español claro por defecto, selección
-    explícita o aplazada y exclusiones. La carpeta del mapa debe quedar vacía.
+    Comprobar la asignación de espacios, la configuración cuando exista, `AGENTS.md` preservado
+    y pregunta ante conflictos. Verificar redacción simplificada bajo petición, selección
+    explícita o aplazada y exclusiones. La inicialización conserva el espacio generado sin crear una wiki.
     Repetir sin duplicar ni borrar decisiones. Probar carpeta inexistente, vacía,
     sin archivos seleccionados y no accesible; una tarea con adjuntos suficientes
     no debe quedar bloqueada. Debe ofrecer orientación y recomendar el mapa con

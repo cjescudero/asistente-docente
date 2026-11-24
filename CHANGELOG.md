@@ -1,5 +1,16 @@
 # Historial
 
+## 0.12.0 — 2026-11-24
+
+- Espacios asignables para fuentes, producción y entregas. La organización física del docente se conserva por defecto.
+- Catálogo versionado, clasificación jerárquica, registro de operaciones y reconciliación incremental por identidad.
+- Planes de organización con aprobación completa, parcial o modificada, recuperación de traslados e incorporación explícita de material de IA.
+- Seguimiento de las fuentes de la wiki y sus derivados por identidad y versión. Las entregas y la gestión quedan fuera del corpus.
+
+- La guía de primer uso cubre ChatGPT Work, Codex, Claude Cowork y Claude Code.
+- Español simplificado bajo petición, como encargo independiente o combinado con otra skill.
+- Criterios editoriales flexibles y actualización de las instrucciones generadas del curso y del mapa.
+
 ## 0.11.4 — 2026-10-21
 
 - Instrucciones de curso para usar subagentes en subtareas independientes cuando el anfitrión lo permita.

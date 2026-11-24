@@ -10,7 +10,9 @@ Distinguir evidencia, inferencia y propuesta.
 
 Los originales no se editan ni trasladan. `source_roots` de
 [fuentes.json](fuentes.json) guarda las raíces relativas a esta carpeta.
-`root` y `path` identifican cada archivo dentro del origen elegido. Las rutas
+`root` y `path` permiten localizar cada archivo. El catálogo del proyecto distingue
+su identificador estable (`material_id`) y su versión de contenido (`content_version`).
+Al registrar el mapa, vincular sus fuentes con esos registros. Las rutas
 `page` y `pages[].path` son relativas al mapa. Los enlaces Markdown se resuelven
 desde la página concreta, como en cualquier documentación estándar.
 
@@ -19,7 +21,7 @@ las de acceso docente, restringido o desconocido, en `reservado/`.
 El lector HTML, el grafo docente y el índice general contienen datos internos; no distribuirlos
 por ocultar un grupo de nodos. La salida estudiantil se genera expresamente.
 
-Al actualizar, revisar las páginas afectadas, registrar el cambio en
+Al mover una fuente, corregir sus enlaces y conservar las explicaciones vigentes. Cuando cambie el contenido, revisar las páginas dependientes, registrar el cambio en
 [log.md](log.md) y regenerar el lector `index.html` y el grafo. Registrar contradicciones y tareas en
 [incidencias.md](incidencias.md). Una consulta no modifica estos archivos.
 

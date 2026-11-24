@@ -42,6 +42,13 @@ def check_map_policy(guide, data, *, source_roots=None, project_root=None,
         "principal": data.get("sources_root")}
     roots = roots if isinstance(roots, dict) else {}
     overrides = source_roots or {}
+    rows = {}
+    if config["structure"] == "curso-v4":
+        from .spaces import corpus_policy
+        config = {**config, "sources": corpus_policy(project, config)}
+        from .catalog import read_catalog
+        rows = {r["path"]: r for r in read_catalog(project)["materials"].values()
+                if r["kind"] == "file" and r["presence"] == "present" and r.get("access_confirmed")}
     excluded = set()
     affected = set()
     for source in data.get("sources", []) if isinstance(data.get("sources"), list) else []:
@@ -54,7 +61,9 @@ def check_map_policy(guide, data, *, source_roots=None, project_root=None,
             continue
         base = Path(overrides[root_id]).expanduser() if root_id in overrides else guide / root
         candidate = Path(os.path.abspath(base / relative))
-        if candidate.resolve().is_relative_to(guide) or not source_allowed(project, config, candidate):
+        record = rows.get(candidate.relative_to(project).as_posix()) if candidate.is_relative_to(project) else None
+        restricted = record and source.get("access") == "estudiante" and record["access"] != "estudiante"
+        if restricted or candidate.resolve().is_relative_to(guide) or not source_allowed(project, config, candidate):
             identifier = source.get("id")
             if isinstance(identifier, str):
                 excluded.add(identifier)
@@ -101,7 +110,7 @@ def check_map_policy(guide, data, *, source_roots=None, project_root=None,
     result["excluded_source_ids"] = sorted(excluded)
     result["affected_pages"] = sorted(affected)
     if excluded:
-        errors.append("Fuentes fuera de la selección actual: " + ", ".join(sorted(excluded)))
+        errors.append("Fuentes fuera de la selección o del acceso autorizado: " + ", ".join(sorted(excluded)))
     if affected:
         errors.append("Páginas pendientes de revisión antes de reutilizar: " + ", ".join(sorted(affected)))
     result["status"] = "invalid" if errors else "ok"
@@ -123,12 +132,32 @@ def register_map(root, map_dir, *, dry_run=False):
     path = _safe_path(root, relative)
     if not (path / "index.md").is_file():
         raise ValueError("El mapa necesita un index.md real antes de registrarse.")
+    config["map"] = relative
+    if config["structure"] == "curso-v4":
+        from .spaces import validate_config
+        validate_config(root, config)
     from scripts.validate_library import validate_library
     report = validate_library(path, project_root=root)
     if report["status"] != "ok":
         raise ValueError("Mapa no válido: " + "; ".join(report["errors"]))
-    config["map"] = relative
     if not dry_run:
-        _replace_config(project_config_path(root), json.dumps(config, ensure_ascii=False, indent=2) + "\n")
-    return {"status": "dry_run" if dry_run else "ok", "map": relative,
-            "config": config, "agents_updated": False}
+        if config["structure"] == "curso-v4":
+            from .knowledge import register_dependencies
+            from .project import CONFIG_V4
+            register_dependencies(root, path)
+            current = load_project(root)
+            if current["spaces"] != config["spaces"] or current["sources"] != config["sources"]:
+                raise ValueError("Cambió la asignación de fuentes durante el registro. Revisa el mapa.")
+            current["map"] = relative
+            config = current
+            destination = _safe_path(root, CONFIG_V4)
+            destination.parent.mkdir(parents=True, exist_ok=True)
+        else:
+            destination = project_config_path(root)
+        _replace_config(destination, json.dumps(config, ensure_ascii=False, indent=2) + "\n")
+    result = {"status": "dry_run" if dry_run else "ok", "map": relative,
+              "config": config, "agents_updated": False}
+    if config["structure"] == "curso-v4" and not dry_run:
+        from .knowledge import refresh_knowledge
+        result["knowledge"] = refresh_knowledge(root)
+    return result

@@ -9,14 +9,18 @@ import copy
 import hashlib
 import heapq
 import json
+import os
 import random
 import re
+import stat
 from collections import Counter
 from decimal import Decimal
 from pathlib import Path, PurePosixPath, PureWindowsPath
+from uuid import UUID
 
 from .gift import escape_gift, parse_gift
-from .project import find_project, load_project, source_allowed
+from .project import INTERNAL_MATERIAL_DIR, _safe_path, _within_relative, find_project, load_project, source_allowed
+from .spaces import corpus_policy, under, reserved, key as path_key
 
 DIFFICULTIES = {"basica", "intermedia", "avanzada"}
 PRINT_TYPES = {"single", "multiple", "truefalse", "numerical"}
@@ -75,11 +79,132 @@ def _relative(base: Path, value, label: str) -> Path:
     return current
 
 
-def _material_path(root, config, material, label):
-    path = _relative(root, material.get("path"), label)
-    if config is not None and not source_allowed(root, config, path):
-        raise ValueError(f"{label}: fuente no seleccionada o excluida: {material['path']}.")
-    return path
+def _uuid(value):
+    try:
+        return str(UUID(value)) == value
+    except (ValueError, TypeError, AttributeError):
+        return False
+
+
+class _BankInputs:
+    """Comprobar por separado los archivos del banco, sus fuentes y sus destinatarios."""
+
+    def __init__(self, root, config, direct):
+        self.root = root
+        self.config = config
+        self.v4 = config is not None and config.get("structure") == "curso-v4"
+        self.records = {}
+        self.paths = {}
+        self.disputed = set()
+        self.direct = set()
+        if self.v4:
+            self.config = {**config, "sources": corpus_policy(root, config)}
+            from .catalog import read_catalog
+            ledger = read_catalog(root)
+            self.records = ledger["materials"]
+            self.paths = {r["path"]: r for r in self.records.values() if r.get("path")}
+            self.disputed = set(ledger.get("identity_questions", {}))
+        for item in direct or []:
+            if not self.v4:
+                raise ValueError("La selección directa de actividades generadas requiere un curso-v4.")
+            row = self.records.get(item, {})
+            relative = row.get("path") if _uuid(item) else item
+            path = _relative(root, relative, "Material elegido")
+            if not self._generated(relative) or not path.is_file() or reserved(relative):
+                raise ValueError(f"Elegir el archivo concreto de la actividad generada: {item}.")
+            self._check_boundary(path, internal=False)
+            self.direct.add(path)
+
+    def _generated(self, relative):
+        return any(_within_relative(relative, base) for base in self.config["spaces"]["generated"])
+
+    def _check_boundary(self, path, *, internal):
+        if not path.is_relative_to(self.root):
+            raise ValueError("El archivo queda fuera del curso.")
+        relative = path.relative_to(self.root).as_posix()
+        _safe_path(self.root, relative)
+        blocked = self.config["spaces"]["submissions"] + self.config["sources"]["exclude"]
+        if self.config["map"]:
+            blocked = [*blocked, self.config["map"]]
+        if any(under(relative, base) for base in blocked):
+            raise ValueError(f"Ruta excluida del proceso de bancos: {relative}.")
+        from .catalog import unreadable_entry
+        if path.exists():
+            st = path.stat()
+            if unreadable_entry(st) or not stat.S_ISREG(st.st_mode):
+                raise ValueError(f"Entrada no disponible como archivo regular local: {relative}.")
+        parts = PurePosixPath(relative).parts
+        if any((reserved(part) or part.startswith(".")) and
+               not (internal and path_key(part) == path_key(INTERNAL_MATERIAL_DIR)) for part in parts):
+            raise ValueError(f"Ruta operativa excluida del proceso de bancos: {relative}.")
+        return relative
+
+    def check_bank_file(self, path, role):
+        if not self.v4:
+            return
+        relative = self._check_boundary(path, internal=role in ("metadata", "catalog"))
+        if self._generated(relative):
+            return
+        sources = self.config["sources"]
+        if not sources["selected"] or not any(_within_relative(relative, base) for base in sources["include"]):
+            raise ValueError(f"Archivo de banco fuera de la selección del curso: {relative}.")
+        # Un catálogo o unos metadatos pueden residir en el control de un banco.
+        anchor = path
+        while INTERNAL_MATERIAL_DIR in anchor.relative_to(self.root).parts:
+            anchor = anchor.parent
+        if not source_allowed(self.root, self.config, anchor):
+            raise ValueError(f"Archivo de banco de una fuente no seleccionada o excluida: {relative}.")
+
+    def check_digest(self, mid, path, material):
+        try:
+            st = path.stat()
+            row = self.paths.get(path.relative_to(self.root).as_posix())
+            if (row and row["sha256"] and row.get("physical_id") == {"dev": st.st_dev, "ino": st.st_ino}
+                    and row["size"] == st.st_size and row["mtime_ns"] == st.st_mtime_ns
+                    and row.get("ctime_ns") == st.st_ctime_ns):
+                digest = row["sha256"]
+            else:
+                if not stat.S_ISREG(st.st_mode):
+                    raise ValueError(f"El material {mid} debe ser un archivo regular.")
+                from .catalog import _digest
+                digest = _digest(path)
+        except OSError as error:
+            raise ValueError(f"Material {mid} no accesible: {material['path']}.") from error
+        if digest != material["sha256"]:
+            raise ValueError(f"El material {mid} ha cambiado: revisar su banco antes de usarlo.")
+
+    def material(self, mid, material, label):
+        declared = material.get("path")
+        material_id = material.get("material_id", mid if _uuid(mid) else None)
+        record = None
+        if self.v4 and (material_id is not None or "content_version" in material):
+            record = self.records.get(material_id) if isinstance(material_id, str) else None
+            if not record or record["kind"] != "file" or record.get("presence") != "present":
+                raise ValueError(f"{label}: identidad ausente o pendiente de reconciliar.")
+            version = material.get("content_version")
+            if type(version) is not int or version != record["content_version"]:
+                raise ValueError(f"{label}: versión distinta o ausente; revisar el banco.")
+            # La ruta guardada puede preceder a un movimiento. Nunca se lee a partir de ella.
+            if declared is not None:
+                _relative(self.root, declared, label)
+            if material.get("sha256") != record["sha256"]:
+                raise ValueError(f"{label}: la huella declarada no corresponde a la versión del catálogo.")
+            declared = record["path"]
+        path = _relative(self.root, declared, label)
+        if self.v4:
+            relative = self._check_boundary(path, internal=False)
+            record = record or self.paths.get(relative)
+            if relative in self.disputed or record and record.get("presence") != "present":
+                raise ValueError(f"{label}: identidad pendiente de reconciliar.")
+            if (material["access"] == "estudiante" and (record or self._generated(relative))
+                    and (record or {}).get("access") != "estudiante"):
+                raise ValueError(f"{label}: el catálogo reserva este material al docente.")
+            material["path"] = relative
+            if path in self.direct:
+                return path
+        if self.config is not None and not source_allowed(self.root, self.config, path):
+            raise ValueError(f"{label}: fuente no seleccionada o excluida: {declared}.")
+        return path
 
 
 def validate_variants(metadata: dict, bank: list[dict]):
@@ -145,7 +270,7 @@ def selection_diversity(built, metadata, used):
     }
 
 
-def _check_metadata(metadata: dict, bank: list[dict], root: Path, config: dict | None):
+def _check_metadata(metadata: dict, bank: list[dict], inputs: _BankInputs):
     materials = metadata.get("materials")
     entries, concepts = metadata.get("questions"), metadata.get("concepts")
     if not isinstance(materials, dict) or not materials:
@@ -156,6 +281,7 @@ def _check_metadata(metadata: dict, bank: list[dict], root: Path, config: dict |
         raise ValueError("Cada pregunta del banco debe tener sus metadatos, sin IDs adicionales.")
     # First validate all paths and permissions, before reading any original.
     checked_paths = {}
+    original_paths = {}
     for mid, material in materials.items():
         _text(mid, "Identificador de material")
         if not isinstance(material, dict):
@@ -165,7 +291,10 @@ def _check_metadata(metadata: dict, bank: list[dict], root: Path, config: dict |
             raise ValueError(f"Acceso no válido en material {mid}.")
         if not isinstance(material.get("sha256"), str) or not _SHA.fullmatch(material["sha256"]):
             raise ValueError(f"Huella SHA-256 no válida en material {mid}.")
-        checked_paths[mid] = _material_path(root, config, material, f"Material {mid}")
+        saved = material.get("path")
+        checked_paths[mid] = inputs.material(mid, material, f"Material {mid}")
+        if saved is not None:
+            original_paths.setdefault(saved, set()).add(checked_paths[mid])
     declared_access = {}
     for mid, material in materials.items():
         path = checked_paths[mid]
@@ -180,11 +309,22 @@ def _check_metadata(metadata: dict, bank: list[dict], root: Path, config: dict |
             if not isinstance(ref, dict) or ref.get("access") not in ("estudiante", "docente"):
                 raise ValueError(f"Referencia no válida en {label}.")
             _text(ref.get("title"), f"Referencia de {label}")
-            path = _material_path(root, config, ref, f"Referencia de {label}")
+            reference_id = ref.get("material_id")
+            if reference_id is not None:
+                if not isinstance(reference_id, str) or reference_id not in checked_paths:
+                    raise ValueError(f"Referencia de {label} sin material declarado.")
+                path = checked_paths[reference_id]
+            else:
+                saved = _text(ref.get("path"), f"Referencia de {label}")
+                candidates = original_paths.get(saved, set())
+                if len(candidates) > 1:
+                    raise ValueError(f"Referencia de {label} ambigua. Indicar material_id.")
+                path = next(iter(candidates)) if candidates else _relative(inputs.root, saved, label)
             if path not in declared_access:
                 raise ValueError(f"La referencia de {label} debe apuntar a un material declarado.")
             if declared_access[path] != ref["access"]:
                 raise ValueError(f"La referencia de {label} contradice el acceso del material.")
+            ref["path"] = path.relative_to(inputs.root).as_posix()
 
     for cid, concept in concepts.items():
         _text(cid, "Identificador de concepto")
@@ -216,27 +356,45 @@ def _check_metadata(metadata: dict, bank: list[dict], root: Path, config: dict |
         check_references(entry, f"pregunta {qid}")
     validate_variants(metadata, bank)
     for mid, path in checked_paths.items():
-        try:
-            raw = path.read_bytes()
-        except OSError as error:
-            raise ValueError(f"Material {mid} no accesible: {materials[mid]['path']}.") from error
-        if hashlib.sha256(raw).hexdigest() != materials[mid]["sha256"]:
-            raise ValueError(f"El material {mid} ha cambiado: revisar su banco antes de usarlo.")
+        inputs.check_digest(mid, path, materials[mid])
 
 
-def load_catalog(catalog_path: str | Path, *, project_root=None, bank_ids=None) -> dict:
+def _course_file(location, role, project_root, direct_materials=None):
+    supplied = Path(os.path.abspath(Path(location).expanduser()))
+    path = supplied.resolve()
+    discovered_root = find_project(supplied.parent) or find_project(path.parent)
+    root = (Path(project_root).expanduser().resolve() if project_root is not None
+            else discovered_root or path.parent)
+    if project_root is not None and discovered_root is not None and discovered_root != root:
+        raise ValueError("El catálogo y la raíz indicada pertenecen a proyectos diferentes.")
+    is_course = discovered_root == root or (project_root is not None and find_project(root) == root)
+    config = load_project(root) if is_course else None
+    inputs = _BankInputs(root, config, direct_materials)
+    if inputs.v4:
+        # Conservar la ruta introducida bajo el curso incluso en /var y /tmp de macOS.
+        for ancestor in supplied.parents:
+            if ancestor.resolve() == root:
+                supplied = root / supplied.relative_to(ancestor)
+                break
+        inputs.check_bank_file(supplied, role)
+    return path, root, discovered_root, inputs
+
+
+def validate_course_bank_files(gift_path, metadata_path=None, *, project_root=None):
+    """Comprobar un banco GIFT suelto antes de abrirlo en un curso con espacios."""
+    _course_file(gift_path, "gift", project_root)
+    if metadata_path is not None:
+        _course_file(metadata_path, "metadata", project_root)
+
+
+def load_catalog(catalog_path: str | Path, *, project_root=None, bank_ids=None, direct_materials=None) -> dict:
     """Cargar bancos seleccionados con metadatos y originales congelables.
 
     La API pública de diagnóstico es validate_catalog. Este resultado interno
     incluye bytes para construir snapshots sin volver a leer archivos mutables.
     """
-    path = Path(catalog_path).expanduser().resolve()
+    path, root, discovered_root, inputs = _course_file(catalog_path, "catalog", project_root, direct_materials)
     catalog, catalog_raw = _json_bytes(path)
-    discovered_root = find_project(path)
-    root = (Path(project_root).expanduser().resolve() if project_root is not None
-            else discovered_root or path.parent)
-    from .project import project_config_path
-    config = load_project(root) if project_config_path(root) is not None else None
     path_base = catalog.get("path_base", "catalog")
     if path_base not in ("catalog", "project"):
         raise ValueError("path_base debe ser 'catalog' o 'project'.")
@@ -268,6 +426,8 @@ def load_catalog(catalog_path: str | Path, *, project_root=None, bank_ids=None) 
         row = by_id[bid]
         gift_path = _relative(bank_root, row["gift"], f"GIFT de {bid}")
         metadata_path = _relative(bank_root, row["metadata"], f"Metadatos de {bid}")
+        inputs.check_bank_file(gift_path, "gift")
+        inputs.check_bank_file(metadata_path, "metadata")
         try:
             raw = gift_path.read_bytes()
             bank = parse_gift(raw.decode("utf-8-sig"))
@@ -276,7 +436,7 @@ def load_catalog(catalog_path: str | Path, *, project_root=None, bank_ids=None) 
         if not bank:
             raise ValueError(f"El banco {bid} está vacío.")
         metadata, metadata_raw = _json_bytes(metadata_path)
-        _check_metadata(metadata, bank, root, config)
+        _check_metadata(metadata, bank, inputs)
         for section in ("materials", "concepts"):
             for key, item in metadata[section].items():
                 if key in merged[section] and merged[section][key] != item:
@@ -307,9 +467,9 @@ def load_catalog(catalog_path: str | Path, *, project_root=None, bank_ids=None) 
             "catalog": catalog, "catalog_bytes": catalog_raw}
 
 
-def validate_catalog(catalog_path: str | Path, *, project_root=None) -> dict:
+def validate_catalog(catalog_path: str | Path, *, project_root=None, direct_materials=None) -> dict:
     """Validar catálogo, metadatos, permisos y huellas; no escribir archivos."""
-    loaded = load_catalog(catalog_path, project_root=project_root)
+    loaded = load_catalog(catalog_path, project_root=project_root, direct_materials=direct_materials)
     return {"status": "ok", "schema_version": 1,
             "banks": [{"id": b["id"], "questions": b["questions"]} for b in loaded["banks"]],
             "questions": len(loaded["bank"]),

@@ -40,7 +40,7 @@ comprensión y proceso; no prueban la autoría de un texto por sí solas.
 - **Registro `actividad.json`:** vincula los archivos y fuentes de una misma
   versión para preparar después la corrección.
 
-En `curso-v3`, la carpeta estable es `materiales_generados/actividades/<id>/`:
+Con los espacios predeterminados, la actividad se prepara en `Material generado por IA/actividades/<id>/`:
 
 ```text
 analisis-de-fuentes/
@@ -62,7 +62,10 @@ El registro común es de tipo `actividad`; su estado (`borrador`, `revisado` o
 archivos y no autoriza una publicación automática. `actividad.json` mantiene
 la procedencia y versión de los archivos utilizados para evaluar, según el
 [contrato del curso](PROYECTO-DOCENTE.md). Las fuentes originales se enlazan;
-si esta actividad se usa después para un banco, permanece en su misma carpeta.
+si el docente elige el enunciado generado como entrada directa para un banco,
+indicar ese archivo en el encargo. Esta elección conserva el estado de la
+actividad. Solo una decisión expresa del docente la incorpora al material
+consolidado de la asignatura.
 Al ubicar `actividad.json` en `_datos_internos/`, ajustar sus rutas relativas
 según la misma base contractual; no reinterpretarlas desde la raíz del curso.
 
@@ -107,13 +110,13 @@ exportación a Moodle tienen su propio [contrato](CALIFICACIONES.md).
 ## Recepción y corrección
 
 Al terminar la actividad, el agente ofrece preparar su carpeta de recepción.
-Al aceptar, crea el siguiente árbol, con el mismo nombre de carpeta e identificador
+Al aceptar, crea el lote en el espacio asignado a **Entregas**. El ejemplo usa su nombre predeterminado y lleva el mismo nombre de carpeta e identificador
 que la actividad. Reutiliza la convocatoria conocida; si no se ha concretado
 y no hay ambigüedad, usa `ordinaria` e indica ese destino. Ante una diferencia entre el identificador registrado y el
 nombre de la carpeta, aclara la correspondencia antes de crear el lote.
 
 ```text
-resultados/analisis-de-fuentes/
+Entregas/analisis-de-fuentes/
 └── ordinaria/
     ├── LEEME.md
     ├── recibidos/

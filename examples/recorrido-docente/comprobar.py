@@ -38,9 +38,8 @@ def run_example(destination, *, pdf=False):
             raise RuntimeError(result.stderr or result.stdout)
         return json.loads(result.stdout)
 
-    initialized = call("init-project", course)
-    assert not initialized["wiki_created"]
-    assert not list((course / "mapa-docente").iterdir())
+    # El circuito conserva sus entradas congeladas y su configuración de curso de origen.
+    assert not (course / "mapa-docente/index.md").exists()
     activity = course / "materiales_generados/actividades/medir-y-justificar"
     student_activity = activity / "alumnado"
     rendered = call("render-markdown", student_activity / "enunciado.md",

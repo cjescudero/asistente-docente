@@ -4,11 +4,7 @@
 sintéticos sobre interpretación de datos y fuentes, adaptables a humanidades
 y ciencias. No contiene datos de estudiantes ni afirma una lectura por el agente.
 
-Para probarlo, pide al agente que copie **solo la carpeta `curso`** a una
-ubicación de trabajo fuera del plugin, la abra y ejecute «Inicia mi proyecto
-docente». La copia es un ejemplo reutilizable, no una exportación de materiales
-del profesor. Git y los ZIP no conservan carpetas vacías: la iniciación completa
-`mapa-docente/` vacía cuando falte, sin crear wiki, índice, lector ni grafo.
+Este ejemplo conserva una configuración anterior para probar su adopción. Para un proyecto nuevo, usa el [ejemplo de espacios asignables](../curso-v4/README.md). Para probar la adopción, copia la carpeta `curso` fuera del plugin y pide «Adapta este curso conservando mis carpetas». Revisa la propuesta de correspondencias y elige qué aceptar.
 
 La configuración `curso-v3` selecciona `fuentes/teoria/` y
 `fuentes/evaluaciones/cuestionarios/`. Excluye
@@ -44,7 +40,7 @@ Peticiones para comprobar el recorrido:
 
 También puedes pedir apuntes o diapositivas visuales individuales. Las sugerencias
 deben reconocer los resultados ya comprobados y no iniciar el siguiente paso
-automáticamente. El idioma predeterminado es español claro.
+automáticamente. Se puede pedir español simplificado para un encargo.
 
 La [guía del proyecto](../../docs/PROYECTO-DOCENTE.md) cubre la organización y
 la organización de carpetas que ya contienen materiales.

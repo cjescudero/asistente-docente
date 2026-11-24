@@ -19,26 +19,34 @@ relevantes; no es un trámite obligatorio para cada petición.
 | Bancos asociados a materiales y actividades | [Cuestionarios: creación de bancos de preguntas](../skills/cuestionarios-bancos-preguntas-creacion/SKILL.md) |
 | Combinar bancos en modelos impresos y respuestas ofuscadas | [Cuestionarios: creación de modelos para imprimir y evaluar](../skills/cuestionarios-modelos-imprimir-evaluar/SKILL.md) |
 | Resultados y comentarios de mejora | [Cuestionarios: observaciones sobre calificaciones para el alumnado](../skills/cuestionarios-observaciones-calificaciones-alumnado/SKILL.md) |
-| Claridad, precisión y formato explicativo | [Español conciso: redacción](../skills/espanol-conciso-redaccion/SKILL.md) |
+| Redactar en español simplificado a petición del docente | [Español conciso: redacción](../skills/espanol-conciso-redaccion/SKILL.md) |
 | Imágenes con estilo de boceto didáctico | [Infografías didácticas: creación](../skills/infografias-didacticas-creacion/SKILL.md) |
+
+### Combinar una tarea con el estilo de español simplificado
+
+| Petición | Resultado esperado |
+| --- | --- |
+| «Crea la wiki» | La skill de mapa prepara la wiki en el idioma y registro del encargo. |
+| «Crea la wiki en español simplificado» | La skill de mapa prepara la wiki y la de redacción aplica el estilo a las explicaciones del mismo documento. |
+| «Reescribe este enunciado en español simplificado» | La skill de redacción conserva los requisitos y adapta la expresión para el alumnado. |
+| «Haz más claro el segundo párrafo» | Se revisa ese párrafo como una edición ordinaria. |
+
+Puedes seleccionar o nombrar la skill directamente. Para mantener el estilo en futuras tareas, pide expresamente que se use en toda la asignatura.
 
 ## Iniciar el proyecto docente
 
 Instala el plugin, abre la carpeta del curso y pide **«Inicia mi proyecto docente»**.
-El agente aclara solo los datos que faltan, prepara el árbol uniforme y guarda
-`_datos_internos_proyecto/proyecto-docente.json`, `LEEME.md` y `AGENTS.md`. El contrato de estructura,
-selección y herramientas está en [Proyecto docente](PROYECTO-DOCENTE.md).
+Si empiezas con una carpeta vacía, el agente prepara `AGENTS.md` y tres espacios:
+**Material de la asignatura**, **Material generado por IA** y **Entregas**. Si ya
+hay carpetas de la asignatura, puedes asignarlas a esos espacios y conservar sus
+nombres y su organización interna. Las propuestas de traslado requieren tu
+aprobación. Las instrucciones previas se conservan y los conflictos se consultan.
 
-Si ya existen materiales, el agente presenta movimientos y enlaces afectados
-antes de reorganizarlos. No sobrescribe archivos ni instrucciones. Modifica
-solo lo autorizado en `AGENTS.md` y pregunta ante conflictos. Repetir la puesta
-en marcha no duplica reglas ni borra un mapa o una selección previos.
-
-El profesor elige las carpetas y exclusiones del corpus, o aplaza esa selección.
-La inicialización deja la carpeta del mapa vacía cuando no existe, recomienda
-crearlo y ofrece orientación para continuar. Su creación requiere un encargo del
-profesor. Establece `espanol-conciso-redaccion` para escribir en español y conserva
-un bloque de consulta de mapa existente.
+Elige ahora o más adelante qué fuentes podrá utilizar la wiki. La carpeta
+`Gestión del proyecto/` se crea cuando hacen falta datos operativos, por ejemplo
+al guardar esa selección o iniciar el catálogo. Puedes pedir «Clasifica mis materiales
+conservando mis carpetas» y después «Crea el mapa de las fuentes elegidas».
+[Organización y catálogo del curso](PROYECTO-DOCENTE.md).
 
 Comprobar que el anfitrión incorpora `AGENTS.md`. Si no, pedir su lectura
 explícita o utilizar las instrucciones de carpeta disponibles. No se crea
@@ -72,17 +80,16 @@ infografías conserva ese alcance; no promete presentaciones editables.
 
 Usar la [ficha Markdown](../templates/ficha-asignatura.md) o su [ejemplo JSON](../templates/ficha-asignatura.json) como contexto. Registrar objetivos, audiencia, fuentes vigentes, criterios y recursos permitidos. No imponer la estructura de una asignatura anterior ni usar cuestionarios reservados como fuente de apuntes sin autorización.
 
-Guardar materiales y resultados fuera del paquete instalado. Los cursos
-usan `curso-v3`: originales en `fuentes/`, trabajos nuevos por tipo en `materiales_generados/`,
-wiki en `mapa-docente/` y lotes en `resultados/<actividad>/<convocatoria>/`, con
-`recibidos/` y `correccion/` separados. Las actividades y cuestionarios reúnen sus
-documentos de alumnado y docente en subcarpetas. Los estados se registran sin
-mover ni duplicar los archivos.
+Las fuentes conservan la jerarquía del profesor. Las producciones nuevas se guardan
+en el espacio generado. Para incorporar una como referencia oficial, pide
+explícitamente su consolidación. En el espacio **Entregas**, cada lote de
+actividad y convocatoria separa `recibidos/` y `correccion/`. La wiki, los bancos
+y el catálogo docente excluyen esos lotes. En los ejemplos siguientes se utilizan
+los nombres predeterminados de los espacios.
 
 Al terminar una skill, ofrecer próximos pasos según los resultados existentes,
 sin ejecutar otras tareas ni asumir que una carpeta acredita su finalización.
-Seguir los [flujos docentes](FLUJOS-DOCENTES.md) y usar español claro por defecto,
-salvo indicación distinta. Una tarea con adjuntos suficientes no exige preparar
+Seguir los [flujos docentes](FLUJOS-DOCENTES.md) y el idioma del encargo. Una tarea con adjuntos suficientes no exige preparar
 todo el curso ni crear un mapa.
 
 Para materiales escritos, entregar Markdown y PDF por defecto. El Mapa docente usa Markdown navegable, registro JSON, lector `index.html` y grafo HTML; el PDF solo se añade si se pide una copia estática. Un notebook es opcional. Una petición de imagen o vídeo conserva su formato: ni un prompt ni un guion cuentan como archivo final generado. Las infografías requieren una capacidad de imágenes disponible; si falta, esa skill entrega brief y prompt, sin cambiar por defecto a SVG. El grafo del mapa se construye a partir de datos y enlaces, sin generación de imágenes.
@@ -152,11 +159,11 @@ superior a las fuentes ni a las instrucciones del profesor.
 El resultado incluye índice, fichas, conceptos, referencias precisas, estados de
 lectura y lagunas explícitas. Las páginas son Markdown estándar con enlaces
 normales; no requieren Notion, Obsidian ni frontmatter. Crear o mantener el mapa
-incluye generar su lector `index.html` y su grafo mediante la skill de visualización
+incluye generar su lector `index.html` y su grafo con los generadores de vistas
 cuando están las capacidades necesarias y la validación del corpus y sus
 dependencias pasa. También puede pedirse regenerar solo uno.
 
-El mapa de un curso nuevo está en `mapa-docente/`, con `index.md`,
+Una ubicación posible del mapa es `Material generado por IA/mapa-docente/`, con `index.md`,
 `LEEME.md`, `_datos_internos/fuentes.json`, `incidencias.md` y `log.md`. Un mapa previo conserva
 su ruta hasta una migración autorizada. Bajo `contenidos/` se separan conceptos,
 presentaciones, apuntes, prácticas y talleres; bajo `reservado/`, evaluaciones,
@@ -207,12 +214,13 @@ python "$ASISTENTE_DOCENTE/scripts/docencia.py" --help
 
 ### Wiki navegable y grafo HTML
 
-Desde la carpeta del curso, con un mapa ya preparado:
+Desde la carpeta del curso, indica la ruta del mapa registrado. Por ejemplo:
 
 ```sh
-python "$ASISTENTE_DOCENTE/scripts/validate_library.py" mapa-docente
-python "$ASISTENTE_DOCENTE/scripts/build_graph.py" mapa-docente \
-  --output mapa-docente/grafo-docente.html --wiki-output mapa-docente/index.html --audience docente
+MAPA="Material generado por IA/mapa-docente"
+python "$ASISTENTE_DOCENTE/scripts/validate_library.py" "$MAPA"
+python "$ASISTENTE_DOCENTE/scripts/build_graph.py" "$MAPA" \
+  --output "$MAPA/grafo-docente.html" --wiki-output "$MAPA/index.html" --audience docente
 ```
 
 El grafo usa enlaces Markdown existentes; no inventa relaciones a partir de
@@ -231,14 +239,14 @@ los materiales reservados en una sección diferenciada y es de uso docente.
 «Ajustar» encuadra las posiciones actuales. Para regenerar solo el lector:
 
 ```sh
-python "$ASISTENTE_DOCENTE/scripts/build_wiki.py" mapa-docente --graph mapa-docente/grafo-docente.html
+python "$ASISTENTE_DOCENTE/scripts/build_wiki.py" "$MAPA" --graph "$MAPA/grafo-docente.html"
 ```
 
 Para una exportación expresamente destinada a estudiantes:
 
 ```sh
-python "$ASISTENTE_DOCENTE/scripts/build_graph.py" mapa-docente \
-  --output mapa-docente/grafo-estudiante.html --audience estudiante
+python "$ASISTENTE_DOCENTE/scripts/build_graph.py" "$MAPA" \
+  --output "$MAPA/grafo-estudiante.html" --audience estudiante
 ```
 
 Esta salida elimina de los datos los nodos no autorizados y los que dependen de
@@ -258,15 +266,15 @@ Para bancos asociados a varios materiales, validar el catálogo y componer con u
 reparto acordado. El formato del catálogo y de la selección se detalla en
 [Bancos](BANCOS.md):
 Antes del comando, guardar el reparto en
-`materiales_generados/cuestionarios/parcial-01/_datos_internos/seleccion.json`.
+`Material generado por IA/cuestionarios/parcial-01/_datos_internos/seleccion.json`.
 La carpeta del cuestionario no debe contener modelos anteriores.
 
 ```sh
 python "$ASISTENTE_DOCENTE/scripts/docencia.py" validate-catalog \
-  materiales_generados/bancos/_datos_internos/catalogo.json --project .
+  "Material generado por IA/bancos/_datos_internos/catalogo.json" --project .
 python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-cuestionarios \
-  --catalog materiales_generados/bancos/_datos_internos/catalogo.json --selection materiales_generados/cuestionarios/parcial-01/_datos_internos/seleccion.json \
-  --project . --output materiales_generados/cuestionarios/parcial-01 --layout curso-v3 --title "Cuestionario de fuentes" \
+  --catalog "Material generado por IA/bancos/_datos_internos/catalogo.json" --selection "Material generado por IA/cuestionarios/parcial-01/_datos_internos/seleccion.json" \
+  --project . --output "Material generado por IA/cuestionarios/parcial-01" --layout curso-v4 --title "Cuestionario de fuentes" \
   --models 4 --questions 5 --seed 42
 ```
 
@@ -275,7 +283,7 @@ También se mantiene la entrada de un único banco:
 ```sh
 python "$ASISTENTE_DOCENTE/scripts/docencia.py" validate-bank banco.gift
 python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-cuestionarios banco.gift \
-  --metadata metadatos.json --output materiales_generados/cuestionarios/parcial-01 --layout curso-v3 \
+  --metadata metadatos.json --output "Material generado por IA/cuestionarios/parcial-01" --layout curso-v4 \
   --title "Cuestionario de fuentes" --models 4 --questions 5 --seed 42
 ```
 
@@ -286,7 +294,7 @@ equilibrio basado en ellos. No usar la ficha de asignatura como metadatos.
 
 Para cuotas por categoría, añadir `--per-category cuotas.json`, cuyo contenido es un objeto de nombre exacto de categoría a cantidad. Su suma debe coincidir con `--questions`. Por ejemplo, `{"Fuentes": 3, "Argumentación": 2}` solo sirve para un banco con esas categorías exactas.
 
-En `curso-v3`, la carpeta de salida puede contener solo `_datos_internos/seleccion.json` preparado para ese cuestionario; en otros casos debe ser nueva o vacía. Incluye `manifest.json`, bancos
+En `curso-v4`, la carpeta de salida puede contener solo `_datos_internos/seleccion.json` preparado para ese cuestionario; en otros casos debe ser nueva o vacía. Incluye `manifest.json`, bancos
 congelados y archivos separados por modelo: HTML/PDF de estudiante, HTML/PDF
 docente y GIFT ofuscado. La composición por catálogo conserva la identidad de
 banco y pregunta, y ofrece cobertura, dificultad y reutilización. Los
@@ -310,9 +318,9 @@ En GIFT, escapar además los caracteres especiales del formato antes de guardar 
 ### Feedback de resultados
 
 ```sh
-python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-feedback materiales_generados/cuestionarios/parcial-01/_datos_internos/manifest.json \
-  --input resultados/parcial-01/ordinaria/recibidos/resultados.csv \
-  --config feedback.json --output resultados/parcial-01/ordinaria/correccion/feedback
+python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-feedback "Material generado por IA/cuestionarios/parcial-01/_datos_internos/manifest.json" \
+  --input Entregas/parcial-01/ordinaria/recibidos/resultados.csv \
+  --config feedback.json --output Entregas/parcial-01/ordinaria/correccion/feedback
 ```
 
 Repetir `--input` para varios CSV. La configuración debe mapear columnas reales,

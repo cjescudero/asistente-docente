@@ -12,8 +12,7 @@ de ubicación. Un material creado puede alimentar otro encargo sin duplicarse.
 Las skills proponen siguientes pasos según evidencias de resultados y necesidades
 pendientes. Los flujos de actividades y de exámenes son independientes, con
 apuntes y diapositivas visuales individuales como apoyos. El mapa es recomendable
-pero no obligatorio para trabajar con adjuntos suficientes. Español claro es
-el idioma y estilo predeterminado; una preferencia explícita del profesor prevalece.
+pero no obligatorio para trabajar con adjuntos suficientes. El profesor puede pedir español simplificado para un encargo o para toda la asignatura.
 
 ## Orientación y evaluación conectadas (0.8.0)
 
@@ -46,7 +45,7 @@ de conocimientos ni sustituye la revisión del profesor.
 | Materia | TI aparece en la procedencia histórica, no como requisito de ejecución. |
 | Nivel | Se elige en cada encargo. El ejemplo universitario es sintético. |
 | Evaluación | Rúbrica y escala explícitas; también se admite análisis cualitativo provisional. No se presume escala 0–10. |
-| Idioma | Apuntes y materiales siguen el idioma solicitado. Español claro se aplica a textos en español. |
+| Idioma | Apuntes y materiales siguen el idioma solicitado. El estilo simplificado requiere petición expresa. |
 | Identidad | Se usa el identificador acordado; no se exige una matrícula institucional. |
 | Fuentes | Carpetas elegidas por el usuario; sin rutas personales ni corpus descubierto por defecto. |
 | Herramientas | Notebooks opcionales. La wiki usa Markdown estándar. Moodle interviene solo en sus flujos. |

@@ -3,7 +3,7 @@
 ## Alcance
 
 Este proyecto contiene doce skills docentes y utilidades portables para ChatGPT
-Work y Claude Cowork. Por decisión explícita del usuario, carpeta, identificador
+Work, Codex, Claude Cowork y Claude Code. Por decisión explícita del usuario, carpeta, identificador
 y paquetes se llaman `asistente-docente`, sin prefijo `plugin-`. Las skills
 usan nombres sin prefijo `skill-` y se agrupan por categoría. La organización
 vigente se documenta en `docs/PROYECTO-DOCENTE.md`.
@@ -65,29 +65,12 @@ vigente se documenta en `docs/PROYECTO-DOCENTE.md`.
 
 ## Proyectos docentes
 
-- El contrato compartido es `docs/PROYECTO-DOCENTE.md`: cursos `curso-v3`,
-  configuración UTF-8 en `_datos_internos_proyecto/proyecto-docente.json` con
-  rutas relativas y selección explícita del corpus. No leer configuraciones de
-  formatos anteriores como proyectos docentes. Si aparece otra configuración en
-  la raíz, señalar la ambigüedad antes de iniciar. No deducir la procedencia
-  de materiales aportados por su carpeta.
-- Separar originales en `fuentes/` y materiales nuevos en
-  `materiales_generados/`, por tipo. Usar `cuestionarios/` y las rutas fijas de
-  `questionnaire_paths` del formato actual, sin regenerar snapshots usados.
-  Cada actividad o cuestionario reúne documentos de alumnado y docente en subcarpetas.
-  El estado se registra en `_datos_internos/material-docente.json` y se muestra
-  en `LEEME.md`; cada cuestionario reúne selección, manifiesto y bancos
-  congelados en su `_datos_internos/`. Un banco guarda allí sus metadatos y el
-  catálogo de bancos se guarda en `bancos/_datos_internos/`;
-  revisar o reutilizar un material no exige moverlo ni duplicarlo.
-- Antes de inicializar o adaptar, inventariar el contenido existente. Los nombres
-  son pistas; comprobar lo necesario y distinguir evidencia y dudas. Mostrar
-  origen, destino, contenido, motivo y dudas, con árbol resultante; aplicar solo
-  movimientos concretos aprobados, comprobar colisiones, enlaces e integridad.
+- Aplicar el contrato de espacios asignables de `docs/PROYECTO-DOCENTE.md`. Respetar el árbol del profesor y crear gestión cuando haya datos que persistir. Separar identidad, ubicación, versión, origen, clasificación y consolidación. Clasificar por agrupaciones lógicas con prioridad a confirmaciones.
+- Serializar los cambios en el catálogo y conservar el historial y la recuperación de operaciones. Los traslados y consolidaciones requieren operaciones concretas aceptadas. Preservar originales, unidades docentes y snapshots. Reconciliar sin releer contenido inalterado y actualizar únicamente dependencias afectadas.
 - La skill del mapa distingue crear/actualizar, regenerar vistas y mostrar vistas
   existentes. Regenerar vistas conserva páginas y metadatos; mostrar no regenera.
   Mantener la consulta separada y de solo lectura.
-- La iniciación prepara carpetas, configuración, LEEME e instrucciones. Ofrece
+- La iniciación asigna espacios, conserva instrucciones y prepara la configuración cuando se necesita. Ofrece
   orientación y recomienda el mapa, sin crearlo ni invocarlo sin encargo.
   `proyecto-docente-ayuda` se invoca siempre como ayuda inline ante dudas de uso,
   flujos, archivos, resultados, posibilidades o siguientes pasos, también durante
@@ -97,18 +80,8 @@ vigente se documenta en `docs/PROYECTO-DOCENTE.md`.
   su consulta en el AGENTS.md del curso, preservando las reglas previas.
 - Ante conflictos en instrucciones existentes, preguntar antes de cambiarlas.
   No imponer bloques generados ni modificar instrucciones globales.
-- Respetar exclusiones incluso mediante enlaces. Resultados, datos internos y el propio mapa
-  quedan fuera del corpus; materiales_generados requiere selección explícita y un registro
-  revisado o listo para entregar. Los borradores quedan fuera; archivo requiere selección explícita.
-  Detectar páginas dependientes de fuentes retiradas antes de reutilizarlas.
-- Organizar lotes nuevos en `resultados/<actividad>/<convocatoria>/`,
-  separando `recibidos/` de `correccion/`. Mantener todo ese árbol
-  fuera del corpus, incluso cuando haya enlaces desde materiales elegidos.
-  Al terminar una actividad, ofrecer preparar su recepción con el mismo ID y
-  nombre de carpeta: `recibidos/entregas/`, hoja Moodle en `recibidos/`,
-  `correccion/` y LEEME con enlaces a criterios. Crear al aceptar o si ya está
-  incluido en el encargo; reutilizar lotes existentes sin sobrescribir archivos.
-  La exportación de notas usa CSV; no presentar `.xlsx` como entrada directa.
+- Consultar únicamente las fuentes seleccionadas. Mantener entregas y gestión fuera del corpus, incluso a través de enlaces. Los materiales generados entran al conocimiento tras una consolidación expresa y dentro de las raíces seleccionadas.
+- Organizar los lotes en la raíz de entregas acordada, por actividad y convocatoria, con originales en `recibidos/` y hojas derivadas en `correccion/`. Ofrecer preparar la recepción al terminar una actividad. La utilidad Moodle usa CSV.
 - No sobrescribir ni mover originales sin una propuesta concreta aprobada.
   Mantener una ubicación para cada material; separar soluciones y estudiantes.
 - Comprobar solo las entradas necesarias para el encargo. Adjuntos suficientes
@@ -119,8 +92,8 @@ vigente se documenta en `docs/PROYECTO-DOCENTE.md`.
   pasos según registros y archivos pertinentes, sin ejecutar tareas ni dar por
   completados resultados por la mera existencia de una carpeta. Respetar los
   flujos inicio → mapa, actividad → corrección y banco → cuestionario → feedback.
-  Ofrecer apuntes y diapositivas visuales individuales como apoyos. Usar español
-  conciso por defecto, salvo indicación distinta del docente.
+  Ofrecer apuntes y diapositivas visuales individuales como apoyos. Aplicar la skill de español
+  simplificado solo cuando el docente solicite la skill o ese estilo.
 
 ## Comprobaciones
 

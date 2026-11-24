@@ -2,9 +2,7 @@
 
 Crear un lector navegable y un grafo de las páginas, fuentes y enlaces existentes. Ambos son derivados del Mapa docente; no sustituyen los Markdown editables ni permiten afirmar que se han leído los documentos representados.
 
-Usar por defecto [español conciso](../../espanol-conciso-redaccion/SKILL.md) en la
-conversación y los documentos, salvo que el profesor indique otro idioma o estilo.
-Respetar citas, identificadores y términos que deban conservarse literalmente.
+Combinar este encargo con [español conciso](../../espanol-conciso-redaccion/SKILL.md) solo si el docente pide esa skill o el estilo de español simplificado, incluido un encargo expreso para todo el curso.
 
 ## Contexto del proyecto
 
@@ -30,12 +28,12 @@ modificadas o incidencias pendientes. Si la vista es antigua, identificarla
 como tal y ofrecer actualizarla; no presentarla como estado actual. Si falta
 el HTML, ofrecer su generación desde el mapa existente, sin iniciarla por el
 mero pedido de abrir una vista. Si tampoco existe un mapa, ofrecer su creación.
-No abrir ni distribuir una vista docente como vista estudiantil.
+Para mostrar una vista al alumnado, verificar primero que las fuentes y sus autorizaciones siguen vigentes. Si se ha retirado una fuente, se ha restringido su acceso o queda una duda de identidad, reservar la vista previa y regenerar una exportación estudiantil solo tras resolverla.
 
 ## Regenerar vistas
 
 Este recorrido escribe solo el lector, el grafo o ambos, según lo solicitado.
-Conservar originales, Markdown, el registro `fuentes.json` (`_datos_internos/fuentes.json` en `curso-v3`), incidencias, log, configuración
+Conservar originales, Markdown, el registro `fuentes.json` (`_datos_internos/fuentes.json` en `curso-v4`), incidencias, log, configuración
 y `AGENTS.md`; no actualizar sus fechas o reglas como efecto secundario.
 Si la validación detecta fuentes retiradas, dependencias pendientes o errores
 que exigen editar la wiki, explicar qué mantenimiento hace falta y solicitar
@@ -44,7 +42,7 @@ identificada como desactualizada; no reparar contenidos silenciosamente.
 
 ## Preparar la vista
 
-Leer el [contrato del Mapa docente](../../../docs/MAPA-DOCENTE.md), `index.md` y el registro `fuentes.json` (`_datos_internos/fuentes.json` en `curso-v3`) del mapa seleccionado. Comprobar la selección y las exclusiones de la configuración del curso (`_datos_internos_proyecto/proyecto-docente.json` en `curso-v3`) cuando exista, las páginas registradas, sus fuentes y sus accesos. Detectar fuentes retiradas y dependencias directas o indirectas antes de generar HTML; no representar como actual una página pendiente de revisión por esa retirada. No descubrir ni añadir carpetas automáticamente para completar el grafo. Mantener intactos originales, páginas y metadatos al regenerar únicamente esta vista.
+Leer el [contrato del Mapa docente](../../../docs/MAPA-DOCENTE.md), `index.md` y el registro `fuentes.json` (`_datos_internos/fuentes.json` en `curso-v4`) del mapa seleccionado. Comprobar la selección y las exclusiones de la configuración del curso (`Gestión del proyecto/proyecto-docente.json` en `curso-v4`) cuando exista, las páginas registradas, sus fuentes y sus accesos. Detectar fuentes retiradas y dependencias directas o indirectas antes de generar HTML; no representar como actual una página pendiente de revisión por esa retirada. No descubrir ni añadir carpetas automáticamente para completar el grafo. Mantener intactos originales, páginas y metadatos al regenerar únicamente esta vista.
 
 El destino predeterminado es **docente**. En esa vista, distinguir visualmente las evaluaciones y mantenerlas ocultas al abrir mediante el filtro previsto, con posibilidad de mostrarlas. Esa ocultación es una preferencia de presentación: los datos siguen en el HTML docente y no constituyen un control de acceso.
 

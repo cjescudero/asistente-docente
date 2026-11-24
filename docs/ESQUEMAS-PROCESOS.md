@@ -28,7 +28,7 @@ flowchart TD
 
 El mapa facilita reutilizar conocimiento, pero una tarea con adjuntos suficientes
 puede hacerse sin él. En cualquier punto: **«¿Qué puedo hacer ahora?»** activa la
-ayuda contextual. Se usa español conciso por defecto, salvo otra indicación.
+ayuda contextual. Se puede pedir español simplificado junto con cualquiera de estos encargos.
 
 ## 1. Inicializar o adaptar el proyecto
 
@@ -45,12 +45,12 @@ flowchart TD
     C -->|No| G
     F --> H[Acordar fuentes y exclusiones]
     G --> H
-    H --> I[Preparar configuración, AGENTS y LEEME]
+    H --> I[Asignar espacios y preparar instrucciones]
     I --> J[Orientar y recomendar crear el mapa]
 ```
 
-**Resultado:** originales en `fuentes/`, productos en `materiales_generados/`,
-datos técnicos en `_datos_internos_proyecto/` y resultados en `resultados/`,
+**Resultado:** originales en `Material de la asignatura/`, productos en `Material generado por IA/`,
+datos técnicos cuando se necesiten en `Gestión del proyecto/` y resultados en `Entregas/`,
 según la organización acordada. La inicialización no crea el mapa automáticamente.
 [Skill de inicialización y adaptación](../skills/proyecto-docente-inicializacion-adaptacion/SKILL.md) ·
 [Organización del proyecto](PROYECTO-DOCENTE.md).
@@ -97,7 +97,7 @@ flowchart TD
     F --> I[Ofrecer preparar la recepción de entregas]
 ```
 
-**Resultado:** conjunto en `materiales_generados/actividades/<actividad>/`.
+**Resultado:** conjunto en `Material generado por IA/actividades/<actividad>/`.
 Se diseña teniendo en cuenta el acceso a IA, sin exigir su uso por defecto:
 justificaciones, contrastes y decisiones permiten observar comprensión.
 [Preparar actividades](../skills/actividades-preparacion/SKILL.md) · [Guía](ACTIVIDADES.md).
@@ -124,7 +124,7 @@ flowchart TD
 **Dónde poner los archivos:**
 
 ```text
-resultados/<actividad>/<convocatoria>/
+Entregas/<actividad>/<convocatoria>/
 ├── LEEME.md
 ├── recibidos/
 │   ├── entregas/
@@ -153,7 +153,7 @@ flowchart TD
     F --> G[Disponibles para combinar en cuestionarios]
 ```
 
-**Resultado:** `materiales_generados/bancos/<banco>/`, con archivos individuales,
+**Resultado:** `Material generado por IA/bancos/<banco>/`, con archivos individuales,
 sin ZIP por defecto. `01-A`, `01-B`… son variantes de una principal. Se parte de
 cuatro modelos y se proponen hasta cuatro variantes pertinentes por principal;
 el profesor ajusta la cantidad. Validar sintaxis no demuestra calidad pedagógica.
@@ -179,7 +179,7 @@ flowchart TD
     I --> J
 ```
 
-**Resultado:** `materiales_generados/cuestionarios/<cuestionario>/`, con
+**Resultado:** `Material generado por IA/cuestionarios/<cuestionario>/`, con
 `alumnado/`, `docente/` y `_datos_internos/`. Ningún modelo repite una principal;
 se busca diversidad sin prometer un óptimo. Emparejamiento queda fuera del
 circuito impreso. El GIFT contiene claves y permanece reservado al docente.

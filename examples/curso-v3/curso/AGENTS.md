@@ -12,8 +12,8 @@
   conversación y el estado pertinente del curso; no repetir decisiones conocidas.
   Resolver la duda sin iniciar tareas nuevas ni leer todo el corpus. Una aplicación
   por respuesta basta; continuar después el encargo ya autorizado.
-- Redactar los textos en español con la skill `espanol-conciso-redaccion`, salvo
-  indicación distinta del docente; conservar rigor, terminología y atribuciones.
+- Aplicar `espanol-conciso-redaccion` solo a petición del docente para el encargo
+  o cuando haya elegido ese estilo para toda la asignatura.
 - Usar subagentes cuando el anfitrión lo permita y haya subtareas independientes
   cuya paralelización aporte una ventaja: por ejemplo, evaluar entregas distintas
   o preparar feedback de estudiantes distintos. No fragmentar tareas pequeñas

@@ -7,11 +7,11 @@ description: Crear o actualizar un Mapa docente con wiki Markdown, lector HTML y
 
 Construir una wiki explicativa del conocimiento docente: desarrollar qué significan los conceptos, cómo se relacionan y cómo se aplican, con fuentes y límites trazables. No limitarla a un índice de documentos. El Mapa docente combina páginas Markdown estándar con un lector `index.html` y un grafo HTML derivados. No sustituye los originales ni genera automáticamente apuntes para estudiantes.
 
-Usar por defecto [español conciso](../espanol-conciso-redaccion/SKILL.md) en la
-conversación y los documentos, salvo que el profesor indique otro idioma o estilo.
-Respetar citas, identificadores y términos que deban conservarse literalmente.
+Combinar este encargo con [español conciso](../espanol-conciso-redaccion/SKILL.md) solo si el docente pide esa skill o el estilo de español simplificado, incluido un encargo expreso para todo el curso.
 
 ## Contexto del proyecto
+
+Resolver las rutas desde los espacios asignados del curso. Los nombres de carpeta de los ejemplos corresponden a la configuración inicial. Si hay varias raíces posibles, reutilizar la decisión del encargo o preguntar por el destino. Consultar el catálogo por identidad y versión cuando el trabajo dependa de materiales persistentes.
 
 Aplicar el [contrato común del proyecto](../../docs/PROYECTO-DOCENTE.md) solo en
 lo necesario para el encargo: respetar selección y exclusiones, consultar el
@@ -44,19 +44,13 @@ primer recorrido. Todos respetan selección, exclusiones y acceso reservado.
 
 ## Carpetas y estructura
 
-Leer las instrucciones aplicables, la configuración del curso (`_datos_internos_proyecto/proyecto-docente.json` en `curso-v3`) cuando exista y el [contrato del Mapa docente](../../docs/MAPA-DOCENTE.md). Reutilizar la selección explícita guardada y sus exclusiones. Si está pendiente, solicitar las carpetas concretas; si no hay configuración, usar las elegidas expresamente en el encargo o mapa anterior, sin ampliar el corpus. La configuración vigente prevalece sobre un inventario antiguo: una fuente retirada no vuelve a admitirse por aparecer en el registro `fuentes.json` (`_datos_internos/fuentes.json` en `curso-v3`) o en un enlace.
+Leer las instrucciones aplicables, la configuración del curso (`Gestión del proyecto/proyecto-docente.json` en `curso-v4`) cuando exista y el [contrato del Mapa docente](../../docs/MAPA-DOCENTE.md). Reutilizar la selección explícita guardada y sus exclusiones. Si está pendiente, solicitar las carpetas concretas; si no hay configuración, usar las elegidas expresamente en el encargo o mapa anterior, sin ampliar el corpus. La configuración vigente prevalece sobre un inventario antiguo: una fuente retirada no vuelve a admitirse por aparecer en el registro `fuentes.json` (`_datos_internos/fuentes.json` en `curso-v4`) o en un enlace.
 
-Guardar el mapa fuera del plugin, en `mapa-docente/` del curso. Conservar un mapa ya creado en su ubicación salvo que el docente acuerde reorganizarlo. Los originales permanecen donde están: no moverlos, editarlos ni renombrarlos. No crear copias de exportación. Reorganizar fuentes corresponde a una propuesta de migración aprobada, no a esta operación.
+Guardar una wiki nueva en la raíz de producción acordada (por ejemplo `Material generado por IA/mapa-docente/`). Resolver la ruta del mapa existente desde la configuración. Conservar las raíces originales del docente. Utilizar el catálogo de identidades para distinguir procedencia, acceso y consolidación. Solo entra en la wiki material de referencia seleccionado. Excluir entregas, gestión y salidas IA pendientes de consolidar.
 
-Distinguir la procedencia aportada (`fuentes/`) y creada (`materiales_generados/`) en las fichas,
-sin cambiar el formato del registro `fuentes.json` (`_datos_internos/fuentes.json` en `curso-v3`) ni deducir vigencia de esa ubicación.
-Admitir contenido de `materiales_generados/` solo si está seleccionado expresamente y tiene un
-`material-docente.json` válido con estado `revisado` o `listo-para-entregar`.
-Excluir borradores, resultados, carpetas `_datos_internos/` y registros `material-docente.json`; no añadir salidas por haberlas
-creado. Si un material vuelve a borrador, tratar sus páginas dependientes como
-pendientes de revisión, igual que al retirar una fuente.
+Antes de autorizar una actualización, comprobar qué fuentes se han añadido, trasladado o modificado. Al mantener el mapa, usar `catalog-sync`: revisar `knowledge.new_sources`, `changed_sources` y `affected_pages`. En las incorporaciones leer los contenidos pertinentes y sus localizadores, integrar la evidencia en las páginas afectadas y completar referencias. En cambios de contenido revisar las síntesis dependientes y sus accesos. Conservar el resto de las páginas. En traslados comprobados, la herramienta repara los enlaces. Regenerar lector y grafo tras una revisión de contenido y ejecutar `register-map` para vincular las fuentes y versiones revisadas. Para consultas, mostrar u orientar, usar los registros de solo lectura.
 
-El mapa contiene `LEEME.md`, `index.md`, el registro `fuentes.json` (`_datos_internos/fuentes.json` en `curso-v3`), `incidencias.md` y `log.md`. Sus páginas pueden organizarse bajo `contenidos/`, en subcarpetas `conceptos/`, `presentaciones/`, `apuntes/`, `practicas/` y `talleres/`; y bajo `reservado/`, en `evaluaciones/`, `soluciones/` o `conceptos/` cuando corresponda. Seguir la estructura detallada del contrato y conservar la organización existente si resulta coherente.
+El mapa contiene `LEEME.md`, `index.md`, el registro `fuentes.json` (`_datos_internos/fuentes.json` en `curso-v4`), `incidencias.md` y `log.md`. Sus páginas pueden organizarse bajo `contenidos/`, en subcarpetas `conceptos/`, `presentaciones/`, `apuntes/`, `practicas/` y `talleres/`; y bajo `reservado/`, en `evaluaciones/`, `soluciones/` o `conceptos/` cuando corresponda. Seguir la estructura detallada del contrato y conservar la organización existente si resulta coherente.
 
 Usar enlaces Markdown normales, como `[Guía del mapa](../../docs/MAPA-DOCENTE.md)`, con etiquetas legibles y rutas reales. No usar wikilinks, frontmatter obligatorio ni formatos propietarios. El mapa debe poder abrirse con lectores Markdown habituales, sin depender de Notion ni Obsidian. Un PDF es una copia estática opcional, no el formato principal del índice.
 
@@ -107,7 +101,7 @@ los cuestionarios anteriores, soluciones y rúbricas?». No preguntar archivo po
 archivo cuando una regla confirmada por carpeta o conjunto sea suficiente.
 Los nombres y el tipo documental son pistas, no permisos.
 
-Guardar las decisiones en `access` de fuentes y páginas del registro `fuentes.json` (`_datos_internos/fuentes.json` en `curso-v3`) y
+Guardar las decisiones en `access` de fuentes y páginas del registro `fuentes.json` (`_datos_internos/fuentes.json` en `curso-v4`) y
 resumir su alcance y excepciones en `LEEME.md` e `index.md`. Usar `estudiante`
 solo con autorización conocida; `docente` para uso del profesor y `restringido`
 para contenido expresamente reservado. Si falta respuesta, usar `desconocido`,
@@ -122,7 +116,7 @@ destinatario, no permisos efectivos ni indicadores de lectura completa.
 
 ## Flujo incremental
 
-1. Leer el mapa existente, si lo hay: `LEEME.md`, `index.md` y el registro `fuentes.json` (`_datos_internos/fuentes.json` en `curso-v3`). Comparar su alcance con la selección vigente. Detectar fuentes retiradas y páginas que dependan de ellas directa o indirectamente; registrar la revisión pendiente y no reutilizar su contenido como vigente. Revisar o retirar esos vínculos durante este mantenimiento autorizado antes de generar HTML. Inventariar solo archivos admitidos sin presentar el listado como lectura. No incorporar entregas, notas ni datos personales de estudiantes solo por encontrarlos junto al material docente.
+1. Leer el mapa existente, si lo hay: `LEEME.md`, `index.md` y el registro `fuentes.json` (`_datos_internos/fuentes.json` en `curso-v4`). Comparar su alcance con la selección vigente. Detectar fuentes retiradas y páginas que dependan de ellas directa o indirectamente; registrar la revisión pendiente y no reutilizar su contenido como vigente. Revisar o retirar esos vínculos durante este mantenimiento autorizado antes de generar HTML. Inventariar solo archivos admitidos sin presentar el listado como lectura. No incorporar entregas, notas ni datos personales de estudiantes solo por encontrarlos junto al material docente.
 2. Crear o actualizar el registro `schema_version: 2` según el contrato. `source_roots` asigna un ID a cada carpeta, mediante una ruta relativa al mapa; cada fuente indica su `root` y su `path` relativo a esa raíz. Mantener IDs estables, título, tipo, curso, vigencia, acceso, lectura, localizadores, ficha y huella opcional. `pages` registra las páginas del mapa con `path`, `title`, `kind`, `access` y `source_ids`. No inventar fuentes para completar un registro.
 3. Priorizar fuentes nuevas, cambiadas o necesarias para el encargo. Leer el contenido y anotar páginas, diapositivas, secciones, celdas o intervalos realmente revisados. Un archivo listado queda `pendiente`; una lectura incompleta, `parcial`. Usar `completa` solo tras revisar la fuente completa, incluidos los elementos visuales necesarios. Si no se puede interpretar, usar `no_legible` y registrar el motivo.
 4. Contrastar texto e imágenes cuando haya figuras, tablas, ecuaciones o una disposición de diapositivas que aporte significado. La extracción de texto no acredita haber entendido esos elementos. Completar lo independiente y describir lo pendiente sin inventarlo.
@@ -131,7 +125,7 @@ destinatario, no permisos efectivos ni indicadores de lectura completa.
 7. Separar tipo documental y acceso. Un cuestionario puede ser histórico o vigente, público o reservado; el tipo no determina por sí solo quién puede verlo. No trasladar soluciones ni conceptos derivados de evaluaciones reservadas a páginas para estudiantes. Registrar contradicciones, fuentes ausentes y materiales posiblemente desactualizados en `incidencias.md`, con evidencia y decisiones pendientes.
 8. Sincronizar registro, páginas e índice. Registrar en `log.md` fecha, fuentes procesadas, cambios y límites. Conservar contenido comprobado y no regenerar páginas ajenas al cambio sin necesidad.
 9. Validar el mapa, su selección y sus dependencias; resolver las incidencias bloqueantes antes de generar derivados. Solo tras superar la validación, seguir la [referencia de generación de vistas](references/visualizacion.md) para generar o actualizar `index.html` junto a `index.md` y el grafo HTML. El lector empieza por el índice, renderiza las páginas registradas y permite navegar entre ellas; el grafo enlaza sus documentos relacionados. Esta generación forma parte del cierre de crear o actualizar el mapa; no presentar derivados antiguos como representación actual.
-10. Integrar el mapa real en las instrucciones del proyecto según el apartado siguiente. Hacerlo también cuando el mapa se cree directamente, sin haber ejecutado la skill de iniciar el proyecto. La generación pendiente de HTML o grafo no impide enlazar un índice Markdown válido. Si existe la configuración del curso (`_datos_internos_proyecto/proyecto-docente.json` en `curso-v3`), registrar su carpeta mediante `register-map` una vez que `index.md` exista y sea válido; no cambiar la selección al registrarla.
+10. Integrar el mapa real en las instrucciones del proyecto según el apartado siguiente. Hacerlo también cuando el mapa se cree directamente, sin haber ejecutado la skill de iniciar el proyecto. La generación pendiente de HTML o grafo no impide enlazar un índice Markdown válido. Si existe la configuración del curso (`Gestión del proyecto/proyecto-docente.json` en `curso-v4`), registrar su carpeta mediante `register-map` una vez que `index.md` exista y sea válido; no cambiar la selección al registrarla.
 
 ## Integrar la referencia en AGENTS.md
 
@@ -152,7 +146,7 @@ el alcance estén claros. Sustituir sus campos con datos comprobados:
 - `{{ORIGENES}}`: carpetas de origen ya autorizadas.
 
 Resolver entrada y orígenes respecto a la carpeta de `AGENTS.md`; recalcular las
-rutas recuperadas del registro `fuentes.json` (`_datos_internos/fuentes.json` en `curso-v3`), que son relativas a la wiki. Comprobar que
+rutas recuperadas del registro `fuentes.json` (`_datos_internos/fuentes.json` en `curso-v4`), que son relativas a la wiki. Comprobar que
 los enlaces llevan a los archivos reales, sin introducir rutas de instalación.
 
 Conservar las instrucciones anteriores y las ediciones del profesor. Integrar

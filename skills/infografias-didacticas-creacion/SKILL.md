@@ -7,11 +7,11 @@ description: Crear imágenes didácticas con estilo de boceto a mano para explic
 
 Transformar el contenido en una explicación visual con fondo crema, tinta negra irregular, pasteles suaves y espacio en blanco. Por defecto, crear una imagen 16:9 de apoyo a una exposición oral por unidad lógica, con texto en español. Una instrucción explícita de formato, idioma, detalle o estilo prevalece.
 
-Usar por defecto [español conciso](../espanol-conciso-redaccion/SKILL.md) en la
-conversación y los documentos, salvo que el profesor indique otro idioma o estilo.
-Respetar citas, identificadores y términos que deban conservarse literalmente.
+Combinar este encargo con [español conciso](../espanol-conciso-redaccion/SKILL.md) solo si el docente pide esa skill o el estilo de español simplificado, incluido un encargo expreso para todo el curso.
 
 ## Contexto del proyecto
+
+Resolver las rutas desde los espacios asignados del curso. Los nombres de carpeta de los ejemplos corresponden a la configuración inicial. Si hay varias raíces posibles, reutilizar la decisión del encargo o preguntar por el destino. Consultar el catálogo por identidad y versión cuando el trabajo dependa de materiales persistentes.
 
 Aplicar el [contrato común del proyecto](../../docs/PROYECTO-DOCENTE.md) solo en
 lo necesario para el encargo: respetar selección y exclusiones, consultar el
@@ -26,7 +26,7 @@ Transferirle el objetivo, las decisiones conocidas y los resultados de esta tare
 tras resolver la duda, retomar el encargo ya autorizado.
 
 
-En `curso-v3`, guardar cada conjunto visual en `materiales_generados/materiales/<id>/`,
+En `curso-v4`, guardar cada conjunto visual en `Material generado por IA/materiales/<id>/`,
 con su `_datos_internos/material-docente.json` de tipo `material` y estado visible en `LEEME.md`.
 Separar imágenes para el alumnado de notas docentes cuando las haya. Un prompt
 pendiente no acredita una diapositiva creada ni un conjunto listo para entregar.

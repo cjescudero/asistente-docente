@@ -10,9 +10,7 @@ de skills ni leer manuales. Consultar el [catálogo](../../docs/CATALOGO.md) par
 enrutar un encargo, y el [contrato del curso](../../docs/PROYECTO-DOCENTE.md) para
 interpretar sus carpetas.
 
-Usar por defecto [español conciso](../espanol-conciso-redaccion/SKILL.md) en la
-conversación y los documentos, salvo que el profesor indique otro idioma o estilo.
-Respetar citas, identificadores y términos que deban conservarse literalmente.
+Combinar este encargo con [español conciso](../espanol-conciso-redaccion/SKILL.md) solo si el docente pide esa skill o el estilo de español simplificado, incluido un encargo expreso para todo el curso.
 
 ## Activación como ayuda inline
 
@@ -55,14 +53,14 @@ un banco está validado o unas notas se han importado en Moodle.
 ## Reconocer el estado sin leerlo todo
 
 1. Identificar la raíz y leer las instrucciones aplicables. Consultar
-   la configuración en `_datos_internos_proyecto/proyecto-docente.json`. Si no se conoce la raíz, preguntar por ella
+   la asignación de espacios en `AGENTS.md` y, cuando exista, la configuración en `Gestión del proyecto/proyecto-docente.json`. Si no se conoce la raíz, preguntar por ella
    solo si hace falta para resolver esa duda. Ofrecer lo que pueda contestarse
    con la conversación y documentación disponible; no bloquear una explicación
    de formatos por desconocer la carpeta. No confundir la instalación del plugin
    o su repositorio de desarrollo con la raíz de un curso.
 2. Revisar solo los índices y registros necesarios: índice del mapa registrado,
-   catálogo en `materiales_generados/bancos/_datos_internos/`, registros `_datos_internos/material-docente.json` y actividades,
-   manifiestos de cuestionarios y nombres de lotes en `resultados/`. Leer cabeceras o informes de ejecución solo
+   catálogo en `Material generado por IA/bancos/_datos_internos/`, registros `_datos_internos/material-docente.json` y actividades,
+   manifiestos de cuestionarios y nombres de lotes en `Entregas/`. Leer cabeceras o informes de ejecución solo
    cuando hagan falta para verificar un indicio. No leer entregas ni calificaciones
    para dar una orientación inicial. La mera presencia de archivos no demuestra
    que estén revisados, actualizados, accesibles o completos.
@@ -89,7 +87,7 @@ profesor, qué entradas faltan y una petición que pueda usar.
 | Con mapa | «Consulta el mapa para localizar materiales de este tema», «Muéstrame el mapa» o «Actualízalo con estas fuentes autorizadas». Un índice existente no acredita que sus fuentes estén al día. |
 | Con materiales | «Diseñemos una actividad para evaluar estos conocimientos» o «Crea bancos vinculados a estos materiales». Preguntar solo por objetivos, contexto o antecedentes que falten. |
 | Con bancos validados | «Prepara modelos de cuestionario sobre estos temas». Por defecto serán cuatro, salvo una cantidad ya indicada. Se necesitan título, cobertura, cantidades, tipos y dificultad; revisar la procedencia antes de prometer equilibrio. |
-| Con actividad y sin entregas | Ofrecer «Prepara la carpeta para recibir las entregas de esta actividad». Explicar `resultados/<actividad>/<convocatoria>/`, trabajos en `recibidos/entregas/`, CSV Moodle en `recibidos/` y salidas en `correccion/`. Si la recepción ya existe, mostrarla y sus entradas pendientes, sin recrearla. |
+| Con actividad y sin entregas | Ofrecer «Prepara la carpeta para recibir las entregas de esta actividad». Explicar `Entregas/<actividad>/<convocatoria>/`, trabajos en `recibidos/entregas/`, CSV Moodle en `recibidos/` y salidas en `correccion/`. Si la recepción ya existe, mostrarla y sus entradas pendientes, sin recrearla. |
 | Con lote identificado | «Evalúa este lote con los criterios de la actividad». Requiere enunciado y entregables, rúbrica o criterios suficientes, entregas e identificación explícita. Para devolver notas, también una hoja Moodle y sus columnas. |
 | Con detalle de resultados comprobado | «Añade feedback a estas calificaciones». Requiere detalle por pregunta, manifiesto y hoja Moodle. Una nota global no permite deducir dificultades conceptuales. |
 
@@ -105,7 +103,8 @@ adjuntos, sin insistir en la creación del mapa.
 
 Presentar también, cuando sean pertinentes, las tres ayudas complementarias:
 **infografías y diapositivas visuales individuales**, **apuntes de estudio** y
-**español claro inspirado en ASD-STE100**. No prometer presentaciones editables,
+**español simplificado a petición del docente**. Si quiere combinar dos skills,
+mostrar una petición como «Crea la wiki en español simplificado». No prometer presentaciones editables,
 certificación del estándar ni imágenes o PDF cuando falten esas capacidades.
 
 ## Límites y continuidad

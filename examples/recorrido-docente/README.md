@@ -63,7 +63,7 @@ que pueda comprobar:
 Si una fase ya está acreditada, no la propondrá como pendiente. Si solo hay
 indicios o falta una entrada, lo explicará; ninguna sugerencia inicia otra tarea.
 También puedes pedir apuntes e infografías o diapositivas visuales individuales.
-El español claro se aplica por defecto, salvo indicación del profesor.
+El profesor puede pedir el estilo de español simplificado.
 
 ## Reproducir las utilidades
 

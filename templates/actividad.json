@@ -10,14 +10,14 @@
   "sources": [
     {
       "id": "fuentes-vigentes",
-      "path": "../../../../fuentes/teoria/testimonios.md",
+      "path": "../../../../Material de la asignatura/Tema 1/testimonios.md",
       "locator": "Apartados Testimonio A y Testimonio B",
       "role": "current",
       "audience": "estudiante"
     },
     {
       "id": "actividad-anterior",
-      "path": "../../../../archivo/actividad-anterior.md",
+      "path": "../../../../Material de la asignatura/Cursos anteriores/actividad-anterior.md",
       "locator": "Tareas y duración",
       "role": "inspiration",
       "audience": "docente"
@@ -36,11 +36,11 @@
       }
     ],
     "rubric": {
-      "path": "rubrica.md",
+      "path": "../docente/rubrica.md",
       "audience": "docente"
     },
     "teaching_guide": {
-      "path": "guia-correccion.md",
+      "path": "../docente/guia-correccion.md",
       "audience": "docente"
     }
   }

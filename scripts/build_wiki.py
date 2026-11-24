@@ -146,7 +146,7 @@ def _page_record(page, guide, output, known, roots, protected):
             "searchText": text, "headings": headings}
 
 
-def build_wiki(guide_dir, output=None, graph=None):
+def build_wiki(guide_dir, output=None, graph=None, *, verified_files=None):
     """Render registered v2 pages and the four administrative pages as one HTML.
 
     This is a teacher-only reader, including reserved documents. It never embeds
@@ -155,7 +155,7 @@ def build_wiki(guide_dir, output=None, graph=None):
     """
     try:
         guide = Path(guide_dir).expanduser().resolve()
-        validation = validate_library(guide)
+        validation = validate_library(guide, verified_files=verified_files)
         if validation["status"] != "ok":
             raise WikiError("Mapa inválido: " + "; ".join(validation["errors"]))
         registry = json.loads(registry_path(guide).read_text(encoding="utf-8-sig"))

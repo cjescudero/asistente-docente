@@ -7,9 +7,7 @@ description: Combinar bancos GIFT de materiales o actividades para preparar mode
 
 Generar todos los derivados desde una única representación ordenada del modelo: pregunta impresa, opción visible, puntuación y correspondencia Moodle deben coincidir.
 
-Usar por defecto [español conciso](../espanol-conciso-redaccion/SKILL.md) en la
-conversación y los documentos, salvo que el profesor indique otro idioma o estilo.
-Respetar citas, identificadores y términos que deban conservarse literalmente.
+Combinar este encargo con [español conciso](../espanol-conciso-redaccion/SKILL.md) solo si el docente pide esa skill o el estilo de español simplificado, incluido un encargo expreso para todo el curso.
 
 ## Puntuaciones e instrucciones
 
@@ -27,6 +25,8 @@ no imprimirlas como instrucciones del alumnado.
 
 ## Contexto del proyecto
 
+Resolver las rutas desde los espacios asignados del curso. Los nombres de carpeta de los ejemplos corresponden a la configuración inicial. Si hay varias raíces posibles, reutilizar la decisión del encargo o preguntar por el destino. Consultar el catálogo por identidad y versión cuando el trabajo dependa de materiales persistentes.
+
 Aplicar el [contrato común del proyecto](../../docs/PROYECTO-DOCENTE.md) solo en
 lo necesario para el encargo: respetar selección y exclusiones, consultar el
 índice del mapa existente y comprobar las entradas requeridas. Un texto o
@@ -39,7 +39,7 @@ sobre siguientes pasos y posibilidades, invocar
 Transferirle el objetivo, las decisiones conocidas y los resultados de esta tarea;
 tras resolver la duda, retomar el encargo ya autorizado.
 
-En `curso-v3`, guardar cada cuestionario en `materiales_generados/cuestionarios/<id>/`, con modelos
+En `curso-v4`, guardar cada cuestionario en `Material generado por IA/cuestionarios/<id>/`, con modelos
 imprimibles en `alumnado/`, solucionarios y GIFT en `docente/`, y selección,
 manifiesto, informe y bancos congelados en `_datos_internos/`. Mantener
 `_datos_internos/material-docente.json` y `LEEME.md` con el estado visible.
@@ -105,7 +105,7 @@ acordadas; resolver con el docente cualquier mínimo de puntuación pendiente.
 1. Recuperar lo ya conocido y preguntar únicamente por lo que falte: título, temas o actividades que evaluar, número de preguntas y modelos, tipos admitidos, dificultad y restricciones. Aplicar los cuatro modelos predeterminados y proponer la cantidad y duración conforme al apartado anterior; no asumir una asignatura técnica.
 2. Localizar los bancos asociados a esos materiales en el [catálogo](../../docs/BANCOS.md), validar sus archivos y leer sus objetivos y metadatos. Preparar un reparto de cobertura y dificultad común a todos los modelos y presentarlo al profesor antes de generar. Un banco anterior puede usarse como entrada única; si faltan metadatos, solicitar completarlos antes de prometer equilibrio por contenido o dificultad.
 3. Comprobar disponibilidad para cada cuota. La selección debe ser reproducible mediante semilla, sin duplicados dentro de un modelo y con preferencia por familias menos usadas, variantes menos usadas y menor solapamiento. El informe expresa el equilibrio y reutilización obtenidos; no afirmar que sean un óptimo matemático. Ante un fondo insuficiente, proponer ajustar el reparto o ampliar bancos con la skill correspondiente. No relajar cuotas ni inventar preguntas durante la composición.
-4. Preparar una salida nueva fuera del plugin y usar `build-cuestionarios` con el catálogo y la selección acordados conforme a [Bancos y composición](../../docs/BANCOS.md). En `curso-v3`, guardar la selección en `<cuestionario>/_datos_internos/seleccion.json` y añadir `--layout curso-v3`; conservar las rutas relativas del manifiesto. Se conserva la entrada de un GIFT: `python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-cuestionarios banco.gift --metadata metadatos.json --output materiales_generados/cuestionarios/cuestionario-01 --title "Cuestionario de fuentes" --models 4 --questions 5 --seed 42 --layout curso-v3`. Para catálogo, indicar además `--catalog <ruta>` y `--selection materiales_generados/cuestionarios/cuestionario-01/_datos_internos/seleccion.json`. Resolver entradas y salidas en el curso; no reorganizar archivos después de generar el manifiesto.
+4. Preparar una salida nueva fuera del plugin y usar `build-cuestionarios` con el catálogo y la selección acordados conforme a [Bancos y composición](../../docs/BANCOS.md). En `curso-v4`, guardar la selección en `<cuestionario>/_datos_internos/seleccion.json` y añadir `--layout curso-v4`; conservar las rutas relativas del manifiesto. Se conserva la entrada de un GIFT: `python "$ASISTENTE_DOCENTE/scripts/docencia.py" build-cuestionarios banco.gift --metadata metadatos.json --output Material generado por IA/cuestionarios/cuestionario-01 --title "Cuestionario de fuentes" --models 4 --questions 5 --seed 42 --layout curso-v4`. Para catálogo, indicar además `--catalog <ruta>` y `--selection Material generado por IA/cuestionarios/cuestionario-01/_datos_internos/seleccion.json`. Resolver entradas y salidas en el curso; no reorganizar archivos después de generar el manifiesto.
 5. Conservar todos los bancos utilizados congelados, sus huellas, metadatos y manifiesto junto con los modelos. La procedencia distingue banco y pregunta original aunque dos bancos reutilicen un mismo título GIFT. No reconstruir categorías, numeración, opciones ni pesos por semejanza de texto o leyendo solo un PDF.
 6. Revisar cada modelo: número y orden de preguntas, letras, unidades, fórmulas, saltos de página y legibilidad. Contrastar papel, solucionario y GIFT con el manifiesto. La respuesta correcta debe permanecer en su posición, también en verdadero/falso y selección múltiple.
 7. Entregar PDF de estudiante y solucionario en archivos claramente separados, GIFT ofuscado, manifiesto e informe de cobertura, dificultad y reutilización. Los HTML son derivados útiles para inspección; `--html-only` no completa una petición de PDF.

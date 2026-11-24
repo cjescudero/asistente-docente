@@ -15,6 +15,11 @@ CONFIG_NAME = "proyecto-docente.json"
 INTERNAL_PROJECT_DIR = "_datos_internos_proyecto"
 INTERNAL_MATERIAL_DIR = "_datos_internos"
 CONFIG_V3 = f"{INTERNAL_PROJECT_DIR}/{CONFIG_NAME}"
+MANAGEMENT_DIR = "Gestión del proyecto"
+CONFIG_V4 = f"{MANAGEMENT_DIR}/{CONFIG_NAME}"
+COURSE_MARKER = "<!-- asistente-docente:curso-v4 -->"
+DEFAULT_SPACES = {"sources": ["Material de la asignatura"], "generated": ["Material generado por IA"],
+                  "submissions": ["Entregas"]}
 IGNORED_FILENAMES = {".gitkeep", ".DS_Store"}
 PLUGIN_ROOT = Path(__file__).resolve().parents[1]
 START_MARKER = "<!-- asistente-docente:proyecto:inicio -->"
@@ -46,8 +51,8 @@ AGENTS_BLOCK_V3 = """<!-- asistente-docente:proyecto:inicio -->
   conversación y el estado pertinente del curso; no repetir decisiones conocidas.
   Resolver la duda sin iniciar tareas nuevas ni leer todo el corpus. Una aplicación
   por respuesta basta; continuar después el encargo ya autorizado.
-- Redactar los textos en español con la skill `espanol-conciso-redaccion`, salvo
-  indicación distinta del docente; conservar rigor, terminología y atribuciones.
+- Aplicar `espanol-conciso-redaccion` solo a petición del docente para el encargo
+  o cuando haya elegido ese estilo para toda la asignatura.
 - Usar subagentes cuando el anfitrión lo permita y haya subtareas independientes
   cuya paralelización aporte una ventaja: por ejemplo, evaluar entregas distintas
   o preparar feedback de estudiantes distintos. No fragmentar tareas pequeñas
@@ -168,7 +173,7 @@ Al finalizar cada tarea, el agente propondrá pasos adecuados a los resultados
 comprobados. Si solo encuentra indicios, los señalará y verificará lo necesario;
 una carpeta vacía no demuestra que una fase esté hecha. Si faltan entregas o
 respuestas, explicará qué debes aportar antes de corregir o generar feedback.
-Por defecto redactará en español claro, inspirado en ASD-STE100, salvo que indiques otra preferencia.
+Puedes combinar tareas y estilos en una petición, por ejemplo «Crea la wiki en español simplificado».
 
 Las entregas y exportaciones originales de Moodle se guardan en
 `resultados/<actividad>/<convocatoria>/recibidos/`; los informes, las copias de
@@ -193,10 +198,15 @@ si su aplicación no lo carga, pídele expresamente que lo lea.
 
 def project_directories(config: dict) -> tuple[str, ...]:
     """Directorios del proyecto docente actual."""
+    if config["structure"] == "curso-v4":
+        return tuple(path for paths in config["spaces"].values() for path in paths)
     return PROJECT_DIRECTORIES_V3
 
 
 def _permanent_exclusions(config: dict) -> tuple[str, ...]:
+    if config["structure"] == "curso-v4":
+        return (*config["spaces"]["submissions"], *config["spaces"]["generated"],
+                MANAGEMENT_DIR, INTERNAL_PROJECT_DIR, ".agents")
     return PERMANENT_EXCLUSIONS
 
 
@@ -237,8 +247,12 @@ def _has_symlink(root: Path, path: Path) -> bool:
     current = root
     for part in path.relative_to(root).parts:
         current /= part
-        if current.is_symlink():
+        if current.is_symlink() or getattr(current, "is_junction", lambda: False)():
             return True
+        if os.name == "nt" and current.exists():
+            import stat
+            if getattr(current.lstat(), "st_reparse_tag", None) == stat.IO_REPARSE_TAG_MOUNT_POINT:
+                return True
     return False
 
 
@@ -270,6 +284,9 @@ def _within_relative(path: str, parent: str) -> bool:
 def _validate_config(root: Path, data: dict) -> dict:
     if not isinstance(data, dict) or type(data.get("schema_version")) is not int or data["schema_version"] != 1:
         raise ValueError("schema_version debe ser 1.")
+    if data.get("structure") == "curso-v4":
+        from .spaces import validate_config
+        return validate_config(root, data)
     if data.get("structure") != "curso-v3":
         raise ValueError("structure debe ser 'curso-v3'.")
     if data.get("questionnaire_paths") != QUESTIONNAIRE_PATHS_V3:
@@ -376,6 +393,9 @@ def load_project(root) -> dict:
     path = _root(root)
     config_file = project_config_path(path)
     if config_file is None:
+        if _implicit_v4(path):
+            from .spaces import defaults
+            return _validate_config(path, defaults())
         raise ValueError(f"Falta {CONFIG_NAME}; inicia el proyecto o indica la raíz correcta.")
     try:
         data = json.loads(config_file.read_text(encoding="utf-8"), object_pairs_hook=_unique_json)
@@ -384,13 +404,27 @@ def load_project(root) -> dict:
     return _validate_config(path, data)
 
 
+def _implicit_v4(root: Path) -> bool:
+    agents = root / "AGENTS.md"
+    if agents.is_symlink() or not agents.is_file():
+        return False
+    return COURSE_MARKER in agents.read_text(encoding="utf-8").splitlines()
+
+
 def project_config_path(root: Path) -> Path | None:
-    """Encontrar únicamente la configuración del formato actual."""
+    """Localizar el contrato activo. La adopción v3 conserva la configuración anterior."""
     root = _root(root)
     if _safe_path(root, CONFIG_NAME).exists():
         raise ValueError(f"{CONFIG_NAME} en la raíz entra en conflicto con {CONFIG_V3}; aclara su función antes de iniciar el proyecto.")
-    path = _safe_path(root, CONFIG_V3)
-    return path if path.exists() or path.is_symlink() else None
+    v3 = _safe_path(root, CONFIG_V3)
+    v4 = _safe_path(root, CONFIG_V4)
+    if v4.exists():
+        if v3.exists():
+            data = json.loads(v4.read_text(encoding="utf-8"), object_pairs_hook=_unique_json)
+            if not isinstance(data, dict) or data.get("adopted_from") != CONFIG_V3:
+                raise ValueError("Dos configuraciones sin registro de adopción: aclarar con el docente.")
+        return v4
+    return v3 if v3.exists() else None
 
 
 def find_project(path) -> Path | None:
@@ -399,12 +433,12 @@ def find_project(path) -> Path | None:
     if candidate.is_file():
         candidate = candidate.parent
     for parent in (candidate, *candidate.parents):
-        if parent.name == INTERNAL_PROJECT_DIR:
+        if parent.name in (INTERNAL_PROJECT_DIR, MANAGEMENT_DIR):
             continue
         if _inside(parent, PLUGIN_ROOT):
             continue
         control = project_config_path(parent)
-        if control is not None:
+        if control is not None or _implicit_v4(parent):
             return parent
     return None
 
@@ -435,6 +469,9 @@ def _source_path_allowed(root, config: dict, file) -> tuple[Path, Path] | None:
             return None
         relative = candidate.relative_to(root).as_posix()
         sources = config["sources"]
+        if config["structure"] == "curso-v4":
+            from .spaces import corpus_policy
+            sources = corpus_policy(root, config)
         if sources["selected"] is not True:
             return None
         excluded = list(_permanent_exclusions(config)) + sources["exclude"]
@@ -442,6 +479,12 @@ def _source_path_allowed(root, config: dict, file) -> tuple[Path, Path] | None:
             excluded.append(config["map"])
         if any(_within_relative(relative, item) for item in excluded):
             return None
+        if config["structure"] == "curso-v4":
+            from .spaces import reserved, under
+            if any(under(relative, item) for item in excluded) or reserved(relative):
+                return None
+            if not any(_within_relative(relative, r) for r in config["spaces"]["sources"]):
+                return None
         if INTERNAL_MATERIAL_DIR in Path(relative).parts:
             return None
         if any(_within_relative(relative, item) for item in sources["include"]):
@@ -457,6 +500,9 @@ def source_allowed(root, config: dict, file) -> bool:
     if paths is None:
         return False
     root, candidate = paths
+    if config["structure"] == "curso-v4":
+        from .spaces import admitted_identity
+        return admitted_identity(root, candidate)
     created = root / "materiales_generados"
     if not _inside(candidate, created):
         return True
@@ -517,6 +563,8 @@ def initialize_project(root, *, include=None, exclude=None, dry_run=False) -> di
     """
     root = _root(root)
     existing_config = project_config_path(root)
+    if existing_config == root / CONFIG_V4 or _implicit_v4(root):
+        return initialize_course(root, include=include, exclude=exclude, dry_run=dry_run)
     config_relative = existing_config.relative_to(root).as_posix() if existing_config else CONFIG_V3
     controls = {}
     for name in (CONFIG_NAME, "AGENTS.md", "LEEME.md"):
@@ -652,17 +700,23 @@ def check_project(root) -> dict:
     try:
         root = _root(root)
         report["root"] = str(root)
-        if project_config_path(root) is None:
+        if project_config_path(root) is None and not _implicit_v4(root):
             report["status"] = "incomplete"
             report["warnings"].append(f"Falta {CONFIG_NAME}; inicia el proyecto o proporciona las entradas del encargo.")
             return report
         config = load_project(root)
+        if config["structure"] == "curso-v4":
+            from .spaces import corpus_policy
+            policy = corpus_policy(root, config)
+            config["sources"] = policy
+            if policy.get("review"):
+                report["warnings"].append("Confirmar las identidades de la selección: " + ", ".join(policy["review"]))
         report["config"] = config
         for relative in project_directories(config):
             path = _safe_path(root, relative)
             if not path.is_dir():
                 report["missing_directories"].append(relative)
-        for name in ("AGENTS.md", "LEEME.md"):
+        for name in (("AGENTS.md",) if config["structure"] == "curso-v4" else ("AGENTS.md", "LEEME.md")):
             path = _safe_path(root, name)
             if not path.is_file():
                 report["warnings"].append(f"Falta {name}.")
@@ -694,3 +748,10 @@ def plan_migration(root, moves) -> dict:
     """Entrada común para la propuesta no mutante de migración."""
     from .migration import plan_migration as prepare
     return prepare(root, moves)
+
+
+def initialize_course(root, *, spaces=None, include=None, exclude=None, dry_run=False, adopt_v3=False):
+    """Preparar o adoptar un curso v4. Ver initialize_project para el contrato v3."""
+    from .spaces import initialize
+    return initialize(root, spaces=spaces, include=include, exclude=exclude,
+                      dry_run=dry_run, adopt_v3=adopt_v3)

@@ -34,6 +34,8 @@ destinadas al alumnado.
 La utilidad admite CSV. Si solo tienes un `.xlsx`, indícalo: habrá que obtener
 el CSV de Moodle o convertir una copia verificando sus identificadores y datos.
 
+El lote pertenece al espacio privado de Entregas. Conserva la hoja y las correspondencias personales dentro del lote.
+
 ## Cómo pedir la corrección
 
 «Evalúa las entregas de {{titulo_actividad}}, convocatoria {{convocatoria}},

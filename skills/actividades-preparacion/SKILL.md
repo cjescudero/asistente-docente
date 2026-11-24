@@ -7,11 +7,11 @@ description: Diseñar mediante diálogo actividades, prácticas, talleres, casos
 
 Convertir objetivos de aprendizaje y fuentes autorizadas en una actividad que el estudiante pueda realizar y el profesor pueda evaluar con criterios explícitos.
 
-Usar por defecto [español conciso](../espanol-conciso-redaccion/SKILL.md) en la
-conversación y los documentos, salvo que el profesor indique otro idioma o estilo.
-Respetar citas, identificadores y términos que deban conservarse literalmente.
+Combinar este encargo con [español conciso](../espanol-conciso-redaccion/SKILL.md) solo si el docente pide esa skill o el estilo de español simplificado, incluido un encargo expreso para todo el curso.
 
 ## Contexto del proyecto
+
+Resolver las rutas desde los espacios asignados del curso. Los nombres de carpeta de los ejemplos corresponden a la configuración inicial. Si hay varias raíces posibles, reutilizar la decisión del encargo o preguntar por el destino. Consultar el catálogo por identidad y versión cuando el trabajo dependa de materiales persistentes.
 
 Aplicar el [contrato común del proyecto](../../docs/PROYECTO-DOCENTE.md) solo en
 lo necesario para el encargo: respetar selección y exclusiones, consultar el
@@ -25,7 +25,7 @@ sobre siguientes pasos y posibilidades, invocar
 Transferirle el objetivo, las decisiones conocidas y los resultados de esta tarea;
 tras resolver la duda, retomar el encargo ya autorizado.
 
-En `curso-v3`, guardar cada actividad en `materiales_generados/actividades/<id>/`, con
+En `curso-v4`, guardar cada actividad en `Material generado por IA/actividades/<id>/`, con
 `alumnado/` para enunciado y plantillas, `docente/` para rúbrica y guía, y
 `_datos_internos/actividad.json` para el registro. Mantener `_datos_internos/material-docente.json` y `LEEME.md` con el estado
 visible en la raíz de la actividad. Un borrador conserva su ubicación al revisarse.
@@ -73,7 +73,7 @@ Cuando se acepte, seguir [Recepción y corrección](../../docs/ACTIVIDADES.md#re
 reutilizar el identificador estable y el mismo nombre de carpeta de la actividad;
 aclarar diferencias entre ambos antes de crear otro lote. Reutilizar la convocatoria
 conocida; si falta y no hay ambigüedad, usar `ordinaria` e indicarlo. Preguntar
-si existen lotes o datos que impidan elegir sin riesgo de mezclar entregas. Crear `resultados/<actividad>/<convocatoria>/recibidos/entregas/`,
+si existen lotes o datos que impidan elegir sin riesgo de mezclar entregas. Crear `Entregas/<actividad>/<convocatoria>/recibidos/entregas/`,
 `correccion/` y un `LEEME.md` del lote adaptado desde la
 [plantilla de recepción](../../templates/recepcion-actividad.md).
 

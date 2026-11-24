@@ -58,7 +58,7 @@ Al finalizar cada tarea, el agente propondrá pasos adecuados a los resultados
 comprobados. Si solo encuentra indicios, los señalará y verificará lo necesario;
 una carpeta vacía no demuestra que una fase esté hecha. Si faltan entregas o
 respuestas, explicará qué debes aportar antes de corregir o generar feedback.
-Por defecto redactará en español claro, inspirado en ASD-STE100, salvo que indiques otra preferencia.
+Puedes combinar tareas y estilos en una petición, por ejemplo «Crea la wiki en español simplificado».
 
 Las entregas y exportaciones originales de Moodle se guardan en
 `resultados/<actividad>/<convocatoria>/recibidos/`; los informes, las copias de

@@ -132,7 +132,7 @@ def _wiki_links(payload, registry, graph_output, wiki_output):
     payload["wikiHref"] = document_href("index.md", graph_output, wiki_output)
 
 
-def build_graph(guide_dir, output, audience="docente", wiki_output=None):
+def build_graph(guide_dir, output, audience="docente", wiki_output=None, *, verified_files=None):
     """Validate, filter and write one standalone HTML; return visible counts.
 
     Existing files are replaced only when they start with this generator's
@@ -146,7 +146,7 @@ def build_graph(guide_dir, output, audience="docente", wiki_output=None):
         raise GraphError("El lector de la wiki es de uso docente; no se incluye en el grafo para estudiantes.")
     try:
         guide = Path(guide_dir).expanduser().resolve()
-        validation = validate_library(guide)
+        validation = validate_library(guide, verified_files=verified_files)
         if validation["status"] != "ok":
             raise GraphError("Biblioteca inválida: " + "; ".join(validation["errors"]))
         registry = json.loads(registry_path(guide).read_text(encoding="utf-8-sig"))
@@ -180,7 +180,7 @@ def build_graph(guide_dir, output, audience="docente", wiki_output=None):
             wiki_destination = Path(wiki_output).expanduser().resolve()
             if wiki_destination == destination:
                 raise GraphError("El lector de la wiki y el grafo necesitan archivos de salida diferentes.")
-            wiki_summary = build_wiki(guide, wiki_output, graph=destination)
+            wiki_summary = build_wiki(guide, wiki_output, graph=destination, verified_files=verified_files)
             _wiki_links(payload, registry, destination, wiki_destination)
         embedded = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
         embedded = embedded.replace("<", "\\u003c").replace("\u2028", "\\u2028").replace("\u2029", "\\u2029")

@@ -1,8 +1,8 @@
 # Asistente docente
 
 Doce skills para organizar fuentes, crear materiales, evaluar y devolver feedback en
-cualquier asignatura. La fuente común genera paquetes para **ChatGPT Work** y
-**Claude Cowork**, bajo [MIT](LICENSE).
+cualquier asignatura. Puedes usar las mismas skills en **ChatGPT Work**, **Codex**, **Claude Cowork** y **Claude Code**.
+El proyecto se distribuye bajo [MIT](LICENSE).
 [Instalación y primer uso](docs/INSTALACION.md) ·
 [Esquemas de los procesos](docs/ESQUEMAS-PROCESOS.md) ·
 [Descargas y novedades](https://github.com/cjescudero/asistente-docente/releases) ·
@@ -61,19 +61,13 @@ esta fuente.
 
 ### Primer uso
 
-Inicia una conversación nueva en ChatGPT Work o Claude Cowork, abre o selecciona
-la carpeta del curso y permite al agente trabajar con ella. Escribe:
+En ChatGPT Work o Claude Cowork, abre una conversación en la carpeta del curso.
+Si usas [Codex CLI](docs/INSTALACION.md#codex-cli) o [Claude Code](docs/INSTALACION.md#claude-code),
+instala el plugin desde su marketplace e inicia una sesión en esa carpeta. Escribe:
 
 **«Inicia mi proyecto docente».**
 
-El agente pregunta por el contexto, los materiales y las exclusiones que falten;
-separa los originales en `fuentes/` de los trabajos nuevos en `materiales_generados/`,
-prepara el mapa y los resultados en carpetas propias, la configuración y una
-guía breve. Conserva tus instrucciones y consulta los conflictos. Comprueba qué
-está disponible y qué falta. Al terminar, te orienta y recomienda crear el mapa
-docente; lo creará cuando se lo pidas. Si ya hay
-materiales, presenta una propuesta antes de reorganizarlos. No necesitas escribir
-comandos.
+El agente te pregunta dónde guardas el material de la asignatura, los documentos generados por IA y las entregas. Si ya tienes carpetas, puedes conservarlas tal como están. En un curso nuevo prepara los tres espacios. Después puedes pedir «Crea el mapa con estas fuentes». El catálogo permite seguir encontrando un documento aunque cambies su nombre o ubicación.
 
 Al actualizar el plugin, comprueba que tu espacio de trabajo haya sincronizado
 el marketplace: publicar en GitHub no actualiza por sí solo una instalación existente.
@@ -89,8 +83,7 @@ para usarlo en presentaciones.
 ## Qué incluye
 
 Orientación contextual mediante «¿Qué puedo hacer ahora?». Puesta en marcha
-con estructura de curso, selección de fuentes, configuración,
-`LEEME.md` y `AGENTS.md`; Mapa docente con índice, conceptos,
+con espacios configurables, selección de fuentes, catálogo e instrucciones en `AGENTS.md`; Mapa docente con índice, conceptos,
 consultas trazables y grafo HTML, actividades y
 enunciados, apuntes, evaluación de entregas con rúbricas, bancos
 GIFT asociados a los materiales, modelos equilibrados combinando bancos,
@@ -108,24 +101,11 @@ y su [índice de ejemplo](examples/mapa-docente/mapa-docente/index.md).
 
 ## Puesta en marcha del proyecto docente
 
-`proyecto-docente-inicializacion-adaptacion` prepara la estructura del curso y guarda
-la selección explícita en `_datos_internos_proyecto/proyecto-docente.json`; prepara `LEEME.md` y
-`AGENTS.md`. Conserva las instrucciones existentes y pregunta ante conflictos.
-Establece `espanol-conciso-redaccion` para escribir en español y aclara dónde están
-los contenidos y qué son cuando falte esa información.
+Puedes empezar con tus carpetas de siempre. Por ejemplo, asigna «Temas» y «Laboratorio» al material de referencia, «Producción» al material generado y «Trabajos recibidos» a las entregas. El agente clasifica las unidades en el catálogo. Una práctica puede conservar juntos el guion, los datos y el cuaderno, aunque cada documento tenga una función distinta.
 
-Los originales viven en `fuentes/`. Los materiales nuevos se reúnen por tipo en
-`materiales_generados/`: materiales, actividades, bancos y cuestionarios. Cada actividad o cuestionario
-separa documentos del alumnado y del docente; su estado figura en un registro y
-en su `LEEME.md`, sin mover archivos al revisarlos. Los lotes en `resultados/`
-separan los archivos recibidos de las correcciones y quedan fuera de la wiki.
-Los lotes de entregas se organizan por actividad y convocatoria en
-`resultados/`. La carpeta `mapa-docente/` queda vacía
-hasta un encargo de creación. Puedes pedir orientación en cualquier momento.
-La selección de fuentes no autoriza su publicación ni acredita que se hayan leído.
-Consulta el [árbol completo y el contrato](docs/PROYECTO-DOCENTE.md).
-El [curso de ejemplo](examples/proyecto-docente/README.md) permite probar la
-iniciación, la selección y las exclusiones con materiales sintéticos.
+Para reorganizar, pide una propuesta y elige qué movimientos aceptar. Para convertir un borrador de IA en referencia de la asignatura, pide que lo incorpore a la carpeta elegida. El catálogo conserva su procedencia. Los trabajos y calificaciones se usan en su proceso de evaluación y quedan fuera de la wiki.
+
+[Guía de organización](docs/PROYECTO-DOCENTE.md) · [Curso de ejemplo](examples/curso-v4/README.md).
 
 ## Del material a la evaluación
 
@@ -144,7 +124,7 @@ consulta los índices disponibles y propone siguientes pasos con sus entradas.
 [Actividades](docs/ACTIVIDADES.md) · [Bancos](docs/BANCOS.md) ·
 [Calificaciones](docs/CALIFICACIONES.md) · [Recorrido de ejemplo](examples/recorrido-docente/README.md).
 Al terminar una actividad, el agente ofrece preparar su carpeta de recepción
-con el mismo nombre bajo `resultados/`. Allí colocarás los trabajos en
+con el mismo nombre en el espacio de entregas. Allí colocarás los trabajos en
 `recibidos/entregas/` y el CSV original de Moodle en `recibidos/`. Al pedir la
 corrección, consulta el enunciado y la rúbrica de la actividad y entrega una copia
 con notas y feedback en `correccion/`. Cada lote incluye un LEEME con los pasos.
@@ -167,28 +147,21 @@ Al terminar una tarea, el agente propone próximos pasos con ejemplos de petici�
 
 Las sugerencias usan los registros y archivos pertinentes. Una carpeta vacía
 no acredita un resultado; un indicio se verifica antes de proponer repetirlo.
-No se inicia la siguiente tarea automáticamente. Se usa español claro por
-defecto, salvo que el profesor indique otro idioma o estilo.
+No se inicia la siguiente tarea automáticamente. Puedes combinar skills en una misma petición, por ejemplo «Crea la wiki en español simplificado».
 [Reglas de orientación](docs/FLUJOS-DOCENTES.md).
 
 ## Mapa docente
 
-Tres skills separadas permiten crear o mantener el mapa, consultarlo sin cambios
-y visualizarlo. Crear o actualizar el mapa escribe también en el `AGENTS.md` de
+Una skill crea, actualiza y visualiza el mapa. Otra responde preguntas sobre su contenido en modo de solo lectura. Crear o actualizar el mapa escribe también en el `AGENTS.md` de
 la raíz del proyecto docente la ruta a su índice y la regla común de consulta:
 índice → enlaces pertinentes → originales cuando sean necesarios. El agente
 reúne la evidencia del encargo sin volver a recorrer toda la documentación.
 Esta integración conserva las reglas previas y no exige ejecutar antes la skill
 de puesta en marcha. Si no se conoce la raíz del proyecto, se solicita.
 
-El profesor elige explícitamente una o varias carpetas de origen y sus
-exclusiones. El mapa reutiliza la selección guardada; no descubre fuentes ni
-amplía el corpus por seguir enlaces. Resultados y el propio mapa quedan
-excluidos; los materiales creados necesitan selección explícita y estado revisado
-o listo para entregar. Los borradores permanecen fuera. Las páginas dependientes de fuentes retiradas requieren revisión. Los originales
-no se mueven, editan ni copian salvo petición expresa de copia.
+El profesor elige las carpetas y las exclusiones del corpus. El catálogo distingue un cambio de ubicación de una nueva versión del contenido. Un traslado conserva las citas y permite reparar sus enlaces. Una modificación señala las páginas que el agente debe revisar. Los contenidos de IA se incorporan como referencias por decisión expresa. Las entregas y las calificaciones quedan fuera del mapa.
 
-El mapa reside en `mapa-docente/`. Dentro de él, `contenidos/` organiza
+La wiki se guarda en el espacio de producción elegido para el curso. Dentro de él, `contenidos/` organiza
 conceptos, presentaciones, apuntes, prácticas y talleres; `reservado/` separa
 evaluaciones, soluciones y criterios que no deben trasladarse al alumnado.
 La organización interna se adapta al contenido. El tipo de material y su acceso son clasificaciones
@@ -224,7 +197,7 @@ evaluación para cada proyecto. Se admiten formación escolar, universitaria,
 profesional y otros contextos; no se impone una rúbrica, matrícula institucional
 ni escala sobre diez. Los ejemplos son sintéticos y no se heredan como reglas.
 La interfaz y las instrucciones están en español; los materiales respetan el
-idioma del encargo. Para textos en español se aplica la skill de redacción clara.
+idioma del encargo. La skill de redacción se aplica cuando pides español simplificado o la seleccionas.
 
 Puedes comenzar con la [ficha vacía](templates/ficha-asignatura-vacia.md) o con un
 encargo en la conversación. Moodle solo es necesario para sus flujos de

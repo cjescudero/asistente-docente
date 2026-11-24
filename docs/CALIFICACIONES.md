@@ -11,7 +11,7 @@ de IA.
 1. Al terminar la actividad, acepta la oferta de preparar su carpeta de recepción
    o pide «Prepara la carpeta para recibir las entregas de esta actividad».
    Tendrá el mismo identificador y nombre de carpeta, bajo
-   `resultados/<actividad>/<convocatoria>/`, y un LEEME con los pasos y criterios.
+   `Entregas/<actividad>/<convocatoria>/`, y un LEEME con los pasos y criterios.
 2. Descarga las entregas y el CSV de calificaciones de la misma actividad y
    convocatoria. Guarda los trabajos en `recibidos/entregas/` y la hoja original
    en `recibidos/`, conservando nombres e identificadores.
@@ -211,8 +211,8 @@ se actualizan filas que coincidan con los ID del lote, conservando las demás.
 Sin esas columnas, el perfil declara que el archivo corresponde al lote.
 
 Si existe el registro de la actividad, añade al perfil
-`"activity_record": "../../../../materiales_generados/actividades/analisis-de-fuentes/_datos_internos/actividad.json"`,
-para un perfil situado en `resultados/analisis-de-fuentes/ordinaria/correccion/`;
+`"activity_record": "../../../../Material generado por IA/actividades/analisis-de-fuentes/_datos_internos/actividad.json"`,
+para un perfil situado en `Entregas/analisis-de-fuentes/ordinaria/correccion/`;
 si está en otra ubicación, adaptar la ruta relativa a su carpeta. La evaluación debe incluir
 `activity_version`: se comprueban el `id` y la `version` del registro, la existencia
 de enunciado, rúbrica, plantillas y guía declarada, y sus audiencias. Los PDF
@@ -220,8 +220,7 @@ registrados también deben existir. Las huellas de estos archivos y del registro
 quedan en el informe. Esta comprobación verifica procedencia, sin interpretar
 semánticamente el Markdown de la rúbrica ni declarar que el agente lo haya leído.
 
-Cuando se encuentra la configuración `_datos_internos_proyecto/proyecto-docente.json`
-en un curso antecesor del perfil,
+Cuando se detecta un curso en una carpeta antecesora del perfil,
 el registro y sus documentos deben permanecer dentro del curso, también después
 de resolver enlaces simbólicos. Sin una raíz conocida se informa de que no se ha
 verificado ese límite. Sin un registro de actividad disponible se emite un aviso explícito: solo se han comprobado los ID de actividad y

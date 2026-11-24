@@ -7,11 +7,11 @@ description: Evaluar actividades, trabajos, informes o notebooks descargados de 
 
 Aplicar los criterios del profesor a evidencias de cada entrega. No deducir una política de evaluación ni una sanción a partir del estilo del texto o de una respuesta inesperada.
 
-Usar por defecto [español conciso](../espanol-conciso-redaccion/SKILL.md) en la
-conversación y los documentos, salvo que el profesor indique otro idioma o estilo.
-Respetar citas, identificadores y términos que deban conservarse literalmente.
+Combinar este encargo con [español conciso](../espanol-conciso-redaccion/SKILL.md) solo si el docente pide esa skill o el estilo de español simplificado, incluido un encargo expreso para todo el curso.
 
 ## Contexto del proyecto
+
+Resolver las rutas desde los espacios asignados del curso. Los nombres de carpeta de los ejemplos corresponden a la configuración inicial. Si hay varias raíces posibles, reutilizar la decisión del encargo o preguntar por el destino. Consultar el catálogo por identidad y versión cuando el trabajo dependa de materiales persistentes.
 
 Aplicar el [contrato común del proyecto](../../docs/PROYECTO-DOCENTE.md) solo en
 lo necesario para el encargo: respetar selección y exclusiones, consultar el
@@ -26,7 +26,7 @@ Transferirle el objetivo, las decisiones conocidas y los resultados de esta tare
 tras resolver la duda, retomar el encargo ya autorizado.
 
 
-En `curso-v3`, organizar el lote en `resultados/<actividad>/<convocatoria>/`,
+En `curso-v4`, organizar el lote en `Entregas/<actividad>/<convocatoria>/`,
 con el mismo identificador y nombre de carpeta que la actividad. Guardar los
 trabajos en `recibidos/entregas/`, la hoja Moodle original en `recibidos/` y las
 correspondencias explícitas, cuando sean necesarias, en `recibidos/identificacion/`.

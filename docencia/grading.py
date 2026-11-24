@@ -264,7 +264,8 @@ def export_grades(evaluation_path, input_path, config_path, output_dir):
     every row. Group members are expanded explicitly. Existing files are never
     overwritten. Pending/absent/unreadable assessments leave both cells intact.
     """
-    output = Path(output_dir).expanduser().resolve()
+    from .course_outputs import course_output
+    output = course_output(output_dir, "submissions", inputs=(evaluation_path, input_path, config_path))
     if output == _PACKAGE_ROOT or _PACKAGE_ROOT in output.parents:
         raise GradingError("La salida debe estar fuera del paquete instalado.")
     try:

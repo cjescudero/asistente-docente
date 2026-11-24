@@ -184,7 +184,15 @@ def print_pdf(html_path: Path, pdf_path: Path) -> tuple[bool, str]:
 def render_markdown(source: str | Path, output: str | Path, *, title: str | None = None,
                     html_only: bool = False) -> dict:
     source = Path(source).resolve()
-    output = external_output(output)
+    from .course_outputs import course_output, output_project
+    from .project import load_project
+    course = output_project(source)
+    role = "generated"
+    if course:
+        config = load_project(course)
+        if any(source.is_relative_to(course / r) for r in config.get("spaces", {}).get("submissions", [])):
+            role = "submissions"
+    output = external_output(course_output(output, role, inputs=(source,)))
     text = source.read_text(encoding="utf-8")
     rendered = fragment(text, "markdown")
     page = document(title or source.stem, rendered, math="\\(" in text or "\\[" in text)

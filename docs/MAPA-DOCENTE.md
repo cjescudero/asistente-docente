@@ -68,12 +68,12 @@ grafo tampoco reescribe `AGENTS.md`. Mostrar una vista no modifica ningún archi
 ## Carpetas elegidas por el profesor
 
 La entrada es **una o varias carpetas identificadas por el usuario**. En cursos
-inicializados, leer la selección y exclusiones de la configuración (`_datos_internos_proyecto/proyecto-docente.json` en `curso-v3`) según
+inicializados, leer la selección y exclusiones de la configuración (`Gestión del proyecto/proyecto-docente.json` en `curso-v4`) según
 el [contrato común](PROYECTO-DOCENTE.md). No hay descubrimiento automático. Una
 selección pendiente requiere aclarar las fuentes antes de crear el mapa; la
 presencia de archivos en el curso no los incorpora al corpus.
 
-El árbol del curso está en ese contrato. La wiki reside en `mapa-docente/`
+El árbol del curso está en ese contrato. La wiki reside en una carpeta del espacio de producción, por ejemplo `Material generado por IA/mapa-docente/`
 en proyectos nuevos; un mapa previo conserva su ruta hasta una migración
 aprobada. Su organización interna es:
 
@@ -100,15 +100,14 @@ mapa-docente/
   grafo-docente.html
 ```
 
-El registro `_datos_internos/fuentes.json` de `curso-v3` mantiene su formato y registra lo inventariado y leído. La
+El registro `_datos_internos/fuentes.json` de `curso-v4` mantiene su formato y registra lo inventariado y leído. La
 configuración del proyecto selecciona lo permitido: prevalece sobre un registro
 anterior si una fuente se retira o excluye. No reintroducirla por un enlace.
 Identificar páginas dependientes directas e indirectas y revisarlas antes de
 reutilizarlas. Una consulta informa sin escribir; el mantenimiento autorizado
 corrige el mapa. Solo generar lector o grafo tras superar la validación.
 
-Resultados, borradores y el propio mapa quedan fuera del corpus; `archivo/`
-requiere selección explícita. Clasificar una fuente o seleccionarla no concede
+El catálogo del curso relaciona el identificador de cada fuente de la wiki con su UUID y su versión. Al actualizar, `catalog-sync` devuelve las incorporaciones y las páginas que necesitan revisión. El agente lee las nuevas versiones, actualiza las síntesis afectadas y registra el mapa revisado con `register-map`. Las vistas existentes pueden regenerarse tras reparar enlaces por traslado. La wiki utiliza las fuentes consolidadas que pertenezcan a la selección. Entregas, materiales generados pendientes de consolidación y datos de gestión quedan fuera de su corpus. Clasificar una fuente o seleccionarla no concede
 permiso de difusión. Registrar la carpeta del mapa en la configuración únicamente
 cuando exista su `index.md`; una carpeta vacía no es una wiki.
 

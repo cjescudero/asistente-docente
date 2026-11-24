@@ -135,7 +135,7 @@ def _validate_pages(data, guide, errors, warnings):
             errors.append("Página de contenido sin registrar en pages: " + name)
 
 
-def validate_library(guide_dir, sources_root=None, source_roots=None, project_root=None):
+def validate_library(guide_dir, sources_root=None, source_roots=None, project_root=None, *, verified_files=None):
     """Return {status, errors, warnings, sources}; perform no filesystem writes."""
     errors, warnings = [], ["No se comprueban encabezados ni anclas de los enlaces Markdown."]
     result = {"status": "invalid", "errors": errors, "warnings": warnings, "sources": 0}
@@ -269,6 +269,13 @@ def validate_library(guide_dir, sources_root=None, source_roots=None, project_ro
                 errors.append(prefix + f"no se puede resolver {field}: {exc}")
         if digest is not None and root is not None and len(errors) == initial_errors:
             try:
+                path = root / source["path"]
+                cached = (verified_files or {}).get(path)
+                if cached is not None:
+                    st = path.stat()
+                    signature = (st.st_dev, st.st_ino, st.st_size, st.st_mtime_ns)
+                    if cached == (signature, digest):
+                        continue
                 actual = hashlib.sha256()
                 with (root / source["path"]).open("rb") as stream:
                     for chunk in iter(lambda: stream.read(1024 * 1024), b""):

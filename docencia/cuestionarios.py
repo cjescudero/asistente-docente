@@ -187,27 +187,28 @@ def build_cuestionarios(bank_path: str | Path | None, output_dir: str | Path, *,
                 metadata_path: str | Path | None = None, per_category: dict | None = None,
                 html_only: bool = False, catalog_path: str | Path | None = None,
                 selection_path: str | Path | None = None,
-                project_root: str | Path | None = None, layout: str = "flat") -> dict:
-    base = external_output(output_dir)
-    if layout not in ("flat", "curso-v3"):
-        raise ValueError("layout debe ser 'flat' o 'curso-v3'.")
+                project_root: str | Path | None = None, layout: str = "flat", direct_materials=None) -> dict:
+    from .course_outputs import course_output
+    base = external_output(course_output(output_dir, "generated", inputs=(project_root, bank_path, catalog_path)))
+    if layout not in ("flat", "curso-v3", "curso-v4"):
+        raise ValueError("layout debe ser flat, curso-v3 o curso-v4.")
     selection_target = base / "_datos_internos/seleccion.json"
-    if layout == "curso-v3" and catalog_path is not None:
+    if layout != "flat" and catalog_path is not None:
         if selection_path is None or Path(selection_path).resolve() != selection_target.resolve():
-            raise ValueError("En curso-v3 guarda --selection en <cuestionario>/_datos_internos/seleccion.json.")
+            raise ValueError("En el formato de curso guarda --selection en <cuestionario>/_datos_internos/seleccion.json.")
         if selection_target.is_symlink() or not selection_target.is_file():
             raise ValueError("La selección previa debe ser un archivo regular.")
     if base.exists():
         if not base.is_dir() or base.is_symlink():
             raise ValueError("El destino del cuestionario debe ser una carpeta regular.")
-        allowed = (layout == "curso-v3" and catalog_path is not None
+        allowed = (layout != "flat" and catalog_path is not None
                    and {p.name for p in base.iterdir()} == {"_datos_internos"}
                    and selection_target.parent.is_dir() and not selection_target.parent.is_symlink()
                    and {p.name for p in selection_target.parent.iterdir()} == {"seleccion.json"})
         if any(base.iterdir()) and not allowed:
             raise ValueError("La carpeta de cuestionario debe estar vacía salvo la selección previa; no se sobrescriben modelos.")
-    output = base / "_datos_internos" if layout == "curso-v3" else base
-    teacher_dir = base / "docente" if layout == "curso-v3" else output
+    output = base / "_datos_internos" if layout != "flat" else base
+    teacher_dir = base / "docente" if layout != "flat" else output
     if (type(models) is not int or type(questions) is not int
             or not 1 <= models <= 100 or questions < 1):
         raise ValueError("Usa entre 1 y 100 modelos y al menos una pregunta.")
@@ -218,13 +219,15 @@ def build_cuestionarios(bank_path: str | Path | None, output_dir: str | Path, *,
         if selection_path is None:
             raise ValueError("El catálogo requiere un archivo de selección explícita.")
         selection = load_selection(selection_path, questions)
-        catalog = load_catalog(catalog_path, project_root=project_root,
+        catalog = load_catalog(catalog_path, project_root=project_root, direct_materials=direct_materials,
                                bank_ids=selection["selection"]["banks"])
         bank, metadata = catalog["bank"], catalog["metadata"]
         raw = serialize_bank(bank)
     else:
         if bank_path is None or selection_path is not None:
             raise ValueError("Indica un banco GIFT o un catálogo con su selección.")
+        from .banks import validate_course_bank_files
+        validate_course_bank_files(bank_path, metadata_path, project_root=project_root)
         raw = Path(bank_path).read_bytes()
         bank = parse_gift(raw.decode("utf-8-sig"))
         metadata = (json.loads(Path(metadata_path).read_text(encoding="utf-8-sig"))
@@ -269,12 +272,12 @@ def build_cuestionarios(bank_path: str | Path | None, output_dir: str | Path, *,
         verify_obfuscated(model, gift)
         rendered.append((render_model(model, title, teacher=False),
                          render_model(model, title, teacher=True), gift))
-    if layout == "curso-v3" and catalog is not None and selection_target.read_bytes() != selection["selection_bytes"]:
+    if layout != "flat" and catalog is not None and selection_target.read_bytes() != selection["selection_bytes"]:
         raise ValueError("La selección cambió durante la preparación del cuestionario.")
     output.mkdir(parents=True, exist_ok=True)
-    if layout == "curso-v3":
+    if layout != "flat":
         (base / "alumnado").mkdir()
-    if layout == "curso-v3":
+    if layout != "flat":
         teacher_dir.mkdir()
     (output / "source").mkdir()
     (output / "source/bank.gift").write_bytes(raw)
@@ -295,7 +298,7 @@ def build_cuestionarios(bank_path: str | Path | None, output_dir: str | Path, *,
             manifest["source_banks"].append(entry)
         for kind, content in (("catalog", catalog["catalog_bytes"]),
                               ("selection", selection["selection_bytes"])):
-            if layout == "curso-v3" and kind == "selection":
+            if layout != "flat" and kind == "selection":
                 manifest[f"{kind}_snapshot"] = "seleccion.json"
                 manifest[f"{kind}_sha256"] = hashlib.sha256(content).hexdigest()
                 continue
@@ -309,12 +312,12 @@ def build_cuestionarios(bank_path: str | Path | None, output_dir: str | Path, *,
     for model, (student, teacher, gift) in zip(built, rendered):
         stem = f"modelo-{model['id']}"
         for role, content in [("student", student), ("teacher", teacher)]:
-            role_dir = (base / "alumnado" if layout == "curso-v3" and role == "student"
-                        else teacher_dir if layout == "curso-v3" and role == "teacher" else output)
+            role_dir = (base / "alumnado" if layout != "flat" and role == "student"
+                        else teacher_dir if layout != "flat" and role == "teacher" else output)
             file = role_dir / f"{stem}-{role}.html"
             file.write_text(content, encoding="utf-8")
-            prefix = ("../alumnado/" if layout == "curso-v3" and role == "student" else
-                      "../docente/" if layout == "curso-v3" and role == "teacher" else
+            prefix = ("../alumnado/" if layout != "flat" and role == "student" else
+                      "../docente/" if layout != "flat" and role == "teacher" else
                       "../alumnado/" if role_dir != output else "")
             model["files"][f"{role}_html"] = prefix + file.name
             pdf = file.with_suffix(".pdf")
@@ -324,18 +327,18 @@ def build_cuestionarios(bank_path: str | Path | None, output_dir: str | Path, *,
                 model["files"][f"{role}_pdf"] = prefix + pdf.name
         gift_path = teacher_dir / f"{stem}.gift"
         gift_path.write_text(gift, encoding="utf-8")
-        model["files"]["gift"] = ("../docente/" if layout == "curso-v3" else "") + gift_path.name
+        model["files"]["gift"] = ("../docente/" if layout != "flat" else "") + gift_path.name
     (output / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
     if catalog is not None:
         (output / "coverage.json").write_text(
             json.dumps(manifest["selection_report"], ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    if layout == "curso-v3":
+    if layout != "flat":
         record = {"schema_version": 1, "id": base.name, "type": "cuestionario", "status": "borrador"}
         record_path = output / "material-docente.json"
         record_path.write_text(
             json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         links = []
-        if layout == "curso-v3":
+        if layout != "flat":
             links.append("## Modelos y archivos\n")
             for model in built:
                 files = model["files"]

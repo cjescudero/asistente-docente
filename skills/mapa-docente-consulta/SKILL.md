@@ -7,11 +7,11 @@ description: Localizar materiales y responder preguntas mediante un Mapa docente
 
 Responder a partir del corpus autorizado y mostrar qué evidencia sustenta la respuesta. La consulta es de solo lectura: no modifica páginas, índice, registro, incidencias o historial y no regenera el grafo HTML.
 
-Usar por defecto [español conciso](../espanol-conciso-redaccion/SKILL.md) en la
-conversación y los documentos, salvo que el profesor indique otro idioma o estilo.
-Respetar citas, identificadores y términos que deban conservarse literalmente.
+Combinar este encargo con [español conciso](../espanol-conciso-redaccion/SKILL.md) solo si el docente pide esa skill o el estilo de español simplificado, incluido un encargo expreso para todo el curso.
 
 ## Contexto del proyecto
+
+Resolver las rutas desde los espacios asignados del curso. Los nombres de carpeta de los ejemplos corresponden a la configuración inicial. Si hay varias raíces posibles, reutilizar la decisión del encargo o preguntar por el destino. Consultar el catálogo por identidad y versión cuando el trabajo dependa de materiales persistentes.
 
 Aplicar el [contrato común del proyecto](../../docs/PROYECTO-DOCENTE.md) solo en
 lo necesario para el encargo: respetar selección y exclusiones, consultar el
@@ -28,8 +28,8 @@ tras resolver la duda, retomar el encargo ya autorizado.
 ## Localizar y seleccionar
 
 1. Abrir el mapa indicado por el usuario o ya identificado en el proyecto. Leer primero `index.md`; consultar `LEEME.md` y el [contrato del Mapa docente](../../docs/MAPA-DOCENTE.md) para resolver raíces y convenciones. No buscar automáticamente una biblioteca en carpetas vecinas ni asumir un destino fijo.
-2. Comprobar la configuración del curso (`_datos_internos_proyecto/proyecto-docente.json` en `curso-v3`) cuando exista y aplicar su selección y exclusiones vigentes, aunque el registro del mapa conserve una fuente anterior. Usar únicamente las carpetas que el usuario haya elegido, una o varias, registradas como raíces. Si se necesita una carpeta adicional, solicitar que se indique; no ampliar el corpus por seguir un enlace que salga del alcance. Las rutas se resuelven respecto al mapa y a la raíz declarada de cada fuente.
-3. Desde `index.md`, seleccionar páginas y fichas pertinentes y seguir recursivamente sus enlaces Markdown normales mientras aporten evidencia al encargo. Resolver cada ruta respecto a la página que la enlaza y mantener las rutas y secciones visitadas para cortar ciclos y evitar relecturas inútiles. Comprobar en el registro `fuentes.json` (`_datos_internos/fuentes.json` en `curso-v3`) curso, vigencia, acceso, versión y estado de lectura. Ampliar hasta reunir evidencia suficiente o localizar una laguna concreta, sin abrir todo el corpus ni imponer un número fijo de páginas. Llegar a los originales cuando lo requieran las comprobaciones siguientes.
+2. Comprobar la configuración del curso (`Gestión del proyecto/proyecto-docente.json` en `curso-v4`) cuando exista y aplicar su selección y exclusiones vigentes, aunque el registro del mapa conserve una fuente anterior. Usar únicamente las carpetas que el usuario haya elegido, una o varias, registradas como raíces. Si se necesita una carpeta adicional, solicitar que se indique; no ampliar el corpus por seguir un enlace que salga del alcance. Las rutas se resuelven respecto al mapa y a la raíz declarada de cada fuente.
+3. Desde `index.md`, seleccionar páginas y fichas pertinentes y seguir recursivamente sus enlaces Markdown normales mientras aporten evidencia al encargo. Resolver cada ruta respecto a la página que la enlaza y mantener las rutas y secciones visitadas para cortar ciclos y evitar relecturas inútiles. Comprobar en el registro `fuentes.json` (`_datos_internos/fuentes.json` en `curso-v4`) curso, vigencia, acceso, versión y estado de lectura. Ampliar hasta reunir evidencia suficiente o localizar una laguna concreta, sin abrir todo el corpus ni imponer un número fijo de páginas. Llegar a los originales cuando lo requieran las comprobaciones siguientes.
 4. Si el índice está incompleto, usar búsquedas acotadas dentro de las carpetas autorizadas. Si no existe mapa, indicarlo y consultar directamente fuentes elegidas por el usuario cuando el encargo lo permita. No crear un mapa ni generar un grafo como efecto secundario de una pregunta.
 
 ## Verificar la evidencia

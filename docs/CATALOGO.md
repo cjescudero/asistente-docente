@@ -7,7 +7,7 @@ del agente; las pruebas Python no sustituyen su ejecución en el anfitrión.
 
 | Skill | Petición representativa | Resultado esperado |
 | --- | --- | --- |
-| `proyecto-docente-inicializacion-adaptacion` | Poner en marcha un proyecto con material docente. | Estructura de curso, configuración de fuentes, LEEME y AGENTS.md respetado; consulta ante conflictos, español claro, orientación y recomendación del mapa, sin crearlo automáticamente. |
+| `proyecto-docente-inicializacion-adaptacion` | Poner en marcha un proyecto con material docente. | Estructura de curso, configuración de fuentes, LEEME y AGENTS.md respetado; consulta ante conflictos, orientación y recomendación del mapa, sin crearlo automáticamente. |
 | `proyecto-docente-ayuda` | ¿Qué puedo hacer ahora con mi asignatura? ¿Para qué sirve este archivo? | Ayuda inline invocada también desde otra skill; recupera decisiones y resultados de la conversación, comprueba el estado pertinente y responde sin iniciar tareas nuevas. |
 | `mapa-docente-creacion-visualizacion` | Crear un Mapa docente de dos carpetas elegidas: materiales actuales y archivo de evaluaciones. | Índice, páginas Markdown y fuentes trazables; bloque en AGENTS.md para consultar desde el índice; originales intactos, acceso y lectura explícitos, lector y grafo cuando hay capacidades. |
 | `mapa-docente-consulta` | Localizar material y criterios vigentes para diseñar una práctica y evaluarla. | Respuesta con evidencia original, distinción de histórico/vigente y contexto para el siguiente encargo; sin editar el mapa ni regenerar el grafo. |
@@ -18,7 +18,7 @@ del agente; las pruebas Python no sustituyen su ejecución en el anfitrión.
 | `cuestionarios-bancos-preguntas-creacion` | Crear preguntas de estos apuntes y de una actividad de literatura. | Bancos GIFT, procedencia, localizadores, conceptos, objetivos, dificultad y repaso en catálogo; inspiración histórica diferenciada del contenido vigente. |
 | `cuestionarios-modelos-imprimir-evaluar` | Combinar preguntas de dos temas y una práctica para tres modelos. | Reparto de cobertura acordado, modelos comparables y reproducibles, PDF, solucionarios, GIFT ofuscados, bancos congelados e informe de reutilización. |
 | `cuestionarios-observaciones-calificaciones-alumnado` | Añadir comentarios al libro de calificaciones a partir del detalle del cuestionario. | Hasta tres dificultades sustentadas y recomendaciones accesibles; notas preservadas y bloqueo de correspondencias ambiguas. |
-| `espanol-conciso-redaccion` | Simplificar una explicación manteniendo todas sus condiciones. | Español natural y preciso, sin resumir ni declarar certificación STE. |
+| `espanol-conciso-redaccion` | Reescribir una explicación en español simplificado. | Español natural y preciso, sin resumir ni declarar certificación STE. |
 | `infografias-didacticas-creacion` | Crear una diapositiva dibujada sobre una cadena causal. | Imagen revisada si hay generador; diseño y prompt claramente identificados si no lo hay. |
 
 ## Nombres visibles
@@ -43,23 +43,21 @@ se declara en `agents/openai.yaml`; el orden y su presentación dependen del anf
 
 ## Casos de aceptación de la puesta en marcha
 
-- Proyecto nuevo sin mapa: crear el árbol `curso-v3`, configuración, LEEME y
-  AGENTS.md con español claro. Preguntar por ubicación, tipos y selección de
-  materiales que falten; dejar la carpeta del mapa vacía, recomendar su creación
+- Proyecto nuevo sin mapa: asignar los tres espacios y preparar AGENTS.md. Preguntar por ubicación, tipos y selección de
+  materiales que falten; recomendar la creación del mapa
   y ofrecer orientación. Crear el mapa requiere un encargo del profesor.
 - Curso anterior: conservar su estructura hasta una migración concreta aprobada.
   Distinguir originales y documentos creados sin inferir procedencia por su carpeta.
 - Cierre: seguir los [flujos docentes](FLUJOS-DOCENTES.md), comprobar indicios
   de resultados y proponer el siguiente paso pendiente sin ejecutarlo. Ofrecer
-  apuntes y diapositivas visuales individuales; español claro salvo otra preferencia.
+  apuntes y diapositivas visuales individuales; español simplificado cuando se solicite.
 - Proyecto con instrucciones propias: modificar solo lo indicado, conservando
   texto y organización ajenos al encargo. Repetir sin duplicar reglas.
 - Regla existente incompatible con la petición o el estilo predeterminado:
   explicar el conflicto y preguntar; no sobrescribir mientras falta la respuesta.
 - Orígenes y tipos ya indicados: reutilizarlos sin volver a preguntar. Si solo
   falta el tipo de material, pedir únicamente ese dato.
-- Redacción: registrar `espanol-conciso-redaccion` como opción predeterminada
-  del proyecto, sin cambiar su activación global ni inventar su disponibilidad.
+- Redacción: aplicar `espanol-conciso-redaccion` solo al solicitar la skill o el estilo.
 - Proyecto con un bloque de consulta del mapa: conservarlo sin reemplazarlo ni
   regenerar la documentación.
 

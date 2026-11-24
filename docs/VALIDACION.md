@@ -1,3 +1,14 @@
+# Organización de materiales y catálogo
+
+Comprobaciones locales del 24 de noviembre de 2026 en macOS con Python 3.12.9 y Chrome.
+
+- Suite de regresión con las pruebas opcionales de PDF activadas. Incluye inicialización vacía, raíces personalizadas, instrucciones previas, adopción voluntaria, exclusión de entregas, clasificación jerárquica y prioridad de las confirmaciones.
+- Cursos sintéticos con traslados manuales y aprobados, nombres cambiados, fuentes repetidas, desapariciones, colisiones, confirmación parcial, consolidación y cortes durante la operación o la reparación de enlaces. Se contrastaron UUID, versión, agrupación lógica, historial y conservación de los originales.
+- Wiki con una fuente renombrada entre dos raíces, una fuente modificada, una promoción y un cambio de acceso. Se comprobaron el registro, los enlaces Markdown, el lector, las páginas dependientes y el bloqueo de la exportación estudiantil cuando cambian las autorizaciones.
+- Lector y grafo probados en Chrome. Navegación, anclas, búsqueda, filtros, reorganización, vista móvil y funcionamiento sin red. Dos pruebas de renderizado PDF ejecutadas con el navegador local.
+- Contraste de los contenidos funcionales de los dos paquetes, manifiestos y enlaces. Inicio desde una instalación extraída de solo lectura y desde otro directorio de trabajo.
+- Las pruebas usan ficheros locales. La CI contempla Windows y Linux; esta comprobación se ejecutó en macOS. La instalación en los anfitriones, la importación real en Moodle y la publicación en GitHub son operaciones independientes.
+
 # Categorías Moodle: validación local de 0.11.2
 
 - 389 pruebas sin fallos; dos pruebas PDF opcionales omitidas.

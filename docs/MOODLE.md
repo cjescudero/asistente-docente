@@ -15,7 +15,7 @@ locales no equivalen a una importación real.
 
 Descargar las entregas y la hoja de calificaciones correspondientes a la actividad
 y convocatoria. Guardar los originales en
-`resultados/<actividad>/<convocatoria>/recibidos/`, con la identificación
+`Entregas/<actividad>/<convocatoria>/recibidos/`, con la identificación
 explícita correspondiente. Guardar notas y feedback nuevos en `correccion/`. El lote queda fuera
 de la wiki.
 
@@ -59,7 +59,7 @@ GIFT es un formato de texto para preguntas de Moodle; no es el formato de imagen
 ## Preparar y comprobar los modelos
 
 Generar papel, solucionario y GIFT desde la misma selección ordenada mediante
-`build-cuestionarios --layout curso-v3` en cursos nuevos. Se puede combinar el [catálogo de bancos](BANCOS.md) por materiales,
+`build-cuestionarios --layout curso-v4` en cursos nuevos. Se puede combinar el [catálogo de bancos](BANCOS.md) por materiales,
 actividades y dificultad tras acordar el reparto. Conservar `manifest.json`,
 los bancos utilizados congelados y sus metadatos en la subcarpeta `_datos_internos/`.
 Los documentos imprimibles están en `alumnado/`; no mover sus archivos a mano.

@@ -14,12 +14,7 @@ ninguno de esos pasos automáticamente.
 - [Instalación para administradores](#instalación-para-administradores): permisos y actualizaciones.
 - [Instalación avanzada](#instalación-avanzada): Codex CLI, Claude Code y Python.
 
-La versión publicada del plugin es **0.11.0**: [descargas y novedades](https://github.com/cjescudero/asistente-docente/releases/tag/v0.11.0).
-Incorpora la organización `curso-v3`.
-Comprueba la versión instalada antes de probar las novedades. Preparar archivos
-locales no actualiza el marketplace ni las instalaciones existentes. Después de
-una publicación, sincroniza el catálogo y comprueba la versión mostrada; una
-referencia fijada a una revisión anterior seguirá usándola hasta que se cambie.
+Consulta las [publicaciones en GitHub](https://github.com/cjescudero/asistente-docente/releases) para conocer los cambios disponibles. Después de actualizar el marketplace, comprueba la versión instalada. Si está fijada a una revisión concreta, el administrador puede cambiarla para recibir las novedades.
 
 ## Instalación para profesores
 
@@ -29,6 +24,7 @@ referencia fijada a una revisión anterior seguirá usándola hasta que se cambi
 | --- | --- |
 | ChatGPT de tu organización | Pedir al administrador que incorpore el marketplace; después instalar el plugin desde los plugins de ese espacio de trabajo. |
 | Claude con plugins disponibles | Añadir el marketplace desde Personalizar y después instalar Asistente docente. |
+| Codex o Claude Code | Instala el plugin desde el marketplace del repositorio. Sigue los pasos de [Codex CLI](#codex-cli) o [Claude Code](#claude-code). |
 | ChatGPT individual, sin espacio administrado | Consultar la alternativa con [Codex CLI](#codex-cli); no se presupone una importación gráfica para cualquier cuenta. |
 
 Los pasos con los nombres de menús están en el
@@ -52,7 +48,7 @@ buscar el plugin entre los publicados por OpenAI o Anthropic.
 
 ### Empezar con un curso
 
-Tras instalarlo, abre una conversación nueva en ChatGPT Work o Claude Cowork.
+Tras instalarlo, abre una conversación en ChatGPT Work o Claude Cowork, o inicia Codex o Claude Code en la carpeta del curso.
 Selecciona una carpeta para tu curso y concede al agente acceso a ella. Puede
 ser una carpeta local sincronizada con OneDrive o SharePoint, con los archivos
 disponibles localmente. Instalar el plugin no concede ese acceso ni configura
@@ -63,19 +59,16 @@ los conoces. La skill ya implementada:
 
 - Pregunta solo por el contexto, las carpetas, los tipos de material y las
   exclusiones que falten; permite dejar la selección pendiente.
-- Prepara `fuentes/`, `materiales_generados/`, `mapa-docente/`, `resultados/` y
-  `archivo/`, la configuración en `_datos_internos_proyecto/proyecto-docente.json`,
-  una guía `LEEME.md` y las instrucciones `AGENTS.md`.
-- Respeta las instrucciones previas, pregunta ante conflictos y conserva la
-  preferencia de español claro. Propone movimientos concretos antes de trasladar originales.
-- Comprueba las entradas y capacidades disponibles y explica lo pendiente.
-  La puesta en marcha deja la carpeta del mapa vacía; recomienda crear la wiki y ofrece orientación, pero no la crea sin encargo.
+- Prepara los espacios **Material de la asignatura**, **Material generado por IA** y **Entregas**. Si ya tienes carpetas, puedes asignar las tuyas y seguir trabajando con ellas.
+- Conserva las instrucciones del profesor en `AGENTS.md`, consulta los conflictos y pide aprobación antes de trasladar originales.
+- Comprueba las entradas y capacidades disponibles. Cuando haga falta una selección persistente o un catálogo, se crea **Gestión del proyecto**.
+- Recomienda crear el mapa. Puedes encargarlo cuando hayas elegido las carpetas que le servirán de fuente.
 
 Comprueba que el agente ha leído `AGENTS.md`; si su aplicación no lo carga,
 pídele que lo lea al comenzar. El plugin no genera `CLAUDE.md` por sistema.
 Una petición sencilla con texto o adjuntos suficientes puede resolverse sin wiki
 ni proyecto completo. Véanse el [contrato del curso](PROYECTO-DOCENTE.md), el
-[ejemplo sintético](../examples/proyecto-docente/README.md).
+[ejemplo sintético](../examples/curso-v4/README.md).
 
 ## Instalación para administradores
 
@@ -148,7 +141,7 @@ No son requisitos para el recorrido gráfico del profesorado.
 
 ### Codex CLI
 
-Alternativa para una cuenta individual sin espacio de trabajo administrado.
+También puedes usar Codex como entorno habitual para trabajar en la carpeta del curso.
 Necesitas Codex CLI con soporte de marketplaces y acceso a GitHub. Comprueba
 que `codex plugin marketplace --help` esté disponible y registra el origen:
 
@@ -235,7 +228,7 @@ PDF, se conservan los archivos editables y HTML y se comunica el resultado pendi
 ## Comprobación y mantenimiento
 
 Verifica la versión instalada y prueba primero con el
-[curso sintético](../examples/proyecto-docente/README.md). Las actualizaciones del
+[curso sintético](../examples/curso-v4/README.md). Las actualizaciones del
 plugin no migran automáticamente los materiales ni las instrucciones del curso.
 Desinstalarlo no elimina esos archivos, que viven fuera de su instalación.
 

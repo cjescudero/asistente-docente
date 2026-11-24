@@ -12,12 +12,13 @@ proponer las preguntas antes de incorporarlas a una evaluación.
 
 ## Archivos y raíces
 
-En cursos `curso-v3`, cada banco nuevo se guarda en `materiales_generados/bancos/<id>/`,
+Para el espacio generado predeterminado, guarda cada banco nuevo en `Material generado por IA/bancos/<id>/`,
 con GIFT y `LEEME.md` visibles; los metadatos y `material-docente.json`
 de tipo `banco` van en `_datos_internos/`. Un borrador conserva ese destino
-al revisarse. El catálogo está en
-`materiales_generados/bancos/_datos_internos/catalogo.json` y puede enlazar bancos aportados bajo
-`fuentes/evaluaciones/bancos/` sin copiarlos. La presencia en el catálogo no
+al revisarse. En este ejemplo el catálogo de bancos está en
+`Material generado por IA/bancos/_datos_internos/catalogo.json` y puede enlazar bancos aportados en las carpetas del profesor. El inventario general de
+materiales se guarda en `Gestión del proyecto/catalogo_materiales.json`.
+La presencia en el catálogo de bancos no
 acredita revisión pedagógica ni autoriza entregar el banco con soluciones.
 
 Los bancos se entregan **sin comprimir**, con enlaces directos a `banco.gift` y
@@ -38,11 +39,11 @@ Los contratos JSON usan UTF-8 y `schema_version: 1`:
 
 `path_base: "project"` permite que `gift` y `metadata` sean relativos a la raíz
 del curso y enlacen bancos de distintas ramas. Es la opción de los catálogos
-nuevos de curso-v3. Si el campo falta o vale `"catalog"`, las rutas siguen siendo
+nuevos de curso-v4. Si el campo falta o vale `"catalog"`, las rutas siguen siendo
 relativas a la carpeta del catálogo, conservando compatibilidad.
 
 Las rutas de materiales y recomendaciones son relativas a la raíz del curso.
-La utilidad localiza la configuración del curso en `_datos_internos_proyecto/` desde el catálogo;
+La utilidad descubre la raíz del curso desde la ubicación del catálogo. La configuración persistente se guarda en `Gestión del proyecto/proyecto-docente.json`. La opción
 `--project` permite indicar esa raíz. `path_base: "project"` requiere una raíz
 explícita o descubierta en la configuración. Para un catálogo antiguo fuera de
 un proyecto, la raíz predeterminada sigue siendo su carpeta. No se admiten rutas
@@ -56,8 +57,8 @@ Ejemplo de catálogo:
   "schema_version": 1,
   "path_base": "project",
   "banks": [
-    {"id": "historia-fuentes", "gift": "fuentes/evaluaciones/bancos/historia.gift", "metadata": "fuentes/evaluaciones/bancos/historia.metadata.json"},
-    {"id": "actividad-medicion", "gift": "materiales_generados/bancos/medicion/banco.gift", "metadata": "materiales_generados/bancos/medicion/_datos_internos/metadatos.json"}
+    {"id": "historia-fuentes", "gift": "Material de la asignatura/Cuestionarios anteriores/historia.gift", "metadata": "Material de la asignatura/Cuestionarios anteriores/historia.metadata.json"},
+    {"id": "actividad-medicion", "gift": "Material generado por IA/bancos/medicion/banco.gift", "metadata": "Material generado por IA/bancos/medicion/_datos_internos/metadatos.json"}
   ]
 }
 ```
@@ -72,6 +73,7 @@ banco: dos bancos distintos pueden conservar el mismo título original.
 Cada entrada de `materials` incluye:
 
 - `path`: ruta del original relativa al curso.
+- Para un material inventariado, guardar su UUID en `material_id` y la versión entera del catálogo en `content_version`. La clave de la entrada en `materials` puede seguir siendo una etiqueta local. Al validar, se consulta la ubicación actual de ese UUID. Si la versión ha cambiado, revisar las preguntas que utilizaban el contenido anterior.
 - `title`: nombre comprensible.
 - `access`: `estudiante` o `docente`, declarado por el profesor.
 - `sha256`: huella SHA-256 actual de sus bytes, en 64 caracteres hexadecimales.
@@ -79,9 +81,18 @@ Cada entrada de `materials` incluye:
 La utilidad comprueba las exclusiones y la selección del curso antes de leer
 el original para verificar su huella. Si cambia, exige revisar las preguntas
 dependientes antes de crear otro cuestionario; no actualiza la huella automáticamente.
-Una selección de fuentes aplazada, una fuente excluida, ilegible o inexistente
-impide usar el banco afectado. Las entregas y resultados permanecen fuera del
+Cuando un banco requiere originales del curso, estos deben estar seleccionados,
+accesibles y vigentes. Una fuente excluida bloquea el banco que la necesita. Las entregas y resultados permanecen fuera del
 corpus. Elegir una fuente no autoriza su publicación.
+
+Un profesor puede seleccionar un archivo generado por IA como entrada directa para
+un encargo concreto, por ejemplo el enunciado de una actividad. En los comandos
+de catálogo y composición, repetir `--direct-material` para cada archivo elegido.
+Se admite la ruta relativa al curso o el UUID inventariado. El permiso se limita
+a esa ejecución. La wiki y las fuentes consolidadas mantienen su propio alcance.
+Las recomendaciones para el alumnado requieren que los metadatos de acceso
+del inventario, del banco y de la recomendación concuerden en
+`estudiante`. Reservar para el docente todo recurso de audiencia incierta.
 
 Cada pregunta del GIFT debe tener exactamente una entrada de `questions`, con:
 
@@ -102,15 +113,16 @@ corresponder a un material declarado y tener su mismo acceso. El feedback solo p
 marcados explícitamente como `estudiante`. La etiqueta no cambia los permisos
 reales del archivo.
 
-Ejemplo parcial —el agente debe calcular la huella y completar todas las
-preguntas del banco—:
+Ejemplo parcial. Sustituir el UUID y la versión por los del catálogo, calcular la huella y completar todas las preguntas del banco.
 
 ```json
 {
   "schema_version": 1,
   "materials": {
     "carta-historica": {
-      "path": "fuentes/teoria/carta.md",
+      "material_id": "057609bf-a513-42b8-986a-3d983ec6c27e",
+      "content_version": 1,
+      "path": "Material de la asignatura/Tema 1/carta.md",
       "title": "Carta y contexto histórico",
       "access": "estudiante",
       "sha256": "<huella SHA-256 calculada sobre el archivo>"
@@ -123,7 +135,7 @@ preguntas del banco—:
       "references": [
         {
           "title": "Revisar la carta",
-          "path": "fuentes/teoria/carta.md",
+          "path": "Material de la asignatura/Tema 1/carta.md",
           "access": "estudiante"
         }
       ]
@@ -267,23 +279,28 @@ del cuestionario; no pueden solicitarse como tipo de una cuota.
 
 ## Uso de las utilidades y resultados
 
-El agente puede ejecutar las utilidades; el profesor no necesita conocer estos
-comandos. Los destinos de resultados deben estar fuera del plugin instalado:
+El agente puede ejecutar estas utilidades desde la raíz del plugin. El ejemplo supone que el curso está en `/curso` y utiliza los espacios predeterminados. Sustituir las rutas por las del curso.
 Antes de ejecutar `build-cuestionarios`, guardar la selección acordada en el
 `_datos_internos/seleccion.json` del cuestionario. No dejarla suelta en la
 carpeta superior ni reutilizar una salida que ya contenga modelos.
 
 ```sh
-python scripts/docencia.py validate-catalog /curso/materiales_generados/bancos/_datos_internos/catalogo.json
+python scripts/docencia.py validate-catalog "/curso/Material generado por IA/bancos/_datos_internos/catalogo.json"
 python scripts/docencia.py build-cuestionarios \
-  --catalog /curso/materiales_generados/bancos/_datos_internos/catalogo.json \
-  --selection /curso/materiales_generados/cuestionarios/parcial-01/_datos_internos/seleccion.json \
+  --catalog "/curso/Material generado por IA/bancos/_datos_internos/catalogo.json" \
+  --selection "/curso/Material generado por IA/cuestionarios/parcial-01/_datos_internos/seleccion.json" \
   --title "Cuestionario de fuentes y medición" \
-  --questions 5 --models 4 --seed 42 --layout curso-v3 \
-  --output /curso/materiales_generados/cuestionarios/parcial-01
+  --questions 5 --models 4 --seed 42 --layout curso-v4 \
+  --output "/curso/Material generado por IA/cuestionarios/parcial-01"
 ```
 
-La entrada antigua de un único GIFT y sus metadatos opcionales sigue disponible.
+Si se han elegido dos documentos generados directamente, añadir a ambas invocaciones las mismas opciones:
+
+```text
+--direct-material "Material generado por IA/actividades/medicion/alumnado/enunciado.md" --direct-material "Material generado por IA/actividades/medicion/alumnado/plantilla.md"
+```
+
+La entrada de un único GIFT y sus metadatos opcionales sigue disponible.
 Los bancos antiguos sin procedencia completa pueden usarse por esa vía; el
 agente debe completar sus metadatos antes de ofrecer el equilibrio por materiales
 y dificultad del catálogo.
@@ -296,7 +313,7 @@ banco único, metadatos externos o cuotas antiguas por categoría.
 serializable con recuentos; las inconsistencias producen `ValueError` y no
 modifican los archivos.
 
-En `--layout curso-v3`, la salida contiene `alumnado/` para modelos
+En `--layout curso-v4`, la salida contiene `alumnado/` para modelos
 HTML/PDF sin soluciones, `docente/` para solucionarios y GIFT y
 `_datos_internos/` para selección, manifiesto, informe y bancos congelados.
 La selección se guarda antes de generar y es el único archivo previo permitido.

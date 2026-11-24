@@ -26,8 +26,14 @@ def main(argv=None):
     selection = project.add_mutually_exclusive_group()
     selection.add_argument("--include", action="append", help="Carpeta relativa elegida; se puede repetir")
     selection.add_argument("--no-sources", action="store_true", help="Elegir explícitamente ninguna fuente")
-    project.add_argument("--exclude", action="append", help="Archivo o subcarpeta relativa; sin patrones")
+    exclusions = project.add_mutually_exclusive_group()
+    exclusions.add_argument("--no-exclusions", action="store_true", help="Retirar expresamente todas las exclusiones opcionales")
+    exclusions.add_argument("--exclude", action="append", help="Archivo o subcarpeta relativa; sin patrones")
     project.add_argument("--dry-run", action="store_true")
+    project.add_argument("--spaces", type=Path, help="JSON con raíces de sources, generated y submissions")
+    project.add_argument("--adopt-v3", action="store_true", help="Aplicar una adopción previamente aceptada")
+    from docencia.catalog_cli import add_commands, dispatch, read_json
+    add_commands(commands)
     check = commands.add_parser("check-project", help="Diagnosticar estructura y entradas sin modificarlas")
     check.add_argument("root", type=Path)
     migration = commands.add_parser("plan-migration", help="Previsualizar movimientos y enlaces; nunca mover")
@@ -56,8 +62,8 @@ def main(argv=None):
     questionnaire.add_argument("--seed", type=int, default=42)
     questionnaire.add_argument("--per-category", type=Path, help="JSON: categoría -> cantidad; suma --questions")
     questionnaire.add_argument("--html-only", action="store_true")
-    questionnaire.add_argument("--layout", choices=("flat", "curso-v3"), default="flat",
-                      help="curso-v3 agrupa selección, manifiesto y snapshots en el cuestionario")
+    questionnaire.add_argument("--layout", choices=("flat", "curso-v3", "curso-v4"), default="flat",
+                      help="El formato de curso agrupa selección, manifiesto y snapshots en el cuestionario")
     feedback = commands.add_parser("build-feedback", help="Preparar comentarios CSV sin modificar notas")
     feedback.add_argument("manifest", type=Path)
     feedback.add_argument("--input", action="append", type=Path, required=True)
@@ -79,6 +85,8 @@ def main(argv=None):
     doctor = commands.add_parser("doctor", help="Comprobar capacidades locales sin instalar dependencias")
     doctor.add_argument("--pdf", action="store_true", help="Exigir también las capacidades PDF")
     doctor.add_argument("--project", type=Path, help="Añadir diagnóstico del curso")
+    for command in (catalog, questionnaire):
+        command.add_argument("--direct-material", action="append", help="Actividad generada autorizada como entrada directa (ruta relativa o UUID)")
     args = parser.parse_args(argv)
     if args.command == "build-cuestionarios":
         if bool(args.bank) == bool(args.catalog):
@@ -87,15 +95,19 @@ def main(argv=None):
             parser.error("--catalog requiere --selection con el reparto acordado.")
         if args.catalog and (args.metadata or args.per_category):
             parser.error("Con --catalog, los metadatos y las cuotas proceden del catálogo y --selection.")
-        if not args.catalog and (args.selection or args.project):
+        if not args.catalog and (args.selection or args.project or args.direct_material):
             parser.error("--selection y --project requieren --catalog.")
     try:
         status = 0
         if args.command == "init-project":
-            from docencia.project import initialize_project
-            result = initialize_project(args.root, include=[] if args.no_sources else args.include,
-                                        exclude=args.exclude, dry_run=args.dry_run)
+            from docencia.project import initialize_course
+            result = initialize_course(args.root, spaces=read_json(args.spaces) if args.spaces else None,
+                                       adopt_v3=args.adopt_v3, include=[] if args.no_sources else args.include,
+                                        exclude=[] if args.no_exclusions else args.exclude, dry_run=args.dry_run)
             status = 2 if result["status"] == "pending_approval" else 0
+        elif args.command.startswith(("catalog-", "organize-")):
+            result = dispatch(args)
+            status = 2 if isinstance(result, dict) and result.get("status") == "needs_review" else 0
         elif args.command == "check-project":
             from docencia.project import check_project
             result = check_project(args.root)
@@ -110,6 +122,8 @@ def main(argv=None):
             result = register_map(args.root, args.map_dir, dry_run=args.dry_run)
         elif args.command == "validate-bank":
             from docencia.gift import parse_gift
+            from docencia.banks import validate_course_bank_files
+            validate_course_bank_files(args.bank)
             questions = parse_gift(args.bank.read_text(encoding="utf-8-sig"))
             types = {}
             for question in questions:
@@ -117,7 +131,7 @@ def main(argv=None):
             result = {"status": "ok", "questions": len(questions), "types": types}
         elif args.command == "validate-catalog":
             from docencia.banks import validate_catalog
-            result = validate_catalog(args.catalog, project_root=args.project)
+            result = validate_catalog(args.catalog, project_root=args.project, direct_materials=args.direct_material)
         elif args.command == "build-cuestionarios":
             from docencia.cuestionarios import build_cuestionarios
             quotas = json.loads(args.per_category.read_text(encoding="utf-8-sig")) if args.per_category else None
@@ -125,10 +139,10 @@ def main(argv=None):
                                    questions=args.questions, seed=args.seed, metadata_path=args.metadata,
                                    per_category=quotas, html_only=args.html_only,
                                    catalog_path=args.catalog, selection_path=args.selection,
-                                   project_root=args.project, layout=args.layout)
+                                   project_root=args.project, layout=args.layout, direct_materials=args.direct_material)
             statuses = {m["id"]: m["pdf_status"] for m in manifest["models"]}
             pending = any(str(s).startswith("PDF pendiente") for states in statuses.values() for s in states.values())
-            manifest_dir = (args.output.resolve() / "_datos_internos" if args.layout == "curso-v3"
+            manifest_dir = (args.output.resolve() / "_datos_internos" if args.layout != "flat"
                             else args.output.resolve())
             result = {"status": "pdf_pending" if pending else "ok", "manifest": str(manifest_dir / "manifest.json"),
                       "excluded_question_ids": manifest["excluded_question_ids"], "pdf_status": statuses}
@@ -170,6 +184,9 @@ def main(argv=None):
                     status = 2
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return status
+    except KeyError as exc:
+        print(json.dumps({"status": "error", "message": f"Identificador o campo desconocido: {exc}."}, ensure_ascii=False), file=sys.stderr)
+        return 1
     except (ValueError, OSError, RuntimeError) as exc:
         print(json.dumps({"status": "error", "message": str(exc)}, ensure_ascii=False), file=sys.stderr)
         return 1

@@ -4,9 +4,15 @@ Consulta la [guía visual de los procesos](ESQUEMAS-PROCESOS.md) para ver entrad
 revisiones, resultados y pasos manuales de Moodle en cada recorrido.
 
 El profesor puede conversar sin conocer los nombres de las skills. El agente
-utiliza por defecto español claro en las respuestas y los documentos, salvo que
-se haya indicado otro idioma o estilo. Conserva rigor, términos, citas y
+respeta el idioma y el estilo del encargo. El español simplificado se aplica
+cuando el docente solicita ese estilo o la skill correspondiente. Conserva rigor, términos, citas y
 restricciones; esta preferencia no autoriza a traducir textos literales.
+
+## Antes y después de trabajar con materiales
+
+Cuando el encargo dependa de los archivos actuales, el agente reconcilia las raíces o la unidad pertinente con `catalog-sync`. Reutiliza su resultado mientras esté vigente. Para orientación o consultas de solo lectura, comprueba el catálogo existente, la selección y las incidencias que afecten a la respuesta. Una conversación con adjuntos suficientes puede continuar sin inicializar el curso.
+
+Tras crear un material en el espacio de producción, registra el conjunto y sus dependencias en el catálogo. Si el profesor pide incorporarlo a la asignatura, verifica el destino, aplica el plan de consolidación y atiende las incorporaciones y dependencias señaladas en el mismo encargo. Actualiza las páginas pertinentes de una wiki existente, sus referencias y vistas. Si el corpus acordado excluye el destino, informa antes de ampliarlo. Una wiki nueva requiere un encargo de creación. Los datos del espacio de entregas solo se usan en el lote correspondiente.
 
 ## Ayuda inline en cualquier punto
 
@@ -90,7 +96,7 @@ corrección breve, basta una frase final; no añadir un menú completo.
   recomendar crear el mapa. Con mapa válido, ofrecer consultarlo o visualizarlo.
 - **Tras crear, consultar o visualizar el mapa:** ofrecer la actividad o el banco
   pertinente; apuntes y diapositivas visuales individuales son otras opciones.
-- **Tras una actividad:** ofrecer preparar `resultados/<actividad>/<convocatoria>/`
+- **Tras una actividad:** ofrecer preparar `Entregas/<actividad>/<convocatoria>/`
   con el mismo identificador, subcarpeta para entregas y LEEME desde la
   [plantilla](../templates/recepcion-actividad.md). Si ya está preparado, mostrar
   dónde colocar trabajos y CSV; si ya hay un lote recibido e identificado,

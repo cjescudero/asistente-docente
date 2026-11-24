@@ -316,7 +316,9 @@ def build_feedback(manifest_path, input_paths, config_path, output_dir, *,
     opt-in and requires explicit answer columns; unavailable individual answers
     receive conceptual feedback and an audit warning, not an invented selection.
     """
-    output = Path(output_dir).expanduser().resolve()
+    from .course_outputs import course_output
+    input_paths = list(input_paths)
+    output = course_output(output_dir, "submissions", inputs=(manifest_path, config_path, gradebook_path, *input_paths))
     if output == _PACKAGE_ROOT or _PACKAGE_ROOT in output.parents:
         raise FeedbackError("La salida debe estar fuera del paquete instalado.")
     try:

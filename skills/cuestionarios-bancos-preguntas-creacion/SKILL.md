@@ -7,9 +7,7 @@ description: Crear, ampliar y revisar bancos GIFT asociados a materiales o activ
 
 Construir un banco cuya cobertura, dificultad y soluciones puedan revisar el profesor. El formato de Moodle es **GIFT**, no GIF.
 
-Usar por defecto [español conciso](../espanol-conciso-redaccion/SKILL.md) en la
-conversación y los documentos, salvo que el profesor indique otro idioma o estilo.
-Respetar citas, identificadores y términos que deban conservarse literalmente.
+Combinar este encargo con [español conciso](../espanol-conciso-redaccion/SKILL.md) solo si el docente pide esa skill o el estilo de español simplificado, incluido un encargo expreso para todo el curso.
 
 ## Puntuaciones e instrucciones
 
@@ -27,6 +25,8 @@ no imprimirlas como instrucciones del alumnado.
 
 ## Contexto del proyecto
 
+Resolver las rutas desde los espacios asignados del curso. Los nombres de carpeta de los ejemplos corresponden a la configuración inicial. Si hay varias raíces posibles, reutilizar la decisión del encargo o preguntar por el destino. Consultar el catálogo por identidad y versión cuando el trabajo dependa de materiales persistentes.
+
 Aplicar el [contrato común del proyecto](../../docs/PROYECTO-DOCENTE.md) solo en
 lo necesario para el encargo: respetar selección y exclusiones, consultar el
 índice del mapa existente y comprobar las entradas requeridas. Un texto o
@@ -39,12 +39,12 @@ sobre siguientes pasos y posibilidades, invocar
 Transferirle el objetivo, las decisiones conocidas y los resultados de esta tarea;
 tras resolver la duda, retomar el encargo ya autorizado.
 
-En `curso-v3`, guardar cada banco nuevo en `materiales_generados/bancos/<id>/` y registrarlo
-en `materiales_generados/bancos/_datos_internos/catalogo.json`. Sus metadatos y
+En `curso-v4`, guardar cada banco nuevo en `Material generado por IA/bancos/<id>/` y registrarlo
+en `Material generado por IA/bancos/_datos_internos/catalogo.json`. Sus metadatos y
 `material-docente.json` van en `<id>/_datos_internos/`; el registro de tipo `banco`
 y `LEEME.md` muestran el estado; un borrador permanece en esa carpeta al revisarse.
-El catálogo admite `path_base: "project"` para enlazar bancos aportados en
-`fuentes/evaluaciones/bancos/` y creados, sin copiarlos ni moverlos. El banco y sus
+Al vincular materiales catalogados, guardar su UUID en `material_id` y la versión en `content_version`. Una actividad generada que el docente elija como entrada directa puede indicarse mediante `--direct-material`; esa elección se limita al banco. El catálogo admite `path_base: "project"` para enlazar bancos aportados en
+la raíz de referencia acordada y creados, sin copiarlos ni moverlos. El banco y sus
 metadatos completos son docentes aunque algunas fuentes sean estudiantiles.
 
 ## Archivos de entrega
