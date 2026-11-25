@@ -1,5 +1,10 @@
 # Historial
 
+## 0.14.0 — 2026-11-25
+
+- La evaluación revisa descuentos y máximos contra el enunciado definitivo y las evidencias de cada entrega.
+- El informe docente documenta cada decisión y el comentario informativo de Moodle explica al estudiante los motivos con ejemplos de su propio trabajo.
+
 ## 0.13.0 — 2026-11-24
 
 - Nuevo espacio opcional «Notas del curso» para las ideas y la planificación del profesor. Se puede habilitar al iniciar un curso o después, con una carpeta nueva o existente y el nombre elegido.

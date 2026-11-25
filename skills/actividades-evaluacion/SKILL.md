@@ -39,7 +39,7 @@ esa exclusión no impide la evaluación expresamente solicitada.
 
 ## Preparar la evaluación
 
-Leer el enunciado utilizado, la rúbrica, las restricciones y la resolución o guía
+Usar el enunciado definitivo y las modificaciones comunicadas por el profesor. Respetar el formato libre cuando se haya acordado. Un plan preliminar, una herramienta opcional o el formato de la solución no añaden requisitos. Leer el enunciado utilizado, la rúbrica, las restricciones y la resolución o guía
 disponibles. Si existe `actividad.json`, comprobar su versión y los archivos
 asociados conforme al [registro de actividad](../../docs/ACTIVIDADES.md).
 Confirmar la identidad mediante identificadores explícitos, sin emparejar personas
@@ -50,7 +50,7 @@ Si no existe rúbrica suficiente, proponer criterios antes de asignar calificaci
 
 ## Hoja Moodle y formato de entrada
 
-La utilidad de exportación admite CSV, no `.xlsx` directamente. Pedir el CSV
+Si el docente solicita una copia Excel para revisión, editar una copia del libro, verificarla celda a celda y conservar su estructura. Distinguir este entregable del archivo de importación. Para generar un CSV importable, la utilidad de exportación admite CSV, no `.xlsx` directamente. Para esa exportación, pedir el CSV
 original de la tarea o del libro según la vía elegida. Si solo existe Excel,
 conservarlo y comprobar si puede obtenerse el CSV de Moodle; una conversión con
 herramientas disponibles debe conservar identificadores como texto, filas,
@@ -66,7 +66,7 @@ permite generar la copia importable sin exigir una segunda petición.
 2. Leer contenido y anexos pertinentes. En notebooks, examinar texto, código y salidas; no ejecutar automáticamente código de estudiantes. Una respuesta puede estar en un bloque de código o junto al texto de la pregunta.
 3. Evaluar por criterio, registrando evidencia concreta: sección, página, celda o fragmento breve. Reconocer alternativas correctas aunque no coincidan con la solución docente.
 4. Calcular la nota solo con la escala y ponderación establecidas. Comprobar sumas, máximos, penalizaciones autorizadas y coherencia entre casos comparables. No recalibrar notas por una distribución esperada sin instrucción del profesor.
-5. Redactar feedback breve: logro observado, dificultad sustentada y siguiente acción de mejora. No mencionar la nota dentro del comentario por defecto si ya existe una columna destinada a ella.
+5. Revisar cada descuento y cada máxima calificación con el mismo criterio. Preparar un informe reservado por actividad y sintetizar sus motivos en el comentario individual que acompañará a la nota en Moodle. Aplicar las pautas y el ejemplo de la [referencia de evaluación](references/evaluacion.md#revisar-las-calificaciones).
 6. Guardar la evaluación estructurada con evidencias por criterio y preparar el perfil de columnas según [Calificaciones de actividades](../../docs/CALIFICACIONES.md). El agente y el profesor valoran las evidencias; la utilidad comprueba cálculos, correspondencias y exportación, sin corregir los trabajos por sí misma.
 7. Generar una copia de la hoja elegida con nota y comentario de los casos evaluados, preservando filas, identificadores y columnas ajenas. Registrar valor anterior, valor nuevo y justificación. Los datos obligatorios inconsistentes o correspondencias ambiguas bloquean la exportación; conservar el análisis cualitativo para resolverlas. No transformar entregas ausentes, ilegibles o pendientes en cero.
 8. Entregar evaluación por criterio, CSV, registro de cambios e incidencias para revisión docente. La importación es manual. Distinguir una rúbrica local de la calificación avanzada configurada en Moodle y comprobar las limitaciones de cada vía conforme a la [guía Moodle](../../docs/MOODLE.md); no cambiar de procedimiento automáticamente.

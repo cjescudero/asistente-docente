@@ -129,7 +129,7 @@ rechazan para no ignorar errores de escritura en criterios o perfiles.
          "evidence": ["Informe, conclusión: delimita la tesis y distingue observación e interpretación."]}
       ],
       "total_points": 7,
-      "feedback": "Explica cómo el contexto afecta a la fiabilidad de cada fuente.",
+      "feedback": "Contrastas dos fuentes y distingues lo observado de tu interpretación. El enunciado pedía valorar ambas en su contexto. En la página 2 solo sitúas una de ellas, por lo que queda sin justificar qué fiabilidad tiene la otra para sostener tu conclusión.",
       "justification": "La rúbrica exige contraste contextual y argumentación sustentada."
     },
     {
