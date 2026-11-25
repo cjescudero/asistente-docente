@@ -3,7 +3,7 @@
 El plugin prepara archivos para dos recorridos docentes:
 
 - **Actividades:** enunciado y criterios → entregas descargadas → corrección con
-  evidencias → copia de la hoja de calificaciones con nota y feedback.
+  evidencias → CSV para importar notas y feedback.
 - **Cuestionarios:** bancos GIFT → modelos impresos y manifiesto → cuestionarios
   ofuscados → puntuación de Moodle → comentarios de mejora.
 
@@ -51,6 +51,19 @@ bloquean la exportación. Un trabajo ausente, ilegible o pendiente no se convier
 automáticamente en cero. Para grupos, aportar la relación explícita de miembros
 y la regla de nota común o individual. No emparejar por semejanza de nombres.
 Antes de importar, revisar los cambios y los casos pendientes en una muestra.
+
+## Importar notas y comentarios en el libro
+
+1. En el curso, abre **Calificaciones → Importar → Archivo CSV**. Adjunta el CSV y selecciona su codificación y separador. Para un archivo UTF-8 separado por comas, elige **UTF-8** y **Coma**. Mantén el formato decimal comprobado para tu instancia. El separador de columnas y el separador decimal se configuran o interpretan por separado.
+2. Pulsa **Subir calificaciones** para abrir la vista previa. Debajo de la tabla, busca **Identificar al usuario por**. En **Mapa desde**, elige la columna del CSV, normalmente **Dirección de correo**. En **Mapa a**, elige **Dirección de correo** como campo del perfil (`useremail`). El destino preseleccionado puede ser **ID de usuario**, que se refiere al identificador interno de Moodle.
+3. En **Mapeos de ítems de calificación**, asigna cada columna de nota, normalmente **(Real)**, a la actividad existente. Asigna su columna de comentario, normalmente **(Retroalimentación)**, a **Retroalimentación para** esa misma actividad. Deja en **Ignorar** los campos ajenos, incluidos los totales. La columna de correo ya identifica a la persona en el bloque anterior. Mapear la nota y el comentario juntos evita que la importación del comentario borre la nota asociada.
+4. Revisa ambas asignaciones para cada actividad y pulsa **Subir calificaciones** al final del formulario. Comprueba el mensaje de éxito y revisa notas y comentarios representativos en el libro. Importar al libro equivale a editar las notas manualmente y puede impedir editarlas desde la página de entregas.
+
+Si Moodle dice que no encuentra un usuario «con id de» y muestra su correo,
+pulsa **Continuar** para iniciar una carga nueva y revisa **Mapa a** bajo la
+vista previa. Si el destino ya es correo, comprueba el valor exacto y su
+unicidad en una exportación reciente del mismo curso.
+[Documentación de importación de calificaciones](https://docs.moodle.org/en/Grade_import).
 
 ## Cuestionarios en papel y cuestionarios ofuscados
 

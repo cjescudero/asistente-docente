@@ -31,15 +31,14 @@ no tiene que escribir JSON. Si el encargo incluye notas y feedback para Moodle,
 la copia CSV forma parte de esa misma tarea. Si falta la hoja o una correspondencia,
 se explica qué aportar y se conserva el análisis cualitativo disponible.
 
-La utilidad acepta **CSV**, no `.xlsx` directamente. Excel puede abrir un CSV,
-pero eso no lo convierte en un libro Excel. Si solo se aporta `.xlsx`, conservar
-el original y solicitar el CSV de Moodle o convertir una copia con herramientas
-disponibles, verificando identificadores como texto, ceros iniciales, columnas,
-filas y notas. No confundir una conversión de formato con cambiar entre hoja de
-tarea y libro de calificaciones.
+El entregable para importar en Moodle es **CSV**. Si la exportación disponible
+está en Excel, conservarla y convertir una copia cuando se puedan comprobar
+identificadores, ceros iniciales, columnas, filas y notas. Mantener la vía elegida
+entre hoja de tarea y libro de calificaciones. Para el libro, seguir las
+[instrucciones de asignación](MOODLE.md#importar-notas-y-comentarios-en-el-libro).
 
 El identificador puede ser el de participante de la hoja de tareas, el ID de
-usuario, el nombre de usuario o el identificador institucional de un libro,
+usuario, el nombre de usuario, el correo del perfil o el identificador institucional de un libro,
 siempre que figure explícitamente en ambos archivos. No se atribuye una entrega
 por semejanza del nombre del estudiante. Una valoración grupal declara todos
 sus miembros con esos mismos identificadores; no se infiere la pertenencia por

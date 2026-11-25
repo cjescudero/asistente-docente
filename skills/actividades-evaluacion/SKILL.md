@@ -1,6 +1,6 @@
 ---
 name: actividades-evaluacion
-description: Evaluar actividades, trabajos, informes o notebooks descargados de Moodle con su enunciado, rúbrica y resolución disponibles; generar puntuaciones justificadas y feedback en una copia de la hoja Moodle. No usar para crear materiales, procesar cuestionarios ofuscados ni atribuir uso de IA sin pruebas.
+description: Evaluar actividades, trabajos, informes o notebooks descargados de Moodle con su enunciado, rúbrica y resolución disponibles; generar puntuaciones justificadas y feedback en un CSV para importar en Moodle. No usar para crear materiales, procesar cuestionarios ofuscados ni atribuir uso de IA sin pruebas.
 ---
 
 # Actividades: evaluación
@@ -48,17 +48,20 @@ y la regla docente para repartir la calificación. Examinar solo el lote solicit
 
 Si no existe rúbrica suficiente, proponer criterios antes de asignar calificaciones definitivas. Se puede avanzar con un análisis cualitativo explícitamente provisional. Usar la [referencia de evaluación](references/evaluacion.md) para extracción, evidencias y casos ambiguos.
 
-## Hoja Moodle y formato de entrada
+## Formato de entrada y entrega para Moodle
 
-Si el docente solicita una copia Excel para revisión, editar una copia del libro, verificarla celda a celda y conservar su estructura. Distinguir este entregable del archivo de importación. Para generar un CSV importable, la utilidad de exportación admite CSV, no `.xlsx` directamente. Para esa exportación, pedir el CSV
-original de la tarea o del libro según la vía elegida. Si solo existe Excel,
-conservarlo y comprobar si puede obtenerse el CSV de Moodle; una conversión con
-herramientas disponibles debe conservar identificadores como texto, filas,
-columnas, ceros iniciales y notas, documentando y revisando la correspondencia.
-No cambiar de vía Moodle por comodidad de formato. Si faltan hoja o identificadores,
-explicar lo pendiente; el análisis cualitativo puede continuar, pero no la
-exportación de notas. Un encargo que incluye calificar y preparar feedback
-permite generar la copia importable sin exigir una segunda petición.
+Entregar un CSV importable con las notas y el feedback cuando el destino sea Moodle. Preparar un Excel adicional únicamente si el docente lo pide para revisión.
+
+Partir de la exportación original de Moodle para la vía elegida. Si el único
+original disponible es Excel, aprovechar una copia convertida a CSV cuando
+se puedan verificar filas, identificadores, encabezados, ceros iniciales y
+valores. Mantener la vía acordada. Si falta una correspondencia verificable,
+dejar pendiente la exportación afectada y continuar el análisis cualitativo.
+
+Para el libro de calificaciones, preferir el correo de la exportación vigente
+cuando esté disponible y sea único en el lote. Conservar el valor exacto y
+comprobar su correspondencia con la entrega. La hoja sin conexión de una tarea
+usa su propio identificador de participante.
 
 ## Flujo
 
@@ -68,8 +71,8 @@ permite generar la copia importable sin exigir una segunda petición.
 4. Calcular la nota solo con la escala y ponderación establecidas. Comprobar sumas, máximos, penalizaciones autorizadas y coherencia entre casos comparables. No recalibrar notas por una distribución esperada sin instrucción del profesor.
 5. Revisar cada descuento y cada máxima calificación con el mismo criterio. Preparar un informe reservado por actividad y sintetizar sus motivos en el comentario individual que acompañará a la nota en Moodle. Aplicar las pautas y el ejemplo de la [referencia de evaluación](references/evaluacion.md#revisar-las-calificaciones).
 6. Guardar la evaluación estructurada con evidencias por criterio y preparar el perfil de columnas según [Calificaciones de actividades](../../docs/CALIFICACIONES.md). El agente y el profesor valoran las evidencias; la utilidad comprueba cálculos, correspondencias y exportación, sin corregir los trabajos por sí misma.
-7. Generar una copia de la hoja elegida con nota y comentario de los casos evaluados, preservando filas, identificadores y columnas ajenas. Registrar valor anterior, valor nuevo y justificación. Los datos obligatorios inconsistentes o correspondencias ambiguas bloquean la exportación; conservar el análisis cualitativo para resolverlas. No transformar entregas ausentes, ilegibles o pendientes en cero.
-8. Entregar evaluación por criterio, CSV, registro de cambios e incidencias para revisión docente. La importación es manual. Distinguir una rúbrica local de la calificación avanzada configurada en Moodle y comprobar las limitaciones de cada vía conforme a la [guía Moodle](../../docs/MOODLE.md); no cambiar de procedimiento automáticamente.
+7. Generar la copia CSV con nota y comentario de los casos evaluados, preservando filas, identificadores y columnas ajenas. En el CSV, escribir los comentarios nuevos en una sola línea sin recortar el contenido y verificar que el archivo se relee con la codificación y el separador indicados. Registrar valor anterior, valor nuevo y justificación. Los datos obligatorios inconsistentes o correspondencias ambiguas bloquean la exportación; conservar el análisis cualitativo para resolverlas. No transformar entregas ausentes, ilegibles o pendientes en cero.
+8. Entregar evaluación por criterio, CSV, registro de cambios e incidencias para revisión docente. Indicar qué codificación y separador usar. En el libro, explicar los dos desplegables de identificación y el destino de cada par de columnas. Si se usa correo, elegir la columna «Dirección de correo» en «Mapa desde» y el campo «Dirección de correo» en «Mapa a». Vincular «(Real)» con la actividad existente y «(Retroalimentación)» con «Retroalimentación para» esa misma actividad. Seguir la [guía de importación](../../docs/MOODLE.md#importar-notas-y-comentarios-en-el-libro) para revisar los valores por defecto, la vista previa y el resultado. Si se usa la hoja sin conexión, comprobar las restricciones de calificación avanzada descritas en la [guía Moodle](../../docs/MOODLE.md#entregas-de-actividades).
 
 ## Cierre
 

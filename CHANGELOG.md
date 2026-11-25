@@ -1,5 +1,9 @@
 # Historial
 
+## 0.14.1 — 2026-11-25
+
+- La evaluación entrega un CSV listo para Moodle. La guía muestra cómo identificar al alumnado por correo y asignar la nota y la retroalimentación de cada actividad.
+
 ## 0.14.0 — 2026-11-25
 
 - La evaluación revisa descuentos y máximos contra el enunciado definitivo y las evidencias de cada entrega.
