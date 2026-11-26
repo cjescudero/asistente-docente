@@ -13,7 +13,7 @@ from . import project as p
 
 RESERVED = frozenset({".agents", ".git", ".venv", "venv", "__pycache__", "node_modules",
                       ".pytest_cache", ".codex", ".claude", p.INTERNAL_PROJECT_DIR,
-                      p.INTERNAL_MATERIAL_DIR, p.MANAGEMENT_DIR})
+                      p.INTERNAL_MATERIAL_DIR, *p.MANAGEMENT_NAMES})
 
 
 def key(value):
@@ -223,7 +223,7 @@ def corpus_policy(root, config, *, refresh=False):
             if name not in inc:
                 _observe(root, config, name, descend=False, found=inc, unavailable=unavailable)
         if updated != bindings and (out or inc):
-            destination = p._safe_path(root, p.CONFIG_V4)
+            destination = p._safe_path(root, p.config_v4(root))
             with destination.open(encoding="utf-8") as handle:
                 active = json.load(handle, object_pairs_hook=p._unique_json)
             if active.get("source_bindings", {}) != bindings or active["sources"] != sources:
@@ -269,8 +269,8 @@ def admitted_identity(root, candidate):
     if metadata and stat.S_ISREG(metadata.st_mode) and metadata.st_nlink > 1:
         # Los demás nombres podrían pertenecer al espacio privado de Entregas.
         return False
-    catalog = p._safe_path(root, f"{p.MANAGEMENT_DIR}/{CATALOG}")
-    if p._safe_path(root, f"{p.MANAGEMENT_DIR}/{PENDING_TX}").exists():
+    catalog = p._safe_path(root, f"{p.management_dir(root)}/{CATALOG}")
+    if p._safe_path(root, f"{p.management_dir(root)}/{PENDING_TX}").exists():
         return False
     try:
         metadata = catalog.stat()
@@ -327,7 +327,7 @@ def instructions(config):
                       "Mantener estas notas fuera del catálogo docente, el mapa y las vistas del alumnado. "
                       "Incorporar una nota concreta como referencia solo por encargo expreso, acordando "
                       "su destino y audiencia. La carpeta conserva sus permisos de almacenamiento."])
-    lines.extend(["", """Respetar las carpetas y las decisiones del docente. Consultar en Gestión del proyecto la selección de fuentes, el catálogo y las incidencias cuando existan. Clasificar unidades lógicas con IDs estables, conservar las agrupaciones y dar prioridad a las confirmaciones del docente. Mantener separados ubicación, procedencia, acceso y estado.
+    lines.extend(["", """Respetar las carpetas y las decisiones del docente. Consultar en la carpeta de gestión del proyecto la selección de fuentes, el catálogo y las incidencias cuando existan. Clasificar unidades lógicas con IDs estables, conservar las agrupaciones y dar prioridad a las confirmaciones del docente. Mantener separados ubicación, procedencia, acceso y estado.
 
 Mantener la estructura actual por defecto. Presentar las carpetas y operaciones propuestas antes de una reorganización física y aplicar solo las aceptadas. Promover material generado a referencia oficial únicamente por decisión expresa. Comprobar identidades y versiones al comenzar un trabajo que dependa del inventario. Reparar enlaces tras un movimiento y actualizar solo los contenidos derivados afectados por cambios de fuente.
 
@@ -416,24 +416,24 @@ def initialize(root, *, spaces, notes, include, exclude, dry_run, adopt_v3):
         raise ValueError("AGENTS.md debe ser un archivo regular.")
     block = instructions(config)
     proposal = p._proposal(agents.read_text(encoding="utf-8"), block) if agents.exists() else None
-    managed = p._safe_path(root, p.CONFIG_V4)
+    managed = p._safe_path(root, p.config_v4(root))
     # Si el AGENTS pertenece al docente, persistir la configuración para poder descubrirla.
     persist = managed.exists() or config != defaults() or proposal is not None
     dirs = list(p.project_directories(config))
     if persist:
-        dirs.append(p.MANAGEMENT_DIR)
+        dirs.append(p.management_dir(root))
     new = [d + "/" for d in dirs if not (root / d).exists()]
     if not agents.exists():
         new.append("AGENTS.md")
     if persist and not managed.exists():
-        new.append(p.CONFIG_V4)
-    update = [p.CONFIG_V4] if managed.is_file() and config != previous else []
+        new.append(p.config_v4(root))
+    update = [p.config_v4(root)] if managed.is_file() and config != previous else []
     if not dry_run:
         for d in dirs:
             p._safe_path(root, d).mkdir(parents=True, exist_ok=True)
         if not agents.exists():
             p._write_new(agents, "# Instrucciones del proyecto docente\n\n" + block + "\n")
-        if p.CONFIG_V4 in new or update:
+        if p.config_v4(root) in new or update:
             p._replace_config(managed, json.dumps(config, ensure_ascii=False, indent=2) + "\n")
     return {"status": "dry_run" if dry_run else "pending_approval" if proposal else "ok",
             "root": str(root), "config": config, "created": [] if dry_run else new,

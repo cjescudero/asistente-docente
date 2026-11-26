@@ -14,7 +14,7 @@ from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path, PurePosixPath
 
-from .project import MANAGEMENT_DIR, _relative, _root, _safe_path, _within_relative, load_project
+from .project import MANAGEMENT_DIR, MANAGEMENT_NAMES, management_dir, _relative, _root, _safe_path, _within_relative, load_project
 from .spaces import corpus_policy, under as _under, reserved
 
 MANAGEMENT = MANAGEMENT_DIR
@@ -23,7 +23,7 @@ HISTORY = "historial_operaciones.jsonl"
 PENDING_TX = "transaccion_catalogo.json"
 CATEGORIES = ("Organización", "Teoría", "Práctica", "Actividades y proyectos",
               "Evaluaciones", "Recursos", "Soluciones y feedback")
-SKIP = {MANAGEMENT, "_datos_internos", "_datos_internos_proyecto", "node_modules",
+SKIP = {*MANAGEMENT_NAMES, "_datos_internos", "_datos_internos_proyecto", "node_modules",
         "venv", "__pycache__", ".gitkeep", ".DS_Store"}
 # Señales de contenido explícitas. Un nombre o una extensión por sí solos
 # no justifican una clasificación. El agente puede aportar evidencias adicionales.
@@ -72,10 +72,10 @@ def _versioned(path):
 
 @contextmanager
 def _writer(root):
-    directory = _safe_path(root, MANAGEMENT)
+    directory = _safe_path(root, management_dir(root))
     directory.mkdir(exist_ok=True)
     for filename in (CATALOG, HISTORY, PENDING_TX, "catalogo.lock"):
-        path = _safe_path(root, f"{MANAGEMENT}/{filename}")
+        path = _safe_path(root, f"{management_dir(root)}/{filename}")
         if path.exists() and not path.is_file():
             raise ValueError(f"Control de catálogo inválido: {filename}")
     # El sistema operativo libera el bloqueo si el proceso termina.
@@ -171,8 +171,8 @@ def read_catalog(root):
     root = _root(root)
     if load_project(root).get("structure") != "curso-v4":
         raise ValueError("El catálogo requiere un proyecto curso-v4.")
-    path = _safe_path(root, f"{MANAGEMENT}/{CATALOG}")
-    if _safe_path(root, f"{MANAGEMENT}/{PENDING_TX}").exists():
+    path = _safe_path(root, f"{management_dir(root)}/{CATALOG}")
+    if _safe_path(root, f"{management_dir(root)}/{PENDING_TX}").exists():
         with _writer(root) as directory:
             _recover(directory)
     return _versioned(path) if path.exists() else _empty()
@@ -262,7 +262,7 @@ def _selection(config, scope):
     spaces = config["spaces"]
     roots = {p: origin for role, origin in (("sources", "teacher"), ("generated", "ai"))
              for p in spaces[role]}
-    excluded = [*spaces["submissions"], MANAGEMENT, "_datos_internos_proyecto",
+    excluded = [*spaces["submissions"], *MANAGEMENT_NAMES, "_datos_internos_proyecto",
                 *config.get("sources", {}).get("exclude", [])]
     if config.get("map"):
         excluded.append(config["map"])

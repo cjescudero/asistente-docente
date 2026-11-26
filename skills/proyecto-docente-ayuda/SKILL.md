@@ -53,7 +53,7 @@ un banco está validado o unas notas se han importado en Moodle.
 ## Reconocer el estado sin leerlo todo
 
 1. Identificar la raíz y leer las instrucciones aplicables. Consultar
-   la asignación de espacios en `AGENTS.md` y, cuando exista, la configuración en `Gestión del proyecto/proyecto-docente.json`. Si no se conoce la raíz, preguntar por ella
+   la asignación de espacios en `AGENTS.md` y, cuando exista, la configuración en `{carpeta de gestión}/proyecto-docente.json`. Si no se conoce la raíz, preguntar por ella
    solo si hace falta para resolver esa duda. Ofrecer lo que pueda contestarse
    con la conversación y documentación disponible; no bloquear una explicación
    de formatos por desconocer la carpeta. No confundir la instalación del plugin
@@ -132,3 +132,5 @@ Cuando la respuesta requiera continuidad, aplicar el
 sin volver a invocar esta skill. Terminar con la respuesta a la duda y, cuando
 procedan, de una a tres opciones sustentadas y sus entradas pendientes. No
 repetir un menú completo ni convertir una sugerencia en ejecución.
+
+En cursos con carpetas numeradas, consultar los espacios y la selección del JSON. Localizar la carpeta de gestión existente como `Archivos de gestión del proyecto/` o `Gestión del proyecto/`, también cuando esté oculta en Finder.

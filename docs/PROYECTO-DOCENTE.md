@@ -38,7 +38,7 @@ Elige las carpetas y exclusiones para la wiki, incluso si has catalogado un espa
 
 ## Configuración y utilidades
 
-Los siguientes comandos son para el agente. El profesor puede pedir las operaciones en lenguaje natural. Ejecutarlos con el Python del plugin y rutas explícitas. Una inicialización mínima con selección aplazada se reconoce por el bloque del curso en `AGENTS.md`. Las asignaciones personalizadas y la selección se guardan en `Gestión del proyecto/proyecto-docente.json`. Las rutas de configuración se interpretan desde la raíz del curso.
+Los siguientes comandos son para el agente. El profesor puede pedir las operaciones en lenguaje natural. Ejecutarlos con el Python del plugin y rutas explícitas. Una inicialización mínima con selección aplazada se reconoce por el bloque del curso en `AGENTS.md`. Las asignaciones personalizadas y la selección se guardan en `Gestión del proyecto/proyecto-docente.json`. En un curso reorganizado, la misma configuración puede residir en `Archivos de gestión del proyecto/`. Se admite una sola carpeta de gestión por curso, incluso oculta en Finder. Los espacios pueden llamarse `01 Material docente`, `03 Material generado por IA`, `04 Entregas` y `05 Anotaciones durante el curso`. La selección explícita determina qué ramas alimentan el mapa. Organización, datos reservados, referencias y archivo se mantienen fuera de esa selección. Las rutas de configuración se interpretan desde la raíz del curso.
 
 ```sh
 python scripts/docencia.py init-project "/ruta/curso" --dry-run

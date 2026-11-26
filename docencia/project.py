@@ -16,6 +16,7 @@ INTERNAL_PROJECT_DIR = "_datos_internos_proyecto"
 INTERNAL_MATERIAL_DIR = "_datos_internos"
 CONFIG_V3 = f"{INTERNAL_PROJECT_DIR}/{CONFIG_NAME}"
 MANAGEMENT_DIR = "Gestión del proyecto"
+MANAGEMENT_NAMES = (MANAGEMENT_DIR, "Archivos de gestión del proyecto")
 CONFIG_V4 = f"{MANAGEMENT_DIR}/{CONFIG_NAME}"
 COURSE_MARKER = "<!-- asistente-docente:curso-v4 -->"
 DEFAULT_SPACES = {"sources": ["Material de la asignatura"], "generated": ["Material generado por IA"],
@@ -207,7 +208,7 @@ def project_directories(config: dict) -> tuple[str, ...]:
 def _permanent_exclusions(config: dict) -> tuple[str, ...]:
     if config["structure"] == "curso-v4":
         return (*config["spaces"]["submissions"], *config["spaces"].get("notes", []), *config["spaces"]["generated"],
-                MANAGEMENT_DIR, INTERNAL_PROJECT_DIR, ".agents")
+                *MANAGEMENT_NAMES, INTERNAL_PROJECT_DIR, ".agents")
     return PERMANENT_EXCLUSIONS
 
 
@@ -412,13 +413,25 @@ def _implicit_v4(root: Path) -> bool:
     return COURSE_MARKER in agents.read_text(encoding="utf-8").splitlines()
 
 
+def management_dir(root: Path) -> str:
+    """Elegir una única carpeta de gestión para lectura y escritura."""
+    existing = [name for name in MANAGEMENT_NAMES if (root / name).exists() or (root / name).is_symlink()]
+    if len(existing) > 1:
+        raise ValueError("Hay dos carpetas de gestión del proyecto. Aclara cuál está activa.")
+    return existing[0] if existing else MANAGEMENT_DIR
+
+
+def config_v4(root: Path) -> str:
+    return f"{management_dir(root)}/{CONFIG_NAME}"
+
+
 def project_config_path(root: Path) -> Path | None:
     """Localizar el contrato activo. La adopción v3 conserva la configuración anterior."""
     root = _root(root)
     if _safe_path(root, CONFIG_NAME).exists():
         raise ValueError(f"{CONFIG_NAME} en la raíz entra en conflicto con {CONFIG_V3}; aclara su función antes de iniciar el proyecto.")
     v3 = _safe_path(root, CONFIG_V3)
-    v4 = _safe_path(root, CONFIG_V4)
+    v4 = _safe_path(root, config_v4(root))
     if v4.exists():
         if v3.exists():
             data = json.loads(v4.read_text(encoding="utf-8"), object_pairs_hook=_unique_json)
@@ -434,7 +447,7 @@ def find_project(path) -> Path | None:
     if candidate.is_file():
         candidate = candidate.parent
     for parent in (candidate, *candidate.parents):
-        if parent.name in (INTERNAL_PROJECT_DIR, MANAGEMENT_DIR):
+        if parent.name in (INTERNAL_PROJECT_DIR, *MANAGEMENT_NAMES):
             continue
         if _inside(parent, PLUGIN_ROOT):
             continue
@@ -564,7 +577,7 @@ def initialize_project(root, *, include=None, exclude=None, dry_run=False) -> di
     """
     root = _root(root)
     existing_config = project_config_path(root)
-    if existing_config == root / CONFIG_V4 or _implicit_v4(root):
+    if existing_config == root / config_v4(root) or _implicit_v4(root):
         return initialize_course(root, include=include, exclude=exclude, dry_run=dry_run)
     config_relative = existing_config.relative_to(root).as_posix() if existing_config else CONFIG_V3
     controls = {}

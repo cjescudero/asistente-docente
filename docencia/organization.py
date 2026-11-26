@@ -13,7 +13,7 @@ import unicodedata
 from uuid import uuid4
 
 from .catalog import CATEGORIES, SKIP, _digest, add_path, refresh_stat, transaction
-from .project import _relative, _root, _safe_path, load_project
+from .project import MANAGEMENT_NAMES, _relative, _root, _safe_path, load_project
 from .spaces import RESERVED, reserved, corpus_policy
 
 
@@ -31,7 +31,7 @@ def _space(path, config):
     if reserved(path) or any(part.startswith(".") for part in Path(path).parts):
         raise ValueError(f"Ruta de control o recurso oculto: {path}")
     areas = config["spaces"]
-    protected = [*areas["submissions"], "Gestión del proyecto", *config["sources"]["exclude"]]
+    protected = [*areas["submissions"], *MANAGEMENT_NAMES, *config["sources"]["exclude"]]
     if config.get("map"):
         protected.append(config["map"])
     if any(_overlap(path, item) for item in protected):

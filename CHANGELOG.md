@@ -1,5 +1,10 @@
 # Historial
 
+## 0.14.2 — 2026-11-26
+
+- El plugin reconoce «Archivos de gestión del proyecto», incluso oculta en Finder, y conserva la compatibilidad con «Gestión del proyecto». Si ambas existen, solicita aclarar cuál está activa.
+- La documentación explica cómo trabajar con espacios docentes numerados y conservar la selección de fuentes del mapa.
+
 ## 0.14.1 — 2026-11-25
 
 - La evaluación entrega un CSV listo para Moodle. La guía muestra cómo identificar al alumnado por correo y asignar la nota y la retroalimentación de cada actividad.

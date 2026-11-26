@@ -2,7 +2,7 @@
 from pathlib import Path
 import os
 
-from .project import CONFIG_V4, DEFAULT_SPACES, find_project, load_project
+from .project import CONFIG_NAME, MANAGEMENT_NAMES, DEFAULT_SPACES, find_project, load_project
 from .spaces import resolve_space
 
 
@@ -10,7 +10,7 @@ def output_project(path):
     """Los formatos independientes y anteriores conservan sus validadores originales."""
     path = Path(path).expanduser().resolve()
     for parent in (path, *path.parents):
-        if (parent / CONFIG_V4).is_file() or all((parent / dirs[0]).is_dir() for dirs in DEFAULT_SPACES.values()):
+        if any((parent / name / CONFIG_NAME).is_file() for name in MANAGEMENT_NAMES) or all((parent / dirs[0]).is_dir() for dirs in DEFAULT_SPACES.values()):
             return find_project(path)
     return None
 

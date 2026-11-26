@@ -54,6 +54,22 @@ class CatalogTests(unittest.TestCase):
         self.assertIn("missing", {p["reason"] for p in cat.reconcile(self.root)["pending"]})
         self.assertEqual(self.rows()[newrel]["presence"], "missing")
 
+    def test_catalog_after_management_directory_rename(self):
+        old = self.root / "Gestión del proyecto"
+        new = self.root / "Archivos de gestión del proyecto"
+        self.write(f"{self.source}/tema.md", "Tema")
+        cat.reconcile(self.root)
+        original = self.rows()[f"{self.source}/tema.md"]["material_id"]
+        old.rename(new)
+        self.write(f"{self.source}/otro.md", "Otro tema")
+        cat.reconcile(self.root)
+        self.assertIn(f"{self.source}/otro.md", self.rows())
+        self.assertEqual(original, self.rows()[f"{self.source}/tema.md"]["material_id"])
+        self.assertFalse(old.exists())
+        old.mkdir()
+        with self.assertRaisesRegex(ValueError, "dos carpetas"):
+            cat.reconcile(self.root)
+
     def test_virtual_unit_confirmed_inheritance_and_mixed_folder(self):
         name = f"{self.source}/Tema"
         self.write(name + "/a.md", "# Fundamentos teóricos")

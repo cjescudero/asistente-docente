@@ -42,7 +42,7 @@ identificada como desactualizada; no reparar contenidos silenciosamente.
 
 ## Preparar la vista
 
-Leer el [contrato del Mapa docente](../../../docs/MAPA-DOCENTE.md), `index.md` y el registro `fuentes.json` (`_datos_internos/fuentes.json` en `curso-v4`) del mapa seleccionado. Comprobar la selección y las exclusiones de la configuración del curso (`Gestión del proyecto/proyecto-docente.json` en `curso-v4`) cuando exista, las páginas registradas, sus fuentes y sus accesos. Detectar fuentes retiradas y dependencias directas o indirectas antes de generar HTML; no representar como actual una página pendiente de revisión por esa retirada. No descubrir ni añadir carpetas automáticamente para completar el grafo. Mantener intactos originales, páginas y metadatos al regenerar únicamente esta vista.
+Leer el [contrato del Mapa docente](../../../docs/MAPA-DOCENTE.md), `index.md` y el registro `fuentes.json` (`_datos_internos/fuentes.json` en `curso-v4`) del mapa seleccionado. Comprobar la selección y las exclusiones de la configuración del curso (`{carpeta de gestión}/proyecto-docente.json` en `curso-v4`) cuando exista, las páginas registradas, sus fuentes y sus accesos. Detectar fuentes retiradas y dependencias directas o indirectas antes de generar HTML; no representar como actual una página pendiente de revisión por esa retirada. No descubrir ni añadir carpetas automáticamente para completar el grafo. Mantener intactos originales, páginas y metadatos al regenerar únicamente esta vista.
 
 El destino predeterminado es **docente**. En esa vista, distinguir visualmente las evaluaciones y mantenerlas ocultas al abrir mediante el filtro previsto, con posibilidad de mostrarlas. Esa ocultación es una preferencia de presentación: los datos siguen en el HTML docente y no constituyen un control de acceso.
 
@@ -73,3 +73,5 @@ Si cambian páginas, fuentes, accesos o enlaces, regenerar lector y grafo como c
 Aplicar el [cierre contextual de los flujos](../../../docs/FLUJOS-DOCENTES.md):
 proponer de uno a tres pasos pertinentes basados en resultados comprobados,
 sin iniciar otra tarea por el mero hecho de sugerirla. Ofrecer consultar una rama del mapa o desarrollar una actividad, un banco, apuntes o diapositivas visuales individuales con sus fuentes; no volver a proponer generar la vista que se acaba de entregar.
+
+En cursos con carpetas numeradas, consultar los espacios y la selección del JSON. Localizar la carpeta de gestión existente como `Archivos de gestión del proyecto/` o `Gestión del proyecto/`, también cuando esté oculta en Finder.
