@@ -1,5 +1,9 @@
 # Historial
 
+## 0.14.3 — 2026-11-26
+
+- La guía de instalación explica cómo cargar las skills en OpenCode 1.x y 2.x desde una copia local y comprobar el primer uso con el curso de ejemplo.
+
 ## 0.14.2 — 2026-11-26
 
 - El plugin reconoce «Archivos de gestión del proyecto», incluso oculta en Finder, y conserva la compatibilidad con «Gestión del proyecto». Si ambas existen, solicita aclarar cuál está activa.

@@ -1,7 +1,8 @@
 # Asistente docente
 
 Doce skills para organizar fuentes, crear materiales, evaluar y devolver feedback en
-cualquier asignatura. Puedes usar las mismas skills en **ChatGPT Work**, **Codex**, **Claude Cowork** y **Claude Code**.
+cualquier asignatura. Puedes usar las mismas skills en **ChatGPT Work**,
+**Codex**, **Claude Cowork**, **Claude Code** y **OpenCode**.
 El proyecto se distribuye bajo [MIT](LICENSE).
 [Instalación y primer uso](docs/INSTALACION.md) ·
 [Esquemas de los procesos](docs/ESQUEMAS-PROCESOS.md) ·
@@ -18,10 +19,9 @@ modelos de cuestionario por defecto y una wiki explicativa. Consulta el
 
 ## Inicio rápido
 
-**Asistente docente se distribuye desde GitHub mediante marketplaces
-personalizados. No se publicará en los directorios públicos de ChatGPT ni de
-Claude.** Un marketplace es un catálogo que incorporas a tu aplicación; después
-puedes instalar los plugins que contiene.
+**Asistente docente se distribuye desde GitHub.** En ChatGPT, Codex y Claude,
+añade el marketplace del repositorio para instalar el plugin. En OpenCode,
+carga las skills desde una copia local.
 
 ### Instalación en ChatGPT
 
@@ -59,18 +59,22 @@ En inglés: **Customize → Plugins → Add → Add marketplace → Add from a r
 Si tu organización restringe los marketplaces, pide al responsable que autorice
 esta fuente.
 
+### Instalación en OpenCode
+
+Guarda una copia completa de Asistente docente y añade la ruta de su carpeta
+`skills/` al `opencode.json` del curso. Usa la configuración correspondiente
+a tu versión. [Cómo cargar las skills en OpenCode](docs/INSTALACION.md#opencode).
+
 ### Primer uso
 
-En ChatGPT Work o Claude Cowork, abre una conversación en la carpeta del curso.
-Si usas [Codex CLI](docs/INSTALACION.md#codex-cli) o [Claude Code](docs/INSTALACION.md#claude-code),
-instala el plugin desde su marketplace e inicia una sesión en esa carpeta. Escribe:
-
-**«Inicia mi proyecto docente».**
+Tras la instalación, abre una conversación o inicia una sesión en la carpeta del
+curso. Escribe **«Inicia mi proyecto docente»**.
 
 El agente te pregunta dónde guardas el material de la asignatura, los documentos generados por IA y las entregas. Si ya tienes carpetas, puedes conservarlas tal como están. En un curso nuevo prepara los tres espacios. Después puedes pedir «Crea el mapa con estas fuentes». El catálogo permite seguir encontrando un documento aunque cambies su nombre o ubicación.
 
-Al actualizar el plugin, comprueba que tu espacio de trabajo haya sincronizado
-el marketplace: publicar en GitHub no actualiza por sí solo una instalación existente.
+En ChatGPT y Claude, comprueba que tu espacio de trabajo haya sincronizado
+el marketplace tras una actualización. En OpenCode, actualiza tu copia local
+y abre una sesión nueva.
 [Guía para el profesor](docs/PROYECTO-DOCENTE.md).
 
 <a href="https://github.com/cjescudero/asistente-docente">
@@ -209,10 +213,9 @@ sin él. [Alcance y revisión de generalidad](docs/GENERALIDAD.md).
 ## Instalación
 
 Sigue la [guía para profesores, administradores y usuarios avanzados](docs/INSTALACION.md).
-El repositorio incluye los marketplaces de ambas plataformas. Primero se
-incorpora ese origen de GitHub y después se instala el plugin en la cuenta.
-No basta con copiar una skill aislada: comparte referencias y utilidades con
-el resto del paquete. La instalación depende de las capacidades de la cuenta.
+El repositorio incluye marketplaces para OpenAI y Claude. En OpenCode, conserva
+la copia local completa para que las skills puedan acceder a sus referencias y
+utilidades. [Configuración de OpenCode](docs/INSTALACION.md#opencode).
 
 En [Descargas y novedades](https://github.com/cjescudero/asistente-docente/releases)
 se ofrecen los paquetes Agent Plugins, Claude y código fuente, junto con sus

@@ -1,18 +1,13 @@
 # Instalación de Asistente docente
 
-Asistente docente se incorpora desde su
-[repositorio GitHub](https://github.com/cjescudero/asistente-docente) mediante
-marketplaces personalizados. **No se publicará en el directorio público de
-ChatGPT ni en el de Claude.** El repositorio es público; «personalizado» describe
-el origen del catálogo, no una restricción de acceso al código.
-
-Primero se añade el marketplace a la aplicación o al espacio de trabajo y,
-después, se instala el plugin. Tener una cuenta en ChatGPT o Claude no realiza
-ninguno de esos pasos automáticamente.
+Asistente docente se distribuye desde un repositorio público. Para ChatGPT, Codex
+y Claude se añade el marketplace de GitHub a la aplicación o al espacio de
+trabajo y después se instala el plugin. OpenCode carga las skills desde una
+copia local del proyecto. [Repositorio en GitHub](https://github.com/cjescudero/asistente-docente).
 
 - [Instalación para profesores](#instalación-para-profesores): sin terminal.
 - [Instalación para administradores](#instalación-para-administradores): permisos y actualizaciones.
-- [Instalación avanzada](#instalación-avanzada): Codex CLI, Claude Code y Python.
+- [Instalación avanzada](#instalación-avanzada): Codex CLI, Claude Code, OpenCode y Python.
 
 Consulta las [publicaciones en GitHub](https://github.com/cjescudero/asistente-docente/releases) para conocer los cambios disponibles. Después de actualizar el marketplace, comprueba la versión instalada. Si está fijada a una revisión concreta, el administrador puede cambiarla para recibir las novedades.
 
@@ -25,6 +20,7 @@ Consulta las [publicaciones en GitHub](https://github.com/cjescudero/asistente-d
 | ChatGPT de tu organización | Pedir al administrador que incorpore el marketplace; después instalar el plugin desde los plugins de ese espacio de trabajo. |
 | Claude con plugins disponibles | Añadir el marketplace desde Personalizar y después instalar Asistente docente. |
 | Codex o Claude Code | Instala el plugin desde el marketplace del repositorio. Sigue los pasos de [Codex CLI](#codex-cli) o [Claude Code](#claude-code). |
+| OpenCode | Descarga el paquete fuente y configura la ruta a `skills/`. Sigue los pasos de [OpenCode](#opencode). |
 | ChatGPT individual, sin espacio administrado | Consultar la alternativa con [Codex CLI](#codex-cli); no se presupone una importación gráfica para cualquier cuenta. |
 
 Los pasos con los nombres de menús están en el
@@ -48,7 +44,8 @@ buscar el plugin entre los publicados por OpenAI o Anthropic.
 
 ### Empezar con un curso
 
-Tras instalarlo, abre una conversación en ChatGPT Work o Claude Cowork, o inicia Codex o Claude Code en la carpeta del curso.
+Tras la instalación, abre una conversación en ChatGPT Work o Claude Cowork,
+o inicia Codex, Claude Code u OpenCode en la carpeta del curso.
 Selecciona una carpeta para tu curso y concede al agente acceso a ella. Puede
 ser una carpeta local sincronizada con OneDrive o SharePoint, con los archivos
 disponibles localmente. Instalar el plugin no concede ese acceso ni configura
@@ -176,6 +173,68 @@ Inicia una sesión nueva en la carpeta del curso. Para revisar actualizaciones,
 abre `/plugin`, selecciona el marketplace en **Marketplaces** y su acción de
 actualización. No asumas que un marketplace externo tenga actualizaciones
 automáticas activadas. [Instalación y gestión en Claude Code](https://code.claude.com/docs/en/discover-plugins).
+
+### OpenCode
+
+1. Descarga y descomprime el ZIP `*-source.zip`, o clona el repositorio. Guarda
+   la copia completa fuera de la carpeta del curso para conservar las referencias
+   a la documentación, las plantillas y los scripts. [Descargas en GitHub](https://github.com/cjescudero/asistente-docente/releases).
+2. Ejecuta `opencode --version` para comprobar si usas 1.x o 2.x. En la raíz
+   del curso, crea `opencode.json` o añade la entrada al archivo `opencode.json`
+   o `opencode.jsonc` que ya uses. Conserva los demás ajustes y las rutas de
+   skills que ya tengas.
+3. Sustituye `/ruta/asistente-docente/skills` por la ruta absoluta a la carpeta
+   `skills/` de tu copia. En Windows puedes escribir la ruta con barras
+   inclinadas, por ejemplo `C:/Herramientas/asistente-docente/skills`.
+
+**OpenCode 1.x** usa `skills.paths`.
+
+```json
+{
+  "skills": {
+    "paths": ["/ruta/asistente-docente/skills"]
+  }
+}
+```
+
+**OpenCode 2.x** usa una lista directamente en `skills`.
+
+```json
+{
+  "skills": ["/ruta/asistente-docente/skills"]
+}
+```
+
+Abre una sesión nueva de OpenCode en la carpeta del curso. Si OpenCode te pide
+permiso para leer archivos externos, revisa que la ruta solicitada pertenezca
+a tu copia de Asistente docente. La ruta de skills carga la colección y el
+agente consulta sus archivos de apoyo a medida que los necesita.
+[Skills en 1.x](https://opencode.ai/v1/docs/skills/) ·
+[Skills en 2.x](https://opencode.ai/docs/skills/) ·
+[Cambios de configuración entre 1.x y 2.x](https://opencode.ai/docs/migrate-v1/#skills).
+
+#### Probar el primer uso en OpenCode
+
+Copia el contenido de `originales/` del curso de ejemplo a una carpeta nueva
+y configura OpenCode ahí. [Curso de ejemplo](../examples/curso-v4/README.md).
+
+Abre una sesión en esa carpeta y pide lo siguiente.
+
+> Inicia mi proyecto docente. Usa «Unidad 1» como material de la asignatura y
+> fuente para la wiki, «Producción» para los materiales nuevos y «Trabajos
+> recibidos» para las entregas. Aplica esta organización y conserva los
+> originales en su sitio.
+
+Si el agente pide más instrucciones, puedes indicarle **«Usa la skill
+`proyecto-docente-inicializacion-adaptacion` y la asignación de `espacios.json`
+del ejemplo `curso-v4`»**. El ejemplo incluye el comando de inicialización para
+reproducir la prueba desde la terminal.
+
+Comprueba que `AGENTS.md` recoge los espacios, que existe
+`Gestión del proyecto/proyecto-docente.json` con «Unidad 1» seleccionada y que
+el guion y las mediciones siguen en su carpeta. El agente puede proponer crear
+el mapa como próximo paso. Encárgaselo cuando quieras iniciar ese trabajo.
+[Qué prepara la inicialización](#empezar-con-un-curso).
 
 ### Código fuente y copias locales
 
