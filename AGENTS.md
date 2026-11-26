@@ -65,7 +65,7 @@ vigente se documenta en `docs/PROYECTO-DOCENTE.md`.
 
 ## Proyectos docentes
 
-- Aplicar el contrato de espacios asignables de `docs/PROYECTO-DOCENTE.md`. Respetar el árbol del profesor y crear gestión cuando haya datos que persistir. Separar identidad, ubicación, versión, origen, clasificación y consolidación. Clasificar por agrupaciones lógicas con prioridad a confirmaciones.
+- Aplicar el contrato de espacios asignables de `docs/PROYECTO-DOCENTE.md`. Respetar el árbol del profesor y crear la carpeta de gestión al iniciar un curso nuevo y guardar la configuración y el catálogo cuando hagan falta. Separar identidad, ubicación, versión, origen, clasificación y consolidación. Clasificar por agrupaciones lógicas con prioridad a confirmaciones.
 - Serializar los cambios en el catálogo y conservar el historial y la recuperación de operaciones. Los traslados y consolidaciones requieren operaciones concretas aceptadas. Preservar originales, unidades docentes y snapshots. Reconciliar sin releer contenido inalterado y actualizar únicamente dependencias afectadas.
 - La skill del mapa distingue crear/actualizar, regenerar vistas y mostrar vistas
   existentes. Regenerar vistas conserva páginas y metadatos; mostrar no regenera.

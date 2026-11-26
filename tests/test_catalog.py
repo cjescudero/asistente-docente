@@ -60,13 +60,13 @@ class CatalogTests(unittest.TestCase):
         self.write(f"{self.source}/tema.md", "Tema")
         cat.reconcile(self.root)
         original = self.rows()[f"{self.source}/tema.md"]["material_id"]
-        old.rename(new)
+        new.rename(old)
         self.write(f"{self.source}/otro.md", "Otro tema")
         cat.reconcile(self.root)
         self.assertIn(f"{self.source}/otro.md", self.rows())
         self.assertEqual(original, self.rows()[f"{self.source}/tema.md"]["material_id"])
-        self.assertFalse(old.exists())
-        old.mkdir()
+        self.assertFalse(new.exists())
+        new.mkdir()
         with self.assertRaisesRegex(ValueError, "dos carpetas"):
             cat.reconcile(self.root)
 
@@ -164,7 +164,7 @@ class CatalogTests(unittest.TestCase):
     def test_reads_noops_and_incident_history(self):
         directory = self.root / cat.MANAGEMENT
         self.assertEqual(cat.read_catalog(self.root)["revision"], 0)
-        self.assertFalse(directory.exists())
+        self.assertEqual(list(directory.iterdir()), [])
         source = self.write(self.source + "/leer.txt", "Recurso")
         cat.reconcile(self.root)
         record = self.rows()[self.source + "/leer.txt"]

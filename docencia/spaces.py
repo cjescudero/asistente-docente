@@ -420,7 +420,7 @@ def initialize(root, *, spaces, notes, include, exclude, dry_run, adopt_v3):
     # Si el AGENTS pertenece al docente, persistir la configuración para poder descubrirla.
     persist = managed.exists() or config != defaults() or proposal is not None
     dirs = list(p.project_directories(config))
-    if persist:
+    if persist or previous is None:
         dirs.append(p.management_dir(root))
     new = [d + "/" for d in dirs if not (root / d).exists()]
     if not agents.exists():
@@ -430,6 +430,9 @@ def initialize(root, *, spaces, notes, include, exclude, dry_run, adopt_v3):
     update = [p.config_v4(root)] if managed.is_file() and config != previous else []
     if not dry_run:
         for d in dirs:
+            if d in p.MANAGEMENT_NAMES:
+                p.ensure_management_dir(root)
+                continue
             p._safe_path(root, d).mkdir(parents=True, exist_ok=True)
         if not agents.exists():
             p._write_new(agents, "# Instrucciones del proyecto docente\n\n" + block + "\n")

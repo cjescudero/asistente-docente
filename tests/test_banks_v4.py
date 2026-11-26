@@ -93,7 +93,7 @@ class BankCourseTests(unittest.TestCase):
         self.write(rel, "Materia de estudio")
         self.declare(rel)
         for restricted in ("Entregas/lote", self.sources + "/privado", self.ai + "/excluido",
-                           "Gestión del proyecto", self.ai + "/.carpeta"):
+                           "Archivos de gestión del proyecto", self.ai + "/.carpeta"):
             with self.subTest(restricted=restricted):
                 self.write(restricted + "/entrada.json", "inválido")
                 for field in ("gift", "metadata"):

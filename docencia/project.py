@@ -8,6 +8,9 @@ from __future__ import annotations
 import copy
 import json
 import os
+import stat
+import subprocess
+import sys
 import tempfile
 from pathlib import Path, PurePosixPath, PureWindowsPath
 
@@ -15,8 +18,8 @@ CONFIG_NAME = "proyecto-docente.json"
 INTERNAL_PROJECT_DIR = "_datos_internos_proyecto"
 INTERNAL_MATERIAL_DIR = "_datos_internos"
 CONFIG_V3 = f"{INTERNAL_PROJECT_DIR}/{CONFIG_NAME}"
-MANAGEMENT_DIR = "Gestión del proyecto"
-MANAGEMENT_NAMES = (MANAGEMENT_DIR, "Archivos de gestión del proyecto")
+MANAGEMENT_DIR = "Archivos de gestión del proyecto"
+MANAGEMENT_NAMES = (MANAGEMENT_DIR, "Gestión del proyecto")
 CONFIG_V4 = f"{MANAGEMENT_DIR}/{CONFIG_NAME}"
 COURSE_MARKER = "<!-- asistente-docente:curso-v4 -->"
 DEFAULT_SPACES = {"sources": ["Material de la asignatura"], "generated": ["Material generado por IA"],
@@ -419,6 +422,27 @@ def management_dir(root: Path) -> str:
     if len(existing) > 1:
         raise ValueError("Hay dos carpetas de gestión del proyecto. Aclara cuál está activa.")
     return existing[0] if existing else MANAGEMENT_DIR
+
+
+def ensure_management_dir(root: Path) -> Path:
+    """Crear y ocultar solo la carpeta nueva; respetar los atributos existentes."""
+    directory = _safe_path(root, management_dir(root))
+    try:
+        directory.mkdir()
+    except FileExistsError:
+        if directory.is_symlink() or not directory.is_dir():
+            raise
+        return directory
+    try:
+        if sys.platform == "darwin":
+            os.chflags(directory, directory.stat().st_flags | stat.UF_HIDDEN)
+        elif os.name == "nt":
+            attrib = Path(os.environ["SystemRoot"]) / "System32" / "attrib.exe"
+            subprocess.run([str(attrib), "+h", str(directory)], check=True)
+    except (OSError, subprocess.CalledProcessError) as exc:
+        directory.rmdir()
+        raise OSError(f"No se pudo ocultar la carpeta de gestión: {directory}") from exc
+    return directory
 
 
 def config_v4(root: Path) -> str:

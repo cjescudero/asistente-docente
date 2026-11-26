@@ -14,7 +14,7 @@ from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path, PurePosixPath
 
-from .project import MANAGEMENT_DIR, MANAGEMENT_NAMES, management_dir, _relative, _root, _safe_path, _within_relative, load_project
+from .project import MANAGEMENT_DIR, MANAGEMENT_NAMES, management_dir, ensure_management_dir, _relative, _root, _safe_path, _within_relative, load_project
 from .spaces import corpus_policy, under as _under, reserved
 
 MANAGEMENT = MANAGEMENT_DIR
@@ -72,8 +72,7 @@ def _versioned(path):
 
 @contextmanager
 def _writer(root):
-    directory = _safe_path(root, management_dir(root))
-    directory.mkdir(exist_ok=True)
+    directory = ensure_management_dir(root)
     for filename in (CATALOG, HISTORY, PENDING_TX, "catalogo.lock"):
         path = _safe_path(root, f"{management_dir(root)}/{filename}")
         if path.exists() and not path.is_file():

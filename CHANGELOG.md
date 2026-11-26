@@ -1,5 +1,10 @@
 # Historial
 
+## 0.14.4 — 2026-11-26
+
+- Los cursos nuevos crean «Archivos de gestión del proyecto» al iniciarse y la ocultan automáticamente en macOS y Windows.
+- Los cursos existentes conservan el nombre y la visibilidad de su carpeta de gestión. La configuración y el catálogo se guardan cuando hacen falta.
+
 ## 0.14.3 — 2026-11-26
 
 - La guía de instalación explica cómo cargar las skills en OpenCode 1.x y 2.x desde una copia local y comprobar el primer uso con el curso de ejemplo.

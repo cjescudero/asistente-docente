@@ -101,7 +101,7 @@ class ProjectCliTests(unittest.TestCase):
 
     def test_invalid_configuration_fails_as_json_without_traceback(self):
         self.run_cli("init-project", self.course, "--no-sources")
-        (self.course / "Gestión del proyecto/proyecto-docente.json").write_text("{invalid", encoding="utf-8")
+        (self.course / "Archivos de gestión del proyecto/proyecto-docente.json").write_text("{invalid", encoding="utf-8")
         result = self.run_cli("check-project", self.course)
         self.assertEqual(result.returncode, 1)
         self.assertEqual(json.loads(result.stdout)["status"], "invalid")

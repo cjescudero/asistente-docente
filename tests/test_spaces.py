@@ -1,6 +1,9 @@
+import os
 import copy
 import json
 from pathlib import Path
+import stat
+import sys
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -18,16 +21,23 @@ class CourseSpacesTests(unittest.TestCase):
         self.addCleanup(tmp.cleanup)
         self.root = Path(tmp.name).resolve() / "Curso"
 
-    def test_defaults_and_lazy_management(self):
+    def test_defaults_and_management_visibility(self):
         preview = initialize_course(self.root, dry_run=True)
         self.assertFalse(self.root.exists())
         actual = initialize_course(self.root)
         self.assertEqual(actual["created"], preview["would_create"])
         self.assertEqual(set(x.name for x in self.root.iterdir()),
-                         {"AGENTS.md", *(v[0] for v in DEFAULT_SPACES.values())})
+                         {"AGENTS.md", MANAGEMENT_DIR, *(v[0] for v in DEFAULT_SPACES.values())})
         self.assertEqual(load_project(self.root)["spaces"], DEFAULT_SPACES)
         self.assertEqual(find_project(self.root / "Entregas"), self.root)
-        self.assertIsNone(project_config_path(self.root))
+        folder = self.root / MANAGEMENT_DIR
+        if sys.platform == "darwin":
+            self.assertTrue(folder.stat().st_flags & stat.UF_HIDDEN)
+            os.chflags(folder, folder.stat().st_flags & ~stat.UF_HIDDEN)
+            initialize_course(self.root, include=[])
+            self.assertFalse(folder.stat().st_flags & stat.UF_HIDDEN)
+        elif os.name == "nt":
+            self.assertTrue(folder.stat().st_file_attributes & stat.FILE_ATTRIBUTE_HIDDEN)
         self.assertEqual(initialize_course(self.root)["created"], [])
         (self.root / "Entregas").rmdir()
         self.assertIn("Entregas", check_project(self.root)["missing_directories"])

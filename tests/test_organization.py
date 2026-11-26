@@ -152,7 +152,7 @@ class OrganizationTests(unittest.TestCase):
             self.assertEqual("needs_review", row["processing"])
         self.assertEqual("unchanged", self.proposal((ids[old], new), mode="promote")["status"])
         self.apply(plan)
-        history = self.root / "Gestión del proyecto" / "historial_operaciones.jsonl"
+        history = self.root / "Archivos de gestión del proyecto" / "historial_operaciones.jsonl"
         events = [event["kind"] for line in history.read_text(encoding="utf-8").splitlines()
                   for event in json.loads(line)["operations"]]
         self.assertEqual(1, events.count("promote"))

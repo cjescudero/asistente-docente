@@ -163,15 +163,14 @@ def register_map(root, map_dir, *, dry_run=False):
     if not dry_run:
         if config["structure"] == "curso-v4":
             from .knowledge import register_dependencies
-            from .project import config_v4
+            from .project import ensure_management_dir
             register_dependencies(root, path)
             current = load_project(root)
             if current["spaces"] != config["spaces"] or current["sources"] != config["sources"]:
                 raise ValueError("Cambió la asignación de fuentes durante el registro. Revisa el mapa.")
             current["map"] = relative
             config = current
-            destination = _safe_path(root, config_v4(root))
-            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination = ensure_management_dir(root) / CONFIG_NAME
         else:
             destination = project_config_path(root)
         _replace_config(destination, json.dumps(config, ensure_ascii=False, indent=2) + "\n")
