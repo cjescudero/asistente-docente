@@ -12,6 +12,8 @@ Abre la carpeta del curso y pide **«Inicia mi proyecto docente»** o **«Adapta
 
 En un curso vacío se crean los tres primeros espacios, la carpeta de gestión y `AGENTS.md`. En un curso existente, se pueden asignar por ejemplo «Temas» y «Laboratorio» al primero y «Producción» al segundo. Las raíces deben ser carpetas independientes dentro del curso. Los archivos sueltos en la raíz conservan su ubicación. Si deben quedar dentro de un espacio, el agente propone una carpeta raíz que los abarque o un traslado que el docente pueda aprobar. Los espacios definen el destino y el tratamiento de los archivos. Los permisos siguen correspondiendo al sistema de almacenamiento. El agente conserva las instrucciones del profesor y consulta los conflictos antes de modificarlas. `.agents/` solo se necesita si el curso utiliza recursos específicos.
 
+En la estructura propuesta, «Alumnado» y «Salidas de campo» son carpetas de uso docente reservado situadas directamente en `02 Organización del curso/`. «Alumnado» reúne listados, informes de la oficina de apoyo a la diversidad (ADI) y documentación similar sobre las circunstancias del alumnado. Ambas carpetas quedan fuera de las fuentes del Mapa docente.
+
 ## Guardar ideas y borradores del profesor
 
 Puedes pedir **«Añade un espacio para mis notas del curso»** o **«Usa mi carpeta Cuaderno docente para mis ideas»**, tanto al empezar como en un curso ya configurado. El nombre sugerido es `Notas del curso`. Elige una carpeta independiente dentro del proyecto. Si ya existe, conserva sus archivos y subcarpetas. Una pregunta como «¿Dónde guardo mis ideas de examen?» sirve para conocer las opciones antes de elegir.

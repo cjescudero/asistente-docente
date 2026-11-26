@@ -1,5 +1,9 @@
 # Historial
 
+## 0.14.5 — 2026-11-26
+
+- La propuesta de estructura sitúa «Alumnado» y «Salidas de campo» directamente en «02 Organización del curso». Ambas carpetas son de uso docente reservado y quedan fuera de las fuentes del Mapa docente.
+
 ## 0.14.4 — 2026-11-26
 
 - Los cursos nuevos crean «Archivos de gestión del proyecto» al iniciarse y la ocultan automáticamente en macOS y Windows.
