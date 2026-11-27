@@ -2,7 +2,7 @@
 
 Crear un lector navegable y un grafo de las páginas, fuentes y enlaces existentes. Ambos son derivados del Mapa docente; no sustituyen los Markdown editables ni permiten afirmar que se han leído los documentos representados.
 
-Combinar este encargo con [español conciso](../../espanol-conciso-redaccion/SKILL.md) solo si el docente pide esa skill o el estilo de español simplificado, incluido un encargo expreso para todo el curso.
+Si el docente pide expresamente [español conciso](../../espanol-conciso-redaccion/SKILL.md) o [inglés técnico claro](../../ingles-tecnico-claro-redaccion/SKILL.md), invocar la skill elegida y aplicarla al texto indicado dentro de este encargo. Una preferencia expresa para el curso rige en el idioma correspondiente.
 
 ## Contexto del proyecto
 

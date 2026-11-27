@@ -19,7 +19,7 @@ Guiar al profesor ante «Inicia mi proyecto docente» o «Adapta mi curso existe
 hasta un proyecto preparado para trabajar. No exigir comandos ni una ficha completa. Esta skill prepara la
 estructura y las instrucciones; no inicia otro flujo docente.
 
-Combinar este encargo con [español conciso](../espanol-conciso-redaccion/SKILL.md) solo si el docente pide esa skill o el estilo de español simplificado, incluido un encargo expreso para todo el curso.
+Si el docente pide expresamente [español conciso](../espanol-conciso-redaccion/SKILL.md) o [inglés técnico claro](../ingles-tecnico-claro-redaccion/SKILL.md), invocar la skill elegida y aplicarla al texto indicado dentro de este encargo. Una preferencia expresa para el curso rige en el idioma correspondiente.
 
 Ante dudas sobre el uso, flujo, archivos o resultados del plugin, o preguntas
 sobre siguientes pasos y posibilidades, invocar

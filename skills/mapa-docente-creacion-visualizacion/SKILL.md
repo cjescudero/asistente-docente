@@ -11,7 +11,7 @@ For an English course map start with the [English index template](../../template
 
 Construir una wiki explicativa del conocimiento docente: desarrollar qué significan los conceptos, cómo se relacionan y cómo se aplican, con fuentes y límites trazables. No limitarla a un índice de documentos. El Mapa docente combina páginas Markdown estándar con un lector `index.html` y un grafo HTML derivados. No sustituye los originales ni genera automáticamente apuntes para estudiantes.
 
-Combinar este encargo con [español conciso](../espanol-conciso-redaccion/SKILL.md) solo si el docente pide esa skill o el estilo de español simplificado, incluido un encargo expreso para todo el curso.
+Si el docente pide expresamente [español conciso](../espanol-conciso-redaccion/SKILL.md) o [inglés técnico claro](../ingles-tecnico-claro-redaccion/SKILL.md), invocar la skill elegida y aplicarla al texto indicado dentro de este encargo. Una preferencia expresa para el curso rige en el idioma correspondiente.
 
 ## Contexto del proyecto
 

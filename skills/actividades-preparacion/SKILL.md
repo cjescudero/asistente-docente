@@ -11,7 +11,7 @@ For English deliverables use the [student brief](../../templates/en/activity-bri
 
 Convertir objetivos de aprendizaje y fuentes autorizadas en una actividad que el estudiante pueda realizar y el profesor pueda evaluar con criterios explícitos.
 
-Combinar este encargo con [español conciso](../espanol-conciso-redaccion/SKILL.md) solo si el docente pide esa skill o el estilo de español simplificado, incluido un encargo expreso para todo el curso.
+Si el docente pide expresamente [español conciso](../espanol-conciso-redaccion/SKILL.md) o [inglés técnico claro](../ingles-tecnico-claro-redaccion/SKILL.md), invocar la skill elegida y aplicarla al texto indicado dentro de este encargo. Una preferencia expresa para el curso rige en el idioma correspondiente.
 
 ## Contexto del proyecto
 
@@ -52,7 +52,7 @@ Consultar la [guía de actividades](references/actividades.md) y el [registro de
 
 1. Redactar un enunciado autónomo con situación, propósito, materiales, tareas, entregables, condiciones y criterios generales de evaluación. Señalar cualquier dato imprescindible que falte.
 2. Preparar las plantillas que necesita esa actividad: informe, ficha de análisis, registro experimental, hoja de trabajo, código o notebook cuando proceda. No crear plantillas sin función ni imponer una herramienta informática a una actividad que no la requiere.
-3. Elaborar siempre una rúbrica docente con criterios, niveles distinguibles, ponderaciones y evidencias esperadas, alineada con las tareas y entregables. La rúbrica completa es reservada; el alumnado recibe los criterios generales en el enunciado.
+3. Elaborar siempre una rúbrica docente con criterios, niveles distinguibles, ponderaciones y evidencias esperadas, alineada con las tareas y entregables. Si el docente pide un estilo para redactar la hoja de trabajo, aplicarlo a esa hoja. Puntuar ese estilo en la redacción del alumnado solo cuando sea un objetivo de evaluación indicado por el docente. La rúbrica completa es reservada; el alumnado recibe los criterios generales en el enunciado.
 4. Preparar una guía de corrección o solución orientativa cuando corresponda, con alternativas válidas y errores frecuentes. En actividades abiertas, una respuesta modelo no es la única respuesta admisible.
 5. Recorrer la actividad con la información del enunciado. Comprobar viabilidad, datos, unidades, referencias, correspondencia entre tareas y criterios y utilidad de las plantillas. Registrar como estimación cualquier duración no comprobada en clase.
 6. Entregar Markdown editable y PDF por defecto. Usar `python "$ASISTENTE_DOCENTE/scripts/docencia.py" render-markdown enunciado.md --output salida`, donde `ASISTENTE_DOCENTE` es la raíz instalada localizada por el anfitrión. Resolver entradas y salidas fuera del plugin. Si falta el motor PDF, conservar Markdown y HTML e identificar el PDF pendiente.

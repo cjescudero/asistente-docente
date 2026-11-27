@@ -101,6 +101,6 @@ para resolver por defecto criterios ambiguos o evidencias contradictorias.
 
 ## Ayuda contextual durante el trabajo
 
-Pide «¿Qué puedo hacer ahora?». El agente consulta las decisiones anteriores y los índices pertinentes. Puede recomendar crear o consultar el mapa, preparar una actividad, corregir entregas, elaborar bancos y modelos o generar feedback. Las instrucciones de inicio no crean la wiki automáticamente. El español simplificado se aplica a petición del docente, también cuando combina varias skills.
+Pide «¿Qué puedo hacer ahora?». El agente consulta las decisiones anteriores y los índices pertinentes. Puede recomendar crear o consultar el mapa, preparar una actividad, corregir entregas, elaborar bancos y modelos o generar feedback. Las instrucciones de inicio no crean la wiki automáticamente. Puedes pedir español conciso o inglés técnico claro para la prosa de cualquiera de estos encargos. [Idiomas y estilos](LANGUAGES.md).
 
 [Ejemplo con carpetas propias](../examples/curso-v4/README.md) · [Flujos docentes](FLUJOS-DOCENTES.md) · [Mapa docente](MAPA-DOCENTE.md).

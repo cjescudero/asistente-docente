@@ -1,6 +1,6 @@
 # Catálogo y casos de aceptación
 
-El plugin contiene doce skills. La selección puede ser automática por descripción
+El plugin contiene trece skills. La selección puede ser automática por descripción
 o explícita por nombre. No se necesita un enrutador que cargue todas las
 instrucciones para cada petición. Los siguientes casos son una guía de evaluación del comportamiento
 del agente; las pruebas Python no sustituyen su ejecución en el anfitrión.
@@ -19,6 +19,7 @@ del agente; las pruebas Python no sustituyen su ejecución en el anfitrión.
 | `cuestionarios-modelos-imprimir-evaluar` | Combinar preguntas de dos temas y una práctica para tres modelos. | Reparto de cobertura acordado, modelos comparables y reproducibles, PDF, solucionarios, GIFT ofuscados, bancos congelados e informe de reutilización. |
 | `cuestionarios-observaciones-calificaciones-alumnado` | Añadir comentarios al libro de calificaciones a partir del detalle del cuestionario. | Hasta tres dificultades sustentadas y recomendaciones accesibles; notas preservadas y bloqueo de correspondencias ambiguas. |
 | `espanol-conciso-redaccion` | Reescribir una explicación en español simplificado. | Español natural y preciso, sin resumir ni declarar certificación STE. |
+| `ingles-tecnico-claro-redaccion` | Prepara una actividad y escribe las instrucciones en inglés técnico claro. | La skill de actividad dirige el encargo. La de redacción aplica el estilo solicitado al texto del alumnado y conserva condiciones, términos y criterios. |
 | `infografias-didacticas-creacion` | Crear una diapositiva dibujada sobre una cadena causal. | Imagen revisada si hay generador; diseño y prompt claramente identificados si no lo hay. |
 
 ## Nombres visibles
@@ -32,10 +33,11 @@ se declara en `agents/openai.yaml`; el orden y su presentación dependen del anf
 | Actividades: preparación | `actividades-preparacion` |
 | Apuntes estudio: creación | `apuntes-estudio-creacion` |
 | Cuestionarios: creación de bancos de preguntas | `cuestionarios-bancos-preguntas-creacion` |
-| Español conciso: redacción | `espanol-conciso-redaccion` |
 | Cuestionarios: observaciones sobre calificaciones para el alumnado | `cuestionarios-observaciones-calificaciones-alumnado` |
 | Cuestionarios: creación de modelos para imprimir y evaluar | `cuestionarios-modelos-imprimir-evaluar` |
+| Español conciso / Plain Spanish | `espanol-conciso-redaccion` |
 | Infografías didácticas: creación | `infografias-didacticas-creacion` |
+| Inglés técnico claro / Plain Technical English | `ingles-tecnico-claro-redaccion` |
 | Mapa docente: consulta | `mapa-docente-consulta` |
 | Mapa docente: creación y visualización | `mapa-docente-creacion-visualizacion` |
 | Proyecto docente: ayuda | `proyecto-docente-ayuda` |
@@ -50,14 +52,14 @@ se declara en `agents/openai.yaml`; el orden y su presentación dependen del anf
   Distinguir originales y documentos creados sin inferir procedencia por su carpeta.
 - Cierre: seguir los [flujos docentes](FLUJOS-DOCENTES.md), comprobar indicios
   de resultados y proponer el siguiente paso pendiente sin ejecutarlo. Ofrecer
-  apuntes y diapositivas visuales individuales; español simplificado cuando se solicite.
+  apuntes y diapositivas visuales individuales según el encargo.
 - Proyecto con instrucciones propias: modificar solo lo indicado, conservando
   texto y organización ajenos al encargo. Repetir sin duplicar reglas.
 - Regla existente incompatible con la petición o el estilo predeterminado:
   explicar el conflicto y preguntar; no sobrescribir mientras falta la respuesta.
 - Orígenes y tipos ya indicados: reutilizarlos sin volver a preguntar. Si solo
   falta el tipo de material, pedir únicamente ese dato.
-- Redacción: aplicar `espanol-conciso-redaccion` solo al solicitar la skill o el estilo.
+- Aplicar español conciso o inglés técnico claro solo al solicitar la skill o el estilo. «Escribe los apuntes en inglés» elige el idioma. «Escribe los apuntes en inglés técnico claro» selecciona además el estilo.
 - Proyecto con un bloque de consulta del mapa: conservarlo sin reemplazarlo ni
   regenerar la documentación.
 
@@ -68,7 +70,7 @@ se declara en `agents/openai.yaml`; el orden y su presentación dependen del anf
 - Migración: informar movimientos, colisiones y enlaces sin aplicar cambios;
   esperar aprobación de la propuesta antes de mover originales.
 
-El [contrato común](PROYECTO-DOCENTE.md) se aplica a las doce skills según las
+El [contrato común](PROYECTO-DOCENTE.md) se aplica a las trece skills según las
 entradas necesarias.
 
 ## Ayuda inline

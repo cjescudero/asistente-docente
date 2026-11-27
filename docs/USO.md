@@ -1,6 +1,6 @@
 # Uso de Asistente docente
 
-El plugin reúne doce skills que comparten criterios de claridad y trazabilidad.
+El plugin reúne trece skills que comparten criterios de claridad y trazabilidad.
 Se puede pedir directamente el resultado en lenguaje natural, sin conocer sus
 nombres. Para descubrir el siguiente paso, pregunta **«¿Qué puedo hacer ahora
 con mi asignatura?»**. La ficha del curso ayuda cuando hay decisiones docentes
@@ -20,18 +20,22 @@ relevantes; no es un trámite obligatorio para cada petición.
 | Combinar bancos en modelos impresos y respuestas ofuscadas | [Cuestionarios: creación de modelos para imprimir y evaluar](../skills/cuestionarios-modelos-imprimir-evaluar/SKILL.md) |
 | Resultados y comentarios de mejora | [Cuestionarios: observaciones sobre calificaciones para el alumnado](../skills/cuestionarios-observaciones-calificaciones-alumnado/SKILL.md) |
 | Redactar en español simplificado a petición del docente | [Español conciso: redacción](../skills/espanol-conciso-redaccion/SKILL.md) |
+| Redactar en inglés técnico claro a petición del docente | [Inglés técnico claro / Plain Technical English](../skills/ingles-tecnico-claro-redaccion/SKILL.md) |
 | Imágenes con estilo de boceto didáctico | [Infografías didácticas: creación](../skills/infografias-didacticas-creacion/SKILL.md) |
 
-### Combinar una tarea con el estilo de español simplificado
+### Combinar una tarea con un estilo de redacción
 
 | Petición | Resultado esperado |
 | --- | --- |
 | «Crea la wiki» | La skill de mapa prepara la wiki en el idioma y registro del encargo. |
 | «Crea la wiki en español simplificado» | La skill de mapa prepara la wiki y la de redacción aplica el estilo a las explicaciones del mismo documento. |
 | «Reescribe este enunciado en español simplificado» | La skill de redacción conserva los requisitos y adapta la expresión para el alumnado. |
+| «Prepara apuntes en inglés sobre estas fuentes» | Se crean los apuntes en inglés con el registro adecuado a la materia y al nivel. |
+| «Háblame en español y prepara los apuntes en inglés técnico claro» | La conversación sigue en español. La skill de apuntes selecciona y cita las fuentes. La de inglés técnico claro redacta las explicaciones del mismo documento. |
+| “Rewrite these instructions in plain technical English.” | Se revisan solo las instrucciones indicadas, conservando términos, condiciones y orden de las acciones. |
 | «Haz más claro el segundo párrafo» | Se revisa ese párrafo como una edición ordinaria. |
 
-Puedes seleccionar o nombrar la skill directamente. Para mantener el estilo en futuras tareas, pide expresamente que se use en toda la asignatura.
+Puedes seleccionar o nombrar la skill directamente. Si el agente responde sin cargar alguna de las dos skills que necesitas, pídele «Usa `apuntes-estudio-creacion` junto con `ingles-tecnico-claro-redaccion` para estos apuntes». Para mantener el estilo en futuras tareas, pide expresamente que se use en toda la asignatura.
 
 ## Iniciar el proyecto docente
 
@@ -72,9 +76,8 @@ Preguntar qué se puede hacer no inicia esos procesos ni lee todo el corpus.
 Si falta una entrada, el agente la identifica. Se puede realizar una tarea con
 adjuntos suficientes aunque el curso todavía no tenga mapa.
 
-Como apoyo se ofrecen apuntes para estudiantes, español claro inspirado en
-ASD-STE100 e infografías o diapositivas visuales individuales. La skill de
-infografías conserva ese alcance; no promete presentaciones editables.
+Como apoyo puedes pedir apuntes para estudiantes, infografías o diapositivas
+visuales individuales.
 
 ## Trabajar con un curso
 

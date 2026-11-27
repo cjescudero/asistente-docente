@@ -12,7 +12,7 @@ de skills ni leer manuales. Consultar el [catálogo](../../docs/CATALOGO.md) par
 enrutar un encargo, y el [contrato del curso](../../docs/PROYECTO-DOCENTE.md) para
 interpretar sus carpetas.
 
-Combinar este encargo con [español conciso](../espanol-conciso-redaccion/SKILL.md) solo si el docente pide esa skill o el estilo de español simplificado, incluido un encargo expreso para todo el curso.
+Si el docente pide expresamente [español conciso](../espanol-conciso-redaccion/SKILL.md) o [inglés técnico claro](../ingles-tecnico-claro-redaccion/SKILL.md), invocar la skill elegida y aplicarla al texto indicado dentro de este encargo. Una preferencia expresa para el curso rige en el idioma correspondiente.
 
 ## Activación como ayuda inline
 
@@ -105,9 +105,9 @@ mapa; recomendarlo no lo convierte en requisito universal. Si el profesor ha
 elegido expresamente trabajar sin fuentes, respetarlo y ofrecer tareas con
 adjuntos, sin insistir en la creación del mapa.
 
-Presentar también, cuando sean pertinentes, las tres ayudas complementarias:
+Presentar también, cuando sean pertinentes, los apoyos de redacción y estudio:
 **infografías y diapositivas visuales individuales**, **apuntes de estudio** y
-**español simplificado a petición del docente**. Si quiere combinar dos skills,
+**redacción en español conciso o en inglés técnico claro a petición del docente**. Si quiere combinar dos skills,
 mostrar una petición como «Crea la wiki en español simplificado». No prometer presentaciones editables,
 certificación del estándar ni imágenes o PDF cuando falten esas capacidades.
 

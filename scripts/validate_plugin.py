@@ -23,6 +23,7 @@ DISPLAY_NAMES = {
     "cuestionarios-observaciones-calificaciones-alumnado": "Cuestionarios / Quizzes: student feedback",
     "espanol-conciso-redaccion": "Español conciso / Plain Spanish",
     "infografias-didacticas-creacion": "Infografías / Teaching visuals",
+    "ingles-tecnico-claro-redaccion": "Inglés técnico claro / Plain Technical English",
     "mapa-docente-consulta": "Mapa docente / Course map: explore",
     "mapa-docente-creacion-visualizacion": "Mapa docente / Course map: build and view",
     "proyecto-docente-ayuda": "Proyecto docente / Course: help",

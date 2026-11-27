@@ -4,7 +4,7 @@ English · [Español](README.md)
 
 Turn course materials into a linked course wiki, assignments, study notes, printable quizzes and individual Moodle feedback. Bring your existing course folder. You choose the sources, the language of the materials and which files students receive.
 
-**Adapting the assistant for a study?** The [researcher guide](docs/RESEARCHER-GUIDE.md) maps all twelve skills to their source files and shows how to test a change on a synthetic course.
+**Adapting the assistant for a study?** The [researcher guide](docs/RESEARCHER-GUIDE.md) maps all thirteen skills to their source files and shows how to test a change on a synthetic course.
 
 ## Install and start
 
@@ -36,6 +36,8 @@ Try the [bilingual sample course](examples/bilingual-course/README.md). An Engli
 | “Give my students feedback on this quiz.” | Supply the frozen manifest, Moodle's question-level results and the target gradebook/profile. Review the feedback CSV and import it manually. The existing quiz grades are preserved. |
 | “Prepare study notes” or “Create a visual slide.” | Source-based notes or a single educational visual. If image generation is unavailable, the agent provides the design and prompt. |
 
-You can say **“Speak to me in English and write the student handout in Spanish.”** Set a course-wide preference or change it for one task. The original source language, filenames and Moodle column headings are preserved. Plain Spanish is an optional writing style you can request for Spanish documents.
+You can say **“Speak to me in English and write the student handout in Spanish.”** Set a course-wide preference or change it for one task. The original source language, filenames and Moodle column headings are preserved.
+
+To request a particular writing style, name it alongside the task. Try **“Design a lab activity and write the student instructions in plain technical English”** or **“Build the course wiki in plain Spanish.”** The English style draws on ASD-STE100 and adapts to your readers and subject. Both styles are optional. [Language and style choices](docs/LANGUAGES.md).
 
 PDF export uses Python, Playwright and Chromium. For assistance, ask **“Check whether I can generate PDFs on this computer.”** If PDF generation is unavailable, you can review the editable source and HTML. Folder names describe the intended audience. Check actual file-sharing permissions before distributing student materials.

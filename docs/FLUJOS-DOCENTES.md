@@ -4,9 +4,9 @@ Consulta la [guía visual de los procesos](ESQUEMAS-PROCESOS.md) para ver entrad
 revisiones, resultados y pasos manuales de Moodle en cada recorrido.
 
 El profesor puede conversar sin conocer los nombres de las skills. El agente
-respeta el idioma y el estilo del encargo. El español simplificado se aplica
-cuando el docente solicita ese estilo o la skill correspondiente. Conserva rigor, términos, citas y
-restricciones; esta preferencia no autoriza a traducir textos literales.
+respeta el idioma del encargo. Si el docente pide inglés técnico claro o español
+conciso, la skill correspondiente redacta la prosa indicada dentro de esa misma
+tarea. Conserva rigor, términos, citas y restricciones. [Idiomas y estilos](LANGUAGES.md).
 
 ## Antes y después de trabajar con materiales
 

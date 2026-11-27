@@ -2,7 +2,7 @@
 
 ## Alcance
 
-Este proyecto contiene doce skills docentes y utilidades portables para ChatGPT
+Este proyecto contiene trece skills docentes y utilidades portables para ChatGPT
 Work, Codex, Claude Cowork, Claude Code y OpenCode. Por decisión explícita del usuario, carpeta, identificador
 y paquetes se llaman `asistente-docente`, sin prefijo `plugin-`. Las skills
 usan nombres sin prefijo `skill-` y se agrupan por categoría. La organización
@@ -94,8 +94,7 @@ vigente se documenta en `docs/PROYECTO-DOCENTE.md`.
   pasos según registros y archivos pertinentes, sin ejecutar tareas ni dar por
   completados resultados por la mera existencia de una carpeta. Respetar los
   flujos inicio → mapa, actividad → corrección y banco → cuestionario → feedback.
-  Ofrecer apuntes y diapositivas visuales individuales como apoyos. Aplicar la skill de español
-  simplificado solo cuando el docente solicite la skill o ese estilo.
+  Ofrecer apuntes y diapositivas visuales individuales como apoyos. Aplicar español conciso o inglés técnico claro únicamente cuando el docente pida la skill o ese estilo para el texto o el curso. La elección de idioma y la petición de estilo son independientes.
 
 ## Comprobaciones
 

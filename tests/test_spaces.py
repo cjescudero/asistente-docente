@@ -55,7 +55,11 @@ class CourseSpacesTests(unittest.TestCase):
         config = load_project(self.root)
         self.assertEqual(config["spaces"], {**ENGLISH_SPACES, "notes": ["Course notes"]})
         self.assertTrue((self.root / ENGLISH_MANAGEMENT_DIR / "proyecto-docente.json").is_file())
-        self.assertIn("## Teaching project", (self.root / "AGENTS.md").read_text(encoding="utf-8"))
+        instructions = (self.root / "AGENTS.md").read_text(encoding="utf-8")
+        self.assertIn("## Teaching project", instructions)
+        self.assertIn("ingles-tecnico-claro-redaccion", instructions)
+        self.assertIn("espanol-conciso-redaccion", instructions)
+        self.assertIn("only when the teacher expressly requests the style", instructions)
         self.assertIn("Choose the source folders", check_project(self.root)["warnings"][0])
         output = self.root / "AI-generated materials" / "quiz"
         self.assertEqual(course_language(output), "en")

@@ -9,7 +9,7 @@ Follow the [language settings](../../docs/LANGUAGES.md) for this task. Example r
 
 Aplicar los criterios del profesor a evidencias de cada entrega. No deducir una política de evaluación ni una sanción a partir del estilo del texto o de una respuesta inesperada.
 
-Combinar este encargo con [español conciso](../espanol-conciso-redaccion/SKILL.md) solo si el docente pide esa skill o el estilo de español simplificado, incluido un encargo expreso para todo el curso.
+Si el docente pide expresamente [español conciso](../espanol-conciso-redaccion/SKILL.md) o [inglés técnico claro](../ingles-tecnico-claro-redaccion/SKILL.md), invocar la skill elegida y aplicarla al texto indicado dentro de este encargo. Una preferencia expresa para el curso rige en el idioma correspondiente.
 
 ## Contexto del proyecto
 

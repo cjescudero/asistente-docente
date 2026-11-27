@@ -30,5 +30,8 @@ entornos virtuales ni binarios de navegador. Las referencias visuales JPG/PNG
 de la skill original no están incluidas: no tienen procedencia documentada en
 esa fuente.
 
-El estilo de redacción está inspirado en ASD-STE100, con adaptación editorial
-propia al español. No se reproduce el estándar ni se declara certificación.
+La skill de inglés técnico claro toma como referencia directa ASD-STE100
+Simplified Technical English. La de español conciso es una adaptación editorial
+propia al español. El plugin distribuye sus pautas y ejemplos originales.
+El estándar y su diccionario se consultan por separado. Aplicar estas skills
+no acredita conformidad con ASD-STE100. [Referencia oficial del STEMG](https://www.asd-ste100.org/STE_faq.html).

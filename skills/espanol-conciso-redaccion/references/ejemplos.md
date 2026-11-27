@@ -4,7 +4,7 @@
 
 Fuente: «El técnico conecta el sensor al receptor cuando este está apagado».
 
-Si la fuente confirma que se trata del receptor: «Con el receptor apagado, conecta el sensor al receptor». Si no lo confirma, preguntar o señalar que no se sabe qué equipo debe estar apagado. La proximidad gramatical no justifica inventar la condición.
+Si otra parte de la fuente identifica el receptor, se puede escribir «El técnico conecta el sensor al receptor cuando el receptor está apagado». La repetición conserva el referente y la descripción de quién actúa. Si el referente sigue siendo dudoso, preguntar «¿Qué equipo debe estar apagado en el momento de la conexión?».
 
 ## Conservar una obligación y su excepción
 
@@ -12,13 +12,13 @@ Fuente: «Cuando el error sea superior al 5 %, el operador deberá repetir la me
 
 Reescritura: «Si el error supera el 5 %, el operador debe repetir la medida. Esta obligación no se aplica si el responsable ha autorizado por escrito una excepción».
 
-Conservar la desigualdad estricta: «más del 5 %» no equivale a «5 % o más».
+El umbral es estricto. El texto indica qué hacer por encima del 5 %. Si añades un ejemplo con un error del 4 %, la fuente deja abierta la posibilidad de repetir la medida. Decir que está prohibido repetirla convertiría «si» en «solo si».
 
 ## No convertir coincidencia en causa
 
 Fuente: «Tras la reforma, aumentó la participación; el informe no permite separar sus efectos de otros cambios».
 
-Reescritura: «La participación aumentó después de la reforma. El informe no permite determinar cuánto se debe a la reforma y cuánto a otros cambios».
+Reescritura: «La participación aumentó después de la reforma. El informe no permite distinguir el posible efecto de la reforma del de otros cambios».
 
 No escribir «La reforma aumentó la participación»: la fuente solo establece una relación temporal.
 
@@ -40,7 +40,7 @@ En una explicación estadística, distinguir «la probabilidad del procedimiento
 
 Fuente: «Los resultados sugieren que el tratamiento podría reducir el crecimiento en estas condiciones; no se ha estudiado a otras temperaturas».
 
-Reescritura: «Los resultados sugieren que el tratamiento puede reducir el crecimiento en estas condiciones. Todavía no se ha estudiado su efecto a otras temperaturas».
+Reescritura: «En estas condiciones, los resultados sugieren que el tratamiento podría reducir el crecimiento. Todavía no se ha estudiado su efecto a otras temperaturas».
 
 No convertirlo en «El tratamiento reduce el crecimiento» ni eliminar el límite de temperatura.
 

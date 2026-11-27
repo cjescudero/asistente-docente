@@ -58,8 +58,8 @@ originales para resolverla sin una petición que lo autorice.
    Registrar quién realizó la importación, qué roles tienen acceso y cualquier
    limitación. Usar el ZIP solo si el anfitrión ofrece esa opción; no confundir
    esa prueba con una importación del marketplace.
-3. Confirmar nombre, versión elegida y doce skills; comprobar que los recursos del
-   paquete son accesibles desde las skills.
+3. Confirmar el nombre, la versión elegida y la lista de skills de su catálogo.
+   Comprobar que los recursos del paquete son accesibles desde las skills.
 4. Pedir una actividad breve con fuentes sintéticas. Revisar rigor, nivel,
    separación entre enunciado y solución y generación real de Markdown/PDF.
 5. Ejecutar el circuito del README con los ejemplos. Comprobar que HTML, PDF,
@@ -83,8 +83,10 @@ originales para resolverla sin una petición que lo autorice.
     enlaces salientes a archivos. El filtro docente no basta para esta prueba.
 11. En un proyecto de prueba externo al plugin, pedir «Inicia mi proyecto docente».
     Comprobar la asignación de espacios, la configuración cuando exista, `AGENTS.md` preservado
-    y pregunta ante conflictos. Verificar redacción simplificada bajo petición, selección
-    explícita o aplazada y exclusiones. La inicialización conserva el espacio generado sin crear una wiki.
+    y pregunta ante conflictos. Probar una petición de español conciso, una de inglés
+    técnico claro y una de edición ordinaria. Comprobar qué skills se invocan.
+    Verificar también la selección de fuentes, explícita o aplazada, y sus exclusiones.
+    La inicialización conserva el espacio generado sin crear una wiki.
     Repetir sin duplicar ni borrar decisiones. Probar carpeta inexistente, vacía,
     sin archivos seleccionados y no accesible; una tarea con adjuntos suficientes
     no debe quedar bloqueada. Debe ofrecer orientación y recomendar el mapa con

@@ -344,7 +344,7 @@ Para reorganizar el curso o mover o renombrar un original, invocar `proyecto-doc
 
 Usar las carpetas de Entregas únicamente para los procesos de evaluación correspondientes. Separar recibidos y corrección por actividad y convocatoria. Excluir entregas, calificaciones y comentarios individuales del catálogo docente, búsqueda y wiki, incluso al seguir enlaces.
 
-Aplicar `espanol-conciso-redaccion` solo a petición del docente para el encargo o cuando haya elegido ese estilo para toda la asignatura. Invocar `proyecto-docente-ayuda` ante dudas de uso y siguientes pasos. Recomendar la creación del mapa cuando proceda. Consultar un mapa real desde su índice y citar las fuentes autorizadas.
+Invocar la skill de estilo solo a petición expresa para ese texto o para el curso. Para «en inglés técnico claro» usar `ingles-tecnico-claro-redaccion`; para «en español conciso» o «en español simplificado» usar `espanol-conciso-redaccion`. Cargarla junto con la skill del encargo si se piden ambas. Elegir un idioma no activa ningún estilo. Invocar `proyecto-docente-ayuda` ante dudas de uso y siguientes pasos. Recomendar la creación del mapa cuando proceda. Consultar un mapa real desde su índice y citar las fuentes autorizadas.
 
 Usar subagentes cuando el anfitrión lo permita y haya trabajo independiente. Compartir solo los datos necesarios. El agente principal revisa e integra, y solo él consolida la hoja Moodle. Consultar al docente antes de cambiar a un modelo más sencillo y respetar su elección para el lote. Reservar soluciones y rúbricas completas al docente. Para cuestionarios, conservar los modelos, manifiesto y bancos congelados. Consultar conflictos antes de modificar instrucciones anteriores.""", p.END_MARKER])
     return "\n".join(lines)
@@ -370,7 +370,7 @@ Invoke `proyecto-docente-inicializacion-adaptacion` to reorganise the course or 
 
 Use student submissions only for the authorised assessment. Separate original downloads and marked work by activity and assessment period. Exclude submissions, grades and individual feedback from the teaching catalogue, searches and wiki, including when following links.
 
-Use `espanol-conciso-redaccion` only when the teacher requests that style for Spanish text. Invoke `proyecto-docente-ayuda` for questions about using the plugin and choosing the next step. Recommend creating the course map when appropriate. Read an existing map from its index and cite the authorised sources.
+Invoke a writing skill only when the teacher expressly requests the style for that text or the course. For “in plain technical English”, load `ingles-tecnico-claro-redaccion`. For “in plain Spanish”, load `espanol-conciso-redaccion`. For a combined request, load the writing skill alongside the main task skill. Choosing a language alone does not select a style. Invoke `proyecto-docente-ayuda` for questions about using the plugin and choosing the next step. Recommend creating the course map when appropriate. Read an existing map from its index and cite the authorised sources.
 
 Use subagents when the host supports them and work can be split independently. Share only necessary data. The lead agent reviews and integrates results and is the only agent to consolidate the Moodle sheet. Ask before switching to a simpler model and respect the teacher's choice for the batch. Keep solutions and full rubrics for the teacher. Preserve quiz models, the manifest and frozen question banks. Consult the teacher about conflicts before changing existing instructions.""", p.END_MARKER])
     return "\n".join(lines)

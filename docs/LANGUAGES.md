@@ -4,9 +4,18 @@ Respond in the teacher's language. Use the language explicitly requested for the
 
 For “Set up my course”, pass the teacher's language to initialization. Reuse configured spaces exactly as saved. Do not translate or rename folders when changing languages. For “Speak English and make a Spanish quiz”, explain the plan in English and pass Spanish to the quiz builder. Continue using the same frozen quiz manifest when the teacher later requests feedback in English. Use the actual Moodle headers and identifiers in the column profile. Keep the teacher's original titles, source quotations and locators, even when explanations change languages.
 
-Read the shared skill procedure in either conversation language. Localize all teacher- and student-facing text you author, including headings, examples, assignment instructions, rubric levels, review suggestions and accessibility text. Use only student-accessible sources in student materials. Retain technical record keys, identifiers, GIFT syntax and input filenames. Describe diagnostic messages to the teacher in their conversation language, preserving the failing path or identifier. Use plain Spanish only on explicit request for Spanish content.
+Read the shared skill procedure in either conversation language. Localize all teacher- and student-facing text you author, including headings, examples, assignment instructions, rubric levels, review suggestions and accessibility text. Use only student-accessible sources in student materials. Retain technical record keys, identifiers, GIFT syntax and input filenames. Describe diagnostic messages to the teacher in their conversation language, preserving the failing path or identifier.
 
 Al trabajar en español se aplican las mismas prioridades. El docente puede pedir una wiki en inglés basada en originales en español, mantener los enunciados en español y recibir las orientaciones en inglés. Para ejemplos de peticiones y del recorrido completo, consulta la [guía inglesa](../README.en.md).
+
+## Optional writing styles / Estilos a petición
+
+Use the relevant writing skill when the teacher selects it or explicitly asks for its style. Apply it to the requested prose in that language. A request such as “Write in English” selects a language. “Make this paragraph clearer” asks for an ordinary edit.
+
+- **Plain technical English.** In “Design a workshop and write its worksheet in plain technical English”, the workshop skill designs the activity and the English skill edits the worksheet. Keep technical terms, measurements, conditions and the force of instructions. [Plain Technical English](../skills/ingles-tecnico-claro-redaccion/SKILL.md).
+- **Español conciso.** En «Explícame los cambios en inglés y redacta el enunciado en español simplificado», la skill de estilo se aplica al enunciado. [Español conciso](../skills/espanol-conciso-redaccion/SKILL.md).
+
+Apply a style to future tasks only if the teacher explicitly establishes a course-wide preference for that style.
 
 ## Utility examples
 

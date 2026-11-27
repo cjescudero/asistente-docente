@@ -1,5 +1,10 @@
 # Historial
 
+## 0.16.0
+
+- Nueva skill «Inglés técnico claro / Plain Technical English», inspirada directamente en ASD-STE100. Se puede pedir por separado o al crear materiales con otra skill.
+- La revisión de «Español conciso» aclara la aplicación a entregables bilingües y mejora los ejemplos sobre obligaciones, hipótesis y causalidad. Ambos estilos se aplican a petición expresa.
+
 ## 0.15.1
 
 - La inicialización usa el idioma de la petición desde el primer mensaje, también cuando el material de referencia está en otro idioma.

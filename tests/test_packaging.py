@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from build_release import build_release, build_source_archive
 from sync_manifests import sync
-from validate_plugin import validate
+from validate_plugin import DISPLAY_NAMES, validate
 
 
 class PackagingTests(unittest.TestCase):
@@ -47,10 +47,10 @@ class PackagingTests(unittest.TestCase):
                     self.assertIn('.codex-plugin/plugin.json', names)
                 self.assertNotIn("plugin.json" if "-claude.zip" in name else ".claude-plugin/plugin.json", names)
                 self.assertEqual(json.loads(archive.read(expected))["name"], "asistente-docente")
-                self.assertEqual(sum(n.startswith("skills/") and n.endswith("/SKILL.md") for n in names), 12)
+                self.assertEqual({n.split("/")[1] for n in names if n.startswith("skills/") and n.endswith("/SKILL.md")}, set(DISPLAY_NAMES))
                 self.assertIn("skills/proyecto-docente-inicializacion-adaptacion/SKILL.md", names)
                 self.assertIn("skills/proyecto-docente-ayuda/SKILL.md", names)
-                self.assertEqual(sum(n.startswith("skills/") and n.endswith("/agents/openai.yaml") for n in names), 12)
+                self.assertEqual({n.split("/")[1] for n in names if n.startswith("skills/") and n.endswith("/agents/openai.yaml")}, set(DISPLAY_NAMES))
                 self.assertIn("skills/mapa-docente-creacion-visualizacion/references/visualizacion.md", names)
                 self.assertFalse(any(n.startswith("skills/visualizar-mapa-docente/") for n in names))
                 self.assertIn("skills/mapa-docente-creacion-visualizacion/assets/agents-mapa.md", names)

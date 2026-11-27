@@ -2,7 +2,7 @@
 
 [English — Installation and first course](README.en.md) · Español
 
-Doce skills para organizar fuentes, crear materiales, evaluar y devolver feedback en
+Trece skills para organizar fuentes, crear materiales, evaluar y devolver feedback en
 cualquier asignatura. Puedes usar las mismas skills en **ChatGPT Work**,
 **Codex**, **Claude Cowork**, **Claude Code** y **OpenCode 2.x**.
 El proyecto se distribuye bajo [MIT](LICENSE).
@@ -11,8 +11,8 @@ El proyecto se distribuye bajo [MIT](LICENSE).
 [Descargas y novedades](https://github.com/cjescudero/asistente-docente/releases) ·
 [Repositorio](https://github.com/cjescudero/asistente-docente).
 
-Las doce skills se agrupan por categoría: actividades, cuestionarios, mapa y
-proyecto docente, junto con apuntes y apoyos visuales. Consulta sus
+Las skills cubren actividades, cuestionarios, mapa y proyecto docente, además de
+apuntes, apoyos visuales y redacción en español e inglés. Consulta sus
 [nombres y funciones](docs/CATALOGO.md).
 
 Incluye ayuda contextual, bancos con preguntas principales y variantes, cuatro
@@ -138,9 +138,8 @@ con el mismo nombre en el espacio de entregas. Allí colocarás los trabajos en
 corrección, consulta el enunciado y la rúbrica de la actividad y entrega una copia
 con notas y feedback en `correccion/`. Cada lote incluye un LEEME con los pasos.
 La utilidad usa CSV; un libro Excel necesita una conversión verificada.
-Las importaciones en Moodle son manuales. Las ayudas complementarias son
-infografías y diapositivas visuales individuales, apuntes y español claro inspirado
-en ASD-STE100; no se promete una presentación editable.
+Las importaciones en Moodle son manuales. También puedes pedir apuntes,
+infografías y diapositivas visuales individuales. La skill de infografías trabaja en formato de imagen.
 
 ## Próximos pasos durante el trabajo
 
@@ -156,7 +155,8 @@ Al terminar una tarea, el agente propone próximos pasos con ejemplos de petici�
 
 Las sugerencias usan los registros y archivos pertinentes. Una carpeta vacía
 no acredita un resultado; un indicio se verifica antes de proponer repetirlo.
-No se inicia la siguiente tarea automáticamente. Puedes combinar skills en una misma petición, por ejemplo «Crea la wiki en español simplificado».
+Tú decides cuándo iniciar la siguiente tarea. Puedes combinarla con un estilo de redacción en la misma petición.
+Por ejemplo, «Crea la wiki en español simplificado» o «Prepara la actividad y redacta las instrucciones para el alumnado en inglés técnico claro».
 [Reglas de orientación](docs/FLUJOS-DOCENTES.md).
 
 ## Mapa docente
@@ -205,8 +205,9 @@ Elige disciplina, nivel, idioma, objetivos, fuentes, actividad y criterios de
 evaluación para cada proyecto. Se admiten formación escolar, universitaria,
 profesional y otros contextos; no se impone una rúbrica, matrícula institucional
 ni escala sobre diez. Los ejemplos son sintéticos y no se heredan como reglas.
-La interfaz y las instrucciones están en español; los materiales respetan el
-idioma del encargo. La skill de redacción se aplica cuando pides español simplificado o la seleccionas.
+Puedes trabajar en español o en inglés. Si quieres un estilo concreto, pide
+**español conciso** o **inglés técnico claro** para el texto que corresponda.
+El estilo inglés adapta ideas de ASD-STE100 a la materia y al lector. Por defecto, esa elección se aplica solo al encargo actual. [Ejemplos de uso](docs/USO.md).
 
 Puedes comenzar con la [ficha vacía](templates/ficha-asignatura-vacia.md) o con un
 encargo en la conversación. Moodle solo es necesario para sus flujos de

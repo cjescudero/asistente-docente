@@ -28,7 +28,7 @@ flowchart TD
 
 El mapa facilita reutilizar conocimiento, pero una tarea con adjuntos suficientes
 puede hacerse sin él. En cualquier punto: **«¿Qué puedo hacer ahora?»** activa la
-ayuda contextual. Se puede pedir español simplificado junto con cualquiera de estos encargos.
+ayuda contextual. Puedes pedir español simplificado o inglés técnico claro junto con cualquiera de estos encargos.
 
 ## 1. Inicializar o adaptar el proyecto
 

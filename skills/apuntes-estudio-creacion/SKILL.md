@@ -11,7 +11,7 @@ Producir un documento autónomo que ayude a comprender y relacionar los concepto
 
 Esta skill crea materiales de aprendizaje para el alumnado. Cuando exista un Mapa docente, usarlo para localizar las fuentes pertinentes y contrastar con ellas la explicación. No crear ni mantener aquí el inventario, la wiki o el grafo del curso; esas tareas corresponden a [crear el Mapa docente](../mapa-docente-creacion-visualizacion/SKILL.md).
 
-Combinar este encargo con [español conciso](../espanol-conciso-redaccion/SKILL.md) solo si el docente pide esa skill o el estilo de español simplificado, incluido un encargo expreso para todo el curso.
+Si el docente pide expresamente [español conciso](../espanol-conciso-redaccion/SKILL.md) o [inglés técnico claro](../ingles-tecnico-claro-redaccion/SKILL.md), invocar la skill elegida y aplicarla al texto indicado dentro de este encargo. Una preferencia expresa para el curso rige en el idioma correspondiente.
 
 ## Contexto del proyecto
 
@@ -40,7 +40,7 @@ Respetar los destinos explícitos acordados dentro del contrato común.
 1. Delimitar tema, audiencia y fuentes. Leer los materiales necesarios completos y, si existen, apuntes de la misma serie para conservar notación y continuidad. Priorizar fuentes vigentes autorizadas frente a bancos o cuestionarios anteriores.
 2. Extraer conceptos, definiciones, relaciones, supuestos, fórmulas y controversias pertinentes. Distinguir conocimientos de la materia, ejemplos y opiniones atribuidas.
 3. Organizar la explicación desde una idea central: propósito del tema, desarrollo por conceptos y relaciones con conocimientos previos. Añadir un glosario solo si reduce una dificultad real.
-4. Respetar el idioma del encargo o del curso. Cuando el docente pida español simplificado, aplicar [español conciso](../espanol-conciso-redaccion/SKILL.md). Explicar nuevos símbolos y condiciones de validez; conservar el rigor adecuado al lector. Un apunte de filosofía puede necesitar argumentos y objeciones; uno de química, modelos, unidades y límites.
+4. Respetar el idioma del encargo o del curso. Explicar nuevos símbolos y condiciones de validez; conservar el rigor adecuado al lector. Un apunte de filosofía puede necesitar argumentos y objeciones; uno de química, modelos, unidades y límites.
 5. Incorporar ejemplos breves que resuelvan dificultades concretas. Si las fuentes son prácticas evaluadas, extraer la teoría sin copiar soluciones reservadas ni convertir el apunte en una secuencia para superar esa evaluación.
 6. Revisar cobertura, atribuciones, consistencia de términos y exactitud contra las fuentes. Mantener referencias suficientes para comprobar afirmaciones especializadas o citas; no inventar bibliografía.
 7. Entregar Markdown y PDF por defecto mediante `python "$ASISTENTE_DOCENTE/scripts/docencia.py" render-markdown apuntes.md --output salida`. Localizar la raíz instalada del plugin en `ASISTENTE_DOCENTE` y resolver entradas y salidas en el espacio del curso; consultar [uso](../../docs/USO.md). Identificar cualquier PDF pendiente de renderizar o revisar.

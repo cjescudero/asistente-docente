@@ -33,6 +33,10 @@ La fuente original atribuye inspiración sobre escritura simplificada y formatos
 
 No se incorporan el PNG ni los trece JPG de referencias visuales del origen: no se encontró licencia ni atribución documentada para esos archivos. La descripción textual del estilo es suficiente para este paquete.
 
+## Inglés técnico claro
+
+La skill `ingles-tecnico-claro-redaccion` toma como referencia directa ASD-STE100 Simplified Technical English, que se desarrolló para la documentación de mantenimiento en aviación. Aplica a la docencia ideas como usar un término estable para cada concepto y hacer explícitas las condiciones de una acción. Sus instrucciones y ejemplos son propios. El profesor puede elegir este estilo flexible para una tarea de cualquier disciplina. Una revisión formal de conformidad requiere consultar el estándar. [Origen de ASD-STE100](https://www.asd-ste100.org/about_STE.html) · [Preguntas frecuentes del STEMG](https://www.asd-ste100.org/STE_faq.html).
+
 ## Renderer previo y código nuevo
 
 `skill-gift-question-bank-pdf-renderer` se examinó como referencia de HTML y PDF. Su script no se incorpora: muestra soluciones por defecto, agrupa por categoría y tiene dependencias y límites de parsing distintos de este flujo. El nuevo proyecto mantiene una representación ordenada común y salidas separadas para estudiante y docente.

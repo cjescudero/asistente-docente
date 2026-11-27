@@ -11,7 +11,7 @@ When feedback is expected in a second language, supply translated concept labels
 
 Construir un banco cuya cobertura, dificultad y soluciones puedan revisar el profesor. El formato de Moodle es **GIFT**, no GIF.
 
-Combinar este encargo con [español conciso](../espanol-conciso-redaccion/SKILL.md) solo si el docente pide esa skill o el estilo de español simplificado, incluido un encargo expreso para todo el curso.
+Si el docente pide expresamente [español conciso](../espanol-conciso-redaccion/SKILL.md) o [inglés técnico claro](../ingles-tecnico-claro-redaccion/SKILL.md), invocar la skill elegida y aplicarla al texto indicado dentro de este encargo. Una preferencia expresa para el curso rige en el idioma correspondiente.
 
 ## Puntuaciones e instrucciones
 

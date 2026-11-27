@@ -7,9 +7,9 @@ description: "Crear imágenes didácticas con estilo de boceto a mano para expli
 
 Follow the [language settings](../../docs/LANGUAGES.md) for this task. Example request: **“Create an infographic about this process.”**
 
-Transformar el contenido en una explicación visual con fondo crema, tinta negra irregular, pasteles suaves y espacio en blanco. Por defecto, crear una imagen 16:9 de apoyo a una exposición oral por unidad lógica, con texto en español. Una instrucción explícita de formato, idioma, detalle o estilo prevalece.
+Transformar el contenido en una explicación visual con fondo crema, tinta negra irregular, pasteles suaves y espacio en blanco. Por defecto, crear una imagen 16:9 de apoyo a una exposición oral por unidad lógica, con texto en el idioma acordado para el material. Una instrucción explícita de formato, idioma, detalle o estilo prevalece.
 
-Combinar este encargo con [español conciso](../espanol-conciso-redaccion/SKILL.md) solo si el docente pide esa skill o el estilo de español simplificado, incluido un encargo expreso para todo el curso.
+Si el docente pide expresamente [español conciso](../espanol-conciso-redaccion/SKILL.md) o [inglés técnico claro](../ingles-tecnico-claro-redaccion/SKILL.md), invocar la skill elegida y aplicarla al texto indicado dentro de este encargo. Una preferencia expresa para el curso rige en el idioma correspondiente.
 
 ## Contexto del proyecto
 
@@ -54,7 +54,7 @@ Para fórmulas, geometría, magnitudes o datos exactos, usar representación ver
 2. Decidir audiencia, alcance, tipo e idioma. Mantener términos, acrónimos, unidades, nombres y cifras. Reproducir literalmente cualquier texto que el usuario exija, sin corregirlo o traducirlo silenciosamente.
 3. Dividir contenido por idea principal. Construir el brief con título, propósito, etiquetas, relaciones, composición y datos que deben conservarse. Aplicar la [guía de composición](references/composicion.md).
 4. Elegir un patrón que explique la relación: proceso, comparación, evolución, capas, ciclo, mapa conceptual o jerarquía. No convertir toda explicación en tarjetas independientes.
-5. Preparar el prompt en inglés, manteniendo el texto visible en español o en el idioma pedido. Incluir siempre estilo obligatorio, elementos que evitar y texto literal. Usar la [plantilla de prompt](references/prompt.md).
+5. Preparar el prompt en inglés, manteniendo las etiquetas visibles en el idioma acordado para el material. Incluir siempre estilo obligatorio, elementos que evitar y texto literal. Usar la [plantilla de prompt](references/prompt.md).
 6. Generar mediante la capacidad disponible. Si el usuario aporta referencias visuales utilizables, extraer estética y densidad; no copiar su contenido. El plugin no incluye las imágenes de referencia originales de procedencia no documentada.
 7. Ver la imagen y revisarla con la [lista de calidad](references/calidad.md): contenido, ortografía, legibilidad, densidad y estilo. Corregir o regenerar cuando aparezcan errores. Si el entorno no permite inspeccionarla, declarar esa revisión pendiente.
 8. Entregar una imagen por unidad lógica y mantener una familia visual coherente. Añadir una descripción textual accesible cuando ayude. Si se pide PDF o presentación, generar primero las imágenes y después componer y verificar ese archivo con las capacidades disponibles.
@@ -65,7 +65,7 @@ Fondo crema o marfil, contornos negros con irregularidad natural y rellenos muy 
 
 Evitar aspecto de folleto institucional, cartel corporativo, panel de indicadores, azul dominante, colores saturados, degradados, sombras brillantes, iconos de catálogo, realismo o 3D. Evitar párrafos, microtexto, tablas densas y exceso de recuadros. El tema médico, académico o jurídico no impone por sí solo una estética institucional.
 
-Para elegir entre texto, diagrama, interacción o vídeo antes de decidir una infografía, consultar [español conciso](../espanol-conciso-redaccion/SKILL.md).
+Para elegir el formato, tener en cuenta qué relación necesita ver el alumnado y si una imagen estática permite explicarla.
 
 ## Sugerir el siguiente paso
 

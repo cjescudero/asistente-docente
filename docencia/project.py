@@ -62,8 +62,7 @@ AGENTS_BLOCK_V3 = """<!-- asistente-docente:proyecto:inicio -->
   conversación y el estado pertinente del curso; no repetir decisiones conocidas.
   Resolver la duda sin iniciar tareas nuevas ni leer todo el corpus. Una aplicación
   por respuesta basta; continuar después el encargo ya autorizado.
-- Aplicar `espanol-conciso-redaccion` solo a petición del docente para el encargo
-  o cuando haya elegido ese estilo para toda la asignatura.
+- Invocar la skill de estilo solo a petición expresa para ese texto o para el curso. Para «en inglés técnico claro» usar `ingles-tecnico-claro-redaccion`; para «en español conciso» o «en español simplificado» usar `espanol-conciso-redaccion`. Cargarla junto con la skill del encargo si se piden ambas. Elegir un idioma no activa ningún estilo.
 - Usar subagentes cuando el anfitrión lo permita y haya subtareas independientes
   cuya paralelización aporte una ventaja: por ejemplo, evaluar entregas distintas
   o preparar feedback de estudiantes distintos. No fragmentar tareas pequeñas
@@ -184,7 +183,7 @@ Al finalizar cada tarea, el agente propondrá pasos adecuados a los resultados
 comprobados. Si solo encuentra indicios, los señalará y verificará lo necesario;
 una carpeta vacía no demuestra que una fase esté hecha. Si faltan entregas o
 respuestas, explicará qué debes aportar antes de corregir o generar feedback.
-Puedes combinar tareas y estilos en una petición, por ejemplo «Crea la wiki en español simplificado».
+Puedes combinar tareas y estilos, por ejemplo «Crea la wiki en español simplificado» o «Prepara los apuntes en inglés técnico claro».
 
 Las entregas y exportaciones originales de Moodle se guardan en
 `resultados/<actividad>/<convocatoria>/recibidos/`; los informes, las copias de
