@@ -1,5 +1,11 @@
 # Historial
 
+## 0.15.1
+
+- La inicialización usa el idioma de la petición desde el primer mensaje, también cuando el material de referencia está en otro idioma.
+- Antes de mover o renombrar un original, el agente muestra el origen y el destino y espera una confirmación explícita en un turno posterior. La inicialización incorpora esta regla a las instrucciones del curso.
+- En OpenCode 2.4.2, «Set up my course» inició en inglés con una lectura en inglés y con otra en español. Una prueba adicional comprobó la confirmación antes del traslado. [Registro de pruebas](docs/VERIFICACION-BILINGUE.md).
+
 ## 0.15.0
 
 - Recorrido docente en inglés y español, con idioma de conversación y de materiales independientes. Se conserva la identidad del plugin y de las doce skills.

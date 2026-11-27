@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "asistente-docente",
-  "version": "0.15.0",
+  "version": "0.15.1",
   "description": "Asistente docente / Teaching Assistant — Materiales y evaluación docente. Course materials, assignments, quizzes and Moodle feedback in English or Spanish.",
   "author": {
     "name": "Carlos J. Escudero"

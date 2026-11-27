@@ -340,7 +340,7 @@ def instructions(config):
                      "Respetar las excepciones para cada encargo y citar los títulos y localizadores originales.")
     lines.extend(["", """Respetar las carpetas y las decisiones del docente. Consultar en la carpeta de gestión del proyecto la selección de fuentes, el catálogo y las incidencias cuando existan. Clasificar unidades lógicas con IDs estables, conservar las agrupaciones y dar prioridad a las confirmaciones del docente. Mantener separados ubicación, procedencia, acceso y estado.
 
-Mantener la estructura actual por defecto. Presentar las carpetas y operaciones propuestas antes de una reorganización física y aplicar solo las aceptadas. Promover material generado a referencia oficial únicamente por decisión expresa. Comprobar identidades y versiones al comenzar un trabajo que dependa del inventario. Reparar enlaces tras un movimiento y actualizar solo los contenidos derivados afectados por cambios de fuente.
+Para reorganizar el curso o mover o renombrar un original, invocar `proyecto-docente-inicializacion-adaptacion`. Mostrar cada origen y destino exactos y esperar la confirmación explícita del docente en un turno posterior, incluso si la petición inicial ya indica ambas rutas. Aplicar solo los traslados confirmados. Promover material generado a referencia oficial únicamente por decisión expresa. Comprobar identidades y versiones al comenzar un trabajo que dependa del inventario. Reparar enlaces tras un movimiento y actualizar solo los contenidos derivados afectados por cambios de fuente.
 
 Usar las carpetas de Entregas únicamente para los procesos de evaluación correspondientes. Separar recibidos y corrección por actividad y convocatoria. Excluir entregas, calificaciones y comentarios individuales del catálogo docente, búsqueda y wiki, incluso al seguir enlaces.
 
@@ -366,7 +366,7 @@ def _english_instructions(config):
                   "Keep original source titles and locators when citing material in another language.",
                   "", """Respect the teacher's folders and decisions. Consult the selected sources, catalogue and incidents in the project management folder when needed. Classify logical units with stable IDs. Preserve groupings and give priority to the teacher's confirmations. Track location, origin, access and status separately.
 
-Keep the current structure by default. Present the folders and moves before reorganising files and apply only the approved changes. Promote generated content to course materials only on explicit request. Check identities and versions before inventory-dependent work. Repair links after a move and update only outputs affected by a source change.
+Invoke `proyecto-docente-inicializacion-adaptacion` to reorganise the course or move or rename an original. Show the exact source and destination for each move and wait for the teacher's explicit confirmation in a later turn, even if the first request gives both paths. Apply only the confirmed moves. Promote generated content to course materials only on explicit request. Check identities and versions before inventory-dependent work. Repair links after a move and update only outputs affected by a source change.
 
 Use student submissions only for the authorised assessment. Separate original downloads and marked work by activity and assessment period. Exclude submissions, grades and individual feedback from the teaching catalogue, searches and wiki, including when following links.
 
