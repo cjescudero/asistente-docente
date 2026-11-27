@@ -4,6 +4,8 @@ English · [Español](README.md)
 
 Turn course materials into a linked course wiki, assignments, study notes, printable quizzes and individual Moodle feedback. Bring your existing course folder. You choose the sources, the language of the materials and which files students receive.
 
+**Adapting the assistant for a study?** The [researcher guide](docs/RESEARCHER-GUIDE.md) maps all twelve skills to their source files and shows how to test a change on a synthetic course.
+
 ## Install and start
 
 1. **Install in your teaching environment.** Choose your route from the table below. The GitHub marketplace address is `https://github.com/cjescudero/asistente-docente`. The plugin identifier is `asistente-docente`.
