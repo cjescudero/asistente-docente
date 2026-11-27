@@ -1,3 +1,3 @@
 interface:
-  display_name: "Mapa docente: consulta"
-  short_description: "Consultar el mapa y sus fuentes sin modificar contenidos"
+  display_name: "Mapa docente / Course map: explore"
+  short_description: "Consultar la wiki / Explore the course wiki"

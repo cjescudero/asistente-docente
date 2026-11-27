@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "asistente-docente",
-  "version": "0.14.5",
-  "description": "Organiza conocimiento docente, crea actividades y bancos con variantes y prepara cuestionarios y feedback para Moodle.",
+  "version": "0.15.0",
+  "description": "Asistente docente / Teaching Assistant — Materiales y evaluación docente. Course materials, assignments, quizzes and Moodle feedback in English or Spanish.",
   "author": {
     "name": "Carlos J. Escudero"
   },
@@ -12,19 +12,22 @@
     "evaluacion",
     "moodle",
     "agent-skills",
-    "mapa-docente"
+    "mapa-docente",
+    "teaching",
+    "course-materials",
+    "question-banks"
   ],
   "extensions": {
     "com.openai": {
       "interface": {
-        "displayName": "Asistente docente",
-        "shortDescription": "Materiales docentes",
-        "longDescription": "Se distribuye desde GitHub mediante un marketplace personalizado. Tras instalarlo, abre la carpeta del curso y pide «Inicia mi proyecto docente». Separa las fuentes aportadas de los materiales creados y sugiere próximos pasos según los resultados existentes: wiki explicativa y mapa docente, actividades y corrección, bancos con variantes, cuatro modelos de cuestionario por defecto y observaciones sobre calificaciones para Moodle. Incluye apuntes, diapositivas visuales individuales y español simplificado a petición del docente. Las siguientes tareas requieren un encargo y las importaciones en Moodle son manuales.",
+        "displayName": "Asistente docente / Teaching Assistant",
+        "shortDescription": "Docencia / Teaching tools",
+        "longDescription": "Organiza tu curso, crea materiales y prepara cuestionarios y comentarios para Moodle. Set up your course, explore your course map, design assignments, grade submissions and prepare printable quizzes with Moodle feedback. Work in English or Spanish and choose a different language for your handouts.",
         "developerName": "Carlos J. Escudero",
         "defaultPrompt": [
-          "Inicia mi proyecto docente en esta carpeta y oriéntame sobre qué puedo hacer después.",
-          "Diseñemos una actividad con enunciado, plantillas y rúbrica docente a partir de estas fuentes.",
-          "Prepara modelos de cuestionario equilibrados combinando los bancos de estos materiales."
+          "Set up my course.",
+          "Inicia mi proyecto docente.",
+          "What can I do next?"
         ]
       }
     }

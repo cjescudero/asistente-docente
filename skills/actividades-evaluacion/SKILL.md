@@ -1,9 +1,11 @@
 ---
 name: actividades-evaluacion
-description: Evaluar actividades, trabajos, informes o notebooks descargados de Moodle con su enunciado, rúbrica y resolución disponibles; generar puntuaciones justificadas y feedback en un CSV para importar en Moodle. No usar para crear materiales, procesar cuestionarios ofuscados ni atribuir uso de IA sin pruebas.
+description: "Evaluar actividades, trabajos, informes o notebooks descargados de Moodle con su enunciado, rúbrica y resolución disponibles; generar puntuaciones justificadas y feedback en un CSV para importar en Moodle. No usar para crear materiales, procesar cuestionarios ofuscados ni atribuir uso de IA sin pruebas. Evaluate submissions against the assignment brief and rubric and prepare Moodle grades and individual feedback. E.g. “Grade these submissions.”"
 ---
 
 # Actividades: evaluación
+
+Follow the [language settings](../../docs/LANGUAGES.md) for this task. Example request: **“Grade these submissions.”**
 
 Aplicar los criterios del profesor a evidencias de cada entrega. No deducir una política de evaluación ni una sanción a partir del estilo del texto o de una respuesta inesperada.
 

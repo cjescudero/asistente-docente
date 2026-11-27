@@ -14,7 +14,20 @@ from urllib.parse import unquote, urlsplit
 from validate_library import _links
 from sync_manifests import generated_files
 
-DISPLAY_NAMES = {'actividades-evaluacion': 'Actividades: evaluación', 'actividades-preparacion': 'Actividades: preparación', 'apuntes-estudio-creacion': 'Apuntes estudio: creación', 'cuestionarios-bancos-preguntas-creacion': 'Cuestionarios: creación de bancos de preguntas', 'espanol-conciso-redaccion': 'Español conciso: redacción', 'cuestionarios-observaciones-calificaciones-alumnado': 'Cuestionarios: observaciones sobre calificaciones para el alumnado', 'cuestionarios-modelos-imprimir-evaluar': 'Cuestionarios: creación de modelos para imprimir y evaluar', 'infografias-didacticas-creacion': 'Infografías didácticas: creación', 'mapa-docente-consulta': 'Mapa docente: consulta', 'mapa-docente-creacion-visualizacion': 'Mapa docente: creación y visualización', 'proyecto-docente-ayuda': 'Proyecto docente: ayuda', 'proyecto-docente-inicializacion-adaptacion': 'Proyecto docente: inicialización y adaptación'}
+DISPLAY_NAMES = {
+    "actividades-evaluacion": "Actividades / Activities: grading",
+    "actividades-preparacion": "Actividades / Activities: design",
+    "apuntes-estudio-creacion": "Apuntes / Study notes",
+    "cuestionarios-bancos-preguntas-creacion": "Cuestionarios / Quizzes: question banks",
+    "cuestionarios-modelos-imprimir-evaluar": "Cuestionarios / Quizzes: printable forms",
+    "cuestionarios-observaciones-calificaciones-alumnado": "Cuestionarios / Quizzes: student feedback",
+    "espanol-conciso-redaccion": "Español conciso / Plain Spanish",
+    "infografias-didacticas-creacion": "Infografías / Teaching visuals",
+    "mapa-docente-consulta": "Mapa docente / Course map: explore",
+    "mapa-docente-creacion-visualizacion": "Mapa docente / Course map: build and view",
+    "proyecto-docente-ayuda": "Proyecto docente / Course: help",
+    "proyecto-docente-inicializacion-adaptacion": "Proyecto docente / Course: setup"
+}
 EXPECTED = set(DISPLAY_NAMES)
 ALLOWED = {"name", "description", "license", "compatibility", "metadata", "allowed-tools"}
 

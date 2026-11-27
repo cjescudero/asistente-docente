@@ -10,7 +10,8 @@ from unittest.mock import patch
 
 from docencia.catalog import reconcile
 from docencia.project import (CONFIG_V3, CONFIG_V4, DEFAULT_SPACES, MANAGEMENT_DIR,
-                              check_project, find_project, initialize_course, initialize_project,
+                              check_project, course_language, ENGLISH_MANAGEMENT_DIR, ENGLISH_SPACES,
+                              find_project, initialize_course, initialize_project,
                               load_project, project_config_path, source_allowed)
 from docencia.spaces import resolve_space
 
@@ -45,6 +46,45 @@ class CourseSpacesTests(unittest.TestCase):
         self.assertTrue((self.root / CONFIG_V4).exists())
         self.assertEqual(initialize_course(self.root)["updated"], [])
         self.assertEqual(check_project(self.root)["selection_status"], "none")
+
+    def test_english_setup_and_per_task_override_preserve_paths(self):
+        preview = initialize_course(self.root, language="en", notes=True, dry_run=True)
+        self.assertFalse(self.root.exists())
+        created = initialize_course(self.root, language="en", notes=True)
+        self.assertEqual(preview["would_create"], created["created"])
+        config = load_project(self.root)
+        self.assertEqual(config["spaces"], {**ENGLISH_SPACES, "notes": ["Course notes"]})
+        self.assertTrue((self.root / ENGLISH_MANAGEMENT_DIR / "proyecto-docente.json").is_file())
+        self.assertIn("## Teaching project", (self.root / "AGENTS.md").read_text(encoding="utf-8"))
+        self.assertIn("Choose the source folders", check_project(self.root)["warnings"][0])
+        output = self.root / "AI-generated materials" / "quiz"
+        self.assertEqual(course_language(output), "en")
+        self.assertEqual(course_language(output, language="es"), "es")
+        self.assertEqual(course_language(output), "en")
+        self.assertEqual(initialize_course(self.root)["created"], [])
+
+        result = initialize_course(self.root, output_language="es")
+        self.assertIn("Default language for materials: es", result["proposals"][0]["block"])
+        self.assertEqual(course_language(output), "es")
+        self.assertEqual(course_language(output, purpose="conversation"), "en")
+        self.assertEqual(load_project(self.root)["spaces"], config["spaces"])
+        self.assertFalse((self.root / MANAGEMENT_DIR).exists())
+
+    def test_new_conversation_language_reuses_existing_spanish_layout(self):
+        initialize_course(self.root)
+        agents = (self.root / "AGENTS.md").read_bytes()
+        result = initialize_course(self.root, language="en")
+        self.assertEqual(load_project(self.root)["spaces"], DEFAULT_SPACES)
+        self.assertFalse((self.root / ENGLISH_MANAGEMENT_DIR).exists())
+        self.assertTrue((self.root / CONFIG_V4).is_file())
+        self.assertEqual((self.root / "AGENTS.md").read_bytes(), agents)
+        self.assertIn("## Teaching project", result["proposals"][0]["block"])
+        self.assertEqual(course_language(self.root), "en")
+
+    def test_unsupported_preference_fails_before_creating_folders(self):
+        with self.assertRaisesRegex(ValueError, "Supported languages"):
+            initialize_course(self.root, language="fr")
+        self.assertFalse(self.root.exists())
 
     def test_existing_units_are_assigned_without_reorganization(self):
         notes = self.root / "Mi estructura/Unidad 1"

@@ -1,7 +1,7 @@
 {
   "name": "asistente-docente",
-  "version": "0.14.5",
-  "description": "Organiza conocimiento docente, crea actividades y bancos con variantes y prepara cuestionarios y feedback para Moodle.",
+  "version": "0.15.0",
+  "description": "Asistente docente / Teaching Assistant — Materiales y evaluación docente. Course materials, assignments, quizzes and Moodle feedback in English or Spanish.",
   "author": {
     "name": "Carlos J. Escudero"
   },
@@ -14,6 +14,9 @@
     "evaluacion",
     "moodle",
     "agent-skills",
-    "mapa-docente"
+    "mapa-docente",
+    "teaching",
+    "course-materials",
+    "question-banks"
   ]
 }

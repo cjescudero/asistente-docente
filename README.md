@@ -1,8 +1,10 @@
-# Asistente docente
+# Asistente docente / Teaching Assistant
+
+[English — Installation and first course](README.en.md) · Español
 
 Doce skills para organizar fuentes, crear materiales, evaluar y devolver feedback en
 cualquier asignatura. Puedes usar las mismas skills en **ChatGPT Work**,
-**Codex**, **Claude Cowork**, **Claude Code** y **OpenCode**.
+**Codex**, **Claude Cowork**, **Claude Code** y **OpenCode 2.x**.
 El proyecto se distribuye bajo [MIT](LICENSE).
 [Instalación y primer uso](docs/INSTALACION.md) ·
 [Esquemas de los procesos](docs/ESQUEMAS-PROCESOS.md) ·
@@ -16,6 +18,8 @@ proyecto docente, junto con apuntes y apoyos visuales. Consulta sus
 Incluye ayuda contextual, bancos con preguntas principales y variantes, cuatro
 modelos de cuestionario por defecto y una wiki explicativa. Consulta el
 [ejemplo de variantes](examples/cuestionarios-variantes/README.md).
+
+Puedes conversar en un idioma y preparar los materiales en otro. Por ejemplo, pide **«Háblame en español y prepara los apuntes en inglés»**. Para empezar directamente en inglés, escribe **“Set up my course”**. [Ejemplo de curso bilingüe](examples/bilingual-course/README.md).
 
 ## Inicio rápido
 
@@ -59,11 +63,10 @@ En inglés: **Customize → Plugins → Add → Add marketplace → Add from a r
 Si tu organización restringe los marketplaces, pide al responsable que autorice
 esta fuente.
 
-### Instalación en OpenCode
+### Instalación en OpenCode 2.x
 
 Guarda una copia completa de Asistente docente y añade la ruta de su carpeta
-`skills/` al `opencode.json` del curso. Usa la configuración correspondiente
-a tu versión. [Cómo cargar las skills en OpenCode](docs/INSTALACION.md#opencode).
+`skills/` al `opencode.json` del curso. Añade la ruta a la lista `skills`. [Cómo cargar las skills en OpenCode](docs/INSTALACION.md#opencode).
 
 ### Primer uso
 

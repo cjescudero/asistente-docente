@@ -17,6 +17,9 @@ if __package__:
 else:
     from validate_library import _inside, registry_path, validate_library
 
+from docencia.map_labels import label, render_template
+from docencia.project import course_language
+
 MARKER = "<!-- asistente-docente:generated-wiki:v1 -->"
 TEMPLATE = Path(__file__).resolve().parents[1] / "assets" / "wiki.html"
 ADMIN_TITLES = {"index.md": "Índice general", "LEEME.md": "Convenciones de la guía",
@@ -53,11 +56,11 @@ def _slug(value):
     return re.sub(r"\s", "-", value) or "seccion"
 
 
-def _markdown_renderer(markdown, page_path, output, known, roots, protected):
+def _markdown_renderer(markdown, page_path, output, known, roots, protected, language):
     try:
         from markdown_it import MarkdownIt
     except ImportError as exc:
-        raise WikiError("Falta markdown-it-py. Instala las dependencias de requirements.txt.") from exc
+        raise WikiError(label("Falta markdown-it-py. Instala las dependencias de requirements.txt.", language)) from exc
     parser = MarkdownIt("commonmark", {"html": False}).enable("table").enable("strikethrough")
     default_link = parser.renderer.rules.get("link_open")
 
@@ -95,7 +98,7 @@ def _markdown_renderer(markdown, page_path, output, known, roots, protected):
         if target is None:
             token.attrs.pop("href", None)
             token.attrSet("class", "blocked-link")
-            token.attrSet("title", "Destino no permitido en el visor")
+            token.attrSet("title", label("Destino no permitido en el visor", language))
         else:
             token.attrSet("href", target)
             if urlsplit(target).scheme:
@@ -110,7 +113,7 @@ def _markdown_renderer(markdown, page_path, output, known, roots, protected):
         target = rewrite(token.attrGet("src") or "", image=True)
         alt = html.escape(token.content, quote=True)
         if target is None:
-            return '<span class="image-blocked">[Imagen no incorporada: ' + alt + "]</span>"
+            return '<span class="image-blocked">[' + label("Imagen no incorporada", language) + ': ' + alt + "]</span>"
         title = token.attrGet("title")
         return '<img src="' + html.escape(target, quote=True) + '" alt="' + alt + '" loading="lazy"' + ((' title="' + html.escape(title, quote=True) + '"') if title else "") + ">"
 
@@ -119,10 +122,10 @@ def _markdown_renderer(markdown, page_path, output, known, roots, protected):
     return parser
 
 
-def _page_record(page, guide, output, known, roots, protected):
+def _page_record(page, guide, output, known, roots, protected, language):
     markdown = (guide / page["path"]).resolve()
     text = markdown.read_text(encoding="utf-8-sig")
-    parser = _markdown_renderer(markdown, page["path"], output, known, roots, protected)
+    parser = _markdown_renderer(markdown, page["path"], output, known, roots, protected, language)
     tokens = parser.parse(text)
     used, headings = set(), []
     for idx, token in enumerate(tokens):
@@ -146,7 +149,7 @@ def _page_record(page, guide, output, known, roots, protected):
             "searchText": text, "headings": headings}
 
 
-def build_wiki(guide_dir, output=None, graph=None, *, verified_files=None):
+def build_wiki(guide_dir, output=None, graph=None, *, verified_files=None, language=None):
     """Render registered v2 pages and the four administrative pages as one HTML.
 
     This is a teacher-only reader, including reserved documents. It never embeds
@@ -155,48 +158,49 @@ def build_wiki(guide_dir, output=None, graph=None, *, verified_files=None):
     """
     try:
         guide = Path(guide_dir).expanduser().resolve()
+        language = course_language(guide, language=language)
         validation = validate_library(guide, verified_files=verified_files)
         if validation["status"] != "ok":
-            raise WikiError("Mapa inválido: " + "; ".join(validation["errors"]))
+            raise WikiError(label("Mapa inválido: ", language) + "; ".join(validation["errors"]))
         registry = json.loads(registry_path(guide).read_text(encoding="utf-8-sig"))
         if registry.get("schema_version") != 2:
-            raise WikiError("El visor requiere fuentes.json schema_version 2.")
+            raise WikiError(label("El visor requiere fuentes.json schema_version 2.", language))
         requested = Path(output).expanduser() if output is not None else guide / "index.html"
         if requested.is_symlink():
-            raise WikiError("La salida no puede ser un enlace simbólico.")
+            raise WikiError(label("La salida no puede ser un enlace simbólico.", language))
         destination = requested.resolve()
         if destination.suffix.lower() != ".html" or not destination.parent.is_dir():
-            raise WikiError("La salida debe ser un archivo .html en una carpeta existente.")
+            raise WikiError(label("La salida debe ser un archivo .html en una carpeta existente.", language))
         roots = [guide] + [(guide / relative).resolve() for relative in registry["source_roots"].values()]
         protected = {registry_path(guide).resolve(), TEMPLATE.resolve(), Path(__file__).resolve()}
         protected.update((guide / registry["source_roots"][source["root"]] / source["path"]).resolve()
                          for source in registry["sources"])
-        pages = [{"path": name, "title": title, "kind": "administracion", "access": "docente"}
+        pages = [{"path": name, "title": label(title, language), "kind": "administracion", "access": "docente"}
                  for name, title in ADMIN_TITLES.items()] + sorted(registry["pages"], key=lambda page: page["path"])
         known = {(guide / page["path"]).resolve(): page["path"] for page in pages}
         protected.update(known)
-        records = [_page_record(page, guide, destination, known, roots, protected) for page in pages]
+        records = [_page_record(page, guide, destination, known, roots, protected, language) for page in pages]
         graph_path = Path(graph).expanduser().resolve() if graph is not None else None
         if graph_path is not None:
             if graph_path.suffix.lower() != ".html":
-                raise WikiError("El grafo enlazado debe ser un archivo .html.")
+                raise WikiError(label("El grafo enlazado debe ser un archivo .html.", language))
             protected.add(graph_path)
         if destination in protected:
-            raise WikiError("La salida coincide con un original, una página u otra entrada protegida.")
+            raise WikiError(label("La salida coincide con un original, una página u otra entrada protegida.", language))
         existing = None
         if destination.exists():
             existing = destination.read_text(encoding="utf-8")
             if not existing.startswith(MARKER + "\n"):
-                raise WikiError("La salida ya existe y no fue generada por esta utilidad.")
+                raise WikiError(label("La salida ya existe y no fue generada por esta utilidad.", language))
         template = TEMPLATE.read_text(encoding="utf-8")
         if not template.startswith(MARKER + "\n") or template.count("__WIKI_DATA__") != 1:
-            raise WikiError("La plantilla del visor no contiene el contrato esperado.")
+            raise WikiError(label("La plantilla del visor no contiene el contrato esperado.", language))
         payload = {"schemaVersion": 1, "title": registry["title"], "audience": "docente",
                    "index": "index.md", "graphHref": _href(graph_path, destination) if graph_path else None,
                    "documents": records}
         embedded = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
         embedded = embedded.replace("<", "\\u003c").replace("\u2028", "\\u2028").replace("\u2029", "\\u2029")
-        rendered = template.replace("__WIKI_DATA__", embedded)
+        rendered = render_template(template, language).replace("__WIKI_DATA__", embedded)
         if rendered != existing:
             temporary = None
             try:
@@ -205,10 +209,10 @@ def build_wiki(guide_dir, output=None, graph=None, *, verified_files=None):
                     temporary = Path(stream.name)
                     stream.write(rendered)
                 if destination.is_symlink():
-                    raise WikiError("La salida se convirtió en enlace simbólico durante la generación.")
+                    raise WikiError(label("La salida se convirtió en enlace simbólico durante la generación.", language))
                 if destination.exists():
                     if existing is None or destination.read_text(encoding="utf-8") != existing:
-                        raise WikiError("La salida cambió durante la generación; no se sobrescribe.")
+                        raise WikiError(label("La salida cambió durante la generación; no se sobrescribe.", language))
                     os.replace(temporary, destination)
                 else:
                     os.link(temporary, destination)
@@ -225,11 +229,12 @@ def build_wiki(guide_dir, output=None, graph=None, *, verified_files=None):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("guide_dir", metavar="GUIDE_DIR")
-    parser.add_argument("--output", metavar="FILE", help="Predeterminado: GUIDE_DIR/index.html")
-    parser.add_argument("--graph", metavar="FILE", help="Enlace de regreso a un grafo HTML docente")
+    parser.add_argument("--output", metavar="FILE", help="Default: GUIDE_DIR/index.html")
+    parser.add_argument("--graph", metavar="FILE", help="Link back to the teacher HTML graph")
+    parser.add_argument("--language", choices=("es", "en"), help="View language (course preference by default)")
     args = parser.parse_args(argv)
     try:
-        result = build_wiki(args.guide_dir, args.output, args.graph)
+        result = build_wiki(args.guide_dir, args.output, args.graph, language=args.language)
     except WikiError as exc:
         print(json.dumps({"status": "invalid", "errors": [str(exc)]}, ensure_ascii=False))
         return 1

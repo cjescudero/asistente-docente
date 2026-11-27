@@ -1,9 +1,13 @@
 ---
 name: cuestionarios-bancos-preguntas-creacion
-description: Crear, ampliar y revisar bancos GIFT asociados a materiales o actividades de cualquier asignatura, con preguntas principales y variantes, procedencia, objetivos, conceptos y dificultad para combinar después en cuestionarios. No usar para corregir entregas, generar feedback posterior ni preparar por sí sola los modelos impresos.
+description: "Crear, ampliar y revisar bancos GIFT asociados a materiales o actividades de cualquier asignatura, con preguntas principales y variantes, procedencia, objetivos, conceptos y dificultad para combinar después en cuestionarios. No usar para corregir entregas, generar feedback posterior ni preparar por sí sola los modelos impresos. Create, expand or review a source-linked GIFT question bank with question families and variants. E.g. “Create a question bank.”"
 ---
 
 # Cuestionarios: creación de bancos de preguntas
+
+Follow the [language settings](../../docs/LANGUAGES.md) for this task. Example request: **“Create a question bank.”**
+
+When feedback is expected in a second language, supply translated concept labels and review guidance in the frozen metadata. See [language settings](../../docs/LANGUAGES.md).
 
 Construir un banco cuya cobertura, dificultad y soluciones puedan revisar el profesor. El formato de Moodle es **GIFT**, no GIF.
 

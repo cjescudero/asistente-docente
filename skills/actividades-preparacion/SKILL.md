@@ -1,9 +1,13 @@
 ---
 name: actividades-preparacion
-description: Diseñar mediante diálogo actividades, prácticas, talleres, casos y experimentos de cualquier disciplina, apoyados en materiales y evidencias de aprendizaje, con enunciado, plantillas y rúbrica docente. Usar también para preparar la carpeta de recepción de una actividad y para notebooks cuando procedan. No usar para apuntes teóricos, bancos de preguntas ni corrección de entregas.
+description: "Diseñar mediante diálogo actividades, prácticas, talleres, casos y experimentos de cualquier disciplina, apoyados en materiales y evidencias de aprendizaje, con enunciado, plantillas y rúbrica docente. Usar también para preparar la carpeta de recepción de una actividad y para notebooks cuando procedan. No usar para apuntes teóricos, bancos de preguntas ni corrección de entregas. Design assignments, lab work or projects with a brief, student templates and a separate teacher rubric. E.g. “Design an activity for my class.”"
 ---
 
 # Actividades: preparación
+
+Follow the [language settings](../../docs/LANGUAGES.md) for this task. Example request: **“Design an activity for my class.”**
+
+For English deliverables use the [student brief](../../templates/en/activity-brief.md), [teacher rubric](../../templates/en/marking-rubric.md) and [submission instructions](../../templates/en/activity-reception.md).
 
 Convertir objetivos de aprendizaje y fuentes autorizadas en una actividad que el estudiante pueda realizar y el profesor pueda evaluar con criterios explícitos.
 

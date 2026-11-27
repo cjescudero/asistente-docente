@@ -1,5 +1,9 @@
 # Historial
 
+## 0.15.0
+
+- Recorrido docente en inglés y español, con idioma de conversación y de materiales independientes. Se conserva la identidad del plugin y de las doce skills.
+
 ## 0.14.5 — 2026-11-26
 
 - La propuesta de estructura sitúa «Alumnado» y «Salidas de campo» directamente en «02 Organización del curso». Ambas carpetas son de uso docente reservado y quedan fuera de las fuentes del Mapa docente.

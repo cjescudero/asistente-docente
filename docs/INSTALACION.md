@@ -2,7 +2,7 @@
 
 Asistente docente se distribuye desde un repositorio público. Para ChatGPT, Codex
 y Claude se añade el marketplace de GitHub a la aplicación o al espacio de
-trabajo y después se instala el plugin. OpenCode carga las skills desde una
+trabajo y después se instala el plugin. OpenCode 2.x carga las skills desde una
 copia local del proyecto. [Repositorio en GitHub](https://github.com/cjescudero/asistente-docente).
 
 - [Instalación para profesores](#instalación-para-profesores): sin terminal.
@@ -20,7 +20,7 @@ Consulta las [publicaciones en GitHub](https://github.com/cjescudero/asistente-d
 | ChatGPT de tu organización | Pedir al administrador que incorpore el marketplace; después instalar el plugin desde los plugins de ese espacio de trabajo. |
 | Claude con plugins disponibles | Añadir el marketplace desde Personalizar y después instalar Asistente docente. |
 | Codex o Claude Code | Instala el plugin desde el marketplace del repositorio. Sigue los pasos de [Codex CLI](#codex-cli) o [Claude Code](#claude-code). |
-| OpenCode | Descarga el paquete fuente y configura la ruta a `skills/`. Sigue los pasos de [OpenCode](#opencode). |
+| OpenCode 2.x | Descarga el paquete fuente y configura la ruta a `skills/`. Sigue los pasos de [OpenCode](#opencode). |
 | ChatGPT individual, sin espacio administrado | Consultar la alternativa con [Codex CLI](#codex-cli); no se presupone una importación gráfica para cualquier cuenta. |
 
 Los pasos con los nombres de menús están en el
@@ -179,23 +179,13 @@ automáticas activadas. [Instalación y gestión en Claude Code](https://code.cl
 1. Descarga y descomprime el ZIP `*-source.zip`, o clona el repositorio. Guarda
    la copia completa fuera de la carpeta del curso para conservar las referencias
    a la documentación, las plantillas y los scripts. [Descargas en GitHub](https://github.com/cjescudero/asistente-docente/releases).
-2. Ejecuta `opencode --version` para comprobar si usas 1.x o 2.x. En la raíz
+2. Ejecuta `opencode --version` para confirmar que utilizas OpenCode 2.x. En la raíz
    del curso, crea `opencode.json` o añade la entrada al archivo `opencode.json`
    o `opencode.jsonc` que ya uses. Conserva los demás ajustes y las rutas de
    skills que ya tengas.
 3. Sustituye `/ruta/asistente-docente/skills` por la ruta absoluta a la carpeta
    `skills/` de tu copia. En Windows puedes escribir la ruta con barras
    inclinadas, por ejemplo `C:/Herramientas/asistente-docente/skills`.
-
-**OpenCode 1.x** usa `skills.paths`.
-
-```json
-{
-  "skills": {
-    "paths": ["/ruta/asistente-docente/skills"]
-  }
-}
-```
 
 **OpenCode 2.x** usa una lista directamente en `skills`.
 
@@ -209,9 +199,7 @@ Abre una sesión nueva de OpenCode en la carpeta del curso. Si OpenCode te pide
 permiso para leer archivos externos, revisa que la ruta solicitada pertenezca
 a tu copia de Asistente docente. La ruta de skills carga la colección y el
 agente consulta sus archivos de apoyo a medida que los necesita.
-[Skills en 1.x](https://opencode.ai/v1/docs/skills/) ·
-[Skills en 2.x](https://opencode.ai/docs/skills/) ·
-[Cambios de configuración entre 1.x y 2.x](https://opencode.ai/docs/migrate-v1/#skills).
+[Configuración de skills en OpenCode 2.x](https://opencode.ai/docs/skills/).
 
 #### Probar el primer uso en OpenCode
 

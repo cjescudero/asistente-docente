@@ -1,9 +1,11 @@
 ---
 name: cuestionarios-modelos-imprimir-evaluar
-description: Combinar bancos GIFT de materiales o actividades para preparar modelos de cuestionario equilibrados, PDF de estudiante, solucionarios y GIFT ofuscados coherentes con su manifiesto Moodle. Usar también con un único banco. No inventar preguntas durante la composición ni importar automáticamente en Moodle.
+description: "Combinar bancos GIFT de materiales o actividades para preparar modelos de cuestionario equilibrados, PDF de estudiante, solucionarios y GIFT ofuscados coherentes con su manifiesto Moodle. Usar también con un único banco. No inventar preguntas durante la composición ni importar automáticamente en Moodle. Build balanced printable quiz forms, teacher keys and matching masked Moodle GIFT files from question banks. E.g. “Prepare four printable quiz forms.”"
 ---
 
 # Cuestionarios: creación de modelos para imprimir y evaluar
+
+Follow the [language settings](../../docs/LANGUAGES.md) for this task. Example request: **“Prepare four printable quiz forms.”**
 
 Generar todos los derivados desde una única representación ordenada del modelo: pregunta impresa, opción visible, puntuación y correspondencia Moodle deben coincidir.
 

@@ -2,6 +2,7 @@
 from pathlib import Path
 import os
 
+from .project_text import diagnostic
 from .project import CONFIG_NAME, MANAGEMENT_NAMES, DEFAULT_SPACES, find_project, load_project
 from .spaces import resolve_space
 
@@ -24,7 +25,7 @@ def course_output(path, role, *, inputs=()):
             continue
         anchor = output_project(item)
         if anchor and load_project(anchor)["structure"] == "curso-v4" and anchor != project:
-            raise ValueError("La salida debe estar en el mismo proyecto que sus entradas.")
+            raise ValueError(diagnostic("La salida debe estar en el mismo proyecto que sus entradas."))
     if project and load_project(project)["structure"] == "curso-v4":
         # Usar la ruta léxica para que resolve_space compruebe también los enlaces.
         if not target.is_relative_to(project):

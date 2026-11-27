@@ -9,6 +9,7 @@ import unicodedata
 from functools import lru_cache
 from pathlib import PurePosixPath
 
+from .project_text import diagnostic
 from . import project as p
 
 RESERVED = frozenset({".agents", ".git", ".venv", "venv", "__pycache__", "node_modules",
@@ -30,35 +31,40 @@ def reserved(relative):
     return any(key(part) in blocked for part in PurePosixPath(relative).parts)
 
 
-def defaults():
-    return {"schema_version": 1, "structure": "curso-v4", "spaces": copy.deepcopy(p.DEFAULT_SPACES),
+def defaults(language="es"):
+    return {"schema_version": 1, "structure": "curso-v4", "spaces": copy.deepcopy(p.ENGLISH_SPACES if language == "en" else p.DEFAULT_SPACES),
             "sources": {"selected": False, "include": [], "exclude": []}, "map": None}
 
 
 def validate_config(root, data):
     result = copy.deepcopy(data)
+    preferences = result.get("languages", {})
+    if not isinstance(preferences, dict) or preferences.keys() - {"conversation", "materials"}:
+        raise ValueError("languages accepts conversation and materials (en/es).")
+    for value in preferences.values():
+        p.supported_language(value)
     spaces = result.get("spaces")
     required = set(p.DEFAULT_SPACES)
     if not isinstance(spaces, dict) or not required <= spaces.keys() <= required | {"notes"}:
-        raise ValueError("spaces requiere sources, generated y submissions; notes es opcional.")
+        raise ValueError(diagnostic("spaces requiere sources, generated y submissions; notes es opcional."))
     roots = []
     for role, values in spaces.items():
         paths = p._paths(values, role)
         if not paths:
-            raise ValueError(f"Elegir al menos una carpeta para el espacio {role}.")
+            raise ValueError(diagnostic("Elegir al menos una carpeta para el espacio {role}.", role=role))
         for relative in paths:
             if reserved(relative) or key(relative.split("/")[0]) in {"agents.md", "leeme.md", key(p.CONFIG_NAME)}:
-                raise ValueError(f"Espacio reservado: {relative}")
+                raise ValueError(diagnostic("Espacio reservado: {relative}", relative=relative))
             if any(under(relative, other) or under(other, relative) for other in roots):
-                raise ValueError(f"Las raíces de los espacios deben ser independientes: {relative}")
+                raise ValueError(diagnostic("Las raíces de los espacios deben ser independientes: {relative}", relative=relative))
             path = p._safe_path(root, relative)
             if path.exists() and not path.is_dir():
-                raise ValueError(f"Colisión con un archivo: {relative}")
+                raise ValueError(diagnostic("Colisión con un archivo: {relative}", relative=relative))
             roots.append(relative)
         spaces[role] = paths
     sources = result.get("sources")
     if not isinstance(sources, dict) or type(sources.get("selected")) is not bool:
-        raise ValueError("La selección del corpus requiere sources.selected.")
+        raise ValueError(diagnostic("La selección del corpus requiere sources.selected."))
     for field in ("include", "exclude"):
         sources[field] = p._paths(sources.get(field), f"sources.{field}")
         for relative in sources[field]:
@@ -67,35 +73,35 @@ def validate_config(root, data):
                 reserved(relative) or not any(p._within_relative(relative, r) for r in spaces["sources"])
                 or (path.exists() and not path.is_dir())
             ):
-                raise ValueError(f"Seleccionar solo carpetas del espacio de material de la asignatura: {relative}")
+                raise ValueError(diagnostic("Seleccionar solo carpetas del espacio de material de la asignatura: {relative}", relative=relative))
     bindings = result.get("source_bindings", {})
     if not isinstance(bindings, dict) or set(bindings) - {"include", "exclude"}:
-        raise ValueError("Identidades de selección del corpus no válidas.")
+        raise ValueError(diagnostic("Identidades de selección del corpus no válidas."))
     for value in bindings.values():
         if not isinstance(value, dict):
-            raise ValueError("Se esperaba un registro de identidades por ruta.")
+            raise ValueError(diagnostic("Se esperaba un registro de identidades por ruta."))
         for name, token in value.items():
             if p._relative(name) != name:
-                raise ValueError("Ruta de identidad no normalizada.")
+                raise ValueError(diagnostic("Ruta de identidad no normalizada."))
             if (not isinstance(token, list) or len(token) != 4 or type(token[0]) is not int
                 or type(token[1]) is not int or token[1] <= 0
                 or not (token[2] is None or type(token[2]) is int) or token[3] not in ("file", "dir")):
-                raise ValueError("Identificador físico de selección no válido.")
+                raise ValueError(diagnostic("Identificador físico de selección no válido."))
     if not sources["selected"] and (sources["include"] or sources["exclude"]):
-        raise ValueError("La selección pendiente requiere listas vacías.")
+        raise ValueError(diagnostic("La selección pendiente requiere listas vacías."))
     if "map" not in result:
-        raise ValueError("Falta el estado de mapa del curso.")
+        raise ValueError(diagnostic("Falta el estado de mapa del curso."))
     if result["map"] is not None:
         m = p._relative(result["map"])
         # Solo los mapas ya existentes procedentes de v3 pueden quedar fuera del espacio generado.
         legacy_map = result.get("adopted_from") == p.CONFIG_V3 and m == result.get("adopted_map")
         outside_map = spaces["sources"] + spaces["submissions"] + spaces.get("notes", [])
         if reserved(m) or any(under(m, r) or under(r, m) for r in outside_map):
-            raise ValueError("La wiki no puede solaparse con las fuentes, las entregas ni las notas del curso.")
+            raise ValueError(diagnostic("La wiki no puede solaparse con las fuentes, las entregas ni las notas del curso."))
         if not legacy_map and not any(p._within_relative(m, r) and m != r for r in spaces["generated"]):
-            raise ValueError("La wiki debe ubicarse dentro del espacio generado.")
+            raise ValueError(diagnostic("La wiki debe ubicarse dentro del espacio generado."))
         if not p._safe_path(root, m + "/index.md").is_file():
-            raise ValueError("map requiere un índice real.")
+            raise ValueError(diagnostic("map requiere un índice real."))
         result["map"] = m
     return result
 
@@ -160,7 +166,7 @@ def _capture(root, config, field):
     for path in config["sources"][field]:
         _observe(root, config, path, descend=field == "exclude", found=found, unavailable=unavailable)
     if unavailable:
-        raise ValueError("No se pudo verificar la selección: " + ", ".join(sorted(unavailable)))
+        raise ValueError(diagnostic("No se pudo verificar la selección: ") + ", ".join(sorted(unavailable)))
     return found
 
 
@@ -227,7 +233,7 @@ def corpus_policy(root, config, *, refresh=False):
             with destination.open(encoding="utf-8") as handle:
                 active = json.load(handle, object_pairs_hook=p._unique_json)
             if active.get("source_bindings", {}) != bindings or active["sources"] != sources:
-                raise ValueError("Cambió la selección del corpus; repetir la reconciliación.")
+                raise ValueError(diagnostic("Cambió la selección del corpus; repetir la reconciliación."))
             active["source_bindings"] = updated
             p._replace_config(destination, json.dumps(active, ensure_ascii=False, indent=2) + "\n")
     if uncertain or unavailable:
@@ -301,19 +307,21 @@ def resolve_space(root, role, destination=None, *, config=None):
     root = p._root(root)
     config = p.load_project(root) if config is None else config
     if config.get("structure") != "curso-v4" or role not in config["spaces"]:
-        raise ValueError(f"El espacio solicitado debe estar asignado en curso-v4: {role}.")
+        raise ValueError(diagnostic("El espacio solicitado debe estar asignado en curso-v4: {role}.", role=role))
     choices = config["spaces"][role]
     if destination is None:
         if len(choices) != 1:
-            raise ValueError(f"Elige una de las carpetas para {role}: " + ", ".join(choices))
+            raise ValueError(diagnostic("Elige una de las carpetas para {role}: ", role=role) + ", ".join(choices))
         destination = choices[0]
     destination = p._relative(destination)
     if reserved(destination) or not any(p._within_relative(destination, folder) for folder in choices):
-        raise ValueError(f"El destino no pertenece al espacio {role}: {destination}")
+        raise ValueError(diagnostic("El destino no pertenece al espacio {role}: {destination}", destination=destination, role=role))
     return p._safe_path(root, destination)
 
 
 def instructions(config):
+    if p.configured_language(config, "conversation") == "en":
+        return _english_instructions(config)
     roles = {"sources": "Material de la asignatura", "generated": "Material generado por IA",
              "submissions": "Entregas"}
     marker = p.COURSE_MARKER if config["spaces"] == p.DEFAULT_SPACES else "<!-- asistente-docente:espacios-configurados -->"
@@ -327,6 +335,9 @@ def instructions(config):
                       "Mantener estas notas fuera del catálogo docente, el mapa y las vistas del alumnado. "
                       "Incorporar una nota concreta como referencia solo por encargo expreso, acordando "
                       "su destino y audiencia. La carpeta conserva sus permisos de almacenamiento."])
+    if config.get("languages"):
+        lines.append(f"\nIdioma predeterminado de los materiales: {p.configured_language(config)}. "
+                     "Respetar las excepciones para cada encargo y citar los títulos y localizadores originales.")
     lines.extend(["", """Respetar las carpetas y las decisiones del docente. Consultar en la carpeta de gestión del proyecto la selección de fuentes, el catálogo y las incidencias cuando existan. Clasificar unidades lógicas con IDs estables, conservar las agrupaciones y dar prioridad a las confirmaciones del docente. Mantener separados ubicación, procedencia, acceso y estado.
 
 Mantener la estructura actual por defecto. Presentar las carpetas y operaciones propuestas antes de una reorganización física y aplicar solo las aceptadas. Promover material generado a referencia oficial únicamente por decisión expresa. Comprobar identidades y versiones al comenzar un trabajo que dependa del inventario. Reparar enlaces tras un movimiento y actualizar solo los contenidos derivados afectados por cambios de fuente.
@@ -336,6 +347,32 @@ Usar las carpetas de Entregas únicamente para los procesos de evaluación corre
 Aplicar `espanol-conciso-redaccion` solo a petición del docente para el encargo o cuando haya elegido ese estilo para toda la asignatura. Invocar `proyecto-docente-ayuda` ante dudas de uso y siguientes pasos. Recomendar la creación del mapa cuando proceda. Consultar un mapa real desde su índice y citar las fuentes autorizadas.
 
 Usar subagentes cuando el anfitrión lo permita y haya trabajo independiente. Compartir solo los datos necesarios. El agente principal revisa e integra, y solo él consolida la hoja Moodle. Consultar al docente antes de cambiar a un modelo más sencillo y respetar su elección para el lote. Reservar soluciones y rúbricas completas al docente. Para cuestionarios, conservar los modelos, manifiesto y bancos congelados. Consultar conflictos antes de modificar instrucciones anteriores.""", p.END_MARKER])
+    return "\n".join(lines)
+
+
+def _english_instructions(config):
+    labels = {"sources": "Course materials", "generated": "AI-generated materials",
+              "submissions": "Student submissions", "notes": "Course notes"}
+    marker = p.COURSE_MARKER if config["spaces"] == p.DEFAULT_SPACES else "<!-- asistente-docente:espacios-configurados -->"
+    lines = [p.START_MARKER, marker, "## Teaching project", ""]
+    for role, paths in config["spaces"].items():
+        lines.append(f"- {labels[role]}: " + ", ".join(f"`{path}/`" for path in paths) + ".")
+    if "notes" in config["spaces"]:
+        lines.append("Keep the teacher's notes outside the catalogue, course map and student views. "
+                     "Consolidate a specific note only on request after agreeing its audience and destination. "
+                     "Folder names do not change storage permissions.")
+    lines.extend(["", f"Default language for materials: {p.configured_language(config)}. "
+                  "Follow the teacher's language in conversation and any language requested for this task. "
+                  "Keep original source titles and locators when citing material in another language.",
+                  "", """Respect the teacher's folders and decisions. Consult the selected sources, catalogue and incidents in the project management folder when needed. Classify logical units with stable IDs. Preserve groupings and give priority to the teacher's confirmations. Track location, origin, access and status separately.
+
+Keep the current structure by default. Present the folders and moves before reorganising files and apply only the approved changes. Promote generated content to course materials only on explicit request. Check identities and versions before inventory-dependent work. Repair links after a move and update only outputs affected by a source change.
+
+Use student submissions only for the authorised assessment. Separate original downloads and marked work by activity and assessment period. Exclude submissions, grades and individual feedback from the teaching catalogue, searches and wiki, including when following links.
+
+Use `espanol-conciso-redaccion` only when the teacher requests that style for Spanish text. Invoke `proyecto-docente-ayuda` for questions about using the plugin and choosing the next step. Recommend creating the course map when appropriate. Read an existing map from its index and cite the authorised sources.
+
+Use subagents when the host supports them and work can be split independently. Share only necessary data. The lead agent reviews and integrates results and is the only agent to consolidate the Moodle sheet. Ask before switching to a simpler model and respect the teacher's choice for the batch. Keep solutions and full rubrics for the teacher. Preserve quiz models, the manifest and frozen question banks. Consult the teacher about conflicts before changing existing instructions.""", p.END_MARKER])
     return "\n".join(lines)
 
 
@@ -369,26 +406,34 @@ def _pending(root, reason, **detail):
             "wiki_created": False, "warnings": []}
 
 
-def initialize(root, *, spaces, notes, include, exclude, dry_run, adopt_v3):
+def initialize(root, *, spaces, notes, include, exclude, dry_run, adopt_v3, language=None, output_language=None):
     root = p._root(root)
     control = p.project_config_path(root)
     previous = p.load_project(root) if control or p._implicit_v4(root) else None
     v3 = previous is not None and previous["structure"] == "curso-v3"
-    config = copy.deepcopy(previous) if previous else defaults()
+    config = copy.deepcopy(previous) if previous else defaults(language)
     if v3:
         config = _adoption(previous)
+    for purpose, value in (("conversation", language), ("materials", output_language)):
+        if value is not None:
+            config.setdefault("languages", {})[purpose] = p.supported_language(value)
+    language = p.configured_language(config, "conversation")
+    english = language == "en"
     if v3 and not adopt_v3:
-        return _pending(root, "Propuesta de adopción de curso-v3; confirmar antes de escribir.",
+        return _pending(root, "Confirm adoption of the existing course before writing." if english else
+                        "Propuesta de adopción de curso-v3; confirmar antes de escribir.",
                         spaces=config["spaces"], sources=config["sources"],
                         review=config["adoption_review"], map=config["map"])
     if spaces is not None:
         if not isinstance(spaces, dict):
-            raise ValueError("spaces debe ser un objeto con las carpetas asignadas.")
+            raise ValueError(diagnostic("spaces debe ser un objeto con las carpetas asignadas."))
         assigned = copy.deepcopy(spaces)
         if "notes" in config["spaces"]:
             assigned.setdefault("notes", config["spaces"]["notes"])
         config["spaces"] = assigned
     if notes is not None:
+        if notes is True:
+            notes = next(iter(config["spaces"].get("notes", [])), "Course notes" if english else p.DEFAULT_NOTES_DIR)
         relative = p._relative(notes, label="notes")
         assigned_notes = p._paths(config["spaces"].get("notes", []), "notes")
         if relative not in assigned_notes:
@@ -396,11 +441,12 @@ def initialize(root, *, spaces, notes, include, exclude, dry_run, adopt_v3):
         config["spaces"]["notes"] = assigned_notes
     if previous is None and root.is_dir() and spaces is None:
         allowed = {i for values in config["spaces"].values() for i in values}
-        allowed.update({"AGENTS.md", "LEEME.md", *p.IGNORED_FILENAMES})
+        allowed.update({"AGENTS.md", "LEEME.md", "README.md", *p.IGNORED_FILENAMES})
         # Mostrar nombres de primer nivel. El agente clasifica después, con el docente.
         entries = sorted(item.name for item in root.iterdir() if item.name not in allowed and not reserved(item.name))
         if entries:
-            return _pending(root, "Asignar las carpetas existentes a los tres espacios antes de preparar el curso.",
+            return _pending(root, "Choose how to use the existing folders before setting up the course." if english else
+                            "Asignar las carpetas existentes a los tres espacios antes de preparar el curso.",
                             entries=entries)
     if include is not None:
         config["sources"]["selected"] = True
@@ -413,34 +459,37 @@ def initialize(root, *, spaces, notes, include, exclude, dry_run, adopt_v3):
             config.setdefault("source_bindings", {})[field] = _capture(root, config, field)
     agents = p._safe_path(root, "AGENTS.md")
     if agents.exists() and not agents.is_file():
-        raise ValueError("AGENTS.md debe ser un archivo regular.")
+        raise ValueError(diagnostic("AGENTS.md debe ser un archivo regular."))
     block = instructions(config)
-    proposal = p._proposal(agents.read_text(encoding="utf-8"), block) if agents.exists() else None
-    managed = p._safe_path(root, p.config_v4(root))
+    proposal = p._proposal(agents.read_text(encoding="utf-8"), block, language=language) if agents.exists() else None
+    management = p.management_dir(root, preferred=p.ENGLISH_MANAGEMENT_DIR if english and previous is None else p.MANAGEMENT_DIR)
+    config_path = f"{management}/{p.CONFIG_NAME}"
+    managed = p._safe_path(root, config_path)
     # Si el AGENTS pertenece al docente, persistir la configuración para poder descubrirla.
     persist = managed.exists() or config != defaults() or proposal is not None
     dirs = list(p.project_directories(config))
     if persist or previous is None:
-        dirs.append(p.management_dir(root))
+        dirs.append(management)
     new = [d + "/" for d in dirs if not (root / d).exists()]
     if not agents.exists():
         new.append("AGENTS.md")
     if persist and not managed.exists():
-        new.append(p.config_v4(root))
-    update = [p.config_v4(root)] if managed.is_file() and config != previous else []
+        new.append(config_path)
+    update = [config_path] if managed.is_file() and config != previous else []
     if not dry_run:
         for d in dirs:
             if d in p.MANAGEMENT_NAMES:
-                p.ensure_management_dir(root)
+                p.ensure_management_dir(root, preferred=management)
                 continue
             p._safe_path(root, d).mkdir(parents=True, exist_ok=True)
         if not agents.exists():
-            p._write_new(agents, "# Instrucciones del proyecto docente\n\n" + block + "\n")
-        if p.config_v4(root) in new or update:
+            heading = "# Teaching project instructions" if english else "# Instrucciones del proyecto docente"
+            p._write_new(agents, heading + "\n\n" + block + "\n")
+        if config_path in new or update:
             p._replace_config(managed, json.dumps(config, ensure_ascii=False, indent=2) + "\n")
     return {"status": "dry_run" if dry_run else "pending_approval" if proposal else "ok",
             "root": str(root), "config": config, "created": [] if dry_run else new,
             "updated": [] if dry_run else update, "would_create": new if dry_run else [],
             "would_update": update if dry_run else [], "proposals": [proposal] if proposal else [],
-            "wiki_created": False, "warnings": (["La selección de fuentes está pendiente."]
+            "wiki_created": False, "warnings": (["Choose the source folders for the course map." if english else "La selección de fuentes está pendiente."]
                                                if not config["sources"]["selected"] else [])}

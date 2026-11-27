@@ -1,9 +1,11 @@
 ---
 name: mapa-docente-consulta
-description: Localizar materiales y responder preguntas mediante un Mapa docente, con evidencia y referencias a las fuentes de las carpetas autorizadas. Usar para saber qué documentos cubren un tema o contrastar contenidos. No usar para mantener el mapa, regenerar el grafo, crear apuntes automáticamente ni responder sin consultar el corpus.
+description: "Localizar materiales y responder preguntas mediante un Mapa docente, con evidencia y referencias a las fuentes de las carpetas autorizadas. Usar para saber qué documentos cubren un tema o contrastar contenidos. No usar para mantener el mapa, regenerar el grafo, crear apuntes automáticamente ni responder sin consultar el corpus. Find evidence and answer questions using an existing course wiki and its linked sources. E.g. “What does the course map say about this topic?”"
 ---
 
 # Mapa docente: consulta
+
+Follow the [language settings](../../docs/LANGUAGES.md) for this task. Example request: **“What does the course map say about this topic?”**
 
 Responder a partir del corpus autorizado y mostrar qué evidencia sustenta la respuesta. La consulta es de solo lectura: no modifica páginas, índice, registro, incidencias o historial y no regenera el grafo HTML.
 

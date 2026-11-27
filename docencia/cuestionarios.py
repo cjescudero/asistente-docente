@@ -10,6 +10,8 @@ from pathlib import Path
 
 from .banks import (coverage_report, load_catalog, load_selection, select_models,
                     select_flat_models, selection_diversity, serialize_bank, validate_variants)
+from .language_context import with_diagnostics
+from .quiz_language import QuizText, diagnostic, model_options
 from .gift import parse_gift
 from .render import document, external_output, fragment, print_pdf
 
@@ -29,7 +31,7 @@ def model_id(index: int) -> str:
     return result
 
 
-def prepare(question: dict, number: int, rng: random.Random, metadata: dict) -> dict:
+def prepare(question: dict, number: int, rng: random.Random, metadata: dict, language="es") -> dict:
     info = metadata.get("questions", {}).get(question["id"], {})
     result = {"number": number, "source_id": question["id"],
               "source_category": question["category"], "concepts": info.get("concepts", []),
@@ -42,10 +44,7 @@ def prepare(question: dict, number: int, rng: random.Random, metadata: dict) -> 
     if question["type"] == "numerical":
         result["numerical"] = question["numerical"]
         return result
-    options = question.get("options", [])
-    if question["type"] == "truefalse" and not options:
-        options = [{"text": "Verdadero", "weight": 100 if question["true_answer"] else 0},
-                   {"text": "Falso", "weight": 0 if question["true_answer"] else 100}]
+    options = model_options(question, language)
     order = list(range(len(options)))
     rng.shuffle(order)
     result["options"] = [{"label": model_id(i), "text": options[j]["text"],
@@ -65,6 +64,7 @@ def numeric_body(values: list[dict]) -> str:
 
 
 def obfuscated_gift(model: dict) -> str:
+    t = QuizText(model.get("language", "es"))
     chunks = [f"$CATEGORY: {model.get('moodle_category', 'cuestionario/' + model['id'])}"]
     for q in model["questions"]:
         if q["type"] == "numerical":
@@ -77,73 +77,77 @@ def obfuscated_gift(model: dict) -> str:
                     prefix = "="
                 else:
                     prefix = "~" if weight == 0 else f"~%{number(weight)}%"
-                lines.append(f"{prefix}Respuesta {option['label']}")
+                lines.append(f"{prefix}{t('Respuesta')} {option['label']}")
             body = "\n" + "\n".join(lines)
-        chunks.append(f"::{model['id']}-P{q['number']:03d}::[plain]Pregunta {q['number']:02d} {{{body}\n}}")
+        chunks.append(f"::{model['id']}-P{q['number']:03d}::[plain]{t('Pregunta')} {q['number']:02d} {{{body}\n}}")
     return "\n\n".join(chunks) + "\n"
 
 
 def verify_obfuscated(model: dict, text: str):
+    t = QuizText(model.get("language", "es"))
     parsed = parse_gift(text)
     if len(parsed) != len(model["questions"]):
-        raise ValueError("Error interno: recuento GIFT inconsistente.")
+        raise ValueError(diagnostic("Error interno: recuento GIFT inconsistente."))
     for source, exported in zip(model["questions"], parsed):
         if "moodle_category" in model and exported["category"] != model["moodle_category"]:
-            raise ValueError("La categoría Moodle no coincide con el manifiesto.")
-        if exported["prompt"] != f"Pregunta {source['number']:02d}":
-            raise ValueError("La numeración GIFT no coincide con el modelo.")
+            raise ValueError(diagnostic("La categoría Moodle no coincide con el manifiesto."))
+        if exported["prompt"] != f"{t('Pregunta')} {source['number']:02d}":
+            raise ValueError(diagnostic("La numeración GIFT no coincide con el modelo."))
         if source["type"] == "numerical":
             actual = [{k:v for k,v in x.items() if k != "feedback"} for x in exported["numerical"]]
             expected = [{k:v for k,v in x.items() if k != "feedback"} for x in source["numerical"]]
             if actual != expected:
-                raise ValueError("Los criterios numéricos cambiaron al exportar GIFT.")
+                raise ValueError(diagnostic("Los criterios numéricos cambiaron al exportar GIFT."))
         else:
             expected_type = "single" if source["type"] == "truefalse" else source["type"]
-            expected = [(f"Respuesta {o['label']}", o["weight"]) for o in source["options"]]
+            expected = [(f"{t('Respuesta')} {o['label']}", o["weight"]) for o in source["options"]]
             actual = [(o["text"], o["weight"]) for o in exported["options"]]
             if exported["type"] != expected_type or actual != expected:
-                raise ValueError("El tipo, el orden o los pesos cambiaron al exportar GIFT.")
+                raise ValueError(diagnostic("El tipo, el orden o los pesos cambiaron al exportar GIFT."))
 
 
 def render_model(model: dict, title: str, *, teacher: bool) -> str:
-    audience = "SOLUCIONARIO DOCENTE" if teacher else "CUESTIONARIO"
+    t = QuizText(model.get("language", "es"))
     body = ["<div class='questionnaire'>",
             f"<header class='questionnaire-header'><h1>{html.escape(title)}</h1>"
-            f"<div class='model-id'>{html.escape(model.get('name', 'Modelo ' + str(model['id'])))}</div></header>"]
+            f"<div class='model-id'>{html.escape(model.get('name', t('Modelo') + ' ' + str(model['id'])))}</div></header>"]
     if teacher:
-        body.append(f"<p class='eyebrow'>{audience}</p>")
+        body.append(f"<p class='eyebrow'>{t('SOLUCIONARIO DOCENTE')}</p>")
     else:
-        body.append("<div class='identity-grid'><div>APELLIDOS Y NOMBRE<span></span></div>"
+        body.append(f"<div class='identity-grid'><div>{t('APELLIDOS Y NOMBRE')}<span></span></div>"
                     "<div>EMAIL<span></span></div></div>")
-        body.append(f"<aside class='instructions'>{len(model['questions'])} preguntas. "
-                    "Marque sus respuestas en papel y traslade la misma opción o valor a Moodle. "
-                    "Círculo: una respuesta; cuadrado: varias respuestas. "
-                    "Las respuestas en blanco valen 0. Los créditos corresponden a una pregunta de 1 punto.</aside>")
+        instructions = " ".join([
+            str(len(model["questions"])), t("pregunta." if len(model["questions"]) == 1 else "preguntas."),
+            t("Marque sus respuestas en papel y traslade la misma opción o valor a Moodle."),
+            t("Círculo: una respuesta; cuadrado: varias respuestas."),
+            t("Las respuestas en blanco valen 0. Los créditos corresponden a una pregunta de 1 punto."),
+        ])
+        body.append(f"<aside class='instructions'>{instructions}</aside>")
     for q in model["questions"]:
         kind = {"single": "UNA RESPUESTA", "multiple": "VARIAS RESPUESTAS", "truefalse": "VERDADERO/FALSO", "numerical": "NUMÉRICA"}[q["type"]]
-        body.append(f"<section class='question'><div class='question-heading'><h2>Pregunta {q['number']:02d}</h2><span>{kind}</span></div>")
+        body.append(f"<section class='question'><div class='question-heading'><h2>{t('Pregunta')} {q['number']:02d}</h2><span>{t(kind)}</span></div>")
         body.append(fragment(q["prompt"], q["format"]))
         if not teacher:
             if q["type"] == "numerical":
                 credits = sorted({a.get("weight", 100) / 100 for a in q["numerical"]})
-                instruction = "Escriba un valor numérico. Crédito aceptado: " + ", ".join(number(x) for x in credits) + "; fuera de los valores admitidos: 0."
+                instruction = t("Escriba un valor numérico. Crédito aceptado:") + " " + ", ".join(number(x) for x in credits) + "; " + t("fuera de los valores admitidos: 0.")
             else:
                 positive = sorted({o["weight"] / 100 for o in q["options"] if o["weight"] > 0})
                 other = sorted({o["weight"] / 100 for o in q["options"] if o["weight"] <= 0})
-                instruction = ("Marque las opciones que correspondan. Se suman los créditos de las opciones marcadas. "
-                               if q["type"] == "multiple" else "Marque una sola opción. ")
-                instruction += "Crédito por acierto: " + ", ".join(number(x) for x in positive)
-                instruction += "; por error: " + ", ".join(number(x) for x in other) + "."
+                instruction = (t("Marque las opciones que correspondan. Se suman los créditos de las opciones marcadas.")
+                               if q["type"] == "multiple" else t("Marque una sola opción."))
+                instruction += " " + t("Crédito por acierto:") + " " + ", ".join(number(x) for x in positive)
+                instruction += "; " + t("por error:") + " " + ", ".join(number(x) for x in other) + "."
 
             body.append("<p class='scoring'>" + html.escape(instruction) + "</p>")
         if q["type"] == "numerical":
-            body.append("<p class='numeric'>Respuesta: __________________________</p>")
+            body.append(f"<p class='numeric'>{t('Respuesta')}: __________________________</p>")
             if teacher:
                 answers = []
                 for answer in q["numerical"]:
-                    value = (f"Intervalo: {number(answer['min'])} a {number(answer['max'])}" if "min" in answer
-                             else f"Valor: {number(answer['value'])}; tolerancia: ±{number(answer.get('tolerance',0))}")
-                    answers.append(f"{value}; crédito: {number(answer.get('weight',100))}%")
+                    value = (f"{t('Intervalo')}: {number(answer['min'])} {t('a')} {number(answer['max'])}" if "min" in answer
+                             else f"{t('Valor')}: {number(answer['value'])}; {t('tolerancia')}: ±{number(answer.get('tolerance',0))}")
+                    answers.append(f"{value}; {t('crédito')}: {number(answer.get('weight',100))}%")
                 body.append(f"<p class='answer'>{'<br>'.join(html.escape(x) for x in answers)}</p>")
         else:
             shape = "square" if q["type"] == "multiple" else "circle"
@@ -154,70 +158,75 @@ def render_model(model: dict, title: str, *, teacher: bool) -> str:
             body.append("</ul>")
             if teacher:
                 weights = "; ".join(f"{o['label']}: {number(o['weight'])}%" for o in q["options"])
-                body.append(f"<p class='answer'>Crédito: {html.escape(weights)}</p>")
+                body.append(f"<p class='answer'>{t('Crédito')}: {html.escape(weights)}</p>")
         body.append("</section>")
     body.append("</div>")
     content = "".join(body)
-    return document(title, content, math="\\(" in content or "\\[" in content)
+    return document(title, content, language=t.language, math="\\(" in content or "\\[" in content)
 
 
 def validate_metadata(metadata: dict, bank: list[dict]):
     if not isinstance(metadata, dict) or metadata.get("schema_version") != 1:
-        raise ValueError("Metadatos: se requiere schema_version 1.")
+        raise ValueError(diagnostic("Metadatos: se requiere schema_version 1."))
     entries = metadata.get("questions", {})
     concepts = metadata.get("concepts", {})
     if not isinstance(entries, dict) or not isinstance(concepts, dict):
-        raise ValueError("Metadatos questions y concepts deben ser objetos.")
+        raise ValueError(diagnostic("Metadatos questions y concepts deben ser objetos."))
     ids = {q["id"] for q in bank}
     if set(entries) - ids:
-        raise ValueError("Los metadatos contienen identificadores que no existen en el banco.")
+        raise ValueError(diagnostic("Los metadatos contienen identificadores que no existen en el banco."))
     for qid, entry in entries.items():
         if not isinstance(entry, dict) or not isinstance(entry.get("concepts", []), list):
-            raise ValueError(f"Metadatos no válidos para {qid}.")
+            raise ValueError(diagnostic("Metadatos no válidos para {qid}.", qid=qid))
         if any(not isinstance(x, str) or x not in concepts for x in entry.get("concepts", [])):
-            raise ValueError(f"Concepto no declarado en {qid}.")
+            raise ValueError(diagnostic("Concepto no declarado en {qid}.", qid=qid))
     validate_variants(metadata, bank)
     for key, concept in concepts.items():
         if not isinstance(concept, dict) or not isinstance(concept.get("label", key), str):
-            raise ValueError(f"Concepto no válido: {key}.")
+            raise ValueError(diagnostic("Concepto no válido: {key}.", key=key))
 
 
-def build_cuestionarios(bank_path: str | Path | None, output_dir: str | Path, *, title: str = "Cuestionario",
+@with_diagnostics
+def build_cuestionarios(bank_path: str | Path | None, output_dir: str | Path, *, title: str | None = None,
                 models: int = 4, questions: int = 5, seed: int = 42,
                 metadata_path: str | Path | None = None, per_category: dict | None = None,
                 html_only: bool = False, catalog_path: str | Path | None = None,
                 selection_path: str | Path | None = None,
-                project_root: str | Path | None = None, layout: str = "flat", direct_materials=None) -> dict:
+                project_root: str | Path | None = None, layout: str = "flat", direct_materials=None,
+                language: str = "es") -> dict:
     from .course_outputs import course_output
+    t = QuizText(language)
+    if title is None:
+        title = t("Cuestionario")
     base = external_output(course_output(output_dir, "generated", inputs=(project_root, bank_path, catalog_path)))
     if layout not in ("flat", "curso-v3", "curso-v4"):
-        raise ValueError("layout debe ser flat, curso-v3 o curso-v4.")
+        raise ValueError(diagnostic("layout debe ser flat, curso-v3 o curso-v4."))
     selection_target = base / "_datos_internos/seleccion.json"
     if layout != "flat" and catalog_path is not None:
         if selection_path is None or Path(selection_path).resolve() != selection_target.resolve():
-            raise ValueError("En el formato de curso guarda --selection en <cuestionario>/_datos_internos/seleccion.json.")
+            raise ValueError(diagnostic("En el formato de curso guarda --selection en <cuestionario>/_datos_internos/seleccion.json."))
         if selection_target.is_symlink() or not selection_target.is_file():
-            raise ValueError("La selección previa debe ser un archivo regular.")
+            raise ValueError(diagnostic("La selección previa debe ser un archivo regular."))
     if base.exists():
         if not base.is_dir() or base.is_symlink():
-            raise ValueError("El destino del cuestionario debe ser una carpeta regular.")
+            raise ValueError(diagnostic("El destino del cuestionario debe ser una carpeta regular."))
         allowed = (layout != "flat" and catalog_path is not None
                    and {p.name for p in base.iterdir()} == {"_datos_internos"}
                    and selection_target.parent.is_dir() and not selection_target.parent.is_symlink()
                    and {p.name for p in selection_target.parent.iterdir()} == {"seleccion.json"})
         if any(base.iterdir()) and not allowed:
-            raise ValueError("La carpeta de cuestionario debe estar vacía salvo la selección previa; no se sobrescriben modelos.")
+            raise ValueError(diagnostic("La carpeta de cuestionario debe estar vacía salvo la selección previa; no se sobrescriben modelos."))
     output = base / "_datos_internos" if layout != "flat" else base
-    teacher_dir = base / "docente" if layout != "flat" else output
+    teacher_dir = base / t("docente") if layout != "flat" else output
     if (type(models) is not int or type(questions) is not int
             or not 1 <= models <= 100 or questions < 1):
-        raise ValueError("Usa entre 1 y 100 modelos y al menos una pregunta.")
+        raise ValueError(diagnostic("Usa entre 1 y 100 modelos y al menos una pregunta."))
     catalog = selection = None
     if catalog_path is not None:
         if bank_path is not None or metadata_path is not None or per_category is not None:
-            raise ValueError("El catálogo no se combina con banco único, metadatos externos o cuotas por categoría.")
+            raise ValueError(diagnostic("El catálogo no se combina con banco único, metadatos externos o cuotas por categoría."))
         if selection_path is None:
-            raise ValueError("El catálogo requiere un archivo de selección explícita.")
+            raise ValueError(diagnostic("El catálogo requiere un archivo de selección explícita."))
         selection = load_selection(selection_path, questions)
         catalog = load_catalog(catalog_path, project_root=project_root, direct_materials=direct_materials,
                                bank_ids=selection["selection"]["banks"])
@@ -225,7 +234,7 @@ def build_cuestionarios(bank_path: str | Path | None, output_dir: str | Path, *,
         raw = serialize_bank(bank)
     else:
         if bank_path is None or selection_path is not None:
-            raise ValueError("Indica un banco GIFT o un catálogo con su selección.")
+            raise ValueError(diagnostic("Indica un banco GIFT o un catálogo con su selección."))
         from .banks import validate_course_bank_files
         validate_course_bank_files(bank_path, metadata_path, project_root=project_root)
         raw = Path(bank_path).read_bytes()
@@ -236,15 +245,15 @@ def build_cuestionarios(bank_path: str | Path | None, output_dir: str | Path, *,
     available = [q for q in bank if q["type"] in SUPPORTED]
     excluded = [q["id"] for q in bank if q["type"] not in SUPPORTED]
     if len(available) < questions:
-        raise ValueError(f"Banco insuficiente: {len(available)} preguntas compatibles para {questions} solicitadas.")
+        raise ValueError(diagnostic("Banco insuficiente: {available} preguntas compatibles para {questions} solicitadas.", available=len(available), questions=questions))
     if per_category is not None:
         if (not isinstance(per_category, dict) or
             any(not isinstance(v, int) or isinstance(v, bool) or v < 0 for v in per_category.values()) or
             sum(per_category.values()) != questions):
-            raise ValueError("Las cuotas por categoría deben ser enteros no negativos y sumar --questions.")
+            raise ValueError(diagnostic("Las cuotas por categoría deben ser enteros no negativos y sumar --questions."))
         for category, count in per_category.items():
             if sum(q["category"] == category for q in available) < count:
-                raise ValueError(f"Banco insuficiente en categoría {category}.")
+                raise ValueError(diagnostic("Banco insuficiente en categoría {category}.", category=category))
     rng = random.Random(seed)
     built = []
     if catalog is not None:
@@ -252,14 +261,14 @@ def build_cuestionarios(bank_path: str | Path | None, output_dir: str | Path, *,
     else:
         selections, used = select_flat_models(bank, metadata, questions, per_category, models, rng)
     if not title.strip() or any(c in title for c in "\r\n/{}\\"):
-        raise ValueError("El título debe ser un nombre de cuestionario sin saltos de línea ni /, llaves o barras inversas para su categoría Moodle.")
+        raise ValueError(diagnostic("El título debe ser un nombre de cuestionario sin saltos de línea ni /, llaves o barras inversas para su categoría Moodle."))
     by_id = {q["id"]: q for q in bank}
     for i in range(models):
         selected = [by_id[qid] for qid, _ in selections[i]]
-        model = {"id": model_id(i), "questions": [prepare(q, j+1, rng, metadata)
+        model = {"id": model_id(i), "language": language, "questions": [prepare(q, j+1, rng, metadata, language)
                  for j, q in enumerate(selected)], "files": {}, "pdf_status": {}}
-        model["name"] = f"Modelo {i + 1:02d}"
-        model["moodle_category"] = f"$course$/top/RespuestasCuestionariosOffline/{title}/{model['name']}"
+        model["name"] = f"{t('Modelo')} {i + 1:02d}"
+        model["moodle_category"] = f"$course$/top/{t('RespuestasCuestionariosOffline')}/{title}/{model['name']}"
         if catalog is not None:
             for prepared, (_, quota) in zip(model["questions"], selections[i]):
                 prepared["quota_label"] = selection["selection"]["quotas"][quota]["label"]
@@ -273,15 +282,15 @@ def build_cuestionarios(bank_path: str | Path | None, output_dir: str | Path, *,
         rendered.append((render_model(model, title, teacher=False),
                          render_model(model, title, teacher=True), gift))
     if layout != "flat" and catalog is not None and selection_target.read_bytes() != selection["selection_bytes"]:
-        raise ValueError("La selección cambió durante la preparación del cuestionario.")
+        raise ValueError(diagnostic("La selección cambió durante la preparación del cuestionario."))
     output.mkdir(parents=True, exist_ok=True)
     if layout != "flat":
-        (base / "alumnado").mkdir()
+        (base / t("alumnado")).mkdir()
     if layout != "flat":
         teacher_dir.mkdir()
     (output / "source").mkdir()
     (output / "source/bank.gift").write_bytes(raw)
-    manifest = {"schema_version": 1, "title": title, "seed": seed,
+    manifest = {"schema_version": 1, "language": language, "title": title, "seed": seed,
                 "bank_sha256": hashlib.sha256(raw).hexdigest(), "bank_snapshot": "source/bank.gift",
                 "metadata": metadata, "excluded_question_ids": excluded, "models": built}
     if catalog is not None:
@@ -310,24 +319,22 @@ def build_cuestionarios(bank_path: str | Path | None, output_dir: str | Path, *,
     if catalog is not None:
         manifest["selection_report"]["coverage"] = {model["id"]: model["coverage"] for model in built}
     for model, (student, teacher, gift) in zip(built, rendered):
-        stem = f"modelo-{model['id']}"
+        stem = f"{t('modelo')}-{model['id']}"
         for role, content in [("student", student), ("teacher", teacher)]:
-            role_dir = (base / "alumnado" if layout != "flat" and role == "student"
+            role_dir = (base / t("alumnado") if layout != "flat" and role == "student"
                         else teacher_dir if layout != "flat" and role == "teacher" else output)
             file = role_dir / f"{stem}-{role}.html"
             file.write_text(content, encoding="utf-8")
-            prefix = ("../alumnado/" if layout != "flat" and role == "student" else
-                      "../docente/" if layout != "flat" and role == "teacher" else
-                      "../alumnado/" if role_dir != output else "")
+            prefix = f"../{role_dir.name}/" if role_dir != output else ""
             model["files"][f"{role}_html"] = prefix + file.name
             pdf = file.with_suffix(".pdf")
-            ok, status = (False, "not_requested") if html_only else print_pdf(file, pdf)
+            ok, status = (False, "not_requested") if html_only else print_pdf(file, pdf, language=language)
             model["pdf_status"][role] = status
             if ok:
                 model["files"][f"{role}_pdf"] = prefix + pdf.name
         gift_path = teacher_dir / f"{stem}.gift"
         gift_path.write_text(gift, encoding="utf-8")
-        model["files"]["gift"] = ("../docente/" if layout != "flat" else "") + gift_path.name
+        model["files"]["gift"] = (f"../{teacher_dir.name}/" if layout != "flat" else "") + gift_path.name
     (output / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
     if catalog is not None:
         (output / "coverage.json").write_text(
@@ -337,37 +344,40 @@ def build_cuestionarios(bank_path: str | Path | None, output_dir: str | Path, *,
         record_path = output / "material-docente.json"
         record_path.write_text(
             json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-        links = []
-        if layout != "flat":
-            links.append("## Modelos y archivos\n")
-            for model in built:
-                files = model["files"]
-                name = model["id"]
-                items = [f"[Modelo {name} (HTML)](alumnado/modelo-{name}-student.html)"]
-                if "student_pdf" in files:
-                    items.append(f"[PDF para imprimir](alumnado/modelo-{name}-student.pdf)")
-                items.append(f"[Solucionario](docente/modelo-{name}-teacher.html)")
-                if "teacher_pdf" in files:
-                    items.append(f"[PDF docente](docente/modelo-{name}-teacher.pdf)")
-                items.append(f"[GIFT para Moodle](docente/modelo-{name}.gift)")
-                links.append(f"- **{model['name']} (ID {name}):** " + " · ".join(items) + f". Categoría Moodle: `{model['moodle_category']}`")
-            controls = ["[Manifiesto](_datos_internos/manifest.json)"]
-            if catalog is not None:
-                controls = ["[Selección](_datos_internos/seleccion.json)", *controls,
-                            "[Informe de cobertura](_datos_internos/coverage.json)"]
-            links.append("\n" + " · ".join(controls) + "\n")
-        (base / "LEEME.md").write_text(
+        links = ["## " + t("Modelos y archivos") + "\n"]
+        for model in built:
+            files = model["files"]
+            name = model["id"]
+            labels = [("student_html", f"{t('Modelo')} {name} (HTML)"),
+                      ("student_pdf", t("PDF para imprimir")), ("teacher_html", t("Solucionario")),
+                      ("teacher_pdf", t("PDF docente")), ("gift", t("GIFT para Moodle"))]
+            items = [f"[{label}]({files[key].removeprefix('../')})" for key, label in labels if key in files]
+            links.append(f"- **{model['name']} (ID {name}):** " + " · ".join(items)
+                         + f". {t('Categoría Moodle')}: `{model['moodle_category']}`")
+        controls = [f"[{t('Manifiesto')}](_datos_internos/manifest.json)"]
+        if catalog is not None:
+            controls = [f"[{t('Selección')}](_datos_internos/seleccion.json)", *controls,
+                        f"[{t('Informe de cobertura')}](_datos_internos/coverage.json)"]
+        links.append("\n" + " · ".join(controls) + "\n")
+        intro = (
+            "# Prepared quiz\n\nStatus: **draft**.\n\n"
+            "Open the printable models in `students/` and the answer keys and Moodle GIFT files in "
+            "`instructor/`. The manifest and frozen sources are in `_datos_internos/`. "
+            "Check each model and its answer mappings before use. Update the status here and "
+            "in the material record.\n\n"
+            "After marking, use the manifest, question-level results and Moodle gradebook to prepare "
+            "feedback. The overall grade alone cannot identify topics to review.\n\n"
+            if language == "en" else
             "# Cuestionario preparado\n\nEstado: **borrador**.\n\n"
-            "Abre los modelos imprimibles en `alumnado/` y los solucionarios y GIFT\n"
-            "en `docente/`. La selección, el manifiesto y los bancos congelados\n"
-            "están en `_datos_internos/`.\n"
-            "Revisar modelos y correspondencias antes de utilizarlos. Actualizar el estado\n"
-            "en este documento y en el registro técnico, sin mover los archivos.\n\n"
-            "Después de la evaluación, se podrá preparar feedback con el manifiesto,\n"
-            "el detalle por pregunta y la hoja de calificaciones de Moodle. Una nota\n"
-            "global no basta para identificar dificultades conceptuales. Si ya hay\n"
-            "resultados o feedback, comprobar su modelo y convocatoria antes de sugerir\n"
-            "una nueva generación. La siguiente tarea requiere un encargo del docente.\n\n"
-            + ("\n".join(links) + "\n" if links else ""),
-            encoding="utf-8")
+            "Abre los modelos imprimibles en `alumnado/` y los solucionarios y GIFT en `docente/`. "
+            "La selección, el manifiesto y los bancos congelados están en `_datos_internos/`. "
+            "Revisar modelos y correspondencias antes de utilizarlos. Actualizar el estado en este "
+            "documento y en el registro técnico, sin mover los archivos.\n\n"
+            "Después de la evaluación, se podrá preparar feedback con el manifiesto, el detalle por "
+            "pregunta y la hoja de calificaciones de Moodle. Una nota global no basta para identificar "
+            "dificultades conceptuales. Si ya hay resultados o feedback, comprobar su modelo y "
+            "convocatoria antes de sugerir una nueva generación. La siguiente tarea requiere un encargo del docente.\n\n"
+        )
+        readme = "README.md" if language == "en" else "LEEME.md"
+        (base / readme).write_text(intro + "\n".join(links) + "\n", encoding="utf-8")
     return manifest

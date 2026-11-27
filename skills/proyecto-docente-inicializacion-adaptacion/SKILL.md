@@ -1,9 +1,13 @@
 ---
 name: proyecto-docente-inicializacion-adaptacion
-description: Inicializar o adaptar un proyecto docente, revisando primero sus contenidos y proponiendo su organización. Usar al iniciar un curso, reorganizar materiales, añadir un espacio para notas del profesor o ajustar la configuración e instrucciones existentes; preguntar por datos, destinos ambiguos y conflictos. Mover solo según una propuesta concreta aprobada. Recomendar el mapa sin crearlo automáticamente.
+description: "Inicializar o adaptar un proyecto docente, revisando primero sus contenidos y proponiendo su organización. Usar al iniciar un curso, reorganizar materiales, añadir un espacio para notas del profesor o ajustar la configuración e instrucciones existentes; preguntar por datos, destinos ambiguos y conflictos. Mover solo según una propuesta concreta aprobada. Recomendar el mapa sin crearlo automáticamente. Set up or adapt a course project, choose the source and output folders and preserve existing materials. E.g. “Set up my course.”"
 ---
 
 # Proyecto docente: inicialización y adaptación
+
+Follow the [language settings](../../docs/LANGUAGES.md) for this task. Example request: **“Set up my course.”**
+
+Pass the working language to `init-project --language en|es` and a requested persistent material preference to `--output-language en|es`. Use the [English course profile](../../templates/en/course-profile.md) when appropriate.
 
 Guiar al profesor ante «Inicia mi proyecto docente» o «Adapta mi curso existente»
 hasta un proyecto preparado para trabajar. No exigir comandos ni una ficha completa. Esta skill prepara la
@@ -25,6 +29,8 @@ tras resolver la duda, retomar el encargo ya autorizado.
 4. Para un inventario solicitado, reconciliar con `catalog-sync`. Analizar agrupaciones temáticas completas antes que archivos sueltos. Comprobar solo lo necesario, anotar la evidencia, usar `catalog-classify` con `--inferred` para inferencias y reservar las confirmaciones para decisiones reales del usuario. Emplear agrupaciones y herencia lógicas. Consultar identidades dudosas y respetar contenidos ilegibles. Inventariar no acredita lectura completa.
 
 Al proponer la estructura del curso, sitúa las carpetas de uso docente reservado directamente en `02 Organización del curso/Alumnado/` y `02 Organización del curso/Salidas de campo/`. Usa «Alumnado» para los listados, los informes de la oficina de apoyo a la diversidad (ADI) y otra documentación sobre las circunstancias del alumnado. Omite la carpeta intermedia «Datos docentes reservados». Si hay que trasladar carpetas existentes, incluye ambos destinos en la previsualización para que el docente pueda aprobar el traslado.
+
+On a new English course, translate proposed folder labels for the teacher (for example, “Course organisation”, “Student records” and “Field trips”). Keep the privacy exclusions and any existing paths. Present suggested folders for approval.
 
 ## Añadir un cuaderno docente a petición
 

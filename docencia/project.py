@@ -14,16 +14,22 @@ import sys
 import tempfile
 from pathlib import Path, PurePosixPath, PureWindowsPath
 
+from .project_text import diagnostic
+from .language_context import use_language, with_diagnostics
+
 CONFIG_NAME = "proyecto-docente.json"
 INTERNAL_PROJECT_DIR = "_datos_internos_proyecto"
 INTERNAL_MATERIAL_DIR = "_datos_internos"
 CONFIG_V3 = f"{INTERNAL_PROJECT_DIR}/{CONFIG_NAME}"
 MANAGEMENT_DIR = "Archivos de gestión del proyecto"
-MANAGEMENT_NAMES = (MANAGEMENT_DIR, "Gestión del proyecto")
+ENGLISH_MANAGEMENT_DIR = "Project management files"
+MANAGEMENT_NAMES = (MANAGEMENT_DIR, "Gestión del proyecto", ENGLISH_MANAGEMENT_DIR)
 CONFIG_V4 = f"{MANAGEMENT_DIR}/{CONFIG_NAME}"
 COURSE_MARKER = "<!-- asistente-docente:curso-v4 -->"
 DEFAULT_SPACES = {"sources": ["Material de la asignatura"], "generated": ["Material generado por IA"],
                   "submissions": ["Entregas"]}
+ENGLISH_SPACES = {"sources": ["Course materials"], "generated": ["AI-generated materials"],
+                  "submissions": ["Student submissions"]}
 DEFAULT_NOTES_DIR = "Notas del curso"
 IGNORED_FILENAMES = {".gitkeep", ".DS_Store"}
 PLUGIN_ROOT = Path(__file__).resolve().parents[1]
@@ -226,23 +232,23 @@ def _inside(path: Path, parent: Path) -> bool:
 def _root(root) -> Path:
     candidate = Path(root).expanduser()
     if candidate.is_symlink():
-        raise ValueError("La raíz del proyecto no puede ser un enlace simbólico.")
+        raise ValueError(diagnostic("La raíz del proyecto no puede ser un enlace simbólico."))
     path = candidate.resolve()
     if _inside(path, PLUGIN_ROOT):
-        raise ValueError("El proyecto docente debe estar fuera de la instalación del plugin.")
+        raise ValueError(diagnostic("El proyecto docente debe estar fuera de la instalación del plugin."))
     if path.exists() and not path.is_dir():
-        raise ValueError("La raíz del proyecto debe ser una carpeta.")
+        raise ValueError(diagnostic("La raíz del proyecto debe ser una carpeta."))
     return path
 
 
 def _relative(value, *, label="ruta") -> str:
     if not isinstance(value, str) or not value.strip() or "\\" in value or "\x00" in value:
-        raise ValueError(f"{label}: se requiere una ruta relativa con separadores '/'.")
+        raise ValueError(diagnostic("{label}: se requiere una ruta relativa con separadores '/'.", label=label))
     path = PurePosixPath(value)
     if path.is_absolute() or PureWindowsPath(value).drive or ".." in path.parts or str(path) == ".":
-        raise ValueError(f"{label}: la ruta debe permanecer dentro del proyecto.")
+        raise ValueError(diagnostic("{label}: la ruta debe permanecer dentro del proyecto.", label=label))
     if any(character in value for character in ("*", "?")):
-        raise ValueError(f"{label}: no se admiten patrones glob; indica rutas exactas.")
+        raise ValueError(diagnostic("{label}: no se admiten patrones glob; indica rutas exactas.", label=label))
     return path.as_posix()
 
 
@@ -267,18 +273,18 @@ def _safe_path(root: Path, relative: str) -> Path:
         if parent == root:
             break
         if _inside(parent, root) and parent.exists() and not parent.is_dir():
-            raise ValueError(f"Colisión con un archivo en la ruta: {relative}")
+            raise ValueError(diagnostic("Colisión con un archivo en la ruta: {relative}", relative=relative))
     if _has_symlink(root, path) or not _inside(path.resolve(), root):
-        raise ValueError(f"Ruta insegura o enlace simbólico: {relative}")
+        raise ValueError(diagnostic("Ruta insegura o enlace simbólico: {relative}", relative=relative))
     return path
 
 
 def _paths(values, label) -> list[str]:
     if not isinstance(values, list):
-        raise ValueError(f"{label} debe ser una lista de rutas relativas.")
+        raise ValueError(diagnostic("{label} debe ser una lista de rutas relativas.", label=label))
     paths = [_relative(value, label=label) for value in values]
     if len(paths) != len(set(paths)):
-        raise ValueError(f"{label} contiene rutas duplicadas.")
+        raise ValueError(diagnostic("{label} contiene rutas duplicadas.", label=label))
     return paths
 
 
@@ -288,7 +294,7 @@ def _within_relative(path: str, parent: str) -> bool:
 
 def _validate_config(root: Path, data: dict) -> dict:
     if not isinstance(data, dict) or type(data.get("schema_version")) is not int or data["schema_version"] != 1:
-        raise ValueError("schema_version debe ser 1.")
+        raise ValueError(diagnostic("schema_version debe ser 1."))
     if data.get("structure") == "curso-v4":
         from .spaces import validate_config
         return validate_config(root, data)
@@ -333,7 +339,7 @@ def _unique_json(pairs):
     result = {}
     for key, value in pairs:
         if key in result:
-            raise ValueError(f"Clave JSON duplicada: {key}")
+            raise ValueError(diagnostic("Clave JSON duplicada: {key}", key=key))
         result[key] = value
     return result
 
@@ -401,11 +407,11 @@ def load_project(root) -> dict:
         if _implicit_v4(path):
             from .spaces import defaults
             return _validate_config(path, defaults())
-        raise ValueError(f"Falta {CONFIG_NAME}; inicia el proyecto o indica la raíz correcta.")
+        raise ValueError(diagnostic("Falta {CONFIG_NAME}; inicia el proyecto o indica la raíz correcta.", CONFIG_NAME=CONFIG_NAME))
     try:
         data = json.loads(config_file.read_text(encoding="utf-8"), object_pairs_hook=_unique_json)
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
-        raise ValueError(f"No se puede leer {CONFIG_NAME}: {exc}") from exc
+        raise ValueError(diagnostic("No se puede leer {CONFIG_NAME}: {exc}", CONFIG_NAME=CONFIG_NAME, exc=exc)) from exc
     return _validate_config(path, data)
 
 
@@ -416,17 +422,17 @@ def _implicit_v4(root: Path) -> bool:
     return COURSE_MARKER in agents.read_text(encoding="utf-8").splitlines()
 
 
-def management_dir(root: Path) -> str:
+def management_dir(root: Path, *, preferred=MANAGEMENT_DIR) -> str:
     """Elegir una única carpeta de gestión para lectura y escritura."""
     existing = [name for name in MANAGEMENT_NAMES if (root / name).exists() or (root / name).is_symlink()]
     if len(existing) > 1:
-        raise ValueError("Hay dos carpetas de gestión del proyecto. Aclara cuál está activa.")
-    return existing[0] if existing else MANAGEMENT_DIR
+        raise ValueError(diagnostic("Hay dos carpetas de gestión del proyecto. Aclara cuál está activa."))
+    return existing[0] if existing else preferred
 
 
-def ensure_management_dir(root: Path) -> Path:
+def ensure_management_dir(root: Path, *, preferred=MANAGEMENT_DIR) -> Path:
     """Crear y ocultar solo la carpeta nueva; respetar los atributos existentes."""
-    directory = _safe_path(root, management_dir(root))
+    directory = _safe_path(root, management_dir(root, preferred=preferred))
     try:
         directory.mkdir()
     except FileExistsError:
@@ -441,7 +447,7 @@ def ensure_management_dir(root: Path) -> Path:
             subprocess.run([str(attrib), "+h", str(directory)], check=True)
     except (OSError, subprocess.CalledProcessError) as exc:
         directory.rmdir()
-        raise OSError(f"No se pudo ocultar la carpeta de gestión: {directory}") from exc
+        raise OSError(diagnostic("No se pudo ocultar la carpeta de gestión: {directory}", directory=directory)) from exc
     return directory
 
 
@@ -453,14 +459,14 @@ def project_config_path(root: Path) -> Path | None:
     """Localizar el contrato activo. La adopción v3 conserva la configuración anterior."""
     root = _root(root)
     if _safe_path(root, CONFIG_NAME).exists():
-        raise ValueError(f"{CONFIG_NAME} en la raíz entra en conflicto con {CONFIG_V3}; aclara su función antes de iniciar el proyecto.")
+        raise ValueError(diagnostic("{CONFIG_NAME} en la raíz entra en conflicto con {CONFIG_V3}; aclara su función antes de iniciar el proyecto.", CONFIG_NAME=CONFIG_NAME, CONFIG_V3=CONFIG_V3))
     v3 = _safe_path(root, CONFIG_V3)
     v4 = _safe_path(root, config_v4(root))
     if v4.exists():
         if v3.exists():
             data = json.loads(v4.read_text(encoding="utf-8"), object_pairs_hook=_unique_json)
             if not isinstance(data, dict) or data.get("adopted_from") != CONFIG_V3:
-                raise ValueError("Dos configuraciones sin registro de adopción: aclarar con el docente.")
+                raise ValueError(diagnostic("Dos configuraciones sin registro de adopción: aclarar con el docente."))
         return v4
     return v3 if v3.exists() else None
 
@@ -479,6 +485,29 @@ def find_project(path) -> Path | None:
         if control is not None or _implicit_v4(parent):
             return parent
     return None
+
+
+def supported_language(value):
+    if value not in ("en", "es"):
+        raise ValueError("Supported languages: en, es / Idiomas disponibles: en, es.")
+    return value
+
+
+def configured_language(config, purpose="materials"):
+    """Resolve a stored preference while preserving courses without locale settings."""
+    if purpose not in ("conversation", "materials"):
+        raise ValueError(f"Unknown language purpose: {purpose}")
+    preferences = config.get("languages", {})
+    return supported_language(preferences.get(purpose, preferences.get("conversation", "es")))
+
+
+def course_language(path=None, *, language=None, purpose="materials"):
+    """An explicit per-task override never changes project configuration or paths."""
+    if language is not None:
+        return supported_language(language)
+    from .course_outputs import output_project
+    root = output_project(path) if path is not None else None
+    return configured_language(load_project(root) if root else {}, purpose)
 
 
 def _source_path_allowed(root, config: dict, file) -> tuple[Path, Path] | None:
@@ -553,7 +582,7 @@ def source_allowed(root, config: dict, file) -> bool:
         return False
 
 
-def _proposal(content: str, block: str = AGENTS_BLOCK_V3) -> dict | None:
+def _proposal(content: str, block: str = AGENTS_BLOCK_V3, *, language="es") -> dict | None:
     if block in content and content.count(START_MARKER) == content.count(END_MARKER) == 1:
         return None
     starts, ends = content.count(START_MARKER), content.count(END_MARKER)
@@ -561,13 +590,16 @@ def _proposal(content: str, block: str = AGENTS_BLOCK_V3) -> dict | None:
         start = content.index(START_MARKER)
         end = content.index(END_MARKER) + len(END_MARKER)
         proposed = content[:start] + block + content[end:]
-        reason = "Actualizar exclusivamente el bloque del proyecto; revisar conflictos con instrucciones existentes."
+        reason = ("Update only the project block after reviewing conflicts with existing instructions." if language == "en" else
+                  "Actualizar exclusivamente el bloque del proyecto; revisar conflictos con instrucciones existentes.")
     elif starts or ends:
-        return {"path": "AGENTS.md", "reason": "Marcadores incompletos o duplicados: resolver el conflicto con el docente.",
+        return {"path": "AGENTS.md", "reason": ("Incomplete or duplicate markers: resolve the conflict with the teacher." if language == "en" else
+                                              "Marcadores incompletos o duplicados: resolver el conflicto con el docente."),
                 "proposed_content": None, "block": block}
     else:
         proposed = content.rstrip() + "\n\n" + block + "\n"
-        reason = "Incorporar el bloque del proyecto respetando el contenido existente; consultar conflictos."
+        reason = ("Add the project block, preserve existing instructions and discuss conflicts." if language == "en" else
+                  "Incorporar el bloque del proyecto respetando el contenido existente; consultar conflictos.")
     return {"path": "AGENTS.md", "reason": reason, "proposed_content": proposed,
             "block": block}
 
@@ -580,7 +612,7 @@ def _write_new(path: Path, content: str):
 def _replace_config(path: Path, content: str):
     """Sustituir únicamente la configuración cuya modificación se pidió."""
     if path.is_symlink():
-        raise ValueError(f"No se puede sustituir un enlace simbólico: {path.name}")
+        raise ValueError(diagnostic("No se puede sustituir un enlace simbólico: {path.name}", path=path))
     temporary = None
     try:
         with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", newline="\n",
@@ -731,24 +763,28 @@ def _scan_source(root: Path, config: dict, relative: str) -> dict:
     return report
 
 
-def check_project(root) -> dict:
+@with_diagnostics
+def check_project(root, *, language=None) -> dict:
     """Diagnóstico de estructura y corpus; no bloquea otras tareas del agente."""
     report = {"status": "ok", "errors": [], "warnings": [], "sources": [],
               "selected_files": [], "selection_status": "pending", "missing_directories": []}
     try:
         root = _root(root)
+        english = language == "en"
         report["root"] = str(root)
         if project_config_path(root) is None and not _implicit_v4(root):
             report["status"] = "incomplete"
-            report["warnings"].append(f"Falta {CONFIG_NAME}; inicia el proyecto o proporciona las entradas del encargo.")
+            report["warnings"].append(f"Missing {CONFIG_NAME}. Set up the course or supply the required inputs." if english else
+                                      f"Falta {CONFIG_NAME}; inicia el proyecto o proporciona las entradas del encargo.")
             return report
         config = load_project(root)
+        english = (supported_language(language) if language else configured_language(config, "conversation")) == "en"
         if config["structure"] == "curso-v4":
             from .spaces import corpus_policy
             policy = corpus_policy(root, config)
             config["sources"] = policy
             if policy.get("review"):
-                report["warnings"].append("Confirmar las identidades de la selección: " + ", ".join(policy["review"]))
+                report["warnings"].append(("Confirm the selected source identities: " if english else "Confirmar las identidades de la selección: ") + ", ".join(policy["review"]))
         report["config"] = config
         for relative in project_directories(config):
             path = _safe_path(root, relative)
@@ -757,20 +793,23 @@ def check_project(root) -> dict:
         for name in (("AGENTS.md",) if config["structure"] == "curso-v4" else ("AGENTS.md", "LEEME.md")):
             path = _safe_path(root, name)
             if not path.is_file():
-                report["warnings"].append(f"Falta {name}.")
+                report["warnings"].append(f"Missing {name}." if english else f"Falta {name}.")
         if report["missing_directories"]:
-            report["warnings"].append("Faltan carpetas de la estructura del curso.")
+            report["warnings"].append("Some course folders are missing." if english else "Faltan carpetas de la estructura del curso.")
         if not config["sources"]["selected"]:
-            report["warnings"].append("La selección de fuentes está pendiente.")
+            report["warnings"].append("Choose the source folders for the course map." if english else "La selección de fuentes está pendiente.")
         else:
             report["selection_status"] = "selected" if config["sources"]["include"] else "none"
             for relative in config["sources"]["include"]:
                 report["sources"].append(_scan_source(root, config, relative))
             report["selected_files"] = sorted({file for source in report["sources"] for file in source["files"]})
             if not config["sources"]["include"]:
-                report["warnings"].append("Se ha elegido no incorporar fuentes: no_selected_files.")
+                report["warnings"].append("No sources were selected for the map." if english else "Se ha elegido no incorporar fuentes: no_selected_files.")
             labels = {"missing": "carpeta inexistente", "empty": "carpeta vacía",
                       "no_selected_files": "sin archivos seleccionados", "inaccessible": "archivos o carpetas no accesibles"}
+            if english:
+                labels = {"missing": "folder not found", "empty": "empty folder", "no_selected_files": "no files selected",
+                          "inaccessible": "some files or folders could not be accessed"}
             for source in report["sources"]:
                 if source["status"] != "ok":
                     report["warnings"].append(f"{source['path']}: {labels[source['status']]}.")
@@ -788,8 +827,10 @@ def plan_migration(root, moves) -> dict:
     return prepare(root, moves)
 
 
-def initialize_course(root, *, spaces=None, notes=None, include=None, exclude=None, dry_run=False, adopt_v3=False):
+def initialize_course(root, *, spaces=None, notes=None, include=None, exclude=None, dry_run=False, adopt_v3=False,
+                      language=None, output_language=None):
     """Preparar o adoptar un curso v4. Ver initialize_project para el contrato v3."""
     from .spaces import initialize
-    return initialize(root, spaces=spaces, notes=notes, include=include, exclude=exclude,
-                      dry_run=dry_run, adopt_v3=adopt_v3)
+    with use_language(course_language(root, language=language, purpose="conversation")):
+        return initialize(root, spaces=spaces, notes=notes, include=include, exclude=exclude,
+                          dry_run=dry_run, adopt_v3=adopt_v3, language=language, output_language=output_language)

@@ -1,9 +1,11 @@
 ---
 name: espanol-conciso-redaccion
-description: Aplicar el estilo de español simplificado cuando el docente seleccione o nombre esta skill o pida expresamente español simplificado o español técnico simplificado. Puede usarse sola o junto con otra skill para el mismo entregable. Las peticiones genéricas de claridad o brevedad se atienden como edición ordinaria.
+description: "Aplicar el estilo de español simplificado cuando el docente seleccione o nombre esta skill o pida expresamente español simplificado o español técnico simplificado. Puede usarse sola o junto con otra skill para el mismo entregable. Las peticiones genéricas de claridad o brevedad se atienden como edición ordinaria. Apply plain Spanish to Spanish-language text only when the teacher asks for this style, including alongside another task. E.g. “Rewrite this handout in plain Spanish.”"
 ---
 
 # Español conciso: redacción
+
+Follow the [language settings](../../docs/LANGUAGES.md) for this task. Example request: **“Rewrite this handout in plain Spanish.”**
 
 Ayuda al lector a entender el contenido en una primera lectura. La inspiración es el inglés técnico simplificado ASD-STE100. Su adaptación al español deja al modelo elegir la sintaxis, el ritmo, el vocabulario y la estructura que convengan a la disciplina, la audiencia y el propósito.
 

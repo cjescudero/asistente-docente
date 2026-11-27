@@ -1,9 +1,11 @@
 ---
 name: apuntes-estudio-creacion
-description: Crear o revisar apuntes teóricos, guías de estudio y síntesis conceptuales a partir de materiales de una asignatura de cualquier disciplina. No usar para resolver evaluaciones reservadas, redactar enunciados, corregir entregas ni generar bancos GIFT.
+description: "Crear o revisar apuntes teóricos, guías de estudio y síntesis conceptuales a partir de materiales de una asignatura de cualquier disciplina. No usar para resolver evaluaciones reservadas, redactar enunciados, corregir entregas ni generar bancos GIFT. Create or revise student study notes from course materials at the requested level. E.g. “Write study notes for this unit.”"
 ---
 
 # Apuntes estudio: creación
+
+Follow the [language settings](../../docs/LANGUAGES.md) for this task. Example request: **“Write study notes for this unit.”**
 
 Producir un documento autónomo que ayude a comprender y relacionar los conceptos del bloque pedido. El nivel y la profundidad proceden del curso y del encargo, no de una disciplina predeterminada.
 

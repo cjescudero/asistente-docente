@@ -1,9 +1,11 @@
 ---
 name: cuestionarios-observaciones-calificaciones-alumnado
-description: Generar feedback conceptual individual y CSV para reimportar en Moodle desde resultados y calificaciones de cuestionarios, el manifiesto del cuestionario y sus metadatos. No usar para corregir ensayos o notebooks, cambiar calificaciones sin autorización, crear bancos ni reconstruir modelos sin manifiesto.
+description: "Generar feedback conceptual individual y CSV para reimportar en Moodle desde resultados y calificaciones de cuestionarios, el manifiesto del cuestionario y sus metadatos. No usar para corregir ensayos o notebooks, cambiar calificaciones sin autorización, crear bancos ni reconstruir modelos sin manifiesto. Give students conceptual feedback using question-level Moodle results and a frozen quiz manifest. E.g. “Give my students feedback on their quiz.”"
 ---
 
 # Cuestionarios: observaciones sobre calificaciones para el alumnado
+
+Follow the [language settings](../../docs/LANGUAGES.md) for this task. Example request: **“Give my students feedback on their quiz.”**
 
 Convertir resultados del cuestionario en orientaciones de aprendizaje trazables. Por defecto, explicar qué conceptos conviene repasar sin revelar preguntas, letras correctas ni soluciones del cuestionario.
 

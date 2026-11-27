@@ -1,9 +1,11 @@
 ---
 name: proyecto-docente-ayuda
-description: Resolver dudas sobre Asistente docente y el proyecto como ayuda inline. Invocar siempre ante preguntas sobre qué puede hacer el plugin, cómo continuar, siguientes pasos, flujos, archivos, resultados o entradas necesarias, también durante otra skill y al orientar tras una tarea. Revisar primero el contexto disponible de la conversación y el estado pertinente del curso. Responder a la duda o proponer opciones sin iniciar otros procesos. Las preguntas disciplinares sobre contenidos corresponden a mapa-docente-consulta.
+description: "Resolver dudas sobre Asistente docente y el proyecto como ayuda inline. Invocar siempre ante preguntas sobre qué puede hacer el plugin, cómo continuar, siguientes pasos, flujos, archivos, resultados o entradas necesarias, también durante otra skill y al orientar tras una tarea. Revisar primero el contexto disponible de la conversación y el estado pertinente del curso. Responder a la duda o proponer opciones sin iniciar otros procesos. Las preguntas disciplinares sobre contenidos corresponden a mapa-docente-consulta. Answer inline questions about this plugin, course files, available actions and next steps based on the conversation and course state. E.g. “What can I do next?”"
 ---
 
 # Proyecto docente: ayuda
+
+Follow the [language settings](../../docs/LANGUAGES.md) for this task. Example request: **“What can I do next?”**
 
 Dar una ayuda breve y adaptada al curso. El profesor no necesita conocer nombres
 de skills ni leer manuales. Consultar el [catálogo](../../docs/CATALOGO.md) para

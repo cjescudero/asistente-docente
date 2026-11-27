@@ -8,6 +8,9 @@ import re
 from html.parser import HTMLParser
 from pathlib import Path
 
+from .language_context import with_diagnostics
+from .quiz_language import QuizText, diagnostic
+
 PACKAGE_ROOT = Path(__file__).resolve().parents[1]
 MATHJAX = PACKAGE_ROOT / "assets/vendor/mathjax/tex-svg.js"
 CSS = """
@@ -59,7 +62,7 @@ def external_output(path: str | Path) -> Path:
     """Los datos del profesor no deben guardarse en el plugin instalado."""
     target = Path(path).expanduser().resolve()
     if target == PACKAGE_ROOT or PACKAGE_ROOT in target.parents:
-        raise ValueError("El directorio de resultados debe estar fuera del paquete del plugin.")
+        raise ValueError(diagnostic("El directorio de resultados debe estar fuera del paquete del plugin."))
     return target
 
 
@@ -78,18 +81,18 @@ class SafeHTML(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         if tag in self.DROP:
-            raise ValueError(f"HTML no soportado: <{tag}>. Adapta el contenido antes de imprimir.")
+            raise ValueError(diagnostic("HTML no soportado: <{tag}>. Adapta el contenido antes de imprimir.", tag=tag))
         if tag == "img":
-            raise ValueError("Las imágenes HTML requieren adaptación explícita; no se omiten silenciosamente.")
+            raise ValueError(diagnostic("Las imágenes HTML requieren adaptación explícita; no se omiten silenciosamente."))
         if tag in self.TAGS:
             structural = ""
             for key, value in attrs:
                 if key in {"rowspan", "colspan"} and tag in {"td", "th"}:
                     if not value or not value.isdecimal() or not 1 <= int(value) <= 100:
-                        raise ValueError(f"Atributo de tabla no válido: {key}.")
+                        raise ValueError(diagnostic("Atributo de tabla no válido: {key}.", key=key))
                     structural += f' {key}="{int(value)}"'
                 elif key.lower().startswith("on"):
-                    raise ValueError("HTML activo no permitido en un documento imprimible.")
+                    raise ValueError(diagnostic("HTML activo no permitido en un documento imprimible."))
             self.parts.append(f"<{tag}{structural}>")
             if tag not in self.VOID:
                 self.stack.append(tag)
@@ -119,7 +122,7 @@ def fragment(text: str, fmt: str = "html") -> str:
         try:
             from markdown_it import MarkdownIt
         except ImportError as exc:
-            raise RuntimeError("Falta markdown-it-py; instala requirements.txt.") from exc
+            raise RuntimeError(diagnostic("Falta markdown-it-py; instala requirements.txt.")) from exc
         saved = []
 
         def protect(match):
@@ -141,21 +144,22 @@ def fragment(text: str, fmt: str = "html") -> str:
     return sanitizer.result()
 
 
-def document(title: str, body: str, *, math: bool = False) -> str:
+def document(title: str, body: str, *, math: bool = False, language: str = "es") -> str:
     script = ""
     if math:
         if not MATHJAX.is_file():
-            raise RuntimeError("Falta el recurso MathJax empaquetado.")
+            raise RuntimeError(diagnostic("Falta el recurso MathJax empaquetado."))
         # La configuración y el JS son recursos del paquete, nunca del banco.
         config = r"""window.MathJax={loader:{load:[]},tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']],packages:['base','ams','newcommand']},svg:{fontCache:'local'},options:{enableMenu:false}};"""
         js = MATHJAX.read_text(encoding="utf-8").replace("</script", "<\\/script")
         script = f"<script>{config}</script><script>{js}</script>"
-    return ("<!doctype html><html lang='es'><head><meta charset='utf-8'>"
+    return (f"<!doctype html><html lang='{QuizText(language).language}'><head><meta charset='utf-8'>"
             f"<title>{html.escape(title)}</title><style>{CSS}</style></head>"
             f"<body>{body}{script}</body></html>")
 
 
-def print_pdf(html_path: Path, pdf_path: Path) -> tuple[bool, str]:
+@with_diagnostics
+def print_pdf(html_path: Path, pdf_path: Path, *, language="es") -> tuple[bool, str]:
     """Un fallo conserva el HTML; no registra un PDF inexistente como generado."""
     browser = None
     try:
@@ -168,7 +172,7 @@ def print_pdf(html_path: Path, pdf_path: Path) -> tuple[bool, str]:
             page.set_content(html_path.read_text(encoding="utf-8"), wait_until="load")
             page.evaluate("async () => { if(window.MathJax?.startup) await MathJax.startup.promise; await document.fonts.ready; }")
             if page.locator("mjx-merror, [data-mjx-error]").count():
-                raise ValueError("MathJax detectó una fórmula no válida.")
+                raise ValueError(diagnostic("MathJax detectó una fórmula no válida."))
             page.pdf(path=str(pdf_path), format="A4", print_background=True,
                      prefer_css_page_size=True, display_header_footer=True,
                      header_template="<span></span>",
@@ -178,11 +182,12 @@ def print_pdf(html_path: Path, pdf_path: Path) -> tuple[bool, str]:
     except Exception as exc:
         pdf_path.unlink(missing_ok=True)
         reason = str(exc).splitlines()[0][:350]
-        return False, f"PDF pendiente: {type(exc).__name__}: {reason}"
+        return False, f"{QuizText(language)('PDF pendiente')}: {type(exc).__name__}: {reason}"
 
 
+@with_diagnostics
 def render_markdown(source: str | Path, output: str | Path, *, title: str | None = None,
-                    html_only: bool = False) -> dict:
+                    html_only: bool = False, language: str = "es") -> dict:
     source = Path(source).resolve()
     from .course_outputs import course_output, output_project
     from .project import load_project
@@ -197,16 +202,16 @@ def render_markdown(source: str | Path, output: str | Path, *, title: str | None
                 role = private_role
                 break
         if role == "generated" and spaces.get("notes") and source.stat().st_nlink > 1:
-            raise ValueError("El documento comparte su identidad con otro archivo y no puede exportarse.")
+            raise ValueError(diagnostic("El documento comparte su identidad con otro archivo y no puede exportarse."))
     output = external_output(course_output(output, role, inputs=(source,)))
     text = source.read_text(encoding="utf-8")
     rendered = fragment(text, "markdown")
-    page = document(title or source.stem, rendered, math="\\(" in text or "\\[" in text)
+    page = document(title or source.stem, rendered, language=language, math="\\(" in text or "\\[" in text)
     output.mkdir(parents=True, exist_ok=True)
     html_path = output / f"{source.stem}.html"
     pdf_path = output / f"{source.stem}.pdf"
     if html_path.exists() or pdf_path.exists():
-        raise ValueError("Ya existen resultados con ese nombre; elige otra carpeta.")
+        raise ValueError(diagnostic("Ya existen resultados con ese nombre; elige otra carpeta."))
     html_path.write_text(page, encoding="utf-8")
-    ok, status = (False, "not_requested") if html_only else print_pdf(html_path, pdf_path)
+    ok, status = (False, "not_requested") if html_only else print_pdf(html_path, pdf_path, language=language)
     return {"html": str(html_path), "pdf": str(pdf_path) if ok else None, "pdf_status": status}

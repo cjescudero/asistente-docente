@@ -16,7 +16,7 @@ from sync_manifests import adapters
 
 ROOT = Path(__file__).resolve().parents[1]
 FOLDERS = ("skills", "docencia", "scripts", "assets", "docs", "templates", "examples", "schemas", "tests")
-FILES = ("README.md", "CHANGELOG.md", "AGENTS.md", "NOTICE.md", "LICENSE", "CONTRIBUTING.md",
+FILES = ("README.md", "README.en.md", "CHANGELOG.md", "AGENTS.md", "NOTICE.md", "LICENSE", "CONTRIBUTING.md",
          "requirements.txt", "requirements-pdf.txt", "requirements-dev.txt", "install.sh")
 
 

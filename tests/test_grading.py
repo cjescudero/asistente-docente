@@ -80,6 +80,23 @@ class GradingTests(unittest.TestCase):
         self.assertEqual(report["updated"], 1)
         self.assertEqual(originals, [path.read_bytes() for path in (self.eval_path, self.input_path, self.config_path)])
 
+    def test_english_report_preserves_moodle_columns_and_free_text(self):
+        self.evaluation["evaluations"][0]["feedback"] = "Explain why the sources differ."
+        self.save()
+        report = export_grades(self.eval_path, self.input_path, self.config_path, self.out, language="en")
+        self.assertEqual(report["status"], "ok", report)
+        self.assertEqual(self.output_rows(report)[0], self.header)
+        self.assertEqual(self.output_rows(report)[2][2:4], ["7,70", "Explain why the sources differ."])
+        self.assertTrue(Path(report["outputs"][0]).name.startswith("grades_"))
+        self.assertIn("Row preserved", next(item for item in report["incidents"] if item["code"] == "NO_ASSESSMENT")["message"])
+
+    def test_english_assessment_reports_validation_details(self):
+        self.evaluation["rubric"][0]["weight"] = 5
+        self.save()
+        report = export_grades(self.eval_path, self.input_path, self.config_path, self.out, language="en")
+        self.assertEqual(report["status"], "blocked")
+        self.assertIn("weights must add up", report["incidents"][0]["message"])
+
     def test_gradebook_profile_and_quoted_multiline_fields(self):
         self.config["profile"] = "gradebook"
         self.config.pop("advanced_grading")

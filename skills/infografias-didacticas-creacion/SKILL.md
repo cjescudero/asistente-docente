@@ -1,9 +1,11 @@
 ---
 name: infografias-didacticas-creacion
-description: Crear imágenes didácticas con estilo de boceto a mano para explicar conceptos, procesos o relaciones de cualquier disciplina, a partir de texto o documentos. Usar para diapositivas visuales o infografías; no activar para cualquier explicación textual, gráficos de datos exactos ni maquetación genérica de documentos.
+description: "Crear imágenes didácticas con estilo de boceto a mano para explicar conceptos, procesos o relaciones de cualquier disciplina, a partir de texto o documentos. Usar para diapositivas visuales o infografías; no activar para cualquier explicación textual, gráficos de datos exactos ni maquetación genérica de documentos. Create a hand-drawn educational infographic or a single visual slide explaining a concept, process or relationship. E.g. “Create an infographic about this process.”"
 ---
 
 # Infografías didácticas: creación
+
+Follow the [language settings](../../docs/LANGUAGES.md) for this task. Example request: **“Create an infographic about this process.”**
 
 Transformar el contenido en una explicación visual con fondo crema, tinta negra irregular, pasteles suaves y espacio en blanco. Por defecto, crear una imagen 16:9 de apoyo a una exposición oral por unidad lógica, con texto en español. Una instrucción explícita de formato, idioma, detalle o estilo prevalece.
 

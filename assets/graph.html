@@ -1,11 +1,11 @@
 <!-- asistente-docente:generated-graph:v1 -->
 <!doctype html>
-<html lang="es">
+<html lang="[[locale]]">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="color-scheme" content="light">
-  <title>Mapa docente</title>
+  <title>[[text:Mapa docente]]</title>
   <style>
     :root { --ink:#24352d; --muted:#617168; --accent:#285a45; --line:#dfe6df;
       --paper:#f7f9f5; --white:#fff; --soft:#eaf0e8; --shadow:0 12px 36px #20382c14; }
@@ -198,41 +198,41 @@
   <div class="app">
     <header class="topbar">
       <svg class="brand-mark" viewBox="0 0 44 44" aria-hidden="true"><path d="M11 30 22 11l12 20M11 30l23 1" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="22" cy="11" r="5.5" fill="currentColor"/><circle cx="11" cy="30" r="4.5" fill="currentColor" opacity=".62"/><circle cx="34" cy="31" r="4.5" fill="currentColor" opacity=".38"/></svg>
-      <div class="brand"><h1>Mapa docente</h1><p class="library-title" id="library-title">Temas y materiales</p></div>
-      <a class="plain-button" id="open-wiki" hidden>Abrir wiki ↗</a>
-      <span class="audience" id="audience-label">Uso docente</span>
-      <details class="help"><summary aria-label="Cómo explorar el mapa">?</summary><div class="help-content"><h2>Cómo explorar</h2><ul><li>Arrastra un nodo para cambiar su posición.</li><li>Reorganizar redistribuye los elementos visibles y conserva tus filtros.</li><li>Ajustar encaja la vista sin cambiar las posiciones.</li><li>Arrastra el fondo para moverte por el mapa.</li><li>Usa la rueda o los botones para acercarte.</li><li>Selecciona un elemento para consultar sus relaciones y documentos de la wiki.</li><li>Tabulador y Enter permiten recorrer y seleccionar los elementos.</li></ul></div></details>
+      <div class="brand"><h1>[[text:Mapa docente]]</h1><p class="library-title" id="library-title">[[text:Temas y materiales]]</p></div>
+      <a class="plain-button" id="open-wiki" hidden>[[text:Abrir wiki ↗]]</a>
+      <span class="audience" id="audience-label">[[text:Uso docente]]</span>
+      <details class="help"><summary aria-label="[[text:Cómo explorar el mapa]]">?</summary><div class="help-content"><h2>[[text:Cómo explorar]]</h2><ul><li>[[text:Arrastra un nodo para cambiar su posición.]]</li><li>[[text:Reorganizar redistribuye los elementos visibles y conserva tus filtros.]]</li><li>[[text:Ajustar encaja la vista sin cambiar las posiciones.]]</li><li>[[text:Arrastra el fondo para moverte por el mapa.]]</li><li>[[text:Usa la rueda o los botones para acercarte.]]</li><li>[[text:Selecciona un elemento para consultar sus relaciones y documentos de la wiki.]]</li><li>[[text:Tabulador y Enter permiten recorrer y seleccionar los elementos.]]</li></ul></div></details>
     </header>
     <main class="workspace">
-      <aside class="sidebar" id="sidebar" aria-label="Buscar, filtrar y consultar la lista de nodos">
-        <div class="search-area"><label class="section-label" for="search-input">Explorar mapa</label><div class="search-wrap">
+      <aside class="sidebar" id="sidebar" aria-label="[[text:Buscar, filtrar y consultar la lista de nodos]]">
+        <div class="search-area"><label class="section-label" for="search-input">[[text:Explorar mapa]]</label><div class="search-wrap">
           <svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8" cy="8" r="5.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m12 12 5 5" stroke="currentColor" stroke-width="1.5"/></svg>
-          <input id="search-input" type="search" autocomplete="off" placeholder="Buscar un tema o material…" aria-controls="node-list" aria-describedby="search-hint">
-          <button id="search-clear" type="button" aria-label="Borrar búsqueda" hidden>×</button></div>
-          <span class="sr-only" id="search-hint">La búsqueda filtra el mapa y la lista. Pulsa Enter para seleccionar el primer resultado.</span></div>
-        <div class="filters"><details class="filter-section" open><summary>Tipos de contenido</summary><div class="filter-options" id="type-filters"></div><p class="evaluation-note" id="evaluation-note" hidden>Las evaluaciones están ocultas al abrir. Actívalas cuando quieras consultarlas.</p></details>
-          <details class="filter-section"><summary>Acceso</summary><div class="filter-options" id="access-filters"></div></details><p class="access-legend" id="access-legend">Sin distintivo: para estudiantes. 🔒 Uso docente o restringido. ? Sin clasificar: pendiente de confirmar. Son etiquetas; no bloquean archivos ni autorizan publicarlos.</p></div>
-        <div class="list-heading"><h2>Elementos del mapa</h2><span id="list-count"></span></div>
-        <ul class="node-list" id="node-list" aria-label="Nodos disponibles"></ul>
+          <input id="search-input" type="search" autocomplete="off" placeholder="[[text:Buscar un tema o material…]]" aria-controls="node-list" aria-describedby="search-hint">
+          <button id="search-clear" type="button" aria-label="[[text:Borrar búsqueda]]" hidden>×</button></div>
+          <span class="sr-only" id="search-hint">[[text:La búsqueda filtra el mapa y la lista. Pulsa Enter para seleccionar el primer resultado.]]</span></div>
+        <div class="filters"><details class="filter-section" open><summary>[[text:Tipos de contenido]]</summary><div class="filter-options" id="type-filters"></div><p class="evaluation-note" id="evaluation-note" hidden>[[text:Las evaluaciones están ocultas al abrir. Actívalas cuando quieras consultarlas.]]</p></details>
+          <details class="filter-section"><summary>[[text:Acceso]]</summary><div class="filter-options" id="access-filters"></div></details><p class="access-legend" id="access-legend">[[text:Sin distintivo: para estudiantes. 🔒 Uso docente o restringido. ? Sin clasificar: pendiente de confirmar. Son etiquetas; no bloquean archivos ni autorizan publicarlos.]]</p></div>
+        <div class="list-heading"><h2>[[text:Elementos del mapa]]</h2><span id="list-count"></span></div>
+        <ul class="node-list" id="node-list" aria-label="[[text:Nodos disponibles]]"></ul>
       </aside>
-      <section class="canvas" id="canvas" aria-label="Mapa de relaciones">
-        <div class="canvas-top"><p id="graph-status" aria-live="polite" aria-atomic="true"></p><button class="mobile-button" id="sidebar-toggle" aria-expanded="false" aria-controls="sidebar" type="button">Lista y filtros</button></div>
-        <svg id="graph" role="group" aria-label="Mapa interactivo. También puedes usar la lista de elementos." tabindex="0">
+      <section class="canvas" id="canvas" aria-label="[[text:Mapa de relaciones]]">
+        <div class="canvas-top"><p id="graph-status" aria-live="polite" aria-atomic="true"></p><button class="mobile-button" id="sidebar-toggle" aria-expanded="false" aria-controls="sidebar" type="button">[[text:Lista y filtros]]</button></div>
+        <svg id="graph" role="group" aria-label="[[text:Mapa interactivo. También puedes usar la lista de elementos.]]" tabindex="0">
           <defs><pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".65" fill="#d7e0d7"/></pattern></defs>
           <rect id="graph-background" width="100%" height="100%" fill="url(#dots)"/>
           <g id="viewport"><g id="edges"></g><g id="nodes"></g></g>
         </svg>
-        <div class="empty-state" id="empty-state" hidden><h2 id="empty-title">No hay coincidencias</h2><p id="empty-copy">Prueba otro término o activa más tipos de contenido.</p><button id="show-all-button" class="primary-button" type="button">Mostrar todos los elementos</button></div>
-        <nav class="controls" aria-label="Controles del mapa"><button class="zoom-button" id="zoom-out" aria-label="Alejar" type="button">−</button><span id="zoom-level" aria-live="off">100 %</span><button class="zoom-button" id="zoom-in" aria-label="Acercar" type="button">+</button><span class="control-separator"></span><button id="fit-button" type="button" title="Encajar la vista sin mover los nodos">Ajustar</button><button id="reset-button" type="button" title="Redistribuir los nodos visibles conservando filtros y selección">Reorganizar</button></nav>
-        <p class="canvas-hint">Arrastra nodos · Desplaza el fondo · Usa la rueda para acercarte</p>
+        <div class="empty-state" id="empty-state" hidden><h2 id="empty-title">[[text:No hay coincidencias]]</h2><p id="empty-copy">[[text:Prueba otro término o activa más tipos de contenido.]]</p><button id="show-all-button" class="primary-button" type="button">[[text:Mostrar todos los elementos]]</button></div>
+        <nav class="controls" aria-label="[[text:Controles del mapa]]"><button class="zoom-button" id="zoom-out" aria-label="[[text:Alejar]]" type="button">−</button><span id="zoom-level" aria-live="off">100 %</span><button class="zoom-button" id="zoom-in" aria-label="[[text:Acercar]]" type="button">+</button><span class="control-separator"></span><button id="fit-button" type="button" title="[[text:Encajar la vista sin mover los nodos]]">[[text:Ajustar]]</button><button id="reset-button" type="button" title="[[text:Redistribuir los nodos visibles conservando filtros y selección]]">[[text:Reorganizar]]</button></nav>
+        <p class="canvas-hint">[[text:Arrastra nodos · Desplaza el fondo · Usa la rueda para acercarte]]</p>
       </section>
-      <aside class="inspector" id="inspector" aria-label="Detalles del nodo seleccionado">
-        <div class="inspector-top"><span class="section-label">Detalle</span><button id="selection-close" type="button" aria-label="Cerrar selección" hidden>×</button></div>
-        <div class="selection-placeholder" id="selection-placeholder"><svg width="65" height="55" viewBox="0 0 65 55" aria-hidden="true"><path d="m12 40 22-25 20 22" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="34" cy="15" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="40" r="5" fill="currentColor"/><circle cx="54" cy="37" r="5" fill="currentColor" opacity=".6"/></svg><h2>Conecta las ideas</h2><p>Selecciona un tema o un material para ver con qué se relaciona y abrir su archivo.</p></div>
-        <div id="selection-content" hidden><p id="selected-type"></p><h2 id="selected-title"></h2><dl class="selection-meta"><dt>Acceso</dt><dd id="selected-access"></dd><dt id="reading-term">Lectura</dt><dd id="selected-reading"></dd></dl><a class="primary-button" id="open-source" target="_blank" rel="noopener noreferrer" hidden>Abrir archivo <span aria-hidden="true">↗</span></a><section id="wiki-section" hidden><h3 class="relations-heading">Documentos de la wiki</h3><ul id="wiki-documents"></ul></section><h3 class="relations-heading" id="relations-heading">Relaciones</h3><ul id="relations-list"></ul><p id="no-relations" hidden>Sin relaciones visibles con los filtros actuales.</p></div>
+      <aside class="inspector" id="inspector" aria-label="[[text:Detalles del nodo seleccionado]]">
+        <div class="inspector-top"><span class="section-label">[[text:Detalle]]</span><button id="selection-close" type="button" aria-label="[[text:Cerrar selección]]" hidden>×</button></div>
+        <div class="selection-placeholder" id="selection-placeholder"><svg width="65" height="55" viewBox="0 0 65 55" aria-hidden="true"><path d="m12 40 22-25 20 22" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="34" cy="15" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="40" r="5" fill="currentColor"/><circle cx="54" cy="37" r="5" fill="currentColor" opacity=".6"/></svg><h2>[[text:Conecta las ideas]]</h2><p>[[text:Selecciona un tema o un material para ver con qué se relaciona y abrir su archivo.]]</p></div>
+        <div id="selection-content" hidden><p id="selected-type"></p><h2 id="selected-title"></h2><dl class="selection-meta"><dt>[[text:Acceso]]</dt><dd id="selected-access"></dd><dt id="reading-term">[[text:Lectura]]</dt><dd id="selected-reading"></dd></dl><a class="primary-button" id="open-source" target="_blank" rel="noopener noreferrer" hidden>[[text:Abrir archivo]] <span aria-hidden="true">↗</span></a><section id="wiki-section" hidden><h3 class="relations-heading">[[text:Documentos de la wiki]]</h3><ul id="wiki-documents"></ul></section><h3 class="relations-heading" id="relations-heading">[[text:Relaciones]]</h3><ul id="relations-list"></ul><p id="no-relations" hidden>[[text:Sin relaciones visibles con los filtros actuales.]]</p></div>
       </aside>
     </main>
-    <footer class="bottomline"><span id="footer-summary">Temas, conceptos y materiales conectados.</span><span>Consulta los documentos originales para comprobar el contexto.</span></footer>
+    <footer class="bottomline"><span id="footer-summary">[[text:Temas, conceptos y materiales conectados.]]</span><span>[[text:Consulta los documentos originales para comprobar el contexto.]]</span></footer>
   </div>
   <script id="graph-data" type="application/json">__GRAPH_DATA__</script>
   <script>
@@ -242,33 +242,33 @@
     const MIN_ZOOM=.02;
     const byId = id => document.getElementById(id);
     const TYPES = {
-      concepto:{label:"Concepto",plural:"Conceptos",color:"#6987b2",symbol:"·"},
-      tema:{label:"Tema",plural:"Temas",color:"#377760",symbol:"·"},
-      presentacion:{label:"Presentación",plural:"Presentaciones",color:"#c88b5c",symbol:"▤"},
-      apuntes:{label:"Apuntes",plural:"Apuntes",color:"#9a83ad",symbol:"≡"},
-      practica:{label:"Práctica",plural:"Prácticas",color:"#c6a044",symbol:"↗"},
-      taller:{label:"Taller",plural:"Talleres",color:"#ba8050",symbol:"↗"},
-      evaluacion:{label:"Evaluación",plural:"Evaluaciones",color:"#b46f7d",symbol:"✓"},
-      programa:{label:"Programa",plural:"Programas",color:"#709499",symbol:"≡"},
-      otro:{label:"Otro material",plural:"Otros materiales",color:"#8b949e",symbol:"·"}
+      concepto:{label:[[js:Concepto]],plural:[[js:Conceptos]],color:"#6987b2",symbol:"·"},
+      tema:{label:[[js:Tema]],plural:[[js:Temas]],color:"#377760",symbol:"·"},
+      presentacion:{label:[[js:Presentación]],plural:[[js:Presentaciones]],color:"#c88b5c",symbol:"▤"},
+      apuntes:{label:[[js:Apuntes]],plural:[[js:Apuntes]],color:"#9a83ad",symbol:"≡"},
+      practica:{label:[[js:Práctica]],plural:[[js:Prácticas]],color:"#c6a044",symbol:"↗"},
+      taller:{label:[[js:Taller]],plural:[[js:Talleres]],color:"#ba8050",symbol:"↗"},
+      evaluacion:{label:[[js:Evaluación]],plural:[[js:Evaluaciones]],color:"#b46f7d",symbol:"✓"},
+      programa:{label:[[js:Programa]],plural:[[js:Programas]],color:"#709499",symbol:"≡"},
+      otro:{label:[[js:Otro material]],plural:[[js:Otros materiales]],color:"#8b949e",symbol:"·"}
     };
-    const ACCESS = {estudiante:"Para estudiantes",docente:"Uso docente",restringido:"Restringido",desconocido:"Sin clasificar"};
-    const READING = {completa:"Completa",parcial:"Parcial",pendiente:"Pendiente",no_legible:"No legible"};
+    const ACCESS = {estudiante:[[js:Para estudiantes]],docente:[[js:Uso docente]],restringido:[[js:Restringido]],desconocido:[[js:Sin clasificar]]};
+    const READING = {completa:[[js:Completa]],parcial:[[js:Parcial]],pendiente:[[js:Pendiente]],no_legible:[[js:No legible]]};
     let data;
     try { data = JSON.parse(byId("graph-data").textContent); }
     catch (_) {
       byId("empty-state").hidden = false;
-      byId("empty-title").textContent = "No se ha podido abrir el mapa";
-      byId("empty-copy").textContent = "Vuelve a generar el archivo desde el mapa docente.";
+      byId("empty-title").textContent = [[js:No se ha podido abrir el mapa]];
+      byId("empty-copy").textContent = [[js:Vuelve a generar el archivo desde el mapa docente.]];
       byId("show-all-button").hidden = true;
       return;
     }
     const student = ["student","estudiante"].includes(data.audience);
-    const title = typeof data.title === "string" ? data.title : "Mapa docente";
+    const title = typeof data.title === "string" ? data.title : [[js:Mapa docente]];
     byId("library-title").textContent = title;
-    byId("audience-label").textContent = student ? "Vista del estudiante" : "Uso docente";
-    if(student) byId("access-legend").textContent = "Material clasificado para estudiantes. Esta vista no concede permisos sobre los documentos ni autoriza su publicación en Internet.";
-    document.title = "Mapa docente · " + title;
+    byId("audience-label").textContent = student ? [[js:Vista del estudiante]] : [[js:Uso docente]];
+    if(student) byId("access-legend").textContent = [[js:Material clasificado para estudiantes. Esta vista no concede permisos sobre los documentos ni autoriza su publicación en Internet.]];
+    document.title = [[js:Mapa docente · ]] + title;
     const aliases = {diapositivas:"presentacion",cuestionario:"evaluacion",examen:"evaluacion",rubrica:"evaluacion"};
     const nodes = (Array.isArray(data.nodes) ? data.nodes : []).filter(n => n && typeof n.id === "string").map(n => ({
       ...n, title:typeof n.title === "string" ? n.title : n.id,
@@ -285,7 +285,7 @@
     const svg = byId("graph"), viewport = byId("viewport");
     const labelMeasure=document.createElement("canvas").getContext("2d");
     if(labelMeasure)labelMeasure.font="500 11px "+getComputedStyle(svg).fontFamily;
-    const norm = value => String(value).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("es").trim();
+    const norm = value => String(value).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase(document.documentElement.lang).trim();
     const text = (tag, value, className) => { const el = document.createElement(tag); el.textContent = value; if (className) el.className = className; return el; };
     function svgel(tag, attrs = {}) { const el = document.createElementNS(NS,tag); Object.entries(attrs).forEach(([k,v]) => el.setAttribute(k,String(v))); return el; }
     function dot(kind) { const el = text("span","","type-dot"); el.style.backgroundColor = TYPES[kind].color; el.setAttribute("aria-hidden","true"); return el; }
@@ -336,7 +336,7 @@
     function layout() {
       // Only the induced visible graph participates. Sorting and a fixed work
       // budget make the same filters and viewport produce the same arrangement.
-      const items=[...visibleNodes].sort((a,b)=>a.id.localeCompare(b.id,"es"));
+      const items=[...visibleNodes].sort((a,b)=>a.id.localeCompare(b.id,document.documentElement.lang));
       if(!items.length)return;
       const aspect=Math.max(.45,Math.min(3,(width-70)/Math.max(220,height-154)));
       const adjacency=new Map(items.map(n=>[n.id,new Set()]));
@@ -348,12 +348,12 @@
       items.forEach(start=>{if(visited.has(start.id))return;const component=[],queue=[start];visited.add(start.id);
         for(let i=0;i<queue.length;i++){const n=queue[i];component.push(n);adjacency.get(n.id).forEach(id=>{if(!visited.has(id)){visited.add(id);queue.push(nodeMap.get(id));}});}
         components.push(component);});
-      components.sort((a,b)=>b.length-a.length||a[0].id.localeCompare(b[0].id,"es"));
+      components.sort((a,b)=>b.length-a.length||a[0].id.localeCompare(b[0].id,document.documentElement.lang));
       const pairCount=components.reduce((sum,c)=>sum+c.length*c.length,0);
       const steps=Math.max(8,Math.min(190,Math.floor(2500000/Math.max(1,pairCount))));
       for(const component of components){
         // Visit from the most connected node so immediate neighbors begin close.
-        const root=[...component].sort((a,b)=>adjacency.get(b.id).size-adjacency.get(a.id).size||a.id.localeCompare(b.id,"es"))[0];
+        const root=[...component].sort((a,b)=>adjacency.get(b.id).size-adjacency.get(a.id).size||a.id.localeCompare(b.id,document.documentElement.lang))[0];
         const order=[root],queued=new Set([root.id]);
         for(let i=0;i<order.length;i++) [...adjacency.get(order[i].id)].sort().forEach(id=>{if(!queued.has(id)){queued.add(id);order.push(nodeMap.get(id));}});
         const componentIds=new Set(component.map(n=>n.id)), componentLinks=links.filter(e=>componentIds.has(e.source));
@@ -427,7 +427,7 @@
       nodeElements.clear(); byId("nodes").replaceChildren(); byId("edges").replaceChildren(); byId("node-list").replaceChildren();
       visibleEdges.forEach(e => {
         const line=svgel("line",{"class":"edge","data-source":e.source,"data-target":e.target});
-        const title=svgel("title"); title.textContent=typeof e.label === "string" ? e.label : "Relación"; line.append(title);
+        const title=svgel("title"); title.textContent=typeof e.label === "string" ? e.label : [[js:Relación]]; line.append(title);
         e.element=line; byId("edges").append(line);
         e.labelElement=null;
         if (e.label) { const label=svgel("text",{"class":"edge-label","text-anchor":"middle"}); label.textContent=String(e.label);
@@ -455,18 +455,18 @@
         nodeElements.set(n.id,group);byId("nodes").append(group);
         const li=document.createElement("li"),button=document.createElement("button");button.type="button";button.className="list-button";button.dataset.nodeId=n.id;
         button.setAttribute("aria-pressed",String(selectedId===n.id));
-        const copy=text("span","","list-copy");copy.append(text("span",n.title,"list-title"),text("span",(n.id.startsWith("source:")?"Original":"Ficha")+" · "+TYPES[n.kind].label,"list-kind"));
+        const copy=text("span","","list-copy");copy.append(text("span",n.title,"list-title"),text("span",(n.id.startsWith("source:")?[[js:Original]]:[[js:Ficha]])+" · "+TYPES[n.kind].label,"list-kind"));
         button.append(dot(n.kind),copy);button.addEventListener("click",() => { select(n.id,true);closeSidebar(); });li.append(button);byId("node-list").append(li);
       });
-      if (!visibleNodes.length) byId("node-list").append(text("li","No hay elementos con estos filtros.","list-empty"));
-      byId("graph-status").textContent=`${visibleNodes.length} de ${nodes.length} nodos · ${visibleEdges.length} relaciones`;
+      if (!visibleNodes.length) byId("node-list").append(text("li",[[js:No hay elementos con estos filtros.]],"list-empty"));
+      byId("graph-status").textContent=`${visibleNodes.length}${[[js: de ]]}${nodes.length} ${[[js:nodos]]} · ${visibleEdges.length} ${[[js:relaciones]]}`;
       byId("list-count").textContent=String(visibleNodes.length);
       byId("search-clear").hidden=!byId("search-input").value;
       byId("empty-state").hidden=visibleNodes.length>0;
-      byId("empty-title").textContent=nodes.length?"No hay coincidencias":"Esta vista todavía no tiene elementos";
-      byId("empty-copy").textContent=nodes.length?"Prueba otro término o activa más tipos de contenido.":"Cuando haya contenidos disponibles, aparecerán aquí sus relaciones.";
+      byId("empty-title").textContent=nodes.length?[[js:No hay coincidencias]]:[[js:Esta vista todavía no tiene elementos]];
+      byId("empty-copy").textContent=nodes.length?[[js:Prueba otro término o activa más tipos de contenido.]]:[[js:Cuando haya contenidos disponibles, aparecerán aquí sus relaciones.]];
       byId("show-all-button").hidden=!nodes.length;
-      byId("footer-summary").textContent=student?"Temas y materiales disponibles para el estudiante.":"Temas, conceptos y materiales del mapa docente.";
+      byId("footer-summary").textContent=student?[[js:Temas y materiales disponibles para el estudiante.]]:[[js:Temas, conceptos y materiales del mapa docente.]];
       if(reorganize)layout();updatePositions();highlight();renderSelection();if (fit) fitView();
     }
     function updatePositions() {
@@ -495,7 +495,7 @@
       byId("selected-access").textContent=ACCESS[node.access];byId("selected-reading").textContent=READING[node.reading]||"";
       byId("reading-term").hidden=!READING[node.reading];byId("selected-reading").hidden=!READING[node.reading];
       const href=student?null:safeHref(node.href),link=byId("open-source");link.hidden=!href;link.removeAttribute("href");
-      if(href){link.href=href;link.textContent=(node.id.startsWith("source:")?"Abrir original":"Abrir ficha")+" ↗";}
+      if(href){link.href=href;link.textContent=(node.id.startsWith("source:")?[[js:Abrir original]]:[[js:Abrir ficha]])+" ↗";}
       const documents=byId("wiki-documents");documents.replaceChildren();
       const seenDocuments=new Set();
       // The producer supplies own and related pages independently of the graph's
@@ -506,15 +506,15 @@
         if(!key||seenDocuments.has(key))return;seenDocuments.add(key);
         const li=text("li","","wiki-document"),links=text("span","","wiki-document-links");
         li.append(text("span",typeof doc.title==="string"?doc.title:node.title,"wiki-document-title"));
-        for(const [destination,label] of [[rendered,"Leer en la wiki"],[markdown,"Abrir Markdown"]]){
+        for(const [destination,label] of [[rendered,[[js:Leer en la wiki]]],[markdown,[[js:Abrir Markdown]]]]){
           if(!destination)continue;const a=text("a",label);a.href=destination;links.append(a);
         }
         li.append(links);documents.append(li);
       });
       byId("wiki-section").hidden=!documents.childElementCount;
       const related=new Map();
-      edges.forEach(e=>{const other=e.source===node.id?e.target:e.target===node.id?e.source:null;if(other&&eligible(nodeMap.get(other)))related.set(other,e.label||"Relacionado");});
-      byId("relations-list").replaceChildren();byId("relations-heading").textContent=`Relaciones visibles · ${related.size}`;byId("no-relations").hidden=related.size>0;
+      edges.forEach(e=>{const other=e.source===node.id?e.target:e.target===node.id?e.source:null;if(other&&eligible(nodeMap.get(other)))related.set(other,e.label||[[js:Relacionado]]);});
+      byId("relations-list").replaceChildren();byId("relations-heading").textContent=`${[[js:Relaciones visibles]]} · ${related.size}`;byId("no-relations").hidden=related.size>0;
       related.forEach((label,id)=>{const other=nodeMap.get(id),li=document.createElement("li"),button=document.createElement("button");button.type="button";button.className="relation-button";button.dataset.relatedId=id;
         const copy=text("span","");copy.append(text("span",other.title,"relation-title"),text("span",String(label),"relation-label"));button.append(dot(other.kind),copy);
         button.addEventListener("click",()=>{if(!matches(other)){query="";byId("search-input").value="";refresh();}select(id,true);});li.append(button);byId("relations-list").append(li);});

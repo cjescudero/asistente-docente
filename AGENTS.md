@@ -3,7 +3,7 @@
 ## Alcance
 
 Este proyecto contiene doce skills docentes y utilidades portables para ChatGPT
-Work, Codex, Claude Cowork y Claude Code. Por decisión explícita del usuario, carpeta, identificador
+Work, Codex, Claude Cowork, Claude Code y OpenCode. Por decisión explícita del usuario, carpeta, identificador
 y paquetes se llaman `asistente-docente`, sin prefijo `plugin-`. Las skills
 usan nombres sin prefijo `skill-` y se agrupan por categoría. La organización
 vigente se documenta en `docs/PROYECTO-DOCENTE.md`.
@@ -24,6 +24,8 @@ vigente se documenta en `docs/PROYECTO-DOCENTE.md`.
 - Distribuir mediante marketplaces de GitHub; no presuponer disponibilidad en
   los directorios públicos de ChatGPT o Claude. Documentar la incorporación del
   marketplace y la instalación posterior del plugin según `docs/INSTALACION.md`.
+
+- Mantener una sola definición por skill en ambos idiomas. Aplicar las prioridades de idioma de [LANGUAGES.md](docs/LANGUAGES.md) y comprobar el recorrido ES/EN cuando cambie texto generado.
 
 ## Invariantes
 

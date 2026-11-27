@@ -16,6 +16,9 @@ else:
     from validate_library import _links, registry_path, validate_library
 
 
+from docencia.map_labels import label, render_template
+from docencia.project import course_language
+
 MARKER = "<!-- asistente-docente:generated-graph:v1 -->"
 TEMPLATE = Path(__file__).resolve().parents[1] / "assets" / "graph.html"
 HOUSEKEEPING = {"index.md", "LEEME.md", "incidencias.md", "log.md"}
@@ -38,7 +41,7 @@ def _href(path, output):
     return quote(Path(os.path.relpath(path, output.parent)).as_posix(), safe="/.-_")
 
 
-def _make_payload(guide, registry, output, audience):
+def _make_payload(guide, registry, output, audience, language):
     roots = {key: (guide / relative).resolve() for key, relative in registry["source_roots"].items()}
     nodes, paths, dependencies, blocked = {}, {}, {}, set()
     housekeeping = {(guide / name).resolve() for name in HOUSEKEEPING}
@@ -91,7 +94,7 @@ def _make_payload(guide, registry, output, audience):
         nodes = {identifier: node for identifier, node in nodes.items() if identifier not in blocked}
         edges = {(source, target) for source, target in edges if source in nodes and target in nodes}
     payload = {"schemaVersion": 1, "title": registry["title"] if audience == "docente"
-               else "Mapa de materiales para estudiantes", "audience": audience,
+               else label("Mapa de materiales para estudiantes", language), "audience": audience,
                "nodes": [nodes[key] for key in sorted(nodes)],
                "edges": [{"source": source, "target": target} for source, target in sorted(edges)]}
     return payload, protected
@@ -132,7 +135,7 @@ def _wiki_links(payload, registry, graph_output, wiki_output):
     payload["wikiHref"] = document_href("index.md", graph_output, wiki_output)
 
 
-def build_graph(guide_dir, output, audience="docente", wiki_output=None, *, verified_files=None):
+def build_graph(guide_dir, output, audience="docente", wiki_output=None, *, verified_files=None, language=None):
     """Validate, filter and write one standalone HTML; return visible counts.
 
     Existing files are replaced only when they start with this generator's
@@ -140,37 +143,39 @@ def build_graph(guide_dir, output, audience="docente", wiki_output=None, *, veri
     Student exports contain only permitted nodes, with no file links or hidden
     records. Metadata provenance affects privacy but never creates graph edges.
     """
-    if audience not in {"docente", "estudiante"}:
-        raise GraphError("audience debe ser docente o estudiante.")
-    if audience == "estudiante" and wiki_output is not None:
-        raise GraphError("El lector de la wiki es de uso docente; no se incluye en el grafo para estudiantes.")
     try:
+        language = course_language(guide_dir, language=language)
+        audience = {"teacher": "docente", "student": "estudiante"}.get(audience, audience)
+        if audience not in {"docente", "estudiante"}:
+            raise GraphError(label("audience debe ser docente o estudiante.", language))
+        if audience == "estudiante" and wiki_output is not None:
+            raise GraphError(label("El lector de la wiki es de uso docente; no se incluye en el grafo para estudiantes.", language))
         guide = Path(guide_dir).expanduser().resolve()
         validation = validate_library(guide, verified_files=verified_files)
         if validation["status"] != "ok":
-            raise GraphError("Biblioteca inválida: " + "; ".join(validation["errors"]))
+            raise GraphError(label("Biblioteca inválida: ", language) + "; ".join(validation["errors"]))
         registry = json.loads(registry_path(guide).read_text(encoding="utf-8-sig"))
         if not isinstance(registry, dict) or registry.get("schema_version") != 2:
-            raise GraphError("El grafo requiere fuentes.json schema_version 2. Migra y revisa el registro antes de generarlo.")
+            raise GraphError(label("El grafo requiere fuentes.json schema_version 2. Migra y revisa el registro antes de generarlo.", language))
         requested = Path(output).expanduser()
         if requested.is_symlink():
-            raise GraphError("La salida no puede ser un enlace simbólico.")
+            raise GraphError(label("La salida no puede ser un enlace simbólico.", language))
         destination = requested.resolve()
         if destination.suffix.lower() != ".html":
-            raise GraphError("La salida debe ser un archivo .html.")
+            raise GraphError(label("La salida debe ser un archivo .html.", language))
         if not destination.parent.is_dir():
-            raise GraphError("La carpeta de salida debe existir antes de generar el grafo.")
-        payload, protected = _make_payload(guide, registry, destination, audience)
+            raise GraphError(label("La carpeta de salida debe existir antes de generar el grafo.", language))
+        payload, protected = _make_payload(guide, registry, destination, audience, language)
         if destination in protected:
-            raise GraphError("La salida coincide con un original, una página o un archivo de entrada protegido.")
+            raise GraphError(label("La salida coincide con un original, una página o un archivo de entrada protegido.", language))
         existing = None
         if destination.exists():
             existing = destination.read_text(encoding="utf-8")
             if not existing.startswith(MARKER + "\n"):
-                raise GraphError("El archivo de salida ya existe y no fue generado por esta utilidad.")
+                raise GraphError(label("El archivo de salida ya existe y no fue generado por esta utilidad.", language))
         template = TEMPLATE.read_text(encoding="utf-8")
         if template.count("__GRAPH_DATA__") != 1 or not template.startswith(MARKER + "\n"):
-            raise GraphError("La plantilla de grafo no contiene el contrato esperado.")
+            raise GraphError(label("La plantilla de grafo no contiene el contrato esperado.", language))
         wiki_summary = None
         if wiki_output is not None:
             if __package__:
@@ -179,12 +184,12 @@ def build_graph(guide_dir, output, audience="docente", wiki_output=None, *, veri
                 from build_wiki import build_wiki
             wiki_destination = Path(wiki_output).expanduser().resolve()
             if wiki_destination == destination:
-                raise GraphError("El lector de la wiki y el grafo necesitan archivos de salida diferentes.")
-            wiki_summary = build_wiki(guide, wiki_output, graph=destination, verified_files=verified_files)
+                raise GraphError(label("El lector de la wiki y el grafo necesitan archivos de salida diferentes.", language))
+            wiki_summary = build_wiki(guide, wiki_output, graph=destination, verified_files=verified_files, language=language)
             _wiki_links(payload, registry, destination, wiki_destination)
         embedded = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
         embedded = embedded.replace("<", "\\u003c").replace("\u2028", "\\u2028").replace("\u2029", "\\u2029")
-        rendered = template.replace("__GRAPH_DATA__", embedded)
+        rendered = render_template(template, language).replace("__GRAPH_DATA__", embedded)
         if rendered != existing:
             temporary = None
             try:
@@ -197,7 +202,7 @@ def build_graph(guide_dir, output, audience="docente", wiki_output=None, *, veri
                 # created or concurrently changed file without authorization.
                 if destination.exists():
                     if existing is None or destination.read_text(encoding="utf-8") != existing:
-                        raise GraphError("La salida cambió durante la generación; no se sobrescribe.")
+                        raise GraphError(label("La salida cambió durante la generación; no se sobrescribe.", language))
                     os.replace(temporary, destination)
                 else:
                     os.link(temporary, destination)
@@ -219,11 +224,12 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("guide_dir", metavar="GUIDE_DIR")
     parser.add_argument("--output", required=True, metavar="FILE")
-    parser.add_argument("--audience", choices=("docente", "estudiante"), default="docente")
-    parser.add_argument("--wiki-output", metavar="FILE", help="Generar también el lector docente, normalmente GUIDE_DIR/index.html.")
+    parser.add_argument("--audience", choices=("docente", "estudiante", "teacher", "student"), default="docente")
+    parser.add_argument("--wiki-output", metavar="FILE", help="Also generate the teacher reader, usually GUIDE_DIR/index.html.")
+    parser.add_argument("--language", choices=("es", "en"), help="View language (course preference by default)")
     args = parser.parse_args(argv)
     try:
-        summary = build_graph(args.guide_dir, args.output, args.audience, args.wiki_output)
+        summary = build_graph(args.guide_dir, args.output, args.audience, args.wiki_output, language=args.language)
     except GraphError as exc:
         print(json.dumps({"status": "invalid", "errors": [str(exc)]}, ensure_ascii=False))
         return 1

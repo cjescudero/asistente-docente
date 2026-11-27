@@ -1,7 +1,7 @@
 {
   "name": "asistente-docente",
   "interface": {
-    "displayName": "Asistente docente"
+    "displayName": "Asistente docente / Teaching Assistant"
   },
   "plugins": [
     {

@@ -21,13 +21,13 @@ def generated_files(manifest):
     name = manifest['name']
     return {**adapters(manifest),
         '.agents/plugins/marketplace.json': {
-            'name': name, 'interface': {'displayName': 'Asistente docente'},
+            'name': name, 'interface': {'displayName': manifest['extensions']['com.openai']['interface']['displayName']},
             'plugins': [{'name': name, 'source': {'source': 'local', 'path': './'},
                          'policy': {'installation': 'AVAILABLE', 'authentication': 'ON_INSTALL'},
                          'category': 'Productivity'}]},
         '.claude-plugin/marketplace.json': {
             'name': name, 'owner': manifest['author'],
-            'metadata': {'description': 'Materiales y evaluación para cualquier asignatura'},
+            'metadata': {'description': manifest['description']},
             'plugins': [{'name': name, 'source': './', 'description': manifest['description']}]}}
 
 

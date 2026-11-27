@@ -18,9 +18,13 @@ import math
 import os
 from pathlib import Path
 import tempfile
+import sys
 
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from docencia.map_labels import render_template
+
 MARKER = "__GRAPH_DATA__"
 
 
@@ -56,7 +60,7 @@ def write_fixture(directory: Path, data: dict, name: str) -> Path:
     assert template.count(MARKER) == 1, "El marcador debe aparecer una sola vez"
     encoded = json.dumps(data, ensure_ascii=False).replace("<", "\\u003c")
     target = directory / name
-    target.write_text(template.replace(MARKER, encoded), encoding="utf-8")
+    target.write_text(render_template(template, "es").replace(MARKER, encoded), encoding="utf-8")
     return target
 
 

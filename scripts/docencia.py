@@ -19,7 +19,7 @@ def main(argv=None):
     for stream in (sys.stdout, sys.stderr):
         if hasattr(stream, "reconfigure"):
             stream.reconfigure(encoding="utf-8")
-    parser = argparse.ArgumentParser(description="Asistente docente: proyectos, bancos, cuestionarios y feedback.")
+    parser = argparse.ArgumentParser(description="Asistente docente / Teaching Assistant — course projects, question banks, printable quizzes and feedback.")
     commands = parser.add_subparsers(dest="command", required=True)
     project = commands.add_parser("init-project", help="Preparar un curso sin crear la wiki")
     project.add_argument("root", type=Path)
@@ -31,8 +31,7 @@ def main(argv=None):
     exclusions.add_argument("--exclude", action="append", help="Archivo o subcarpeta relativa; sin patrones")
     project.add_argument("--dry-run", action="store_true")
     project.add_argument("--spaces", type=Path, help="JSON con raíces de sources, generated, submissions y notes opcional")
-    from docencia.project import DEFAULT_NOTES_DIR
-    project.add_argument("--notes", nargs="?", const=DEFAULT_NOTES_DIR, metavar="CARPETA",
+    project.add_argument("--notes", nargs="?", const=True, metavar="CARPETA",
                          help="Asignar una carpeta de notas del profesor (por defecto «Notas del curso»)")
     project.add_argument("--adopt-v3", action="store_true", help="Aplicar una adopción previamente aceptada")
     from docencia.catalog_cli import add_commands, dispatch, read_json
@@ -59,7 +58,7 @@ def main(argv=None):
     questionnaire.add_argument("--project", type=Path, help="Raíz del curso del catálogo")
     questionnaire.add_argument("--output", type=Path, required=True)
     questionnaire.add_argument("--metadata", type=Path)
-    questionnaire.add_argument("--title", default="Cuestionario")
+    questionnaire.add_argument("--title", help="Quiz title / Título del cuestionario")
     questionnaire.add_argument("--models", type=int, default=4, help="Número de modelos acordado (predeterminado: 4)")
     questionnaire.add_argument("--questions", type=int, required=True, help="Preguntas por modelo, tras acordar cobertura y duración")
     questionnaire.add_argument("--seed", type=int, default=42)
@@ -90,6 +89,11 @@ def main(argv=None):
     doctor.add_argument("--project", type=Path, help="Añadir diagnóstico del curso")
     for command in (catalog, questionnaire):
         command.add_argument("--direct-material", action="append", help="Actividad generada autorizada como entrada directa (ruta relativa o UUID)")
+    for command in (project, check, register, bank, catalog, questionnaire, feedback, grades, markdown):
+        command.add_argument("--language", choices=("en", "es"),
+                             help="Language for this operation (course conversation language during setup)")
+    project.add_argument("--output-language", choices=("en", "es"),
+                         help="Save a default language for course materials")
     args = parser.parse_args(argv)
     if args.command == "build-cuestionarios":
         if bool(args.bank) == bool(args.catalog):
@@ -101,10 +105,12 @@ def main(argv=None):
         if not args.catalog and (args.selection or args.project or args.direct_material):
             parser.error("--selection y --project requieren --catalog.")
     try:
+        from docencia.project import course_language
         status = 0
         if args.command == "init-project":
             from docencia.project import initialize_course
-            result = initialize_course(args.root, spaces=read_json(args.spaces) if args.spaces else None, notes=args.notes,
+            result = initialize_course(args.root, language=args.language, output_language=args.output_language,
+                                       spaces=read_json(args.spaces) if args.spaces else None, notes=args.notes,
                                        adopt_v3=args.adopt_v3, include=[] if args.no_sources else args.include,
                                         exclude=[] if args.no_exclusions else args.exclude, dry_run=args.dry_run)
             status = 2 if result["status"] == "pending_approval" else 0
@@ -113,7 +119,7 @@ def main(argv=None):
             status = 2 if isinstance(result, dict) and result.get("status") == "needs_review" else 0
         elif args.command == "check-project":
             from docencia.project import check_project
-            result = check_project(args.root)
+            result = check_project(args.root, language=args.language)
             status = {"ok": 0, "incomplete": 2, "invalid": 1}[result["status"]]
         elif args.command == "plan-migration":
             from docencia.project import plan_migration
@@ -122,29 +128,32 @@ def main(argv=None):
             status = 1 if result["status"] == "invalid" else 0
         elif args.command == "register-map":
             from docencia.project_map import register_map
-            result = register_map(args.root, args.map_dir, dry_run=args.dry_run)
+            result = register_map(args.root, args.map_dir, dry_run=args.dry_run, language=args.language)
         elif args.command == "validate-bank":
             from docencia.gift import parse_gift
             from docencia.banks import validate_course_bank_files
-            validate_course_bank_files(args.bank)
-            questions = parse_gift(args.bank.read_text(encoding="utf-8-sig"))
+            language = course_language(args.bank, language=args.language)
+            validate_course_bank_files(args.bank, language=language)
+            questions = parse_gift(args.bank.read_text(encoding="utf-8-sig"), language=language)
             types = {}
             for question in questions:
                 types[question["type"]] = types.get(question["type"], 0) + 1
             result = {"status": "ok", "questions": len(questions), "types": types}
         elif args.command == "validate-catalog":
             from docencia.banks import validate_catalog
-            result = validate_catalog(args.catalog, project_root=args.project, direct_materials=args.direct_material)
+            result = validate_catalog(args.catalog, project_root=args.project, direct_materials=args.direct_material,
+                                      language=course_language(args.project or args.catalog, language=args.language))
         elif args.command == "build-cuestionarios":
             from docencia.cuestionarios import build_cuestionarios
             quotas = json.loads(args.per_category.read_text(encoding="utf-8-sig")) if args.per_category else None
-            manifest = build_cuestionarios(args.bank, args.output, title=args.title, models=args.models,
+            language = course_language(args.project or args.output, language=args.language)
+            manifest = build_cuestionarios(args.bank, args.output, title=args.title, models=args.models, language=language,
                                    questions=args.questions, seed=args.seed, metadata_path=args.metadata,
                                    per_category=quotas, html_only=args.html_only,
                                    catalog_path=args.catalog, selection_path=args.selection,
                                    project_root=args.project, layout=args.layout, direct_materials=args.direct_material)
             statuses = {m["id"]: m["pdf_status"] for m in manifest["models"]}
-            pending = any(str(s).startswith("PDF pendiente") for states in statuses.values() for s in states.values())
+            pending = any(str(s).startswith(("PDF pendiente", "PDF pending")) for states in statuses.values() for s in states.values())
             manifest_dir = (args.output.resolve() / "_datos_internos" if args.layout != "flat"
                             else args.output.resolve())
             result = {"status": "pdf_pending" if pending else "ok", "manifest": str(manifest_dir / "manifest.json"),
@@ -154,16 +163,18 @@ def main(argv=None):
             from docencia.feedback import build_feedback
             result = build_feedback(args.manifest, args.input, args.config, args.output,
                                     detailed=args.detailed, consolidated=args.consolidated,
-                                    gradebook_path=args.gradebook)
+                                    gradebook_path=args.gradebook, language=course_language(args.manifest, language=args.language))
             status = 0 if result["status"] == "ok" else 1
         elif args.command == "export-grades":
             from docencia.grading import export_grades
-            result = export_grades(args.evaluation, args.input, args.config, args.output)
+            result = export_grades(args.evaluation, args.input, args.config, args.output,
+                                   language=course_language(args.evaluation, language=args.language))
             status = 0 if result["status"] == "ok" else 1
         elif args.command == "render-markdown":
             from docencia.render import render_markdown
-            result = render_markdown(args.input, args.output, title=args.title, html_only=args.html_only)
-            status = 2 if str(result["pdf_status"]).startswith("PDF pendiente") else 0
+            result = render_markdown(args.input, args.output, title=args.title, html_only=args.html_only,
+                                     language=course_language(args.output, language=args.language))
+            status = 2 if str(result["pdf_status"]).startswith(("PDF pendiente", "PDF pending")) else 0
         else:
             from docencia.render import MATHJAX
             result = {"python": sys.version.split()[0], "python_supported": sys.version_info >= (3,10),

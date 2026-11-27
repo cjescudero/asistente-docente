@@ -69,6 +69,27 @@ class WikiTests(unittest.TestCase):
         self.assertIn("SOLUCIÓN DOCENTE SINTÉTICA", private["html"])
         self.assertIn("Uso docente", self.output.read_text(encoding="utf-8"))
 
+    def test_english_views_keep_original_titles_and_omit_private_student_data(self):
+        from scripts.build_graph import build_graph
+
+        graph = self.guide / "teacher.html"
+        build_graph(self.guide, graph, "teacher", self.output, language="en")
+        html = self.output.read_text(encoding="utf-8")
+        self.assertIn('<html lang="en">', html)
+        self.assertIn("Search the wiki", html)
+        self.assertNotIn("Buscar en la wiki", html)
+        self.assertEqual(self.record(self.payload(), "index.md")["title"], "Course index")
+        self.assertEqual(self.record(self.payload(), "contenidos/medición ñ.md")["title"], "Medición y crítica")
+        self.assertIn("Read in wiki", graph.read_text(encoding="utf-8"))
+        student = self.guide / "student.html"
+        build_graph(self.guide, student, "student", language="en")
+        student_html = student.read_text(encoding="utf-8")
+        self.assertIn("Student material map", student_html)
+        self.assertNotIn("Evaluación reservada", student_html)
+        self.assertNotIn("SOLUCIÓN DOCENTE SINTÉTICA", student_html)
+        self.assertNotIn("teacher.html", student_html)
+        self.assertNotIn("reservado/examen.md", student_html)
+
     def test_relative_links_reference_links_anchors_and_unicode_routes(self):
         (self.guide / "index.md").write_text(
             "# Índice\n\n[Concepto][c]\n\n[c]: <contenidos/medición ñ.md#qué-sabemos>\n", encoding="utf-8")

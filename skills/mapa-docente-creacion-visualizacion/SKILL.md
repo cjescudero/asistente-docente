@@ -1,9 +1,13 @@
 ---
 name: mapa-docente-creacion-visualizacion
-description: Crear o actualizar un Mapa docente con wiki Markdown, lector HTML y grafo; regenerar solo sus vistas o abrir las existentes cuando se pida mostrarlo. Usar para organizar materiales de las fuentes elegidas o visualizar el mapa. La creación integra su índice en AGENTS.md; abrir o regenerar vistas no modifica la wiki. Para preguntas sobre contenidos, usar mapa-docente-consulta. No mover originales ni generar apuntes.
+description: "Crear o actualizar un Mapa docente con wiki Markdown, lector HTML y grafo; regenerar solo sus vistas o abrir las existentes cuando se pida mostrarlo. Usar para organizar materiales de las fuentes elegidas o visualizar el mapa. La creación integra su índice en AGENTS.md; abrir o regenerar vistas no modifica la wiki. Para preguntas sobre contenidos, usar mapa-docente-consulta. No mover originales ni generar apuntes. Build or update an explanatory course wiki from selected sources, regenerate the reader and concept graph, or open an existing view. E.g. “Build my course map.”"
 ---
 
 # Mapa docente: creación y visualización
+
+Follow the [language settings](../../docs/LANGUAGES.md) for this task. Example request: **“Build my course map.”**
+
+For an English course map start with the [English index template](../../templates/mapa-docente/en/index.md). Use the same registry contract and retain original source titles and locators.
 
 Construir una wiki explicativa del conocimiento docente: desarrollar qué significan los conceptos, cómo se relacionan y cómo se aplican, con fuentes y límites trazables. No limitarla a un índice de documentos. El Mapa docente combina páginas Markdown estándar con un lector `index.html` y un grafo HTML derivados. No sustituye los originales ni genera automáticamente apuntes para estudiantes.
 

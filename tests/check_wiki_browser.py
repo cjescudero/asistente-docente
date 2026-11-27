@@ -16,6 +16,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from scripts.build_wiki import build_wiki
+from scripts.build_graph import build_graph
 
 
 def fixture(root):
@@ -117,6 +118,22 @@ def main():
         assert page.locator("#document table").evaluate("el => {el.scrollLeft=90; return el.scrollLeft > 0;}")
         if args.screenshots:
             page.screenshot(path=str(args.screenshots / "wiki-sintetica-movil.png"), full_page=True)
+        # The interface follows the requested language; Spanish source titles
+        # and the Markdown path remain intact in both views.
+        english_graph = reader.parent / "teacher.html"
+        build_graph(reader.parent, english_graph, "teacher", reader, language="en")
+        page.set_viewport_size({"width": 1440, "height": 960})
+        page.goto(english_graph.as_uri())
+        assert page.get_by_role("button", name="Rearrange", exact=True).is_visible()
+        page.locator('#node-list button', has_text="Medición").click()
+        page.get_by_role("link", name="Read in wiki").first.click()
+        assert page.locator("#document h1").inner_text() == "Medición"
+        assert page.get_by_role("link", name="Open Markdown").get_attribute("href") == "contenidos/medici%C3%B3n.md"
+        assert page.locator('html').get_attribute('lang') == "en"
+        page.set_viewport_size({"width": 390, "height": 844})
+        page.get_by_role("button", name="Documents").click()
+        page.get_by_label("Search the wiki").fill("918273")
+        assert page.locator("#page-nav .empty").inner_text() == "No documents match this search."
         if args.html:
             page.set_viewport_size({"width": 1440, "height": 960})
             page.goto(args.html.resolve().as_uri())

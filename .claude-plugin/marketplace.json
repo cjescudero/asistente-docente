@@ -4,13 +4,13 @@
     "name": "Carlos J. Escudero"
   },
   "metadata": {
-    "description": "Materiales y evaluación para cualquier asignatura"
+    "description": "Asistente docente / Teaching Assistant — Materiales y evaluación docente. Course materials, assignments, quizzes and Moodle feedback in English or Spanish."
   },
   "plugins": [
     {
       "name": "asistente-docente",
       "source": "./",
-      "description": "Organiza conocimiento docente, crea actividades y bancos con variantes y prepara cuestionarios y feedback para Moodle."
+      "description": "Asistente docente / Teaching Assistant — Materiales y evaluación docente. Course materials, assignments, quizzes and Moodle feedback in English or Spanish."
     }
   ]
 }

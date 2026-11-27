@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "concepts": {
+    "measurement": {
+      "label": "Measurement quality",
+      "guidance": "Compare repeated readings and then weigh a known reference.",
+      "translations": {
+        "es": {
+          "label": "Calidad de la medición",
+          "guidance": "Compara las lecturas y pesa una referencia conocida."
+        }
+      }
+    }
+  },
+  "questions": {
+    "01-A": {
+      "family_id": "01",
+      "variant_id": "A",
+      "concepts": [
+        "measurement"
+      ],
+      "objective": "Interpret close readings",
+      "difficulty": "basica",
+      "guidance": "Use the spread of the readings to discuss repeatability.",
+      "source_refs": [
+        {
+          "material_id": "reading",
+          "locators": [
+            "Repetibilidad y calibración"
+          ]
+        }
+      ],
+      "translations": {
+        "es": {
+          "guidance": "Examina la dispersión de las lecturas para valorar la repetibilidad."
+        }
+      }
+    },
+    "02-A": {
+      "family_id": "02",
+      "variant_id": "A",
+      "concepts": [
+        "measurement"
+      ],
+      "objective": "Check calibration",
+      "difficulty": "basica",
+      "guidance": "Use a known reference to check for bias.",
+      "source_refs": [
+        {
+          "material_id": "reading",
+          "locators": [
+            "Repetibilidad y calibración"
+          ]
+        }
+      ],
+      "translations": {
+        "es": {
+          "guidance": "Utiliza una referencia conocida para comprobar el sesgo."
+        }
+      }
+    }
+  }
+}
